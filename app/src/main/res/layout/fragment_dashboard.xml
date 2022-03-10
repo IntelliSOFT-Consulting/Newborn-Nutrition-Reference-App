@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dashboard.DashboardFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="12dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/findPatientsCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            app:layout_constraintEnd_toStartOf="@+id/activeVisitsCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/rlt_maternity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/maternityButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/dashboard_maternity_icon_label"
+                    android:src="@drawable/maternity"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/findPatientLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/maternityButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/dashboard_maternity_icon_label" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/activeVisitsCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/formEntryCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/findPatientsCardView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside">
+
+            <RelativeLayout
+                android:id="@+id/activeVisitsView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/newBornButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/dashboard_newborn_icon_label"
+                    android:src="@drawable/behavior"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/activeVisitsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/newBornButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/dashboard_newborn_icon_label" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/registerPatientCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            app:layout_constraintEnd_toStartOf="@+id/formEntryCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/findPatientsCardView">
+
+            <RelativeLayout
+                android:id="@+id/registryPatientView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/newbornPatientsButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/action_patient_list"
+                    android:src="@drawable/pediatrics"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/registryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/newbornPatientsButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/action_new_born" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/formEntryCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/postNatalEntryCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/registerPatientCardView"
+            app:layout_constraintTop_toBottomOf="@+id/activeVisitsCardView">
+
+            <RelativeLayout
+                android:id="@+id/captureVitalsView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/postNatalButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/dashboard_hmb_icon_label"
+                    android:src="@drawable/healthcare"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/formsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/postNatalButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/action_post_natallabel" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/newBornPatientCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            app:layout_constraintEnd_toStartOf="@+id/postNatalEntryCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerPatientCardView">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/allPatientsButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/action_patient_list"
+                    android:src="@drawable/list"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/allPatientsButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/action_patient_list" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/postNatalEntryCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/manageProviderCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/newBornPatientCardView"
+            app:layout_constraintTop_toBottomOf="@+id/formEntryCardView">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/humanMilkButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:contentDescription="@string/dashboard_hmb_icon_label"
+                    android:src="@drawable/heart"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/humanMilkButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/dashboard_hmb_icon_label" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/manageProviderCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postNatalEntryCardView">
+
+            <RelativeLayout
+                android:id="@+id/dashboardProviderManagementView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/monitoringButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width"
+                    android:layout_height="@dimen/dashboard_icon_height_width"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/dashboard_icon_margin"
+                    android:layout_marginTop="@dimen/dashboard_icon_margin"
+                    android:layout_marginEnd="@dimen/dashboard_icon_margin"
+                    android:layout_marginBottom="@dimen/dashboard_icon_margin"
+                    android:src="@drawable/checkup"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/dashboardProviderManagementLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/monitoringButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/action_provider_management" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

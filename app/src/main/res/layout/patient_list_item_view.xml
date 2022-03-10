@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/fab_margin">
+
+    <ImageView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginTop="@dimen/status_margin"
+        android:contentDescription="@string/description_status"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_baseline_circle" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginEnd="@dimen/small_text_margin"
+        android:layout_marginBottom="@dimen/small_text_margin"
+        android:layout_toEndOf="@id/status"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textStyle="bold"
+        tools:text="Navya Patel" />
+
+    <TextView
+        android:id="@+id/field_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignStart="@id/name"
+        android:layout_marginTop="@dimen/small_text_margin"
+        android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/small_text_margin"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceBody2"
+        tools:text="50 years old" />
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/field_name"
+        android:layout_alignStart="@id/name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/small_text_margin"
+        android:layout_marginEnd="@dimen/small_text_margin"
+        android:layout_toEndOf="@id/status"
+        android:textAppearance="?attr/textAppearanceBody2"
+        tools:text="Id: #...456" />
+</RelativeLayout>

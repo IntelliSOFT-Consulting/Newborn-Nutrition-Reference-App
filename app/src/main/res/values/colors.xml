@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <color name="colorPrimary">#449026</color>
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
+    <color name="colorAccent">@color/colorPrimary</color>
+    <color name="colorStatusBar">@color/colorPrimary</color>
+    <color name="low_risk">#388e3c</color>
+    <color name="low_risk_background">#e8f5e9</color>
+    <color name="moderate_risk">#DD2C00</color>
+    <color name="moderate_risk_background">#fff8e1</color>
+    <color name="high_risk">#c62828</color>
+    <color name="high_risk_background">#ffebee</color>
+    <color name="unknown_risk_background">#10156125</color>
+    <color name="unknown_risk">#ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="buttontext">#50C2C9</color>
+    <color name="inactive">#C4C4C4</color>
+    <color name="active">#50C2C9</color>
+</resources>

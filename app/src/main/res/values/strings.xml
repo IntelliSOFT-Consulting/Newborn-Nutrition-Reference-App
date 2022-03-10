@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Neonatal DAK</string>
+
+    <string name="title_nndak">NNDAK</string>
+    <string name="title_patient_list">Registered Patients</string>
+    <string name="title_patient_detail">SamplePatient Detail</string>
+
+    <string name="menu_about">About Fhir Engine</string>
+    <string name="menu_sync_resources">Sync Resources</string>
+    <string name="menu_patient_edit">@string/edit_patient</string>
+
+    <!-- For display observations in brief, for a patient -->
+    <string name="observation_brief_text">%1$s: %2$s\nEffective: %3$s</string>
+    <string name="query_hint_patient_search">Find by Patient Name</string>
+    <string name="cancel_questionnaire_message">Are you sure you want to discard the answers?</string>
+    <string name="patient_id">Id</string>
+    <string name="patient_name">Name</string>
+    <string name="patient_gender">Gender</string>
+    <string name="patient_dob">DOB</string>
+    <string name="patient_phone_number">Phone Number</string>
+    <string name="patient_city">City</string>
+    <string name="patient_country">Country</string>
+    <string name="patient_is_active">Is Active</string>
+    <string name="patient_property_mobile">Mobile Number</string>
+    <string name="patient_property_id">ID Number</string>
+    <string name="patient_property_address">Address</string>
+    <string name="patient_property_dob">Date of Birth</string>
+    <string name="patient_property_gender">Gender</string>
+    <string name="add_patient">Add Patient</string>
+    <string name="edit_patient">Edit Patient</string>
+    <string name="submit">Submit</string>
+    <string name="message_syncing">Syncing\u2026</string>
+    <string name="message_input_missing">Inputs are missing.</string>
+    <string name="message_patient_updated">Patient is updated.</string>
+    <string name="inputs_missing">Inputs are missing.</string>
+    <string name="resources_saved">Resources are saved.</string>
+    <string name="response_received">questionnaire response is received.</string>
+    <string name="html_text">Current status: <font color="#ddd">UNKNOWN</font></string>
+    <string name="header_observation">Observations</string>
+    <string name="header_conditions">Conditions</string>
+    <string name="message_no_datetime">No effective DateTime</string>
+    <string name="message_no_value_quantity">No Value Quantity</string>
+    <string name="complete_survey">Complete Survey</string>
+    <string name="risk_status">Current status: </string>
+    <string name="unknown">UNKNOWN</string>
+    <string name="none">none</string>
+    <string name="description_status">Status</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="sync_menu">Sync</string>
+    <string name="last_sync">Last sync</string>
+    <string name="action_submit">Submit</string>
+    <string name="action_gender">Gender</string>
+    <string name="action_lastname">Last Name</string>
+    <string name="action_dob">Date of Birth</string>
+    <string name="action_firstname">First Name</string>
+    <string name="action_other">Family Name</string>
+    <string name="action_phone">Phone Number</string>
+    <string name="action_city">City</string>
+    <string name="action_country">Country</string>
+    <string name="action_active">Is Active?</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
+    <string name="action_male">Male</string>
+    <string name="action_female">Female</string>
+    <string name="action_client">Client Info</string>
+    <string name="maternity_menu">Maternity Registration</string>
+    <string name="mother_child_menu">Mother and Child Assessment</string>
+    <string name="post_natal_menu">Post Natal Unit</string>
+    <string name="new_born_menu">"New Born Unit "</string>
+    <string name="feeding_assessment_menu">" Feeding Needs Assessment"</string>
+    <string name="hmb_menu">HMB Ordering and Dispensing</string>
+    <string name="monitoring_menu">NB Monitoring and Assessment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_maternity">Record Maternity</string>
+    <string name="dashboard_maternity_icon_label">Maternity </string>
+    <string name="dashboard_newborn_icon_label"> Assessment</string>
+    <string name="action_patient_list">Registered Patients</string>
+    <string name="dashboard_hmb_icon_label">Human Milk Bank</string>
+    <string name="home_menu">Home</string>
+    <!--  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-->
+
+    //Headings
+    <string name="heading_one">Title 1</string>
+    <string name="heading_two">Title 2</string>
+    <string name="heading_three">Title 3</string>
+    <string name="heading_fourth">Title 4</string>
+
+    //Description
+    <string name="desc_one">Description 1</string>
+    <string name="desc_two">Description 2</string>
+    <string name="desc_three">Description 3</string>
+    <string name="desc_fourth">Description 4</string>
+    <string name="action_username">Username *</string>
+    <string name="action_password">Password</string>
+    <string name="unable_to_login">Problem Login?</string>
+    <string name="login_offline">Offline</string>
+    <string name="action_provider_management">Monitoring and Assessment</string>
+    <string name="action_new_born">New Born</string>
+    <string name="action_post_natallabel">Post Natal</string>
+</resources>

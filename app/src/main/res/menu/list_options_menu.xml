@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.NoTitleBar">
+    <item
+        android:id="@+id/sync_resources"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="@string/menu_sync_resources"
+        app:showAsAction="always" />
+</menu>

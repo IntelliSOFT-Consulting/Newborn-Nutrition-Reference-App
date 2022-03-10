@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reference_nav_graph"
+    app:startDestination="@id/dashboard">
+
+    <fragment
+        android:id="@+id/patient_list"
+        android:name="com.imeja.demo.patients.PatientListFragment"
+        android:label="Patient List"
+        tools:layout="@layout/patient_list_view">
+        <action
+            android:id="@+id/navigate_to_product_detail"
+            app:destination="@id/patient_details" />
+        <action
+            android:id="@+id/action_patient_list_to_addPatientFragment"
+            app:destination="@id/addPatientFragment" />
+        <argument
+            android:name="step"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_patient_list_to_screenerEncounterFragment"
+            app:destination="@id/screenerEncounterFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/patient_details"
+        android:name="com.imeja.demo.patients.PatientDetailsFragment"
+        android:label="Patient Details"
+        tools:layout="@layout/patient_detail">
+        <action
+            android:id="@+id/navigate_to_edit_patient"
+            app:destination="@id/editPatientFragment" />
+        <action
+            android:id="@+id/action_patient_details_to_screenEncounterFragment"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/screenerEncounterFragment"
+        android:name="com.imeja.demo.screens.ScreenerFragment"
+        android:label="Screen Encounter"
+        tools:layout="@layout/screener_encounter_fragment">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="quastion"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPatientFragment"
+        android:name="com.imeja.demo.patients.AddPatientFragment"
+        android:label="@string/add_patient"
+        tools:layout="@layout/add_patient_fragment" />
+
+    <fragment
+        android:id="@+id/editPatientFragment"
+        android:name="com.imeja.demo.patients.EditPatientFragment"
+        android:label="Edit Patient"
+        tools:layout="@layout/add_patient_fragment">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dashboard"
+        android:name="com.imeja.demo.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboard_to_patient_list"
+            app:destination="@id/patient_list" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,242 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.2",
+  "publisher": "Fred Hersch (fredhersch@google.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "text": "Details for Monitoring and Assessment",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "assessment"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "dateToday",
+          "type": "date",
+          "text": "Assessment Date",
+          "required": true,
+          "extension": [
+            {
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "dateToday"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "readyForDischarge",
+          "type": "choice",
+          "text": "Is patient ready for discharge?",
+          "required": true,
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "readyForDischarge"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "notReady",
+                "display": "No",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "yesReady",
+                "display": "Yes",
+                "system": "custom"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Assessment Remarks",
+      "type": "group",
+      "linkId": "7.0.0",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "remarks"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "feedAdjustment",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "feedAdjustment"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "adjustFeeds",
+              "type": "choice",
+              "text": "Does the feeding prescription need to be adjusted?",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "adjustFeeds"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "10001",
+                    "display": "No",
+                    "system": "custom"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "10002",
+                    "display": "Yes",
+                    "system": "custom"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "additionalComments",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "additionalComments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "text": "Additional Comment's",
+              "type": "string",
+              "linkId": "comments",
+              "initial": [
+                {
+                  "valueString": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "dateOfAssessment",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "dateOfAssessment"
+              }
+            }
+          ],
+          "item": [
+            {
+              "text": "Date of Assessment",
+              "type": "display",
+              "linkId": "assessmentDate"
+            },
+            {
+              "linkId": "assessmentDate",
+              "type": "dateTime",
+              "text": "",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "assessmentDate"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

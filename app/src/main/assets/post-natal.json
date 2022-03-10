@@ -1,0 +1,587 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.2",
+  "publisher": "Fred Hersch (fredhersch@google.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "text": "Milk expression and storage",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "expressedAmount",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "expressedAmount"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "amountExpressed",
+              "type": "decimal",
+              "text": "Amount Expressed",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "amountExpressed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "expressionTime",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "expressionTime"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "timeOfExpression",
+              "type": "dateTime",
+              "text": "Time of Expression",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "timeOfExpression"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "storageTime",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "storageTime"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "timeOfStorage",
+              "type": "dateTime",
+              "text": "Time of Storage",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "timeOfStorage"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "collector",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "collector"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "milkCollector",
+              "type": "string",
+              "text": "Collected By",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "milkCollector"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Lactation Support",
+      "type": "group",
+      "linkId": "7.0.0",
+      "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "support"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "feedingOptions",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "feedingOptions"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "currentConditions",
+              "type": "choice",
+              "repeats": true,
+              "text": "Evaluate the effectiveness of lactation support",
+              "code": [],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "check-box",
+                        "display": "Checkbox"
+                      }
+                    ],
+                    "text": "Checkbox"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "one",
+                    "display": "Option One",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "two",
+                    "display": "Option Two",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "three",
+                    "display": "Option Three ",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "four",
+                    "display": "Option Four",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "five",
+                    "display": "Option Five",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "effectiveFeeding",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "effectiveFeeding"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "currentConditions",
+              "type": "choice",
+              "repeats": true,
+              "text": "Baby's effectively feeding",
+              "code": [],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "check-box",
+                        "display": "Checkbox"
+                      }
+                    ],
+                    "text": "Checkbox"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "one01",
+                    "display": "Option One",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "two01",
+                    "display": "Option Two",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "three01",
+                    "display": "Option Three ",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "four01",
+                    "display": "Option Four",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "five01",
+                    "display": "Option Five",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+
+      ]
+    },
+    {
+      "text": "Feeding Supplements",
+      "type": "group",
+      "linkId": "7.0.0",
+      "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "support"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "feedingSupplements",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "feedingSupplements"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "supplementsConsidered",
+              "type": "choice",
+              "text": "Do feeding supplements need to be considered?",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "supplementsConsidered"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "noNeed",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "yesConsider",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "whichSupplements",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "whichSupplements"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "supplementsConsidered",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yesConsider",
+                "display": "Yes",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "whatConsidered",
+              "type": "choice",
+              "text": "What is the feeding supplement considered?",
+              "required": true,
+              "repeats": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "whatConsidered"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "vitK",
+                    "display": "Vitamin K",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "vitD",
+                    "display": "Vitamin D",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "vitB12",
+                    "display": "Vitamin B12",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "iron",
+                    "display": "Iron",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "additionalComments",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "additionalComments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "commentsAdded",
+              "type": "string",
+              "text": "Additional Comments",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "commentsAdded"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "completer",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "completer"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "completerName",
+              "type": "string",
+              "text": "Completed By",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "completerName"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,539 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.2",
+  "publisher": "Fred Hersch (fredhersch@google.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "text": "HMB Ordering and Dispensing",
+      "linkId": "hmbOrdering",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "text": "Hospital Receiving HMB",
+          "linkId": "hmbHospital",
+          "type": "choice",
+          "required": true,
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "optionOne",
+                "display": "Hospital X",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "optionTwo",
+                "display": "Hospital Y",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "optionThree",
+                "display": "Hospital Z",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "dateOfConsent",
+          "type": "date",
+          "text": "Consent Date",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "dateOfConsent"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "clinicianName",
+          "type": "string",
+          "text": "Clinician Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "clinicianName"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "clinicianDesignation",
+          "type": "string",
+          "text": "Clinician Designation",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "clinicianDesignation"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "givenConsent",
+          "type": "boolean",
+          "text": "Has consent to use DHM been received from legal guardian?",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "givenConsent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "DHM Prescription",
+      "linkId": "dhmPrescription",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "orderDate",
+          "type": "date",
+          "text": "Order Date",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "orderDate"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "recipientGestation",
+          "type": "decimal",
+          "text": "Recipient Gestation",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "recipientGestation"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "recipientLocation",
+          "type": "string",
+          "text": "Recipient Location",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "recipientLocation"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "volumePrescribed",
+          "type": "decimal",
+          "text": "Volume Prescribed",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "volumePrescribed"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "pretermOrTerm",
+          "text": "Is preterm or term milk?",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "preTermMilk",
+                "display": "preterm",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "termMilk",
+                "display": "Term",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "prescriberName",
+          "type": "string",
+          "text": "Prescriber Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "prescriberName"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "nursingStaffName",
+          "type": "string",
+          "text": "Nursing Staff Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "nursingStaffName"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "DHM Confirmation",
+      "linkId": "dhmConfirmation",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "dhmAvailable",
+          "text": "Is DHM available to fulfill the order?",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yesAvailable",
+                "display": "Yes",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notAvailable",
+                "display": "No",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "amountAvailable",
+          "type": "decimal",
+          "text": "Total Amount Available",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "amountAvailable"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "orderAccepted",
+          "text": "Has order being accepted?",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yesAccepted",
+                "display": "Yes",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notAccepted",
+                "display": "No",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "assessmentDateLabel",
+          "type": "display",
+          "text": "Order Date",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "assessmentDateLabel"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "orderDate",
+          "type": "dateTime",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "orderDate"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "batchNumber",
+          "type": "string",
+          "text": "Batch Number",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "batchNumber"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "amountOrdered",
+          "type": "decimal",
+          "text": "Amount Ordered (mls)",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "amountOrdered"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "prescriberName",
+          "type": "string",
+          "text": "Prescriber Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "prescriberName"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Receiving DHM",
+      "linkId": "dhmReceive",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "dispatchDate",
+          "type": "date",
+          "text": "Dispatch Date",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "orderDate"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "receivingUnit",
+          "type": "string",
+          "text": "Receiving Unit",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "receivingUnit"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "dispensingStaff",
+          "type": "string",
+          "text": "Dispensing Staff Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "dispensingStaff"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "receivingStaff",
+          "type": "string",
+          "text": "Receiving Staff Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "receivingStaff"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1396 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.2",
+  "publisher": "Fred Hersch (fredhersch@google.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "text": "Maternity Registration",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "maternity"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "1.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "1.0.1",
+              "type": "decimal",
+              "text": "Parity-The number of times that client (mother) has given birth to a fetus with a gestational age of 24 weeks or more",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "parity"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 1.0
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 50.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "2.0.1",
+              "type": "decimal",
+              "text": "(Gravidity) How many times have you been pregnant?",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "gravidity"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 1.0
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 15.0
+                }
+              ]
+            },
+            {
+              "linkId": "2.0.2",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "/wk"
+                }
+              ]
+            },
+            {
+              "linkId": "2.0.3",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "http://unitsofmeasure.org"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "gestation",
+              "type": "decimal",
+              "text": "Gestation (Weeks)",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 1.0
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 50.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "lmp",
+              "type": "date",
+              "text": "Last Menstrual Period (LMP)",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Observation",
+                    "name": "lmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "5.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "edd",
+              "type": "date",
+              "text": "Expected Date of Delivery",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Observation",
+                    "name": "edd"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Mother's Health Status",
+      "type": "group",
+      "linkId": "4.0.0",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "4.1.0",
+          "type": "choice",
+          "repeats": true,
+          "text": "Do you have any of the following existing conditions",
+          "code": [],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "check-box",
+                    "display": "Checkbox"
+                  }
+                ],
+                "text": "Checkbox"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "161527007",
+                "display": "Asthma",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "13645005",
+                "display": "Chronic Lung Disease",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "35489007",
+                "display": "Depression",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "161445009",
+                "display": "Diabetes",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "161501007",
+                "display": "Hypertension",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "56265001",
+                "display": "Heart disease",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "161450003",
+                "display": "High blood lipids",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "4.2.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "asthma"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "161527007",
+                "display": "Asthma",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.2.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "161527007",
+                    "display": "Asthma",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.3.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "chronicLung"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "13645005",
+                "display": "Chronic Lung Disease",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.3.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "13645005",
+                    "display": "Chronic Lung Disease",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.4.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "depression"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "35489007",
+                "display": "Depression",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.4.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "35489007",
+                    "display": "Depression",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.5.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "diabetes"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "161445009",
+                "display": "Diabetes",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.5.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "161445009",
+                    "display": "Diabetes",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.6.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "hypertension"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "161501007",
+                "display": "Hypertension",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.6.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "161501007",
+                    "display": "Hypertension",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.7.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "heartDisease"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "56265001",
+                "display": "Heart disease",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.7.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "56265001",
+                    "display": "Heart disease",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.8.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Condition",
+                "name": "bloodLipids"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "code": "161450003",
+                "display": "High blood lipids",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.8.1",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "161450003",
+                    "display": "High blood lipids",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Delivery Details",
+      "linkId": "2.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "delivery"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "labourStage",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "labourStage"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "stageLabor",
+              "text": "What is the Labor Stage",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "radio-button",
+                        "display": "Radio Button"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                  "valueCode": "horizontal"
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "early",
+                    "display": "Early labor",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "active",
+                    "display": "Active labor",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "transition",
+                    "display": "Transition",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "deliveryMethod",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "deliveryMethod"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "methodOfDelivery",
+              "text": "What method was used to deliver the baby?",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "radio-button",
+                        "display": "Radio Button"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                  "valueCode": "horizontal"
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "vaginalDelivery",
+                    "display": " Vaginal Delivery",
+                    "system": "custom"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "cesarianSection",
+                    "display": "Cesarian Section",
+                    "system": "custom"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "vaginalCesarian",
+                    "display": "Vaginal Birth After Cesarian",
+                    "system": "custom"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "vacuumExtraction",
+                    "display": "Vacuum Extraction",
+                    "system": "custom"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "forcepsDelivery",
+                    "display": "Forceps Delivery",
+                    "system": "custom"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "conditionAppropriate",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "conditionAppropriate"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "appropriateConditions",
+              "text": "Was there any of the following Conditions?",
+              "type": "choice",
+              "repeats": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "check-box",
+                        "display": "Checkbox"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "resuscitation",
+                    "display": "Resuscitation?",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "placentaComplete",
+                    "display": "Is Client's placenta Complete?",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "eyeProphylaxis",
+                    "display": "Does baby show signs of Eye Prophylaxis (1% TED)",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Vitamin K",
+      "type": "group",
+      "linkId": "4.0.0",
+      "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "vitamink"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "text": "Has the Baby been given Vitamin K?",
+          "type": "choice",
+          "linkId": "4.1.0",
+          "required": true,
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "NV",
+                "display": "No",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "FV",
+                "display": "Yes",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "text": "Which type of Vitamin K was given?",
+          "type": "choice",
+          "linkId": "4.2.0",
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "system": "custom",
+                "code": "FV"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "INJ",
+                "display": "Injection"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "INT",
+                "display": "Intravenous"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ORL",
+                "display": "Oral"
+              }
+            }
+          ]
+        },
+        {
+          "text": "Date and Time of first dose?",
+          "type": "dateTime",
+          "linkId": "4.2.1",
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "system": "custom",
+                "code": "FV"
+              }
+            }
+          ]
+        },
+        {
+          "text": "Date and Time of second dose?",
+          "type": "dateTime",
+          "linkId": "4.3.1",
+          "enableWhen": [
+            {
+              "question": "4.1.0",
+              "operator": "=",
+              "answerCoding": {
+                "system": "custom",
+                "code": "FV"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "New Born Registration",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "newBorn"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "nameOfChild",
+          "type": "string",
+          "text": "Child Name",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "nameOfChild"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Jina "
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "dateOfBirth",
+          "type": "date",
+          "text": "Date of Birth",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "dateOfBirth"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Tarehe"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "babySex",
+          "text": "Baby's Biological Sex",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "femaleGender",
+                "display": "Female",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "maleGender",
+                "display": "Male",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "birthWeight",
+          "type": "decimal",
+          "text": "Birth Weight (Kgs)",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "birthWeight"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Kipimo"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "gestationPeriod",
+          "type": "decimal",
+          "text": "Gestation Period",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "gestationPeriod"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Muda"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "weeksPeriod",
+          "type": "decimal",
+          "text": "Weeks between Conception and Birth",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "weeksPeriod"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Wiki"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "tempCentigrade",
+          "type": "decimal",
+          "text": "Temperature (Degrees centigrade)",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "tempCentigrade"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Joto"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "apgarScore",
+          "type": "decimal",
+          "text": "Apgar Score",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "apgarScore"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Joto"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "currentWeight",
+          "type": "decimal",
+          "text": "Current Weight (Kgs)",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "currentWeight"
+              }
+            }
+          ],
+          "_text": {
+            "extension": [
+              {
+                "extension": [
+                  {
+                    "url": "lang",
+                    "valueCode": "sw"
+                  },
+                  {
+                    "url": "content",
+                    "valueString": "Kipimo"
+                  }
+                ],
+                "url": "http://hl7.org/fhir/StructureDefinition/translation"
+              }
+            ]
+          }
+        },
+        {
+          "linkId": "bornBeforeArrival",
+          "text": "Was baby born before arrival to facility?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "bornBeforeArrival"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "NV",
+                "display": "No",
+                "system": "custom"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PV",
+                "display": "Yes",
+                "system": "custom"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "whereBabyBorn",
+          "text": "Where was the baby born?",
+          "type": "text",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "whereBabyBorn"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "bornBeforeArrival",
+              "operator": "=",
+              "answerCoding": {
+                "system": "custom",
+                "code": "PV"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "4.11.0",
+          "text": "Reason for Admission",
+          "type": "text",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "whereBabyBorn"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "nurseCompleting",
+          "text": "Completed By",
+          "type": "text",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "nurseCompleting"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "fromAdmission",
+          "text": "Where has baby been admitted From",
+          "type": "text",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Observation",
+                "name": "fromAdmission"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
