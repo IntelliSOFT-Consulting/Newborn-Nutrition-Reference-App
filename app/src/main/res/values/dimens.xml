@@ -31,4 +31,5 @@
     <dimen name="custom_fab_standard_21">21dp</dimen>
     <dimen name="padding_16">16dp</dimen>
     <dimen name="_35dp">35dp</dimen>
+    <dimen name="_150dp">150dp</dimen>
 </resources>

@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     app:flow_horizontalAlign="center">
 
     <ImageView
         android:id="@+id/titleImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_150dp"
+        android:layout_height="@dimen/_150dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/image1" />
+        android:src="@drawable/checkup" />
 
     <TextView
         android:id="@+id/texttitle"
@@ -21,7 +22,7 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/heading_one"
         android:textAlignment="center"
-        android:textSize="28dp" />
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/textdeccription"
@@ -31,7 +32,7 @@
         android:fontFamily="@font/poppins"
         android:text="@string/desc_one"
         android:textAlignment="center"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
 
 </LinearLayout>

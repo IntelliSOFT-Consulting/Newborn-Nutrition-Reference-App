@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/patient_list"
-        android:name="com.imeja.demo.patients.PatientListFragment"
+        android:name="com.intellisoft.nndak.patients.PatientListFragment"
         android:label="Patient List"
         tools:layout="@layout/patient_list_view">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/patient_details"
-        android:name="com.imeja.demo.patients.PatientDetailsFragment"
+        android:name="com.intellisoft.nndak.patients.PatientDetailsFragment"
         android:label="Patient Details"
         tools:layout="@layout/patient_detail">
         <action
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/screenerEncounterFragment"
-        android:name="com.imeja.demo.screens.ScreenerFragment"
+        android:name="com.intellisoft.nndak.screens.ScreenerFragment"
         android:label="Screen Encounter"
         tools:layout="@layout/screener_encounter_fragment">
         <argument
@@ -60,13 +60,13 @@
     </fragment>
     <fragment
         android:id="@+id/addPatientFragment"
-        android:name="com.imeja.demo.patients.AddPatientFragment"
+        android:name="com.intellisoft.nndak.patients.AddPatientFragment"
         android:label="@string/add_patient"
         tools:layout="@layout/add_patient_fragment" />
 
     <fragment
         android:id="@+id/editPatientFragment"
-        android:name="com.imeja.demo.patients.EditPatientFragment"
+        android:name="com.intellisoft.nndak.patients.EditPatientFragment"
         android:label="Edit Patient"
         tools:layout="@layout/add_patient_fragment">
         <argument
@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/dashboard"
-        android:name="com.imeja.demo.dashboard.DashboardFragment"
+        android:name="com.intellisoft.nndak.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action

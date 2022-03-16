@@ -82,16 +82,16 @@
     <!--  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-->
 
     //Headings
-    <string name="heading_one">Title 1</string>
-    <string name="heading_two">Title 2</string>
-    <string name="heading_three">Title 3</string>
-    <string name="heading_fourth">Title 4</string>
+    <string name="heading_one">Assessment</string>
+    <string name="heading_two">New Born Registration</string>
+    <string name="heading_three">Post Natal</string>
+    <string name="heading_fourth">Monitoring and Assessment</string>
 
     //Description
-    <string name="desc_one">Description 1</string>
-    <string name="desc_two">Description 2</string>
-    <string name="desc_three">Description 3</string>
-    <string name="desc_fourth">Description 4</string>
+    <string name="desc_one">Maternity Unit, Assess the mother and baby | Record maternity details</string>
+    <string name="desc_two">Register a new born! Capture units for weight and temperature </string>
+    <string name="desc_three">Re-assess the baby, check if need for Lactation Support as ease.</string>
+    <string name="desc_fourth">Monitor Mother\'s and Baby\'s progress, Discharge once they are both ready</string>
     <string name="action_username">Username *</string>
     <string name="action_password">Password</string>
     <string name="unable_to_login">Problem Login?</string>
@@ -99,4 +99,5 @@
     <string name="action_provider_management">Monitoring and Assessment</string>
     <string name="action_new_born">New Born</string>
     <string name="action_post_natallabel">Post Natal</string>
+    <string name="skip">Skip</string>
 </resources>
