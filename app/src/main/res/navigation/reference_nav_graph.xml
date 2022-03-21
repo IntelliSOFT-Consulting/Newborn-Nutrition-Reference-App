@@ -18,8 +18,7 @@
             app:destination="@id/addPatientFragment" />
         <argument
             android:name="step"
-            app:argType="string"
-            app:nullable="true" />
+            app:argType="string" />
         <action
             android:id="@+id/action_patient_list_to_screenerEncounterFragment"
             app:destination="@id/screenerEncounterFragment" />

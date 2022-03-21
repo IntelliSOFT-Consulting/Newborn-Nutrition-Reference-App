@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "FHIRReference"
+rootProject.name = "HumanMilk"
 include ':app'

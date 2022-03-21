@@ -9,41 +9,31 @@ import org.hl7.fhir.r4.model.OperationOutcome
 import org.hl7.fhir.r4.model.Resource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 
 /** hapi.fhir.org API communication via Retrofit */
 interface HapiFhirService {
 
   @GET suspend fun getResource(@Url url: String): Bundle
-
-
   @PUT("{type}/{id}")
   suspend fun insertResource(
     @Path("type") type: String,
     @Path("id") id: String,
     @Body body: RequestBody
   ): Resource
-
-
   @PATCH("{type}/{id}")
   suspend fun updateResource(
     @Path("type") type: String,
     @Path("id") id: String,
     @Body body: RequestBody
   ): OperationOutcome
-
-
   @DELETE("{type}/{id}")
   suspend fun deleteResource(@Path("type") type: String, @Path("id") id: String): OperationOutcome
 
+  @POST(".") suspend fun postData(@Body body: RequestBody): Resource
+
   companion object {
-    private const val BASE_URL = "https://hapi.fhir.org/baseR4/"
+    const val BASE_URL = "https://hapi.fhir.org/baseR4/"
 
     fun create(parser: IParser): HapiFhirService {
       val logger = HttpLoggingInterceptor()

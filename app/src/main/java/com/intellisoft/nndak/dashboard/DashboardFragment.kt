@@ -64,30 +64,34 @@ class DashboardFragment : Fragment() {
         (activity as MainActivity).setDrawerEnabled(true)
 
         binding.rltMaternity.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("0"))
+            proceedNext("0")
         }
         binding.newBornButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("1"))
+            proceedNext("1")
         }
         binding.newbornPatientsButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("2"))
+            proceedNext("2")
         }
         binding.postNatalButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("3"))
+            proceedNext("3")
         }
         binding.allPatientsButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("4"))
+            proceedNext("4")
         }
         binding.humanMilkButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("5"))
+            proceedNext("5")
         }
         binding.monitoringButton.setOnClickListener {
-            findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList("6"))
+            proceedNext("6")
         }
 
 
     }
 
+    private fun proceedNext(s: String) {
+        findNavController().navigate(DashboardFragmentDirections.actionDashboardToPatientList(s))
+
+    }
     private fun drawIcons() {
         drawIcon(binding.maternityButton, R.drawable.ic_baseline_circle)
         drawIcon(binding.newBornButton, R.drawable.ic_baseline_circle)
@@ -104,12 +108,18 @@ class DashboardFragment : Fragment() {
         }
     }
 
+
     private fun createImageBitmap(key: Int, layoutParams: ViewGroup.LayoutParams) {
         if (mBitmapCache!![key] == null) {
-            mBitmapCache!!.put(key, ImageUtils.decodeBitmapFromResource(resources, key,
-                layoutParams.width, layoutParams.height))
+            mBitmapCache!!.put(
+                key, ImageUtils.decodeBitmapFromResource(
+                    resources, key,
+                    layoutParams.width, layoutParams.height
+                )
+            )
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

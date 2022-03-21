@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Neonatal DAK</string>
+    <string name="app_name">Human Milk</string>
 
-    <string name="title_nndak">NNDAK</string>
+    <string name="title_nndak">Human Milk</string>
     <string name="title_patient_list">Registered Patients</string>
     <string name="title_patient_detail">SamplePatient Detail</string>
 
@@ -39,7 +39,6 @@
     <string name="header_observation">Observations</string>
     <string name="header_conditions">Conditions</string>
     <string name="message_no_datetime">No effective DateTime</string>
-    <string name="message_no_value_quantity">No Value Quantity</string>
     <string name="complete_survey">Complete Survey</string>
     <string name="risk_status">Current status: </string>
     <string name="unknown">UNKNOWN</string>

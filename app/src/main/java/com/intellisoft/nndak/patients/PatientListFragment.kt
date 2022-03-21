@@ -167,66 +167,47 @@ class PatientListFragment : Fragment() {
     }
 
     private fun onPatientItemClicked(patientItem: PatientItem) {
-        if (!args.step.isNullOrEmpty()) {
-            if (args.step.equals("0")) {
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId, "hey.json", "Maternity Registration"
-                    )
-                )
-            }
-            if (args.step.equals("1")) {
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId,
-                        "mother-child-assessment.json", "Mother & Child Assessment"
-                    )
-                )
-            }
-            if (args.step.equals("2")) {
+        if (args.step.isNotEmpty()) {
+            if (args.step == "0") {
 
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId,
-                        "new-born.json", "New Born Unit"
-                    )
-                )
+                screenerScreen(patientItem, "maternity.json", "Maternity Registration")
+            }
+            if (args.step == "1") {
 
+                screenerScreen(patientItem, "mother-child-assessment.json", "Mother & Child Assessment")
+            }
+            if (args.step == "2") {
+
+                screenerScreen(patientItem, "new-born.json", "New Born Unit")
 
             }
-            if (args.step.equals("3")) {
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId,
-                        "post-natal.json", "Post Natal Unit"
-                    )
-                )
+            if (args.step == "3") {
+                screenerScreen(patientItem, "post-natal.json", "Post Natal Unit")
             }
-            if (args.step.equals("4")) {
+            if (args.step == "4") {
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
                     )
                 )
             }
-            if (args.step.equals("5")) {
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId,
-                        "human-milk.json", "Human Milk"
-                    )
-                )
+            if (args.step == "5") {
+
+                screenerScreen(patientItem, "human-milk.json", "Human Milk Bank")
             }
-            if (args.step.equals("6")) {
-                findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                        patientItem.resourceId,
-                        "assessment.json", "Monitoring & Assessment"
-                    )
-                )
+            if (args.step == "6") {
+                screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
             }
 
         }
+    }
+
+    private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
+        findNavController().navigate(
+            PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
+                patientItem.resourceId, asset, title
+            )
+        )
     }
 
     private fun onAddPatientClick() {

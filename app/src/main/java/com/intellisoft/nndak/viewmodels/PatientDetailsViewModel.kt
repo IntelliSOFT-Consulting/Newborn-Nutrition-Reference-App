@@ -243,8 +243,10 @@ class PatientDetailsViewModel(
             val value =
                 if (observation.hasValueQuantity()) {
                     observation.valueQuantity.value.toString()
+                } else if (observation.hasValueCodeableConcept()) {
+                    observation.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
                 } else {
-                    resources.getText(R.string.message_no_value_quantity).toString()
+                    ""
                 }
             val valueUnit =
                 if (observation.hasValueQuantity()) {
@@ -280,7 +282,7 @@ class PatientDetailsViewModel(
                 if (condition.hasVerificationStatus()) {
                     condition.verificationStatus.codingFirstRep.code
                 } else {
-                    resources.getText(R.string.message_no_value_quantity).toString()
+                    ""
                 }
 
             return ConditionItem(
