@@ -1,6 +1,7 @@
-package com.intellisoft.nndak.patients
+package com.intellisoft.nndak.screens.patients
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -96,6 +97,7 @@ class PatientDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_patient_edit -> {
+                Log.e("Patient Details","Resource ID::: ${args.patientId}")
                 findNavController()
                     .navigate(
                         PatientDetailsFragmentDirections.navigateToEditPatient(

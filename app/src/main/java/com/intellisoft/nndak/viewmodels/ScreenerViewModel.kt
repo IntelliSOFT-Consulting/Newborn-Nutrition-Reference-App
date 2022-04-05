@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -9,6 +10,7 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.screens.ScreenerFragment
 import java.math.BigDecimal
 import java.util.UUID
@@ -30,11 +32,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private var questionnaireJson: String? = null
     private var fhirEngine: FhirEngine = FhirApplication.fhirEngine(application.applicationContext)
 
-    /**
-     * Saves screener encounter questionnaire response into the application database.
-     *
-     * @param questionnaireResponse screener encounter questionnaire response
-     */
     fun saveScreenerEncounter(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val bundle =
@@ -43,6 +40,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResource,
                     questionnaireResponse
                 )
+            Log.e("Saving:::: ",bundle.fhirType())
             val subjectReference = Reference("Patient/$patientId")
             val encounterId = generateUuid()
             if (isRequiredFieldMissing(bundle)) {
@@ -193,7 +191,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             .asSequence()
             .filter { it.resource is Observation }
             .map { it.resource as Observation }
-            .filter { it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(SPO2) }
+            .filter { it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(Logics.SPO2) }
             .map { it.valueQuantity.value }
             .firstOrNull()
     }
@@ -213,7 +211,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
     private fun isSymptomPresent(symptom: String): Boolean {
-        return symptoms.contains(symptom)
+        return Logics.symptoms.contains(symptom)
     }
 
     private fun isComorbidityPresent(bundle: Bundle): Boolean {
@@ -231,35 +229,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
     private fun isComorbidityPresent(comorbidity: String): Boolean {
-        return comorbidities.contains(comorbidity)
+        return Logics.comorbidities.contains(comorbidity)
     }
 
-    private companion object {
-        const val ASTHMA = "161527007"
-        const val LUNG_DISEASE = "13645005"
-        const val DEPRESSION = "35489007"
-        const val DIABETES = "161445009"
-        const val HYPER_TENSION = "161501007"
-        const val HEART_DISEASE = "56265001"
-        const val HIGH_BLOOD_LIPIDS = "161450003"
 
-        const val FEVER = "386661006"
-        const val SHORTNESS_BREATH = "13645005"
-        const val COUGH = "49727002"
-        const val LOSS_OF_SMELL = "44169009"
-
-        const val SPO2 = "59408-5"
-
-        private val comorbidities: Set<String> =
-            setOf(
-                ASTHMA,
-                LUNG_DISEASE,
-                DEPRESSION,
-                DIABETES,
-                HYPER_TENSION,
-                HEART_DISEASE,
-                HIGH_BLOOD_LIPIDS
-            )
-        private val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
-    }
 }

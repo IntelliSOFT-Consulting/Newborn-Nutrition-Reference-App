@@ -1,5 +1,6 @@
 package com.intellisoft.nndak
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +10,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.fhir.sync.State
+import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.dashboard.DashboardFragment
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -21,9 +25,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 const val MAX_RESOURCE_COUNT = 20
-const val USER_ADDRESS = "Kenya-Pumwani"
-//const val USER_ADDRESS = "NAIROBI"
+const val CURRENT_ORGANIZATION ="NAIROBI"// "Pumwani Maternity Hospital"
+const val USER_ADDRESS = "NAIROBI"
 const val USER_COUNTRY = "KE"
+const val SYNC_PARAM="address-city"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -81,6 +86,25 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_sync -> {
                 viewModel.poll()
+                true
+            }
+            R.id.menu_exit -> {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Logout")
+                builder.setMessage("Are you sure you want to logout?")
+
+                builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                    FhirApplication.setLoggedIn(this,false)
+                    finishAffinity()
+                    val i = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(i)
+
+                }
+
+                builder.setNegativeButton(android.R.string.no) { dialog, which ->
+                    dialog.dismiss()
+                }
+                builder.show()
                 true
             }
 

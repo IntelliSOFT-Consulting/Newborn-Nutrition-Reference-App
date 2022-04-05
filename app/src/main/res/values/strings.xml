@@ -99,4 +99,5 @@
     <string name="action_new_born">New Born</string>
     <string name="action_post_natallabel">Post Natal</string>
     <string name="skip">Skip</string>
+    <string name="exit_menu">Logout</string>
 </resources>

@@ -9,7 +9,7 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.intellisoft.nndak.FhirApplication
-import com.intellisoft.nndak.patients.AddPatientFragment
+import com.intellisoft.nndak.screens.patients.AddPatientFragment
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import java.util.*

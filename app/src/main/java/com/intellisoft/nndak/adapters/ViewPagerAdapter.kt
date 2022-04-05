@@ -12,21 +12,21 @@ import com.intellisoft.nndak.R
 
 class ViewPagerAdapter(private val context: Context) : PagerAdapter() {
 
-    val images = intArrayOf(
+    private val images = intArrayOf(
         R.drawable.behavior,
         R.drawable.pediatrics,
         R.drawable.healthcare,
         R.drawable.checkup
     )
 
-    val headings = intArrayOf(
+    private val headings = intArrayOf(
         R.string.heading_one,
         R.string.heading_two,
         R.string.heading_three,
         R.string.heading_fourth
     )
 
-    val description = intArrayOf(
+    private val description = intArrayOf(
         R.string.desc_one,
         R.string.desc_two,
         R.string.desc_three,
@@ -44,11 +44,12 @@ class ViewPagerAdapter(private val context: Context) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val layoutInflater =
-            context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = layoutInflater.inflate(R.layout.slider_layout, container, false)
         val slidetitleimage = view.findViewById<ImageView>(R.id.titleImage)
         val slideHeading = view.findViewById<TextView>(R.id.texttitle)
         val slideDesciption = view.findViewById<TextView>(R.id.textdeccription)
+
         slidetitleimage.setImageResource(images[position])
         slideHeading.setText(headings[position])
         slideDesciption.setText(description[position])

@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,10 +16,12 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import com.intellisoft.nndak.viewmodels.TAG
 
 /** A fragment class to show screener questionnaire screen. */
 class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
@@ -84,6 +87,10 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
     private fun onSubmitAction() {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+          val context= FhirContext.forR4()
+         Log.d(TAG,"Questionnaire Response:::: "+context.newJsonParser().encodeResourceToString(questionnaireFragment.getQuestionnaireResponse()))
+
         viewModel.saveScreenerEncounter(
             questionnaireFragment.getQuestionnaireResponse(),
             args.patientId

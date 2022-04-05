@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.patients
+package com.intellisoft.nndak.screens.patients
 
 import android.os.Bundle
 import android.view.*
@@ -14,12 +14,13 @@ import com.intellisoft.nndak.viewmodels.AddPatientViewModel
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import org.hl7.fhir.r4.model.QuestionnaireResponse
-import java.util.*
 
 
 class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
 
     private val viewModel: AddPatientViewModel by viewModels()
+
+    private val TAG = "AddPatientFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +62,7 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
 
     private fun updateArguments() {
         requireArguments()
-            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "new-patient-registration-paginated.json")
+            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "new-patient-registration.json")
     }
 
     private fun addQuestionnaireFragment() {
@@ -76,6 +77,9 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
     private fun onSubmitAction() {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+      //  val context=FhirContext.forR4()
+        //Log.d(TAG,context.newJsonParser().encodeResourceToString(questionnaireFragment.getQuestionnaireResponse()))
         savePatient(questionnaireFragment.getQuestionnaireResponse())
     }
 

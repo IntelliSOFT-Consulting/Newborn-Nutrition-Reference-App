@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.patients
+package com.intellisoft.nndak.screens.patients
 
 import android.os.Bundle
 import android.view.Menu
@@ -31,7 +31,7 @@ class EditPatientFragment : Fragment(R.layout.add_patient_fragment) {
             title = requireContext().getString(R.string.edit_patient)
         }
         requireArguments()
-            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "new-patient-registration-paginated.json")
+            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "new-patient-registration.json")
 
         viewModel.livePatientData.observe(viewLifecycleOwner) { addQuestionnaireFragment(it) }
         viewModel.isPatientSaved.observe(viewLifecycleOwner) {

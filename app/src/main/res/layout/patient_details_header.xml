@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:drawableStart="@drawable/ic_baseline_add_24"
                 android:drawablePadding="2dp"
                 android:paddingStart="2dp"
@@ -83,7 +83,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/maternity"
                 android:layout_width="0dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"

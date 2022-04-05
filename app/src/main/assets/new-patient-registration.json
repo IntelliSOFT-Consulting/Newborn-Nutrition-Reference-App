@@ -325,10 +325,6 @@
                     "expression": "Patient.address.country",
                     "name": "patientCity"
                   }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
                 }
               ],
               "linkId": "PR-address-country",
@@ -336,11 +332,6 @@
               "type": "string",
               "text": "Country",
               "required": true,
-              "initial": [
-                {
-                  "valueString": "Kenya-Pumwani"
-                }
-              ],
               "_text": {
                 "extension": [
                   {
@@ -358,9 +349,27 @@
                   }
                 ]
               }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.address.state",
+                    "name": "patientState"
+                  }
+                }
+              ],
+              "linkId": "PR-address-country",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.address.state",
+              "type": "string",
+              "text": "State",
+              "required": true
             }
           ]
         },
+
         {
           "extension": [
             {

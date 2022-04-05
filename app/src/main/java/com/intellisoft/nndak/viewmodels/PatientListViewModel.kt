@@ -12,6 +12,7 @@ import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
+import com.intellisoft.nndak.CURRENT_ORGANIZATION
 import com.intellisoft.nndak.USER_ADDRESS
 import com.intellisoft.nndak.models.PatientItem
 import kotlinx.coroutines.launch
@@ -101,13 +102,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
     }
 
     private fun filterCity(search: Search) {
-        search.filter(
-            Patient.ADDRESS_COUNTRY,
-            {
-                modifier = StringFilterModifier.CONTAINS
-                value = USER_ADDRESS
-            }
-        )
+        search.filter(Patient.ADDRESS_CITY, { value = "NAIROBI" })
     }
 
     private suspend fun getRiskAssessments(): Map<String, RiskAssessment?> {
@@ -146,6 +141,7 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
     val phone = if (hasTelecom()) telecom[0].value else ""
     val city = if (hasAddress()) address[0].city else ""
     val country = if (hasAddress()) address[0].country else ""
+    val state = if (hasAddress()) address[0].state else ""
     val isActive = active
     val html: String = if (hasText()) text.div.valueAsString else ""
 
@@ -159,6 +155,7 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
         city = city ?: "",
         country = country ?: "",
         isActive = isActive,
-        html = html
+        html = html,
+        state = state ?: ""
     )
 }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/patient_list"
-        android:name="com.intellisoft.nndak.patients.PatientListFragment"
+        android:name="com.intellisoft.nndak.screens.patients.PatientListFragment"
         android:label="Patient List"
         tools:layout="@layout/patient_list_view">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/patient_details"
-        android:name="com.intellisoft.nndak.patients.PatientDetailsFragment"
+        android:name="com.intellisoft.nndak.screens.patients.PatientDetailsFragment"
         android:label="Patient Details"
         tools:layout="@layout/patient_detail">
         <action
@@ -59,13 +59,13 @@
     </fragment>
     <fragment
         android:id="@+id/addPatientFragment"
-        android:name="com.intellisoft.nndak.patients.AddPatientFragment"
+        android:name="com.intellisoft.nndak.screens.patients.AddPatientFragment"
         android:label="@string/add_patient"
         tools:layout="@layout/add_patient_fragment" />
 
     <fragment
         android:id="@+id/editPatientFragment"
-        android:name="com.intellisoft.nndak.patients.EditPatientFragment"
+        android:name="com.intellisoft.nndak.screens.patients.EditPatientFragment"
         android:label="Edit Patient"
         tools:layout="@layout/add_patient_fragment">
         <argument

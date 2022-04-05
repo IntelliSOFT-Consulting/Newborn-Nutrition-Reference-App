@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.patients
+package com.intellisoft.nndak.screens.patients
 
 import android.content.Context
 import android.graphics.Color
@@ -170,7 +170,8 @@ class PatientListFragment : Fragment() {
         if (args.step.isNotEmpty()) {
             if (args.step == "0") {
 
-                screenerScreen(patientItem, "maternity.json", "Maternity Registration")
+                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
+               // screenerScreen(patientItem, "apgar-score.json", "Maternity Registration")
             }
             if (args.step == "1") {
 
@@ -185,6 +186,8 @@ class PatientListFragment : Fragment() {
                 screenerScreen(patientItem, "post-natal.json", "Post Natal Unit")
             }
             if (args.step == "4") {
+
+                Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
@@ -203,6 +206,8 @@ class PatientListFragment : Fragment() {
     }
 
     private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
+
+        Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
         findNavController().navigate(
             PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
                 patientItem.resourceId, asset, title

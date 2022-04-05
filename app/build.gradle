@@ -35,9 +35,13 @@ android {
     }
     packagingOptions {
         resources {
-            pickFirsts += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
+            pickFirsts += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt' ]
         }
     }
+  /*  packagingOptions {
+        pickFirst("META-INF/ASL-2.0.txt")
+        pickFirst("META-INF/LGPL-3.0.txt")
+    }*/
 }
 
 dependencies {
@@ -61,10 +65,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-
     /*FHIR */
     implementation("com.google.android.fhir:engine:0.1.0-alpha06")
     implementation("com.google.android.fhir:data-capture:0.1.0-beta02")
-//    implementation("com.google.android.fhir:workflow:0.1.0-alpha01")
+    /*implementation("com.google.android.fhir:workflow:0.1.0-alpha01")*/
 
 }

@@ -49,6 +49,7 @@
         {
           "linkId": "1.0.0",
           "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
               "linkId": "1.0.1",
@@ -80,12 +81,14 @@
         {
           "linkId": "2.0.0",
           "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
               "linkId": "2.0.1",
               "type": "decimal",
               "text": "(Gravidity) How many times have you been pregnant?",
               "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -104,44 +107,13 @@
                   "valueDecimal": 15.0
                 }
               ]
-            },
-            {
-              "linkId": "2.0.2",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "/wk"
-                }
-              ]
-            },
-            {
-              "linkId": "2.0.3",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "http://unitsofmeasure.org"
-                }
-              ]
             }
           ]
         },
         {
           "linkId": "3.0.0",
           "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
               "linkId": "gestation",
@@ -171,7 +143,6 @@
               "type": "date",
               "text": "Last Menstrual Period (LMP)",
               "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
@@ -194,7 +165,6 @@
               "type": "date",
               "text": "Expected Date of Delivery",
               "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
@@ -268,27 +238,6 @@
             },
             {
               "valueCoding": {
-                "code": "35489007",
-                "display": "Depression",
-                "system": "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "161445009",
-                "display": "Diabetes",
-                "system": "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "161501007",
-                "display": "Hypertension",
-                "system": "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
                 "code": "56265001",
                 "display": "Heart disease",
                 "system": "http://snomed.info/sct"
@@ -335,7 +284,6 @@
             {
               "linkId": "4.2.1",
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
               "initial": [
                 {
                   "valueCoding": {
@@ -386,141 +334,6 @@
                   "valueCoding": {
                     "code": "13645005",
                     "display": "Chronic Lung Disease",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.4.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "depression"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "4.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "35489007",
-                "display": "Depression",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.4.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "35489007",
-                    "display": "Depression",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.5.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "diabetes"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "4.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "161445009",
-                "display": "Diabetes",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.5.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "161445009",
-                    "display": "Diabetes",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.6.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "hypertension"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "4.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "161501007",
-                "display": "Hypertension",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.6.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "161501007",
-                    "display": "Hypertension",
                     "system": "http://snomed.info/sct"
                   }
                 }
@@ -668,7 +481,6 @@
               "text": "What is the Labor Stage",
               "type": "choice",
               "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -733,7 +545,6 @@
               "text": "What method was used to deliver the baby?",
               "type": "choice",
               "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -812,7 +623,6 @@
               "text": "Was there any of the following Conditions?",
               "type": "choice",
               "repeats": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -859,7 +669,6 @@
       "text": "Vitamin K",
       "type": "group",
       "linkId": "4.0.0",
-      "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -889,7 +698,6 @@
           "type": "choice",
           "linkId": "4.1.0",
           "required": true,
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
           "answerOption": [
             {
               "valueCoding": {

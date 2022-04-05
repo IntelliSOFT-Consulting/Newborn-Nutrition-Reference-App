@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "HumanMilk"
+rootProject.name = "human-milk"
 include ':app'
