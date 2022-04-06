@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-    <color name="colorPrimary">#449026</color>
+    <color name="colorPrimary">#169722</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">@color/colorPrimary</color>
     <color name="colorStatusBar">@color/colorPrimary</color>
@@ -17,4 +17,8 @@
     <color name="buttontext">#50C2C9</color>
     <color name="inactive">#C4C4C4</color>
     <color name="active">#50C2C9</color>
+    <color name="gradient_start">#4CAF50</color>
+    <color name="gradient_end">#CDDC39</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="textColor">#ECE5EC</color>
 </resources>

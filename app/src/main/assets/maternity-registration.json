@@ -459,11 +459,11 @@
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDecimal": 1
+                  "valueDecimal": 8
                 },
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 30
+                  "valueDecimal": 20
                 }
               ]
             },
@@ -740,7 +740,7 @@
     },
     {
       "text": "Date of Birth",
-      "linkId": "7.0.0",
+      "linkId": "11.0.0",
       "type": "date",
       "repeats": false,
       "required": true,
@@ -757,7 +757,7 @@
       ]
     },
     {
-      "linkId": "patient-0-gender",
+      "linkId": "12.0.0",
       "type": "choice",
       "text": "Baby's biological sex",
       "required": true,
@@ -825,6 +825,79 @@
               }
             ]
           }
+        }
+      ]
+    },
+
+    {
+      "linkId": "13.0.0",
+      "type": "group",
+      "enableWhen": [
+        {
+          "question": "10.1.1",
+          "operator": "=",
+          "answerCoding": {
+            "code": "Alive",
+            "display": "Alive",
+            "system": "http://snomed.info/sct"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "13.1.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "bornBefore"
+              }
+            }
+          ],
+          "item": [
+            {
+              "text": "Was baby born before arrival to facility?",
+              "linkId": "13.1.1",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Yes",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "No",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }

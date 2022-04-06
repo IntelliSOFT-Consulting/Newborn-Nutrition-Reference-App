@@ -25,10 +25,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 const val MAX_RESOURCE_COUNT = 20
-const val CURRENT_ORGANIZATION ="NAIROBI"// "Pumwani Maternity Hospital"
+const val CURRENT_ORGANIZATION ="NAIROBI";
+//const val CURRENT_ORGANIZATION = "Pumwani Maternity Hospital"
 const val USER_ADDRESS = "NAIROBI"
 const val USER_COUNTRY = "KE"
 const val SYNC_PARAM="address-city"
+//const val SYNC_PARAM="organization"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

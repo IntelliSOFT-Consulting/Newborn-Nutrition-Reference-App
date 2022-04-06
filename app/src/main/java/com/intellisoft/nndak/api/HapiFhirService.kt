@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.api
 
 import ca.uhn.fhir.parser.IParser
+import com.intellisoft.nndak.data.User
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,9 +11,15 @@ import org.hl7.fhir.r4.model.Resource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import retrofit2.Call
 
 /** hapi.fhir.org API communication via Retrofit */
 interface HapiFhirService {
+
+
+  @Headers("Content-Type: application/json")
+  @POST("users")
+  fun loginUser(@Body userData: User): Call<User>
 
   @GET suspend fun getResource(@Url url: String): Bundle
   @PUT("{type}/{id}")
