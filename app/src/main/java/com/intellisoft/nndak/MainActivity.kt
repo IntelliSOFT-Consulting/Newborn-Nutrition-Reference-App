@@ -23,14 +23,13 @@ import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 const val MAX_RESOURCE_COUNT = 20
-const val CURRENT_ORGANIZATION ="NAIROBI";
-//const val CURRENT_ORGANIZATION = "Pumwani Maternity Hospital"
+const val SYNC_VALUE = "Pumwani Maternity Hospital"
 const val USER_ADDRESS = "NAIROBI"
 const val USER_COUNTRY = "KE"
-const val SYNC_PARAM="address-city"
-//const val SYNC_PARAM="organization"
+const val SYNC_PARAM = "address-state"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 builder.setMessage("Are you sure you want to logout?")
 
                 builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                    FhirApplication.setLoggedIn(this,false)
+                    FhirApplication.setLoggedIn(this, false)
                     finishAffinity()
                     val i = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(i)
@@ -122,7 +121,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Log.i(TAG, message)
+        Timber.i(message)
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -131,7 +130,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeSyncState() {
         lifecycleScope.launch {
             viewModel.pollState.collect {
-                Log.d(TAG, "observerSyncState: pollState Got status $it")
+                Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
                     is State.Started -> showToast("Sync: started")
                     is State.InProgress -> showToast("Sync: in progress with ${it.resourceType?.name}")

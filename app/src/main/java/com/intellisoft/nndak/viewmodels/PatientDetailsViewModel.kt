@@ -111,17 +111,11 @@ class PatientDetailsViewModel(
                     PatientProperty(
                         getString(R.string.patient_property_gender),
                         it.gender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-                    ),
+
+                    ),lastInGroup = true
                 )
             )
-            data.add(
-                PatientDetailProperty(
-                    PatientProperty("State",
-                        it.state.toString()
-                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }),
-                            lastInGroup = true
-                )
-            )
+
         }
 
         if (observations.isNotEmpty()) {

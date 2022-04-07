@@ -47,7 +47,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 patient.telecom[0].value != null
             ) {
                 patient.id = generateUuid()
-                fhirEngine.save(patient)
+                fhirEngine.create(patient)
                 isPatientSaved.value = true
                 return@launch
             }

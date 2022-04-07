@@ -6,11 +6,13 @@
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/border.xml" value="0.2985" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/gradient_login.xml" value="0.2985" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/linear_background.xml" value="0.2985" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/nurse.xml" value="0.2665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/signin_button_bg.xml" value="0.2985" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/switch_tricks.xml" value="0.2985" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/switch_tumbs.xml" value="0.2985" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_login.xml" value="0.24954710144927536" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_otp.xml" value="0.358695652173913" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_splash.xml" value="0.2740036231884058" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/login_app_bar_layout.xml" value="0.358695652173913" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_header.xml" value="0.24954710144927536" />
       </map>

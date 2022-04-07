@@ -34,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var password: TextInputEditText
     private lateinit var signIn: TextView
     private lateinit var recover: TextView
-    private var isSign = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         password = binding.ePass
 
         progressBar = binding.pbLoading
-        hideProgress(progressBar,binding.btnSubmit)
+        hideProgress(progressBar, binding.btnSubmit)
 
         binding.btnSubmit.setOnClickListener {
 
@@ -59,90 +58,44 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        signIn = binding.signIn
-        recover = binding.recover
-
-        signIn.setOnClickListener {
-            isSign = true
-            binding.signIn.background = getDrawable(R.drawable.switch_tricks)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.signIn.setTextColor(getColor(R.color.textColor))
-            }
-
-            binding.recover.background = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.recover.setTextColor(getColor(R.color.colorPrimary))
-            };
-
-            binding.singUpLayout.isVisible = false
-            binding.logInLayout.isVisible = true
-
-        }
-        recover.setOnClickListener {
-            isSign = false
-            binding.recover.background = getDrawable(R.drawable.switch_tricks)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.recover.setTextColor(getColor(R.color.textColor))
-            }
-
-            binding.signIn.background = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.signIn.setTextColor(getColor(R.color.colorPrimary))
-            };
-
-            binding.logInLayout.isVisible = false
-            binding.singUpLayout.isVisible = true
-        }
     }
+
 
 
     private fun handleDataCheck() {
-        if (isSign) {
-            val user = username.text.toString()
-            val pass = password.text.toString()
-            if (!validInput(user)) {
-                binding.eMail.error = getString(R.string.enter_email_address)
-                binding.eMail.requestFocus()
-                return
-            }
-            if (!validEmail(user)) {
-                binding.eMail.error = getString(R.string.enter_valid_email_address)
-                binding.rMail.requestFocus()
-                return
-            }
-            if (isValidPassword(pass)) {
-                // validateLogin(user, pass)
-                FhirApplication.setLoggedIn(this, true)
-                finishAffinity()
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            } else {
-                Toast.makeText(this, "Enter your 6 Digit Password", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            val user = binding.rMail.text.toString()
-            if (!validInput(user)) {
-                binding.rMail.error = getString(R.string.enter_email_address)
-                binding.rMail.requestFocus()
-                return
-            }
-            if (!validEmail(user)) {
-                binding.rMail.error = getString(R.string.enter_valid_email_address)
-                binding.rMail.requestFocus()
-                return
-            }
-            processAccountRecover(user)
+
+        val user = username.text.toString()
+        val pass = password.text.toString()
+        if (!validInput(user)) {
+            binding.eMail.error = getString(R.string.enter_email_address)
+            binding.eMail.requestFocus()
+            return
         }
+        if (!validEmail(user)) {
+            binding.eMail.error = getString(R.string.enter_valid_email_address)
+            binding.eMail.requestFocus()
+            return
+        }
+        if (isValidPassword(pass)) {
+            // validateLogin(user, pass)
+            FhirApplication.setLoggedIn(this, true)
+            finishAffinity()
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        } else {
+            Toast.makeText(this, "Enter your 6 Digit Password", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun processAccountRecover(user: String) {
-        showProgress(binding.pbLoading,binding.btnSubmit)
-        val timer = object: CountDownTimer(3000, 1000) {
+        showProgress(binding.pbLoading, binding.btnSubmit)
+        val timer = object : CountDownTimer(3000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Timber.d("It's just a matter of time")
             }
 
             override fun onFinish() {
-                hideProgress(binding.pbLoading,binding.btnSubmit)
+                hideProgress(binding.pbLoading, binding.btnSubmit)
                 startActivity(Intent(this@LoginActivity, OtpActivity::class.java))
             }
         }
@@ -152,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateLogin(user: String, pass: String) {
 
-        showProgress(progressBar,binding.btnSubmit)
+        showProgress(progressBar, binding.btnSubmit)
         val apiService = RestManager()
         val user = User(
             userId = null,
@@ -162,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
 
         apiService.loginUser(user) {
 
-            hideProgress(progressBar,binding.btnSubmit)
+            hideProgress(progressBar, binding.btnSubmit)
 
             if (it?.userId != null) {
                 Timber.d("Success $it")
@@ -177,12 +130,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideProgress(progressBar: ProgressBar,button:MaterialButton) {
+    private fun hideProgress(progressBar: ProgressBar, button: MaterialButton) {
         progressBar.isVisible = false
         button.isVisible = true
     }
 
-    private fun showProgress(progressBar: ProgressBar,button:MaterialButton) {
+    private fun showProgress(progressBar: ProgressBar, button: MaterialButton) {
         progressBar.isVisible = true
         button.isVisible = false
     }
