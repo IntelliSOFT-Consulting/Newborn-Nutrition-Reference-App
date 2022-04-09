@@ -100,4 +100,7 @@
     <string name="action_post_natallabel">Post Natal</string>
     <string name="skip">Skip</string>
     <string name="exit_menu">Logout</string>
+
+    <string name="view"><u>View</u></string>
+
 </resources>
