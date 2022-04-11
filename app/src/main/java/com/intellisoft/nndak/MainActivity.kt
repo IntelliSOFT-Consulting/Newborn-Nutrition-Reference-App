@@ -32,6 +32,7 @@ const val USER_COUNTRY = "KE"
 const val SYNC_PARAM = "address-state"
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private val TAG = javaClass.name

@@ -53,19 +53,16 @@ class LoginActivity : AppCompatActivity() {
         hideProgress(progressBar, binding.btnSubmit)
 
         binding.btnSubmit.setOnClickListener {
-
             handleDataCheck()
         }
-
-
     }
 
 
 
     private fun handleDataCheck() {
 
-        val user = username.text.toString()
-        val pass = password.text.toString()
+        val user = username.text.toString().trim()
+        val pass = password.text.toString().trim()
         if (!validInput(user)) {
             binding.eMail.error = getString(R.string.enter_email_address)
             binding.eMail.requestFocus()
