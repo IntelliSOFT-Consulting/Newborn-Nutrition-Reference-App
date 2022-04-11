@@ -17,19 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/openmrsLogo"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="196dp"
+            android:layout_height="196dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:src="@drawable/checkup"
-            android:tint="@color/colorPrimary"
             android:visibility="visible"
-            app:civ_border_color="@color/colorPrimary"
-            app:civ_border_width="2dp"
+            android:src="@drawable/doctor"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/locationLoadingProgressBar" />
@@ -44,14 +42,14 @@
             android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/openmrsLogo" />
+            app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <TextView
             android:id="@+id/client_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:text="@string/app_name"
+            android:text="@string/app_slogan"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -81,7 +79,7 @@
                 app:hintTextColor="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_username"
+                    android:id="@+id/eMail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -104,7 +102,7 @@
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_password"
+                    android:id="@+id/ePass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberPassword"
@@ -115,14 +113,13 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginButton"
+                android:id="@+id/btnSubmit"
                 style="@style/loginButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal|center"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginVertical="@dimen/padding_16"
-                android:enabled="false"
                 android:fontFamily="@font/poppins"
                 android:gravity="center_vertical|center_horizontal"
                 android:insetTop="0dp"
@@ -181,7 +178,7 @@
         </LinearLayout>
 
         <ProgressBar
-            android:id="@+id/loginLoading"
+            android:id="@+id/pbLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
