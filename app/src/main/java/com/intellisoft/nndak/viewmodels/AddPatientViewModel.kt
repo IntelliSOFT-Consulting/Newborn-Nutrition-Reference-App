@@ -55,7 +55,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 if (isDateValid){
 
                     patient.id = generateUuid()
-                    fhirEngine.save(patient)
+                    fhirEngine.create(patient)
                     isPatientSaved.value = true
                     return@launch
 
