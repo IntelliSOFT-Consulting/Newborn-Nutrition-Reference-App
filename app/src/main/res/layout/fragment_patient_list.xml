@@ -11,6 +11,9 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.SearchView
+            app:queryBackground="@android:color/transparent"
+            android:layout_margin="10dp"
+            android:background="@drawable/search_round"
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,6 +23,7 @@
         <include
             android:id="@+id/patient_list_container"
             layout="@layout/patient_list_view" />
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -33,4 +37,5 @@
         android:foregroundTint="#ffffff"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_baseline_add_24" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
