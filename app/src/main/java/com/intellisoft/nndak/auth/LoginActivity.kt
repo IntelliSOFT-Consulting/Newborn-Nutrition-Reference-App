@@ -2,10 +2,7 @@ package com.intellisoft.nndak.auth
 
 import android.content.Intent
 import android.os.*
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -14,8 +11,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
-import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
 import com.intellisoft.nndak.utils.Common.isValidPassword
 import com.intellisoft.nndak.utils.Common.validEmail
@@ -30,8 +27,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
-    private lateinit var signIn: TextView
-    private lateinit var recover: TextView
     private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,10 +83,8 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         if (isValidPassword(pass)) {
-            // validateLogin(user, pass)
-            FhirApplication.setLoggedIn(this, true)
-            finishAffinity()
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            validateLogin(user, pass)
+
         } else {
             Toast.makeText(this, "Enter your 6 Digit Password", Toast.LENGTH_SHORT).show()
         }
@@ -118,24 +111,19 @@ class LoginActivity : AppCompatActivity() {
 
         showProgress(progressBar, binding.btnSubmit)
         val apiService = RestManager()
-        val user = User(
-            userId = null,
-            userEmail = email,
-            userPass = pass,
-        )
-
-        apiService.loginUser(user) {
+        val user = LoginData(email = email, password = pass)
+        apiService.loginUser(this,user) {
 
             hideProgress(progressBar, binding.btnSubmit)
 
-            if (it?.userId != null) {
+            if (it != null) {
                 Timber.d("Success $it")
+                FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             } else {
-                Timber.e("Error registering new user")
-                Toast.makeText(this, "Error Encountered,please try again", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -159,6 +147,8 @@ class LoginActivity : AppCompatActivity() {
 
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 }

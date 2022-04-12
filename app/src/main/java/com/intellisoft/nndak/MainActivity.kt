@@ -15,15 +15,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import com.google.android.fhir.sync.State
+import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.dashboard.DashboardFragment
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
+import com.intellisoft.nndak.screens.profile.ProfileActivity
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
 
 const val MAX_RESOURCE_COUNT = 20
 const val SYNC_VALUE = "Pumwani Maternity Hospital"
@@ -82,12 +85,18 @@ class MainActivity : AppCompatActivity() {
         drawerToggle = ActionBarDrawerToggle(this, binding.drawer, R.string.open, R.string.close)
         binding.drawer.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+        syncProfile()
     }
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_sync -> {
                 viewModel.poll()
+                true
+            }
+            R.id.menu_profile -> {
+                val i = Intent(this@MainActivity, ProfileActivity::class.java)
+                startActivity(i)
                 true
             }
             R.id.menu_exit -> {
@@ -101,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                     val i = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(i)
 
+
                 }
 
                 builder.setNegativeButton(android.R.string.no) { dialog, which ->
@@ -113,6 +123,20 @@ class MainActivity : AppCompatActivity() {
         }
         binding.drawer.closeDrawer(GravityCompat.START)
         return false
+    }
+
+    private fun syncProfile() {
+        val apiService = RestManager()
+        apiService.loadUser(this) {
+
+            if (it != null) {
+                val gson = Gson()
+                val json = gson.toJson(it)
+                FhirApplication.updateProfile(this,json)
+            } else {
+               Log.e(TAG,"Error")
+            }
+        }
     }
 
     private fun replaceFragment(fragment: DashboardFragment) {

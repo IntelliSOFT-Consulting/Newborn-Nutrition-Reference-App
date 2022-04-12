@@ -8,49 +8,18 @@
             android:icon="@android:drawable/ic_popup_sync"
             android:title="@string/sync_menu" />
     </group>
- <group
-        android:id="@+id/grp_maternity"
+    <group
+        android:id="@+id/grp_account"
         android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_profile"
+            android:icon="@drawable/ic_baseline_account_box_24"
+            android:title="@string/action_profile" />
         <item
             android:id="@+id/menu_exit"
             android:icon="@drawable/ic_baseline_exit_to_app_24"
             android:title="@string/exit_menu" />
-<!--        <item-->
-<!--            android:id="@+id/menu_maternity"-->
-<!--            android:icon="@drawable/ic_baseline_pregnant_woman_24"-->
-<!--            android:title="@string/maternity_menu" />-->
-<!--        <item-->
-<!--            android:id="@+id/menu_mother_child"-->
-<!--            android:icon="@drawable/ic_baseline_assessment_24"-->
-<!--            android:title="@string/mother_child_menu" />-->
-    </group>
-    <!--     <group
-          android:id="@+id/grp_post_natal"
-          android:checkableBehavior="single">
-          <item
-              android:id="@+id/menu_post_natal"
-              android:icon="@drawable/ic_baseline_emoji_nature_24"
-              android:title="@string/post_natal_menu" />
-          <item
-              android:id="@+id/menu_new_born"
-              android:icon="@drawable/ic_baseline_baby_changing_station_24"
-              android:title="@string/new_born_menu" />
-      </group>
-      <group
-          android:id="@+id/grp_assessment"
-          android:checkableBehavior="single">
-          <item
-              android:id="@+id/menu_feeding"
-              android:icon="@drawable/ic_baseline_touch_app_24"
-              android:title="@string/feeding_assessment_menu" />
-          <item
-              android:id="@+id/menu_hmb"
-              android:icon="@drawable/ic_baseline_medical_services_24"
-              android:title="@string/hmb_menu" />
-          <item
-              android:id="@+id/menu_monitoring"
-              android:icon="@drawable/ic_baseline_assignment_24"
-              android:title="@string/monitoring_menu" />
 
-      </group>-->
+    </group>
+
 </menu>

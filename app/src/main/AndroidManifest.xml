@@ -15,8 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".screens.profile.ProfileActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".auth.ChangerActivity"
             android:exported="false"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".auth.OtpActivity"

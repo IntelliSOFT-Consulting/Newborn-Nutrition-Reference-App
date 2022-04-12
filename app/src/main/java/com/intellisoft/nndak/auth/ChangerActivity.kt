@@ -1,21 +1,27 @@
 package com.intellisoft.nndak.auth
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.andrognito.pinlockview.IndicatorDots
-import com.andrognito.pinlockview.PinLockListener
-import com.andrognito.pinlockview.PinLockView
+import androidx.core.view.isVisible
+import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.LoginData
+import com.intellisoft.nndak.data.RestManager
+import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityChangerBinding
+import com.intellisoft.nndak.utils.Common
+import com.intellisoft.nndak.utils.Common.validInput
 import timber.log.Timber
 
 class ChangerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChangerBinding
-    private lateinit var mPinLockView: PinLockView
-    private lateinit var mIndicatorDots: IndicatorDots
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,35 +36,79 @@ class ChangerActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.screen_encounter_fragment_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add_patient_submit -> {
+                onSubmitAction()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onSubmitAction() {
+        /*Make APi Call Here*/
+        val npass = binding.ePass.text.toString().trim()
+        val cpass = binding.cPass.text.toString().trim()
+
+        if (!validInput(npass)) {
+            binding.ePass.error = getString(R.string.action_enter_pin)
+            binding.ePass.requestFocus()
+            return
+        }
+        if (!validInput(cpass)) {
+            binding.cPass.error = getString(R.string.action_confirm_password)
+            binding.cPass.requestFocus()
+            return
+        }
+        if (npass != cpass) {
+            binding.cPass.error = getString(R.string.action_matching_password)
+            binding.cPass.requestFocus()
+            return
+        }
+        val apiService = RestManager()
+        val user = LoginData(
+            email = npass,
+            password = cpass,
+        )
+        binding.progressBar.isVisible = true
+        apiService.loginUser(this,user) {
+            binding.progressBar.isVisible = false
+            if (it != null) {
+                Timber.d("Success $it")
+                finishAffinity()
+                startActivity(Intent(this@ChangerActivity, MainActivity::class.java))
+            } else {
+                Timber.e("Error registering new user")
+                Toast.makeText(this, "Error Encountered,please try again", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
     private fun initViews() {
-
-        mPinLockView = binding.pinLockView
-        mIndicatorDots = binding.indicatorDots
-
-        mPinLockView.attachIndicatorDots(mIndicatorDots)
-        mPinLockView.setPinLockListener(pinLock)
-        mPinLockView.pinLength = 6
-        mPinLockView.textColor = ContextCompat.getColor(this@ChangerActivity, R.color.white)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = ""
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     }
 
-//
-
-
-    private val pinLock: PinLockListener = object : PinLockListener {
-
-        override fun onComplete(pin: String) {
-            verifyPIN(pin)
-        }
-
-        override fun onEmpty() {
-            Timber.d("Pin Empty")
-        }
-
-        override fun onPinChange(pinLength: Int, intermediatePin: String) {
-            Timber.d("Pin Entered $intermediatePin")
-        }
-    }
 }
 
 
