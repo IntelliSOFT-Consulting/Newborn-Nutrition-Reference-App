@@ -28,12 +28,13 @@ class ChangerActivity : AppCompatActivity() {
 
     private fun initViews() {
         binding.pinLockView.attachIndicatorDots(binding.indicatorDots)
-        binding.pinLockView.setPinLockListener(mPinLockListener)
-        binding.pinLockView.pinLength = 6
+        binding.pinLockView.setPinLockListener(pinLock)
+        binding.pinLockView.pinLength=6
         binding.pinLockView.textColor = ContextCompat.getColor(this@ChangerActivity, R.color.white)
+
     }
 
-    private val mPinLockListener: PinLockListener = object : PinLockListener {
+    private val pinLock: PinLockListener = object : PinLockListener {
 
         override fun onComplete(pin: String) {
             verifyPIN(pin)

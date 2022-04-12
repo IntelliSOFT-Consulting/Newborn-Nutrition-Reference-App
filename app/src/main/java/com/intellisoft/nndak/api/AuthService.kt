@@ -16,7 +16,7 @@ interface AuthService {
 
     object ServiceBuilder {
 
-        const val BASE_URL = "https://broshere.imejadevelopers.co.ke/api/"
+        const val BASE_URL = "https://hapi.fhir.org/baseR4/"
 
         private val client = OkHttpClient.Builder().build()
 
