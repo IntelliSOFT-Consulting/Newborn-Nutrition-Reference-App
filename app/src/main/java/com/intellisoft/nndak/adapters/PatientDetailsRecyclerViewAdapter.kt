@@ -19,7 +19,9 @@ import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.viewmodels.*
 
 class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,private val onMaternityClick: () -> Unit) :
+
     ListAdapter<PatientDetailData, PatientDetailItemViewHolder>(PatientDetailDiffUtil()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientDetailItemViewHolder {
         return when (ViewTypes.from(viewType)) {
             ViewTypes.HEADER ->
@@ -184,6 +186,7 @@ class PatientPropertyItemViewHolder(private val binding: PatientListItemViewBind
         }
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE
+        binding.tvView.visibility = View.INVISIBLE
     }
 }
 
@@ -203,6 +206,7 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
         }
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE
+        binding.tvView.visibility = View.INVISIBLE
     }
 }
 
@@ -215,6 +219,7 @@ class PatientDetailsConditionItemViewHolder(private val binding: PatientListItem
         }
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE
+        binding.tvView.visibility = View.INVISIBLE
     }
 }
 
