@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -40,6 +41,10 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                     .entryFirstRep
             if (entry.resource !is Patient) return@launch
             val patient = entry.resource as Patient
+
+
+
+
             if (patient.hasName() &&
                 patient.name[0].hasGiven() &&
                 patient.name[0].hasFamily() &&
@@ -48,11 +53,13 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 patient.telecom[0].value != null &&
                 patient.hasBirthDate()
             ) {
+                val isPhoneNo = FormatHelper().checkPhoneNo(patient.telecom[0].value)
+
                 val birthDate = patient.birthDate.toString()
                 val todayDate = FormatHelper().getTodayDate()
                 val isDateValid = FormatHelper().checkDate(birthDate,todayDate)
 
-                if (isDateValid){
+                if (isDateValid && isPhoneNo){
 
                     patient.id = generateUuid()
                     fhirEngine.create(patient)
@@ -60,12 +67,16 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                     return@launch
 
                 }
+                Log.e("++++++ ", isPhoneNo.toString())
+
                 isPatientSaved.value = false
             }
 
             isPatientSaved.value = false
         }
     }
+
+
 
     private fun getQuestionnaireJson(): String {
         questionnaireJson?.let {

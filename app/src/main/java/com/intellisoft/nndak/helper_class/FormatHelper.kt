@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.helper_class
 
+import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,6 +30,17 @@ class FormatHelper {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val date = Date()
         return formatter.format(date)
+    }
+
+    fun checkPhoneNo(string: String):Boolean{
+        var isNo = true
+
+        try {
+            val num = parseDouble(string)
+        } catch (e: NumberFormatException) {
+            isNo = false
+        }
+        return isNo
     }
 
 }

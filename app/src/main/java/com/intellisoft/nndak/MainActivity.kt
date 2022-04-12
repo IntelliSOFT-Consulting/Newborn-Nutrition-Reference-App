@@ -23,7 +23,7 @@ import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
+//import timber.log.Timber
 
 const val MAX_RESOURCE_COUNT = 20
 const val SYNC_VALUE = "Pumwani Maternity Hospital"
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Timber.i(message)
+//        Timber.i(message)
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeSyncState() {
         lifecycleScope.launch {
             viewModel.pollState.collect {
-                Timber.d("observerSyncState: pollState Got status $it")
+//                Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
                     is State.Started -> showToast("Sync: started")
                     is State.InProgress -> showToast("Sync: in progress with ${it.resourceType?.name}")
