@@ -49,8 +49,8 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:padding="3dp"
-                android:src="@drawable/custom"
                 android:scaleType="centerCrop"
+                android:src="@drawable/custom"
                 app:civ_border_color="@android:color/black"
                 app:civ_border_width="1dp" />
 
@@ -75,6 +75,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height=".3dp"
@@ -105,6 +106,7 @@
                 android:text="@string/action_role"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/tv_role"
                 android:layout_width="0dp"
@@ -129,6 +131,7 @@
             android:layout_height=".3dp"
             android:layout_marginTop="15dp"
             android:background="@color/colorPrimary" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -152,6 +155,7 @@
                 android:text="@string/action_member"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/tv_since"
                 android:layout_width="0dp"
@@ -182,6 +186,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1" />
+
         <LinearLayout
             android:id="@+id/lyt_logout"
             android:layout_width="wrap_content"
