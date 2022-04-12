@@ -9,6 +9,7 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.screens.patients.AddPatientFragment
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
@@ -44,12 +45,22 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 patient.name[0].hasFamily() &&
                 patient.hasBirthDate() &&
                 patient.hasTelecom() &&
-                patient.telecom[0].value != null
+                patient.telecom[0].value != null &&
+                patient.hasBirthDate()
             ) {
-                patient.id = generateUuid()
-                fhirEngine.create(patient)
-                isPatientSaved.value = true
-                return@launch
+                val birthDate = patient.birthDate.toString()
+                val todayDate = FormatHelper().getTodayDate()
+                val isDateValid = FormatHelper().checkDate(birthDate,todayDate)
+
+                if (isDateValid){
+
+                    patient.id = generateUuid()
+                    fhirEngine.create(patient)
+                    isPatientSaved.value = true
+                    return@launch
+
+                }
+                isPatientSaved.value = false
             }
 
             isPatientSaved.value = false

@@ -100,6 +100,9 @@
     <string name="action_post_natallabel">Post Natal</string>
     <string name="skip">Skip</string>
     <string name="exit_menu">Logout</string>
+
+
+
     <string name="welcome_text_Wizard">Welcome Back</string>
     <string name="signin_now">Signin</string>
     <string name="log_in">SignIn</string>
@@ -110,6 +113,8 @@
     <string name="enter_valid_email_address">Enter Valid Email Address</string>
     <string name="hint_0">0</string>
     <string name="app_slogan">Life saving milk</string>
+
     <string name="view"><u>View</u></string>
     <string name="action_enter_pin">Enter New Pin</string>
+
 </resources>

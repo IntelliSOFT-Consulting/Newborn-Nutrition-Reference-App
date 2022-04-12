@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
     /*FHIR */
     implementation("com.google.android.fhir:engine:0.1.0-beta01")
+    implementation("com.google.android.fhir:engine:0.1.0-beta01")
     implementation("com.google.android.fhir:data-capture:0.1.0-beta02")
 
 }
