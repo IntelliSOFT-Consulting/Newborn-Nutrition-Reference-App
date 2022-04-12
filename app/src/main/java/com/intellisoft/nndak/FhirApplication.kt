@@ -3,10 +3,7 @@ package com.intellisoft.nndak
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.android.fhir.DatabaseErrorStrategy
-import com.google.android.fhir.FhirEngine
-import com.google.android.fhir.FhirEngineConfiguration
-import com.google.android.fhir.FhirEngineProvider
+import com.google.android.fhir.*
 import com.google.android.fhir.sync.Sync
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.LOGIN
@@ -26,7 +23,8 @@ class FhirApplication : Application() {
         instance = this.applicationContext
           FhirEngineProvider.init(
             FhirEngineConfiguration(enableEncryptionIfSupported = true,
-                DatabaseErrorStrategy.RECREATE_AT_OPEN
+                DatabaseErrorStrategy.RECREATE_AT_OPEN,
+                ServerConfiguration("https://hapi.fhir.org/baseR4/")
             )
           )
         Sync.oneTimeSync<FhirPeriodicSyncWorker>(this)

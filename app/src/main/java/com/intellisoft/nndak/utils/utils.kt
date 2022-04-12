@@ -1,11 +1,13 @@
 package com.intellisoft.nndak.utils
 
 import com.google.android.material.textfield.TextInputEditText
+import com.intellisoft.nndak.R
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 object Common {
 
@@ -35,7 +37,7 @@ object Common {
 
     }
 
-    fun getAddress(city: String,country: String): List<Address> {
+    fun getAddress(city: String, country: String): List<Address> {
         return listOf(Address().setCity(city.uppercase()).setCountry(country.uppercase()))
     }
 
@@ -49,5 +51,28 @@ object Common {
             Locale.ENGLISH
         ).parse(dob)
 
+    }
+
+    fun validInput(input: String): Boolean {
+        if (input.isEmpty()) {
+            return false
+        }
+        return true
+    }
+
+    fun validEmail(email: String): Boolean {
+        val emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$"
+
+        val pat: Pattern = Pattern.compile(emailRegex)
+        return pat.matcher(email).matches()
+    }
+      fun isValidPassword(string: String): Boolean {
+        if (string.length > 5) {
+            return true
+        }
+        return false
     }
 }
