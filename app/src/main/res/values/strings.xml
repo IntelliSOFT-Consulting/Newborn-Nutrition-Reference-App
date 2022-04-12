@@ -111,4 +111,5 @@
     <string name="hint_0">0</string>
     <string name="app_slogan">Life saving milk</string>
     <string name="view"><u>View</u></string>
+    <string name="action_enter_pin">Enter New Pin</string>
 </resources>

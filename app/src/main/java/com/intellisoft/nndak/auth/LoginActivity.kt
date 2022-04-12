@@ -1,9 +1,7 @@
 package com.intellisoft.nndak.auth
 
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.CountDownTimer
+import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ProgressBar
@@ -34,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var password: TextInputEditText
     private lateinit var signIn: TextView
     private lateinit var recover: TextView
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +54,23 @@ class LoginActivity : AppCompatActivity() {
         binding.btnSubmit.setOnClickListener {
             handleDataCheck()
         }
-    }
+        binding.forgotPass.setOnClickListener {
 
+            val user = username.text.toString().trim()
+
+            if (!validInput(user)) {
+                binding.eMail.error = getString(R.string.enter_email_address)
+                binding.eMail.requestFocus()
+                return@setOnClickListener
+            }
+            if (!validEmail(user)) {
+                binding.eMail.error = getString(R.string.enter_valid_email_address)
+                binding.eMail.requestFocus()
+                return@setOnClickListener
+            }
+            processAccountRecover(user)
+        }
+    }
 
 
     private fun handleDataCheck() {
@@ -88,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
         showProgress(binding.pbLoading, binding.btnSubmit)
         val timer = object : CountDownTimer(3000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Timber.d("It's just a matter of time")
+                Timber.d("It's just a matter of time $user")
             }
 
             override fun onFinish() {
@@ -100,13 +114,13 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun validateLogin(user: String, pass: String) {
+    private fun validateLogin(email: String, pass: String) {
 
         showProgress(progressBar, binding.btnSubmit)
         val apiService = RestManager()
         val user = User(
             userId = null,
-            userEmail = user,
+            userEmail = email,
             userPass = pass,
         )
 
@@ -135,5 +149,16 @@ class LoginActivity : AppCompatActivity() {
     private fun showProgress(progressBar: ProgressBar, button: MaterialButton) {
         progressBar.isVisible = true
         button.isVisible = false
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
 }

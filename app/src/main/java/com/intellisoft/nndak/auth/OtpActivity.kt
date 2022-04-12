@@ -1,12 +1,16 @@
 package com.intellisoft.nndak.auth
 
 import android.R
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.intellisoft.nndak.databinding.ActivityOtpBinding
+import com.intellisoft.nndak.utils.Common
+import com.intellisoft.nndak.utils.Common.validInput
 
 
 class OtpActivity : AppCompatActivity() {
@@ -22,14 +26,27 @@ class OtpActivity : AppCompatActivity() {
 
     private fun initViews() {
 
-        listenForward(binding.etC1,binding.etC2)
-        listenForward(binding.etC2,binding.etC3)
-        listenForward(binding.etC3,binding.etC4)
-        listenForward(binding.etC4,binding.etC5)
-        listenForward(binding.etC5,binding.etC6)
-        listenForward(binding.etC6,binding.etC6)
+        listenForward(binding.etC1, binding.etC2)
+        listenForward(binding.etC2, binding.etC3)
+        listenForward(binding.etC3, binding.etC4)
+        listenForward(binding.etC4, binding.etC5)
+        listenForward(binding.etC5, binding.etC6)
+        listenForward(binding.etC6, binding.etC6)
 
-        listenBackward(binding.etC2,binding.etC1)
+
+        binding.btnVerify.setOnClickListener {
+            if (!validInput(binding.etC1.text.toString()) || !validInput(binding.etC2.text.toString()) ||
+                !validInput(binding.etC3.text.toString()) || !validInput(binding.etC4.text.toString()) ||
+                !validInput(binding.etC5.text.toString()) || !validInput(
+                    binding.etC6.text.toString()
+                )
+            ) {
+                Toast.makeText(this@OtpActivity, "Please enter code", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            finish()
+            startActivity(Intent(this@OtpActivity, ChangerActivity::class.java))
+        }
     }
 
     private fun listenForward(current: EditText, next: EditText) {
@@ -46,7 +63,5 @@ class OtpActivity : AppCompatActivity() {
         })
     }
 
-    private fun listenBackward(current: EditText, previous: EditText) {
 
-    }
 }
