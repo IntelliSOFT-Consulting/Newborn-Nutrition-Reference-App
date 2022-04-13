@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.android.fhir.*
 import com.google.android.fhir.sync.Sync
+import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
+import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
 import com.intellisoft.nndak.utils.Constants.LOGIN
+import com.intellisoft.nndak.utils.Constants.USER_ACCOUNT
 import com.intellisoft.nndak.utils.Constants.WELCOME
 
 class FhirApplication : Application() {
@@ -33,9 +36,6 @@ class FhirApplication : Application() {
         editor = sharedPreferences.edit()
     }
 
-    fun getInstance(): Context {
-        return instance
-    }
 
     private fun constructFhirEngine(): FhirEngine {
         return FhirEngineProvider.getInstance(this)
@@ -70,6 +70,21 @@ class FhirApplication : Application() {
         fun setLoggedIn(context: Context, b: Boolean) {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
+
+        fun updateDetails(context: Context, it: AuthResponse) {
+            (context.applicationContext as FhirApplication).editor.putString(ACCESS_TOKEN, it.token).commit()
+        }
+        fun updateProfile(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(USER_ACCOUNT, it).commit()
+        }
+        fun fetchAuthToken(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(ACCESS_TOKEN,"")
+        }
+        fun getProfile(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(USER_ACCOUNT,"")
+        }
+
+
 
 
     }

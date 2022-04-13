@@ -79,7 +79,7 @@
             app:layout_constraintVertical_chainStyle="spread_inside">
 
             <RelativeLayout
-                android:id="@+id/activeVisitsView"
+                android:id="@+id/rlt_assessment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -129,7 +129,7 @@
             app:layout_constraintTop_toBottomOf="@+id/findPatientsCardView">
 
             <RelativeLayout
-                android:id="@+id/registryPatientView"
+                android:id="@+id/rlt_new_born"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -176,7 +176,7 @@
             app:layout_constraintTop_toBottomOf="@+id/activeVisitsCardView">
 
             <RelativeLayout
-                android:id="@+id/captureVitalsView"
+                android:id="@+id/rlt_post_natal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -226,6 +226,7 @@
             app:layout_constraintTop_toBottomOf="@+id/registerPatientCardView">
 
             <RelativeLayout
+                android:id="@+id/rlt_all_patients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -271,6 +272,7 @@
             app:layout_constraintTop_toBottomOf="@+id/formEntryCardView">
 
             <RelativeLayout
+                android:id="@+id/rlt_human_milk"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -320,7 +322,7 @@
             app:layout_constraintTop_toBottomOf="@+id/postNatalEntryCardView">
 
             <RelativeLayout
-                android:id="@+id/dashboardProviderManagementView"
+                android:id="@+id/rlt_monitoring"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"

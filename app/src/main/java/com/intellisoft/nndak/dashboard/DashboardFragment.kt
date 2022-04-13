@@ -66,22 +66,22 @@ class DashboardFragment : Fragment() {
         binding.rltMaternity.setOnClickListener {
             proceedNext("0")
         }
-        binding.newBornButton.setOnClickListener {
+        binding.rltAssessment.setOnClickListener {
             proceedNext("1")
         }
-        binding.newbornPatientsButton.setOnClickListener {
+        binding.rltNewBorn.setOnClickListener {
             proceedNext("2")
         }
-        binding.postNatalButton.setOnClickListener {
+        binding.rltPostNatal.setOnClickListener {
             proceedNext("3")
         }
-        binding.allPatientsButton.setOnClickListener {
+        binding.rltAllPatients.setOnClickListener {
             proceedNext("4")
         }
-        binding.humanMilkButton.setOnClickListener {
+        binding.rltHumanMilk.setOnClickListener {
             proceedNext("5")
         }
-        binding.monitoringButton.setOnClickListener {
+        binding.rltMonitoring.setOnClickListener {
             proceedNext("6")
         }
 

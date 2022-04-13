@@ -36,7 +36,11 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
     fun savePatient(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
             val entry =
-                ResourceMapper.extract(getApplication(), questionnaireResource, questionnaireResponse)
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
                     .entryFirstRep
             if (entry.resource !is Patient) return@launch
             val patient = entry.resource as Patient
@@ -50,10 +54,11 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
             ) {
                 val birthDate = patient.birthDate.toString()
                 val todayDate = FormatHelper().getTodayDate()
-                val isDateValid = FormatHelper().checkDate(birthDate,todayDate)
+                val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
 
-                if (isDateValid){
+                if (isDateValid) {
 
+                    patient.active = true
                     patient.id = generateUuid()
                     fhirEngine.create(patient)
                     isPatientSaved.value = true
@@ -71,7 +76,8 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
         questionnaireJson?.let {
             return it!!
         }
-        questionnaireJson = readFileFromAssets(state[AddPatientFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
+        questionnaireJson =
+            readFileFromAssets(state[AddPatientFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
         return questionnaireJson!!
     }
 
