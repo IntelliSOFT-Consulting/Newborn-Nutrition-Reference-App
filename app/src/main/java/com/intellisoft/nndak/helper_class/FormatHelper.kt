@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.helper_class
 
+import com.intellisoft.nndak.models.DbObservations
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,5 +43,62 @@ class FormatHelper {
         }
         return isNo
     }
+
+    fun fhirObservations(value: String, value1: String): DbObservations{
+
+        var title = ""
+        var dbValue = value
+
+        if (value == "Negative" || value == "Positive" || value == "Unknown"){
+            //HIV
+            title = "HIV Status"
+        }else if (value == "SVD" || value == "Breech" || value == "Vacuum" || value == "Cs"){
+            //Delivery Method
+            title = "Delivery Method"
+        }else if (value == "Alive" || value == "Dead"){
+            //Baby Life State at birth
+            title = "Baby Life at Birth"
+        }else if (value == "Male" || value == "Female"){
+            //Baby Biological sex
+            title = "Baby Biological Sex"
+
+        }else if (value == "YES" || value == "NO"){
+            //Was baby born b4 arrival to facility
+            title = "Was baby born b4 arrival to facility"
+        }else {
+            //Anyother
+            title = value
+            dbValue = value1
+        }
+
+        return DbObservations(dbValue, title)
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

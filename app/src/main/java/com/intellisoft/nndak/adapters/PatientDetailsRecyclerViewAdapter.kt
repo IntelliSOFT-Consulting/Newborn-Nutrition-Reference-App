@@ -2,6 +2,7 @@ package com.intellisoft.nndak.adapters
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter.Companio
 import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.viewmodels.*
 
 class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,private val onMaternityClick: () -> Unit) :
@@ -201,8 +203,24 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailObservation).let {
-            binding.name.text = it.observation.code
-            binding.fieldName.text = it.observation.value
+
+            val formatHelper = FormatHelper()
+
+            val title = it.observation.code
+            val value = it.observation.value
+
+            val dbObservation = formatHelper.fhirObservations(title, value)
+            val dbTitle = dbObservation.title
+            val dbValue = dbObservation.value
+
+            Log.e("************", "***************")
+            Log.e("------1", dbTitle)
+            Log.e("------2", dbValue)
+
+
+
+            binding.name.text = dbTitle
+            binding.fieldName.text = dbValue
         }
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE

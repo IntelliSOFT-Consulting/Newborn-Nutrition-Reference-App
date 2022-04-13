@@ -883,15 +883,15 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Yes",
-                    "display": "Yes",
+                    "code": "YES",
+                    "display": "YES",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "No",
-                    "display": "No",
+                    "code": "NO",
+                    "display": "NO",
                     "system": "http://snomed.info/sct"
                   }
                 }

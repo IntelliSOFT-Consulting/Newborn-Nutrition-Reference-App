@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.content.res.ObbScanner
 import android.content.res.Resources
 import android.os.Build
 import android.util.Log
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
+import com.google.android.fhir.search.Operation
+import com.google.android.fhir.search.has
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.R
@@ -24,10 +27,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils
-import org.hl7.fhir.r4.model.Condition
-import org.hl7.fhir.r4.model.Observation
-import org.hl7.fhir.r4.model.Patient
-import org.hl7.fhir.r4.model.RiskAssessment
+import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
 
 /**
@@ -56,15 +56,14 @@ class PatientDetailsViewModel(
 
         fhirEngine
             .search<Observation> {
-                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                filter(
+                    Observation.SUBJECT, { value = "Patient/$patientId" }
+
+                )
             }
             .take(MAX_RESOURCE_COUNT)
             .map { createObservationItem(it, getApplication<Application>().resources) }
-            .let { observations.addAll(it)
-                Log.e("++++ ", it.toString())
-            }
-
-        Log.e("----xx ", observations.toString())
+            .let { observations.addAll(it) }
 
 
         return observations
@@ -131,7 +130,6 @@ class PatientDetailsViewModel(
         if (observations.isNotEmpty()) {
 
             data.add(PatientDetailHeader(getString(R.string.header_observation)))
-
 
             val observationDataModel =
                 observations.mapIndexed { index, observationItem ->
@@ -251,6 +249,7 @@ class PatientDetailsViewModel(
             val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
 
 
+
             // Show nothing if no values available for datetime and value quantity.
             val dateTimeString =
                 if (observation.hasEffectiveDateTimeType()) {
@@ -275,8 +274,6 @@ class PatientDetailsViewModel(
             val valueString = "$value $valueUnit"
 
 
-
-            Log.e("+_+_+_+_+ ", "$observationCode $valueString")
 
             return ObservationItem(
                 observation.logicalId,
