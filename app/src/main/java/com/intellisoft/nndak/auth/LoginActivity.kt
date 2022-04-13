@@ -1,13 +1,8 @@
 package com.intellisoft.nndak.auth
 
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.*
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -16,8 +11,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
-import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
 import com.intellisoft.nndak.utils.Common.isValidPassword
 import com.intellisoft.nndak.utils.Common.validEmail
@@ -32,8 +27,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
-    private lateinit var signIn: TextView
-    private lateinit var recover: TextView
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,19 +47,31 @@ class LoginActivity : AppCompatActivity() {
         hideProgress(progressBar, binding.btnSubmit)
 
         binding.btnSubmit.setOnClickListener {
-
             handleDataCheck()
         }
+        binding.forgotPass.setOnClickListener {
 
+            val user = username.text.toString().trim()
 
+            if (!validInput(user)) {
+                binding.eMail.error = getString(R.string.enter_email_address)
+                binding.eMail.requestFocus()
+                return@setOnClickListener
+            }
+            if (!validEmail(user)) {
+                binding.eMail.error = getString(R.string.enter_valid_email_address)
+                binding.eMail.requestFocus()
+                return@setOnClickListener
+            }
+            processAccountRecover(user)
+        }
     }
-
 
 
     private fun handleDataCheck() {
 
-        val user = username.text.toString()
-        val pass = password.text.toString()
+        val user = username.text.toString().trim()
+        val pass = password.text.toString().trim()
         if (!validInput(user)) {
             binding.eMail.error = getString(R.string.enter_email_address)
             binding.eMail.requestFocus()
@@ -77,10 +83,8 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         if (isValidPassword(pass)) {
-            // validateLogin(user, pass)
-            FhirApplication.setLoggedIn(this, true)
-            finishAffinity()
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            validateLogin(user, pass)
+
         } else {
             Toast.makeText(this, "Enter your 6 Digit Password", Toast.LENGTH_SHORT).show()
         }
@@ -91,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
         showProgress(binding.pbLoading, binding.btnSubmit)
         val timer = object : CountDownTimer(3000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Timber.d("It's just a matter of time")
+                Timber.d("It's just a matter of time $user")
             }
 
             override fun onFinish() {
@@ -103,28 +107,23 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun validateLogin(user: String, pass: String) {
+    private fun validateLogin(email: String, pass: String) {
 
         showProgress(progressBar, binding.btnSubmit)
         val apiService = RestManager()
-        val user = User(
-            userId = null,
-            userEmail = user,
-            userPass = pass,
-        )
-
-        apiService.loginUser(user) {
+        val user = LoginData(email = email, password = pass)
+        apiService.loginUser(this,user) {
 
             hideProgress(progressBar, binding.btnSubmit)
 
-            if (it?.userId != null) {
+            if (it != null) {
                 Timber.d("Success $it")
+                FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             } else {
-                Timber.e("Error registering new user")
-                Toast.makeText(this, "Error Encountered,please try again", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -138,5 +137,18 @@ class LoginActivity : AppCompatActivity() {
     private fun showProgress(progressBar: ProgressBar, button: MaterialButton) {
         progressBar.isVisible = true
         button.isVisible = false
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 }
