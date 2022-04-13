@@ -40,3 +40,7 @@ data class ConditionItem(
 ) {
     override fun toString(): String = code
 }
+data class DbObservations(
+    val value: String,
+    val title:String
+)
