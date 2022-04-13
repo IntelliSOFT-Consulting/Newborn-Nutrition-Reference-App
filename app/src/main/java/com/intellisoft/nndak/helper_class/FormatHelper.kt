@@ -65,7 +65,16 @@ class FormatHelper {
         }else if (value == "YES" || value == "NO"){
             //Was baby born b4 arrival to facility
             title = "Was baby born b4 arrival to facility"
-        }else {
+        }else if (value == "Yes" || value == "No") {
+            title = "Birth of one baby on a single pregnancy"
+
+        }else if (value == "Elective" || value == "Emergency") {
+            title = "Reason for CS"
+
+        }else if (value == "Twins" || value == "Triplets" || value == "Quadruplets"
+            || value == "Quintuplets" || value == "Sextuplets" || value == "Septuplets")
+            title = "How many babies on a single pregnancy"
+        else {
             //Anyother
             title = value
             dbValue = value1

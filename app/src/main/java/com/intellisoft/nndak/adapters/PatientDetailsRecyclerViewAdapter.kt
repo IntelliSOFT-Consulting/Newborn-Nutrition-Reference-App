@@ -217,8 +217,6 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
             Log.e("------1", dbTitle)
             Log.e("------2", dbValue)
 
-
-
             binding.name.text = dbTitle
             binding.fieldName.text = dbValue
         }
