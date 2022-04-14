@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_patient_list_to_screenerEncounterFragment"
             app:destination="@id/screenerEncounterFragment" />
+        <action
+            android:id="@+id/action_patient_list_to_maternityFragment"
+            app:destination="@id/maternityFragment" />
     </fragment>
 
     <fragment
@@ -77,10 +80,27 @@
         android:id="@+id/dashboard"
         android:name="com.intellisoft.nndak.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboard_to_patient_list"
             app:destination="@id/patient_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/maternityFragment"
+        android:name="com.intellisoft.nndak.screens.maternity.MaternityFragment"
+        android:label="fragment_maternity"
+        tools:layout="@layout/fragment_maternity">
+
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="quastion"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

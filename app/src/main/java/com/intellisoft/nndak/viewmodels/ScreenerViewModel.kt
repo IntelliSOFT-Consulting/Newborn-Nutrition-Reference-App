@@ -100,10 +100,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
-
-                    if (resource.hasValueStringType() && !resource.valueDateTimeType.hasValue()) {
-                        return true
-                    }
                 }
 
                /* is Condition -> {

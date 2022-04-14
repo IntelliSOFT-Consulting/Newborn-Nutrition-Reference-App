@@ -25,6 +25,7 @@ import com.intellisoft.nndak.screens.profile.ProfileActivity
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
 //import timber.log.Timber
 
 
@@ -105,12 +106,14 @@ class MainActivity : AppCompatActivity() {
                 builder.setMessage("Are you sure you want to logout?")
 
                 builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                    FhirApplication.setLoggedIn(this, false)
-                    finishAffinity()
-                    val i = Intent(this@MainActivity, LoginActivity::class.java)
-                    startActivity(i)
-
-
+                    try {
+                        FhirApplication.setLoggedIn(this, false)
+                        finishAffinity()
+                        val i = Intent(this@MainActivity, LoginActivity::class.java)
+                        startActivity(i)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
 
                 builder.setNegativeButton(android.R.string.no) { dialog, which ->
@@ -132,9 +135,9 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                FhirApplication.updateProfile(this,json)
+                FhirApplication.updateProfile(this, json)
             } else {
-               Log.e(TAG,"Error")
+                Log.e(TAG, "Error")
             }
         }
     }

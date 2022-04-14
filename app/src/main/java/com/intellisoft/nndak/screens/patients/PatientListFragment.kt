@@ -34,6 +34,7 @@ import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import com.intellisoft.nndak.viewmodels.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class PatientListFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
@@ -170,8 +171,12 @@ class PatientListFragment : Fragment() {
         if (args.step.isNotEmpty()) {
             if (args.step == "0") {
 
-                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
-               // screenerScreen(patientItem, "apgar-score.json", "Maternity Registration")
+//                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
+                findNavController().navigate(
+                    PatientListFragmentDirections.actionPatientListToMaternityFragment(
+                        patientItem.resourceId, "maternity-registration.json", "Maternity Registration"
+                    )
+                )
             }
             if (args.step == "1") {
 
@@ -187,7 +192,7 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "4") {
 
-                Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
+                Timber.e("Resource ID::: " + patientItem.resourceId)
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
@@ -207,7 +212,7 @@ class PatientListFragment : Fragment() {
 
     private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
 
-        Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
+        Timber.e("Resource ID::: " + patientItem.resourceId)
         findNavController().navigate(
             PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
                 patientItem.resourceId, asset, title
