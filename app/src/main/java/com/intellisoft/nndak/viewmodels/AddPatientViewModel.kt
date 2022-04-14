@@ -63,9 +63,8 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 val todayDate = FormatHelper().getTodayDate()
                 val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
 
-
+ 
                 if (isDateValid && isPhoneNo){
-
 
                     patient.active = true
                     patient.id = generateUuid()

@@ -26,8 +26,6 @@ import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-//import timber.log.Timber
-
 
 const val MAX_RESOURCE_COUNT = 20
 const val SYNC_VALUE = "Pumwani Maternity Hospital"
