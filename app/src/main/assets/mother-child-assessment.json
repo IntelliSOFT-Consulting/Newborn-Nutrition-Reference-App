@@ -181,6 +181,7 @@
         {
           "linkId": "4.0.0",
           "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -196,7 +197,7 @@
               "linkId": "4.1.1",
               "type": "string",
               "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.system"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
             }
           ]
         }
@@ -291,7 +292,7 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Condition",
-                "name": "asthma"
+                "name": "asphyxia"
               }
             },
             {
@@ -440,7 +441,7 @@
               "operator": "=",
               "answerCoding": {
                 "code": "Is baby born term",
-                "display": "Is baby born term",
+                "display": "Baby born term",
                 "system": "http://snomed.info/sct"
               }
             }
@@ -454,7 +455,7 @@
                 {
                   "valueCoding": {
                     "code": "Is baby born term",
-                    "display": "Is baby born term",
+                    "display": "Baby born term",
                     "system": "http://snomed.info/sct"
                   }
                 }
@@ -566,13 +567,14 @@
         {
           "linkId": "5.4.0",
           "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "comments"
+                "name": "babyComments"
               }
             }
           ],
@@ -581,7 +583,7 @@
               "linkId": "5.4.1",
               "type": "string",
               "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.system"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
             }
           ]
         }

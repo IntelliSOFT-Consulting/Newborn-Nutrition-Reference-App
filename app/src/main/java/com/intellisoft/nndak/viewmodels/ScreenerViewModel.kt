@@ -17,6 +17,7 @@ import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import timber.log.Timber
 
 const val TAG = "ScreenerViewModel"
 
@@ -40,7 +41,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResource,
                     questionnaireResponse
                 )
-            Log.e("Saving:::: ",bundle.fhirType())
+            val context = FhirContext.forR4()
+            Timber.d(
+                "Questionnaire Response:::: " + context.newJsonParser()
+                    .encodeResourceToString(questionnaireResponse)
+            )
+
             val subjectReference = Reference("Patient/$patientId")
             val encounterId = generateUuid()
             if (isRequiredFieldMissing(bundle)) {
@@ -92,6 +98,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             when (resource) {
                 is Observation -> {
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
+                        return true
+                    }
+
+                    if (resource.hasValueStringType() && !resource.valueDateTimeType.hasValue()) {
                         return true
                     }
                 }

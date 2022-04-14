@@ -17,883 +17,1093 @@
   ],
   "item": [
     {
-      "type": "group",
+      "text": "Pregnancy Details",
       "linkId": "1.0.0",
+      "type": "group",
       "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "parity"
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "1.1.0",
-          "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-          "item": [
-            {
-              "text": "Number of times the client has given birth",
-              "type": "decimal",
-              "linkId": "1.1.1",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDecimal": 1
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 30
-                }
-              ]
-            },
-            {
-              "linkId": "1.1.2",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "times"
-                }
-              ]
-            },
-            {
-              "linkId": "1.1.3",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "http://unitsofmeasure.org"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "1.2.0",
-          "type": "choice",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueCoding": {
-                "code": "8867-4",
-                "display": "Parity",
-                "system": "http://loinc.org"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "linkId": "2.0.0",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "gestation "
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "2.1.0",
-          "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-          "item": [
-            {
-              "text": "The period of time between conception and birth.",
-              "type": "decimal",
-              "linkId": "2.1.1",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDecimal": 1
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 30
-                }
-              ]
-            },
-            {
-              "linkId": "2.1.2",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "weeks"
-                }
-              ]
-            },
-            {
-              "linkId": "2.1.3",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "http://unitsofmeasure.org"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "2.2.0",
-          "type": "choice",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueCoding": {
-                "code": "8867-4",
-                "display": "Gestation",
-                "system": "http://loinc.org"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "3.0.0",
-      "type": "group",
-      "item": [
-        {
-          "linkId": "3.1.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "pmtct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "text": "What is  the status of mother living with or at risk of HIV",
-              "linkId": "3.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "77176002",
-                    "display": "Positive",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "8517006",
-                    "display": "Negative",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "8392000",
-                    "display": "Unknown",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "linkId": "4.0.0",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "multiple"
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "4.1.0",
-          "type": "group",
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "choice",
-              "text": "A multiple pregnancy is a pregnancy with 2 or more fetuses.",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Yes",
-                    "display": "Yes",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "No",
-                    "display": "No",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "5.0.0",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "4.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Yes",
-            "display": "Yes",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "5.1.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "birthtype"
-              }
-            }
-          ],
-          "item": [
-            {
-              "text": "The birth of more than one baby from a single pregnancy.",
-              "linkId": "5.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Twins",
-                    "display": "Twins",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Triplets",
-                    "display": "Triplets",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Quadruplets",
-                    "display": "Quadruplets",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Quintuplets",
-                    "display": "Quintuplets",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Sextuplets",
-                    "display": "Sextuplets",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Septuplets",
-                    "display": "Septuplets",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Other",
-                    "display": "Other",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "linkId": "6.0.0",
-      "enableWhen": [
-        {
-          "question": "5.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Other",
-            "display": "Other",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "other "
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "6.1.0",
-          "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-          "item": [
-            {
-              "text": "Enter the number of babies given birth",
-              "type": "decimal",
-              "linkId": "6.1.1",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDecimal": 8
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 20
-                }
-              ]
-            },
-            {
-              "linkId": "2.1.2",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "babies"
-                }
-              ]
-            },
-            {
-              "linkId": "2.1.3",
-              "type": "string",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueString": "http://unitsofmeasure.org"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "6.2.0",
-          "type": "choice",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueCoding": {
-                "code": "8867-490",
-                "display": "Other Birth Type",
-                "system": "http://loinc.org"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Time of Delivery",
-      "linkId": "7.0.0",
-      "type": "dateTime",
-      "repeats": false,
-      "required": true
-    },
-    {
-      "linkId": "8.0.0",
-      "type": "group",
-      "item": [
-        {
-          "linkId": "8.1.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "deliveryMethod"
-              }
-            }
-          ],
-          "item": [
-            {
-              "text": "What method was used to deliver the baby?",
-              "linkId": "8.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "SVD",
-                    "display": "SVD",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Vacuum",
-                    "display": "Vacuum",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breech",
-                    "display": "Breech",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Cs",
-                    "display": "Cs",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "9.0.0",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "8.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Cs",
-            "display": "Cs",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "8.1.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "deliveryMethod"
-              }
-            }
-          ],
-          "item": [
-            {
-              "text": "Please select the reason as to why the client gave birth through the Cs",
-              "linkId": "9.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Elective",
-                    "display": "Elective",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Emergency",
-                    "display": "Emergency",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "10.0.0",
-      "type": "group",
-      "item": [
-        {
-          "linkId": "10.1.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "deliveryMethod"
-              }
-            }
-          ],
-          "item": [
-            {
-              "text": "The baby's life state after birth",
-              "linkId": "10.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Alive",
-                    "display": "Alive",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Dead",
-                    "display": "Dead",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Date of Birth",
-      "linkId": "11.0.0",
-      "type": "date",
-      "repeats": false,
-      "required": true,
-      "enableWhen": [
-        {
-          "question": "10.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Alive",
-            "display": "Alive",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "12.0.0",
-      "type": "choice",
-      "text": "Baby's biological sex",
-      "required": true,
-      "enableWhen": [
-        {
-          "question": "10.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Alive",
-            "display": "Alive",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-          "valueExpression": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "patientGender"
-          }
-        },
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
           "valueCodeableConcept": {
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
+                "code": "page",
+                "display": "Page"
               }
-            ]
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
-        }
-      ],
-      "answerOption": [
-        {
-          "valueCoding": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "code": "female",
-            "display": "Female",
-            "designation": [
-              {
-                "language": "sw",
-                "value": "Mwanamke"
-              }
-            ]
-          }
-        },
-        {
-          "valueCoding": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "code": "male",
-            "display": "Male",
-            "designation": [
-              {
-                "language": "sw",
-                "value": "Mwanaume"
-              }
-            ]
-          }
-        }
-      ]
-    },
-
-    {
-      "linkId": "13.0.0",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "10.1.1",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Alive",
-            "display": "Alive",
-            "system": "http://snomed.info/sct"
+            ],
+            "text": "Page"
           }
         }
       ],
       "item": [
         {
-          "linkId": "13.1.0",
           "type": "group",
-          "required": true,
+          "linkId": "1.0.0",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "bornBefore"
+                "name": "parity"
               }
             }
           ],
           "item": [
             {
-              "text": "Was baby born before arrival to facility?",
-              "linkId": "13.1.1",
+              "linkId": "1.1.0",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+              "item": [
+                {
+                  "text": "Parity",
+                  "type": "decimal",
+                  "linkId": "1.1.1",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                      "valueDecimal": 1
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                      "valueDecimal": 30
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.1.2",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "times"
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.1.3",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "linkId": "1.2.0",
               "type": "choice",
-              "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "8867-4",
+                    "display": "Parity",
+                    "system": "http://loinc.org"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "1.0.0",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "gravidity"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1.1.0",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+              "item": [
+                {
+                  "text": "Gravidity",
+                  "type": "decimal",
+                  "linkId": "1.1.1",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                      "valueDecimal": 1
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                      "valueDecimal": 30
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.1.2",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "weeks"
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.1.3",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "linkId": "1.2.0",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "Gravidity",
+                    "display": "Gravidity",
+                    "system": "http://loinc.org"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "2.0.0",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "gestation "
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "2.1.0",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+              "item": [
+                {
+                  "text": "Gestation.",
+                  "type": "decimal",
+                  "linkId": "2.1.1",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                      "valueDecimal": 1
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                      "valueDecimal": 60
+                    }
+                  ]
+                },
+                {
+                  "linkId": "2.1.2",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "weeks"
+                    }
+                  ]
+                },
+                {
+                  "linkId": "2.1.3",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "linkId": "2.2.0",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueCoding": {
+                    "code": "8867-4",
+                    "display": "Gestation",
+                    "system": "http://loinc.org"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "lmp",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "lmp"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1",
+              "text": "When was your last menstrual period? (LMP)",
+              "type": "date",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+                  "valueString": "yyyy-mm-dd"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "edd",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "edd"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1",
+              "text": "Expected date of delivery,",
+              "type": "date",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+                  "valueString": "yyyy-mm-dd"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "3.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "pmtct"
                   }
                 }
               ],
-              "answerOption": [
+              "item": [
                 {
-                  "valueCoding": {
-                    "code": "YES",
-                    "display": "YES",
-                    "system": "http://snomed.info/sct"
+                  "text": "What is  the status of mother living with or at risk of HIV",
+                  "linkId": "3.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "77176002",
+                        "display": "Positive",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "8517006",
+                        "display": "Negative",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "8392000",
+                        "display": "Unknown",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "4.0.0",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "multiple"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "4.1.1",
+                  "type": "choice",
+                  "text": "Multiple Pregnancy?",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Yes",
+                        "display": "Yes",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "No",
+                        "display": "No",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "5.0.0",
+          "type": "group",
+          "enableWhen": [
+            {
+              "question": "4.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Yes",
+                "display": "Yes",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "5.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "birthtype"
                   }
+                }
+              ],
+              "item": [
+                {
+                  "text": "The birth of more than one baby from a single pregnancy.",
+                  "linkId": "5.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Twins",
+                        "display": "Twins",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Triplets",
+                        "display": "Triplets",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Quadruplets",
+                        "display": "Quadruplets",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Quintuplets",
+                        "display": "Quintuplets",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Sextuplets",
+                        "display": "Sextuplets",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Septuplets",
+                        "display": "Septuplets",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Other",
+                        "display": "Other",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "6.0.0",
+          "enableWhen": [
+            {
+              "question": "5.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Other",
+                "display": "Other",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "other "
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "6.1.0",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+              "item": [
+                {
+                  "text": "Enter the number of babies given birth",
+                  "type": "decimal",
+                  "linkId": "6.1.1",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                      "valueDecimal": 8
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                      "valueDecimal": 20
+                    }
+                  ]
                 },
                 {
+                  "linkId": "2.1.2",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "babies"
+                    }
+                  ]
+                },
+                {
+                  "linkId": "2.1.3",
+                  "type": "string",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "initial": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "linkId": "6.2.0",
+              "type": "choice",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
                   "valueCoding": {
-                    "code": "NO",
-                    "display": "NO",
-                    "system": "http://snomed.info/sct"
+                    "code": "8867-490",
+                    "display": "Other Birth Type",
+                    "system": "http://loinc.org"
                   }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Delivery Details",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "8.1.0",
+          "type": "group",
+          "required": true,
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "deliveryMethod"
+              }
+            }
+          ],
+          "item": [
+            {
+              "text": "Time of Delivery",
+              "linkId": "7.0.0",
+              "type": "dateTime",
+              "repeats": false,
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString"
+            }
+          ]
+        },
+        {
+          "linkId": "8.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "8.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "deliveryMethod"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "text": "Delivery Method",
+                  "linkId": "8.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "SVD",
+                        "display": "SVD",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Vacuum",
+                        "display": "Vacuum",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Breech",
+                        "display": "Breech",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Cs",
+                        "display": "Cs",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "9.0.0",
+          "type": "group",
+          "enableWhen": [
+            {
+              "question": "8.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Cs",
+                "display": "Cs",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "8.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "deliveryMethod"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "text": "Please select the reason as to why the client gave birth through the Cs",
+                  "linkId": "9.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Elective",
+                        "display": "Elective",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Emergency",
+                        "display": "Emergency",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "10.0.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "10.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "deliveryMethod"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "text": "The baby's life state after birth",
+                  "linkId": "10.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Alive",
+                        "display": "Alive",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Dead",
+                        "display": "Dead",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Date of Birth",
+          "linkId": "11.0.0",
+          "type": "date",
+          "repeats": false,
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "10.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Alive",
+                "display": "Alive",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "12.0.0",
+          "type": "choice",
+          "text": "Baby's biological sex",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "10.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Alive",
+                "display": "Alive",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "patientGender"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "female",
+                "display": "Female",
+                "designation": [
+                  {
+                    "language": "sw",
+                    "value": "Mwanamke"
+                  }
+                ]
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "male",
+                "display": "Male",
+                "designation": [
+                  {
+                    "language": "sw",
+                    "value": "Mwanaume"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "13.0.0",
+          "type": "group",
+          "enableWhen": [
+            {
+              "question": "10.1.1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Alive",
+                "display": "Alive",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "13.1.0",
+              "type": "group",
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "bornBefore"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "text": "Was baby born before arrival to facility?",
+                  "linkId": "13.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "YES",
+                        "display": "YES",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "NO",
+                        "display": "NO",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
                 }
               ]
             }

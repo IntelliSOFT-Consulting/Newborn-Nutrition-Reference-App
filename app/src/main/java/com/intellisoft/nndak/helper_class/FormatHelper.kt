@@ -64,7 +64,7 @@ class FormatHelper {
 
         }else if (value == "YES" || value == "NO"){
             //Was baby born b4 arrival to facility
-            title = "Was baby born b4 arrival to facility"
+            title = "Was baby born before arrival to facility"
         }else if (value == "Yes" || value == "No") {
             title = "Birth of one baby on a single pregnancy"
 

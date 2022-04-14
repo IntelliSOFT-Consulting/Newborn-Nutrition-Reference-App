@@ -65,11 +65,15 @@ class ProfileActivity : AppCompatActivity() {
         val user = FhirApplication.getProfile(this)
         if (user != null) {
             val gson = Gson()
-            val it: User = gson.fromJson(user, User::class.java)
-            binding.tvName.text = it.names
-            binding.tvEmail.text = it.email
-            binding.tvRole.text = it.role
-            binding.tvSince.text = it.createdAt.substring(0, 10)
+            try {
+                val it: User = gson.fromJson(user, User::class.java)
+                binding.tvName.text = it.names
+                binding.tvEmail.text = it.email
+                binding.tvRole.text = it.role
+                binding.tvSince.text = it.createdAt.substring(0, 10)
+            } catch (e: Exception) {
+
+            }
         }
     }
 
