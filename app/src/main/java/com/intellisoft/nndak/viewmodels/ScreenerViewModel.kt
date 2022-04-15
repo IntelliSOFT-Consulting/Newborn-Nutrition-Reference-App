@@ -46,6 +46,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 "Questionnaire Response:::: " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)
             )
+            Log.e("TAG", context.newJsonParser().encodeResourceToString(questionnaireResponse))
 
             val subjectReference = Reference("Patient/$patientId")
             val encounterId = generateUuid()
@@ -102,11 +103,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     }
                 }
 
-               /* is Condition -> {
-                    if (resource.hasCode() && !resource.hasPrimitiveValue()) {
-                        return true
-                    }
-                }*/
+                /* is Condition -> {
+                     if (resource.hasCode() && !resource.hasPrimitiveValue()) {
+                         return true
+                     }
+                 }*/
                 // TODO check other resources inputs
             }
         }
@@ -197,7 +198,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             .asSequence()
             .filter { it.resource is Observation }
             .map { it.resource as Observation }
-            .filter { it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(Logics.SPO2) }
+            .filter {
+                it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(
+                    Logics.SPO2
+                )
+            }
             .map { it.valueQuantity.value }
             .firstOrNull()
     }

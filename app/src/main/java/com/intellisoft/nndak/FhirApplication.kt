@@ -12,6 +12,8 @@ import com.intellisoft.nndak.utils.Constants.FHIR_BASE_URL
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.USER_ACCOUNT
 import com.intellisoft.nndak.utils.Constants.WELCOME
+import timber.log.Timber
+
 
 class FhirApplication : Application() {
     // Only initiate the FhirEngine when used for the first time, not when the app is created.
@@ -24,6 +26,9 @@ class FhirApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         instance = this.applicationContext
           FhirEngineProvider.init(
             FhirEngineConfiguration(enableEncryptionIfSupported = true,
@@ -35,6 +40,7 @@ class FhirApplication : Application() {
 
         sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+
     }
 
 

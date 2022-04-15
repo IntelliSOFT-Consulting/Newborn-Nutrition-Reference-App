@@ -171,12 +171,12 @@ class PatientListFragment : Fragment() {
         if (args.step.isNotEmpty()) {
             if (args.step == "0") {
 
-//                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
-                findNavController().navigate(
+                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
+            /*    findNavController().navigate(
                     PatientListFragmentDirections.actionPatientListToMaternityFragment(
                         patientItem.resourceId, "maternity-registration.json", "Maternity Registration"
                     )
-                )
+                )*/
             }
             if (args.step == "1") {
 
