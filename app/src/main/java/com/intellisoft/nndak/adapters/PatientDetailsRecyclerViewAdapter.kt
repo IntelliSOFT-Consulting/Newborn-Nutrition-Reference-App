@@ -6,18 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.RoundedCornerTreatment
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter.Companion.allCornersRounded
 import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.utils.Common.allCornersRounded
+import com.intellisoft.nndak.utils.Common.bottomCornersRounded
+import com.intellisoft.nndak.utils.Common.noCornersRounded
+import com.intellisoft.nndak.utils.Common.topCornersRounded
 import com.intellisoft.nndak.viewmodels.*
 
 class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,private val onMaternityClick: () -> Unit) :
@@ -101,59 +100,7 @@ class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,
         }.ordinal
     }
 
-    companion object {
-        private const val STROKE_WIDTH = 2f
-        private const val CORNER_RADIUS = 10f
-        @ColorInt
-        private const val FILL_COLOR = Color.TRANSPARENT
-        @ColorInt
-        private const val STROKE_COLOR = Color.GRAY
 
-        fun allCornersRounded(): MaterialShapeDrawable {
-            return MaterialShapeDrawable(
-                ShapeAppearanceModel.builder()
-                    .setAllCornerSizes(CORNER_RADIUS)
-                    .setAllCorners(RoundedCornerTreatment())
-                    .build()
-            )
-                .applyStrokeColor()
-        }
-
-        fun topCornersRounded(): MaterialShapeDrawable {
-            return MaterialShapeDrawable(
-                ShapeAppearanceModel.builder()
-                    .setTopLeftCornerSize(CORNER_RADIUS)
-                    .setTopRightCornerSize(CORNER_RADIUS)
-                    .setTopLeftCorner(RoundedCornerTreatment())
-                    .setTopRightCorner(RoundedCornerTreatment())
-                    .build()
-            )
-                .applyStrokeColor()
-        }
-
-        fun bottomCornersRounded(): MaterialShapeDrawable {
-            return MaterialShapeDrawable(
-                ShapeAppearanceModel.builder()
-                    .setBottomLeftCornerSize(CORNER_RADIUS)
-                    .setBottomRightCornerSize(CORNER_RADIUS)
-                    .setBottomLeftCorner(RoundedCornerTreatment())
-                    .setBottomRightCorner(RoundedCornerTreatment())
-                    .build()
-            )
-                .applyStrokeColor()
-        }
-
-        fun noCornersRounded(): MaterialShapeDrawable {
-            return MaterialShapeDrawable(ShapeAppearanceModel.builder().build()).applyStrokeColor()
-        }
-
-        private fun MaterialShapeDrawable.applyStrokeColor(): MaterialShapeDrawable {
-            strokeWidth = STROKE_WIDTH
-            fillColor = ColorStateList.valueOf(FILL_COLOR)
-            strokeColor = ColorStateList.valueOf(STROKE_COLOR)
-            return this
-        }
-    }
 }
 
 abstract class PatientDetailItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {

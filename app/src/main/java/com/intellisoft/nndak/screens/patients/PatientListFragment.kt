@@ -172,19 +172,26 @@ class PatientListFragment : Fragment() {
             if (args.step == "0") {
 
                 screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
-            /*    findNavController().navigate(
-                    PatientListFragmentDirections.actionPatientListToMaternityFragment(
-                        patientItem.resourceId, "maternity-registration.json", "Maternity Registration"
-                    )
-                )*/
+                /*    findNavController().navigate(
+                        PatientListFragmentDirections.actionPatientListToMaternityFragment(
+                            patientItem.resourceId, "maternity-registration.json", "Maternity Registration"
+                        )
+                    )*/
             }
             if (args.step == "1") {
 
-                screenerScreen(patientItem, "mother-child-assessment.json", "Mother & Child Assessment")
+                screenerScreen(
+                    patientItem,
+                    "mother-child-assessment.json",
+                    "Mother & Child Assessment"
+                )
             }
             if (args.step == "2") {
 
-                screenerScreen(patientItem, "new-born.json", "New Born Unit")
+                // screenerScreen(patientItem, "new-born.json", "New Born Unit")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId)
+                )
 
             }
             if (args.step == "3") {

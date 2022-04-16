@@ -2,7 +2,7 @@
   "title": "Screener",
   "status": "active",
   "version": "0.0.1",
-  "publisher": "Fred Hersch (fredhersch@google.com)",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
   "resourceType": "Questionnaire",
   "subjectType": [
     "Encounter"
@@ -1639,11 +1639,11 @@
           ],
           "item": [
             {
-              "linkId": "4.1.0",
+              "linkId": "babySex",
               "type": "group",
               "item": [
                 {
-                  "linkId": "5.6.2",
+                  "linkId": "biologicalSex",
                   "type": "choice",
                   "text": "Baby's biological sex",
                   "required": true,
@@ -1717,7 +1717,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "%"
+                      "valueString": "kg"
                     }
                   ]
                 },
@@ -1752,8 +1752,8 @@
               "initial": [
                 {
                   "valueCoding": {
-                    "code": "BirthWeight",
-                    "display": "Birth Weight (Kg)",
+                    "code": "Birth Weight",
+                    "display": "Birth Weight",
                     "system": "http://loinc.org"
                   }
                 }
@@ -1809,7 +1809,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "%"
+                      "valueString": "c"
                     }
                   ]
                 },
@@ -1844,8 +1844,8 @@
               "initial": [
                 {
                   "valueCoding": {
-                    "code": "BirthWeight",
-                    "display": "Birth Weight (Kg)",
+                    "code": "Baby's Temperature",
+                    "display": "Baby's Temperature",
                     "system": "http://loinc.org"
                   }
                 }
@@ -1993,7 +1993,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "%"
+                      "valueString": "kg"
                     }
                   ]
                 },
@@ -2028,8 +2028,8 @@
               "initial": [
                 {
                   "valueCoding": {
-                    "code": "BirthWeight",
-                    "display": "Birth Weight (Kg)",
+                    "code": "Current Weight",
+                    "display": "Current Weight",
                     "system": "http://loinc.org"
                   }
                 }

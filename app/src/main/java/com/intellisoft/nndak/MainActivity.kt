@@ -3,6 +3,8 @@ package com.intellisoft.nndak
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private val TAG = javaClass.name
     private val viewModel: MainActivityViewModel by viewModels()
+    private var exit = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +62,16 @@ class MainActivity : AppCompatActivity() {
             binding.drawer.closeDrawer(GravityCompat.START)
             return
         }
-        super.onBackPressed()
+   /*     if (exit) {*/
+            super.onBackPressed()
+       /*     return
+        }*/
+
+        /*this.exit = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            exit = false
+        }, 2000)*/
     }
 
     fun setDrawerEnabled(enabled: Boolean) {
@@ -136,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                 val json = gson.toJson(it)
                 FhirApplication.updateProfile(this, json)
             } else {
-                Log.e(TAG, "Error")
+                Timber.e("Error")
             }
         }
     }
@@ -157,7 +169,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeSyncState() {
         lifecycleScope.launch {
             viewModel.pollState.collect {
-               Timber.d("observerSyncState: pollState Got status $it")
+                Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
                     is State.Started -> showToast("Sync: started")
                     is State.InProgress -> showToast("Sync: in progress with ${it.resourceType?.name}")

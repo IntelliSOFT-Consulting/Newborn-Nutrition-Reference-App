@@ -123,5 +123,8 @@
     <string name="action_role">Role</string>
     <string name="action_member">Added</string>
     <string name="action_signup">Sign Up</string>
+    <string name="menu_new_born">New Born Assessment</string>
+    <string name="menu_assessment">Feeding Data</string>
+    <string name="menu_prescribe">Prescribe Feeds</string>
 
 </resources>

@@ -1,7 +1,13 @@
 package com.intellisoft.nndak.utils
 
+import android.content.res.ColorStateList
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.RoundedCornerTreatment
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
-import com.intellisoft.nndak.R
+import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
+import com.intellisoft.nndak.utils.Constants.FILL_COLOR
+import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
@@ -74,5 +80,50 @@ object Common {
             return true
         }
         return false
+    }
+
+    fun allCornersRounded(): MaterialShapeDrawable {
+        return MaterialShapeDrawable(
+            ShapeAppearanceModel.builder()
+                .setAllCornerSizes(CORNER_RADIUS)
+                .setAllCorners(RoundedCornerTreatment())
+                .build()
+        )
+            .applyStrokeColor()
+    }
+
+    fun topCornersRounded(): MaterialShapeDrawable {
+        return MaterialShapeDrawable(
+            ShapeAppearanceModel.builder()
+                .setTopLeftCornerSize(CORNER_RADIUS)
+                .setTopRightCornerSize(CORNER_RADIUS)
+                .setTopLeftCorner(RoundedCornerTreatment())
+                .setTopRightCorner(RoundedCornerTreatment())
+                .build()
+        )
+            .applyStrokeColor()
+    }
+
+    fun bottomCornersRounded(): MaterialShapeDrawable {
+        return MaterialShapeDrawable(
+            ShapeAppearanceModel.builder()
+                .setBottomLeftCornerSize(CORNER_RADIUS)
+                .setBottomRightCornerSize(CORNER_RADIUS)
+                .setBottomLeftCorner(RoundedCornerTreatment())
+                .setBottomRightCorner(RoundedCornerTreatment())
+                .build()
+        )
+            .applyStrokeColor()
+    }
+
+    fun noCornersRounded(): MaterialShapeDrawable {
+        return MaterialShapeDrawable(ShapeAppearanceModel.builder().build()).applyStrokeColor()
+    }
+
+    fun MaterialShapeDrawable.applyStrokeColor(): MaterialShapeDrawable {
+        strokeWidth = Constants.STROKE_WIDTH
+        fillColor = ColorStateList.valueOf(FILL_COLOR)
+        strokeColor = ColorStateList.valueOf(STROKE_COLOR)
+        return this
     }
 }

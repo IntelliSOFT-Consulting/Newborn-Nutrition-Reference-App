@@ -52,6 +52,9 @@ class FormatHelper {
         if (value == "Negative" || value == "Positive" || value == "Unknown"){
             //HIV
             title = "HIV Status"
+        }else if (value == "BF" || value == "NGT"){
+            //Method of feeding
+            title = "Method of feeding"
         }else if (value == "SVD" || value == "Breech" || value == "Vacuum" || value == "Cs"){
             //Delivery Method
             title = "Delivery Method"

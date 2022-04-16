@@ -78,7 +78,7 @@ class ChangerActivity : AppCompatActivity() {
             password = cpass,
         )
         binding.progressBar.isVisible = true
-        apiService.loginUser(this,user) {
+        apiService.loginUser(this, user) {
             binding.progressBar.isVisible = false
             if (it != null) {
                 Timber.d("Success $it")
@@ -103,9 +103,11 @@ class ChangerActivity : AppCompatActivity() {
 
     private fun initViews() {
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = ""
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = ""
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
 
     }
 

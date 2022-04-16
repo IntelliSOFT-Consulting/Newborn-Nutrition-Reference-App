@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_new_born.xml" value="0.2740036231884058" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_detail.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_card_view.xml" value="0.37135416666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_list_item_view.xml" value="0.2740036231884058" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/details_options_menu.xml" value="0.37135416666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/options_menu.xml" value="0.37135416666666665" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>
