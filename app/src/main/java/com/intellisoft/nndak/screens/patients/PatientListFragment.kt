@@ -188,14 +188,15 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "2") {
 
-                // screenerScreen(patientItem, "new-born.json", "New Born Unit")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId)
                 )
 
             }
             if (args.step == "3") {
-                screenerScreen(patientItem, "post-natal.json", "Post Natal Unit")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToPostNatal(patientItem.resourceId)
+                )
             }
             if (args.step == "4") {
 
@@ -208,7 +209,7 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "5") {
 
-                screenerScreen(patientItem, "human-milk.json", "Human Milk Bank")
+                screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
             }
             if (args.step == "6") {
                 screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")

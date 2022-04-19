@@ -28,6 +28,9 @@
         <action
             android:id="@+id/navigate_to_newborn"
             app:destination="@id/newBornFragment" />
+        <action
+            android:id="@+id/navigate_to_post_natal"
+            app:destination="@id/postNatalFragment" />
     </fragment>
 
     <fragment
@@ -110,6 +113,21 @@
         android:name="com.intellisoft.nndak.screens.newborn.NewBornFragment"
         android:label="fragment_new_born"
         tools:layout="@layout/fragment_new_born">
+        <action
+            android:id="@+id/navigate_to_edit_patient"
+            app:destination="@id/editPatientFragment" />
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/postNatalFragment"
+        android:name="com.intellisoft.nndak.screens.postnatal.PostNatalFragment"
+        android:label="fragment_post_natal"
+        tools:layout="@layout/fragment_post_natal">
         <action
             android:id="@+id/navigate_to_edit_patient"
             app:destination="@id/editPatientFragment" />

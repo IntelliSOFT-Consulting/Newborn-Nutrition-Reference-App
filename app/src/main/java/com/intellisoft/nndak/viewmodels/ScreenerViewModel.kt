@@ -46,7 +46,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 "Questionnaire Response:::: " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)
             )
-            Log.e("TAG", context.newJsonParser().encodeResourceToString(questionnaireResponse))
+
 
             val subjectReference = Reference("Patient/$patientId")
             val encounterId = generateUuid()

@@ -436,7 +436,6 @@
         {
           "linkId": "4.0.0",
           "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -449,10 +448,17 @@
           ],
           "item": [
             {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
+              "linkId": "3.1.0",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
+              "item": [
+                {
+                  "linkId": "4.1.1",
+                  "type": "string",
+                  "text": "Any additional notes",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
+                }
+              ]
             }
           ]
         }
@@ -757,7 +763,7 @@
               "linkId": "4.1.1",
               "type": "string",
               "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.system"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.value"
             }
           ]
         },
@@ -799,7 +805,8 @@
             {
               "linkId": "4.1.1",
               "type": "date",
-              "text": "Assessment Date"
+              "text": "Assessment Date",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueDate"
             }
           ]
         }
