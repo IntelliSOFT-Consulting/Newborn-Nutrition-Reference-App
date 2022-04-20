@@ -3,20 +3,17 @@ package com.intellisoft.nndak.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityChangerBinding
-import com.intellisoft.nndak.utils.Common
-import com.intellisoft.nndak.utils.Common.validInput
+import com.intellisoft.nndak.utils.*
 import timber.log.Timber
 
 class ChangerActivity : AppCompatActivity() {

@@ -13,7 +13,6 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
-import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.databinding.FragmentPostNatalBinding
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory

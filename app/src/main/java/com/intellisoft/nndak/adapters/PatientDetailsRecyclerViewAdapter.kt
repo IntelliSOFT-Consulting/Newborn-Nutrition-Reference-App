@@ -13,13 +13,13 @@ import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.utils.Common.allCornersRounded
-import com.intellisoft.nndak.utils.Common.bottomCornersRounded
-import com.intellisoft.nndak.utils.Common.noCornersRounded
-import com.intellisoft.nndak.utils.Common.topCornersRounded
+import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
 
-class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,private val onMaternityClick: () -> Unit) :
+class PatientDetailsRecyclerViewAdapter(
+    private val onScreenerClick: () -> Unit,
+    private val onMaternityClick: () -> Unit
+) :
 
     ListAdapter<PatientDetailData, PatientDetailItemViewHolder>(PatientDetailDiffUtil()) {
 
@@ -40,7 +40,7 @@ class PatientDetailsRecyclerViewAdapter(private val onScreenerClick: () -> Unit,
                         parent,
                         false
                     ),
-                    onScreenerClick,onMaternityClick
+                    onScreenerClick, onMaternityClick
                 )
             ViewTypes.PATIENT_PROPERTY ->
                 PatientPropertyItemViewHolder(
@@ -120,7 +120,8 @@ class PatientOverviewItemViewHolder(
             binding.patientContainer.setBackgroundColor(it.patientCardColor)
             binding.statusValue.text = it.riskStatus
             binding.statusValue.setTextColor(Color.BLACK)
-            binding.statusValue.background = allCornersRounded().apply { fillColor = ColorStateList.valueOf(it.riskStatusColor) }
+            binding.statusValue.background =
+                allCornersRounded().apply { fillColor = ColorStateList.valueOf(it.riskStatusColor) }
             binding.lastContactValue.text = it.lastContacted
         }
     }
@@ -156,6 +157,7 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
             val title = it.observation.code
             val value = it.observation.value
 
+
             val dbObservation = formatHelper.fhirObservations(title, value)
             val dbTitle = dbObservation.title
             val dbValue = dbObservation.value
@@ -166,6 +168,7 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
 
             binding.name.text = dbTitle
             binding.fieldName.text = dbValue
+
         }
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE
@@ -186,19 +189,6 @@ class PatientDetailsConditionItemViewHolder(private val binding: PatientListItem
     }
 }
 
-enum class ViewTypes {
-    HEADER,
-    PATIENT,
-    PATIENT_PROPERTY,
-    OBSERVATION,
-    CONDITION;
-
-    companion object {
-        fun from(ordinal: Int): ViewTypes {
-            return values()[ordinal]
-        }
-    }
-}
 
 class PatientDetailDiffUtil : DiffUtil.ItemCallback<PatientDetailData>() {
     override fun areItemsTheSame(o: PatientDetailData, n: PatientDetailData) = o == n

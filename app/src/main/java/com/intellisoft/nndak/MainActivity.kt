@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
 
             if (it != null) {
                 val gson = Gson()
-                val json = gson.toJson(it)
+                val json = gson.toJson(it.data)
                 FhirApplication.updateProfile(this, json)
             } else {
                 Timber.e("Error")

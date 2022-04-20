@@ -450,13 +450,11 @@
             {
               "linkId": "3.1.0",
               "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
               "item": [
                 {
                   "linkId": "4.1.1",
                   "type": "string",
-                  "text": "Any additional notes",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
+                  "text": "Any additional notes"
                 }
               ]
             }

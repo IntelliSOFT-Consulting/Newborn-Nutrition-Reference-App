@@ -1,4 +1,5 @@
 package com.intellisoft.nndak.data
+
 import android.content.Context
 import android.util.Log
 import com.intellisoft.nndak.api.AuthInterceptor
@@ -10,6 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 class RestManager {
     private lateinit var apiService: AuthService
@@ -39,32 +41,65 @@ class RestManager {
             .build()
     }
 
-    fun loginUser(context: Context,data: LoginData, onResult: (AuthResponse?) -> Unit){
+    fun loginUser(context: Context, data: LoginData, onResult: (AuthResponse?) -> Unit) {
         getService(context).loginUser(data).enqueue(
             object : Callback<AuthResponse> {
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
                 }
-                override fun onResponse( call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                    val user = response.body()
-                    onResult(user)
+
+                override fun onResponse(
+                    call: Call<AuthResponse>,
+                    response: Response<AuthResponse>
+                ) {
+                    Timber.e("onResponse " + response.body())
+                    onResult(response.body())
+
                 }
             }
         )
     }
-    fun loadUser(context: Context,onResult: (User?) -> Unit){
+
+    fun loadUser(context: Context, onResult: (UserResponse?) -> Unit) {
         getService(context).loadUser().enqueue(
-            object : Callback<User> {
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Log.e("TAG","onFailure "+t.localizedMessage)
+            object : Callback<UserResponse> {
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
-                override fun onResponse( call: Call<User>, response: Response<User>) {
+
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    Timber.e("onResponse " + response.headers())
                     onResult(response.body())
                 }
             }
         )
     }
+
+    fun resetPassword(context: Context, data: LoginData, onResult: (AuthResponse?) -> Unit) {
+        getService(context).resetPassword(data).enqueue(
+            object : Callback<AuthResponse> {
+                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<AuthResponse>,
+                    response: Response<AuthResponse>
+                ) {
+                    Timber.e("onResponse " + response.body())
+                    onResult(response.body())
+                }
+            }
+        )
+    }
+
 
 }

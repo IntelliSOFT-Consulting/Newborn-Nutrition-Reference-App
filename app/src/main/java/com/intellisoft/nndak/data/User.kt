@@ -7,6 +7,22 @@ data class LoginData(
     @SerializedName("password") val password: String?
 )
 
+data class AuthResponse(
+    @SerializedName("status") val status: String?,
+    @SerializedName("token") val token: String?,
+    @SerializedName("issued") val issued: String?,
+    @SerializedName("expires") val expires: String?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("_reset_url") val _reset_url: String?,
+
+    )
+
+data class UserResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("data") val data: User
+
+)
+
 data class User(
     @SerializedName("id") val id: String,
     @SerializedName("createdAt") val createdAt: String,
@@ -15,11 +31,4 @@ data class User(
     @SerializedName("email") val email: String,
     @SerializedName("role") val role: String
 
-)
-
-data class AuthResponse(
-    @SerializedName("status") val status: String?,
-    @SerializedName("token") val token: String?,
-    @SerializedName("issued") val issued: String?,
-    @SerializedName("expires") val expires: String?,
 )
