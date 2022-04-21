@@ -10,13 +10,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
+import com.intellisoft.nndak.databinding.FragmentMaternityBinding
+import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.screens.ScreenerFragmentArgs
+import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
+import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,121 +40,86 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MaternityFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MaternityFragment : Fragment(R.layout.fragment_maternity) {
+class MaternityFragment : Fragment() {
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientDetailsViewModel: PatientDetailsViewModel
+    private val args: MaternityFragmentArgs by navArgs()
+    private var _binding: FragmentMaternityBinding? = null
+    private val binding
+        get() = _binding!!
 
-    private val viewModel: ScreenerViewModel by viewModels()
-    private val args: ScreenerFragmentArgs by navArgs()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMaternityBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpActionBar()
-        setHasOptionsMenu(true)
-        updateArguments()
-        onBackPressed()
-        observeResourcesSaveAction()
-        if (savedInstanceState == null) {
-            addQuestionnaireFragment()
-        }
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientDetailsViewModel =
+            ViewModelProvider(
+                this,
+                PatientDetailsViewModelFactory(
+                    requireActivity().application,
+                    fhirEngine,
+                    args.patientId
+                )
+            )
+                .get(PatientDetailsViewModel::class.java)
+        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = args.title
+            title = "Maternity Unit"
             setDisplayHomeAsUpEnabled(true)
         }
+        patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
     }
 
+    private fun onAddScreenerClick() {
+
+    }
+
+    private fun onMaternityClick() {
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.screen_encounter_fragment_menu, menu)
+        inflater.inflate(R.menu.maternity, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_add_patient_submit -> {
-                onSubmitAction()
+            android.R.id.home -> {
+                NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-            android.R.id.home -> {
-                showCancelScreenerQuestionnaireAlertDialog()
+            R.id.menu_maternity -> {
+                Timber.e("Resource ID::: " + args.patientId)
+                findNavController().navigate(
+                    MaternityFragmentDirections.navigateToScreening(
+                        args.patientId, "maternity-registration.json", "Maternity Unit"
+                    )
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
-    private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, args.quastion)
-    }
-
-    private fun addQuestionnaireFragment() {
-        val fragment = QuestionnaireFragment()
-        fragment.arguments =
-            bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
-        childFragmentManager.commit {
-            add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
-        }
-    }
-
-    private fun onSubmitAction() {
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-        viewModel.saveScreenerEncounter(
-            questionnaireFragment.getQuestionnaireResponse(),
-            args.patientId
-        )
-    }
-
-    private fun showCancelScreenerQuestionnaireAlertDialog() {
-        val alertDialog: AlertDialog? =
-            activity?.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@MaternityFragment).navigateUp()
-                    }
-                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
-                }
-                builder.create()
-            }
-        alertDialog?.show()
-    }
-
-    private fun onBackPressed() {
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-            showCancelScreenerQuestionnaireAlertDialog()
-        }
-    }
-
-    private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                return@observe
-            }
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.resources_saved),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            NavHostFragment.findNavController(this).navigateUp()
-        }
-    }
-
-    companion object {
-        const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
-        const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
-    }
 }

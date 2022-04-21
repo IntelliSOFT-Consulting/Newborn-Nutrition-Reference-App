@@ -126,5 +126,12 @@
     <string name="menu_new_born">New Born Assessment</string>
     <string name="menu_assessment">Feeding Data</string>
     <string name="menu_prescribe">Prescribe Feeds</string>
+    <string name="menu_request_consent">Request</string>
+    <string name="menu_dhm_prescription">DHM Prescription</string>
+    <string name="menu_order_confirmation">Order confirmation</string>
+    <string name="menu_register_update">Register Update</string>
+    <string name="menu_dhm_reception">Receive DHM</string>
+    <string name="menu_assess">Assess</string>
+    <string name="menu_maternity">Record Details</string>
 
 </resources>

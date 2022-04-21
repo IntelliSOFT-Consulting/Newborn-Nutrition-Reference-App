@@ -19,7 +19,7 @@
   ],
   "item": [
     {
-      "text": "HMB Ordering and Dispensing",
+      "text": "DHM Prescription",
       "linkId": "1.0.0",
       "type": "group",
       "item": [
@@ -41,10 +41,49 @@
             {
               "linkId": "1.1.0",
               "type": "group",
+              "item": [
+                {
+                  "linkId": "prescriberName",
+                  "type": "date",
+                  "text": "Order Date",
+                  "required": true,
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Observation",
+                        "name": "orderDate"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.1.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "riskFactors"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1.1.0",
+              "type": "group",
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
               "item": [
                 {
-                  "text": "Amount Expressed",
+                  "text": "Volume Prescribed per feed (mls/hrly)",
                   "type": "decimal",
                   "linkId": "1.1.1",
                   "required": true,
@@ -56,7 +95,7 @@
                     },
                     {
                       "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 10000
+                      "valueDecimal": 3000
                     }
                   ]
                 },
@@ -72,7 +111,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "ml(s)"
+                      "valueString": "mls/hrly"
                     }
                   ]
                 },
@@ -107,10 +146,150 @@
               "initial": [
                 {
                   "valueCoding": {
-                    "code": "Amount Expressed",
-                    "display": "Amount Expressed",
+                    "code": "Volume Prescribed per feed",
+                    "display": "Volume Prescribed per feed",
                     "system": "http://loinc.org"
                   }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.1.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "riskFactors"
+              }
+            }
+          ],
+          "item": [
+            {
+              "text": "Identify if milk is preterm or term milk",
+              "linkId": "10.1.1",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "milkType"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Preterm Milk",
+                    "display": "Preterm Milk",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Term Milk",
+                    "display": "Term Milk",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.1.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "riskFactors"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "prescriberName",
+                  "type": "string",
+                  "text": "Prescriber Name",
+                  "required": true,
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Observation",
+                        "name": "clinicianName"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.1.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "riskFactors"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "1.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "clinicianName",
+                  "type": "string",
+                  "text": "Clinician Name",
+                  "required": true,
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Observation",
+                        "name": "clinicianName"
+                      }
+                    }
+                  ]
                 }
               ]
             }

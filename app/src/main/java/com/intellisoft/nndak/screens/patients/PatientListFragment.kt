@@ -170,13 +170,11 @@ class PatientListFragment : Fragment() {
     private fun onPatientItemClicked(patientItem: PatientItem) {
         if (args.step.isNotEmpty()) {
             if (args.step == "0") {
-
-                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
-                /*    findNavController().navigate(
-                        PatientListFragmentDirections.actionPatientListToMaternityFragment(
-                            patientItem.resourceId, "maternity-registration.json", "Maternity Registration"
-                        )
-                    )*/
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToMaternity(
+                        patientItem.resourceId
+                    )
+                )
             }
             if (args.step == "1") {
 
@@ -209,10 +207,20 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "5") {
 
-                screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
+                // screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToDhm(
+                        patientItem.resourceId
+                    )
+                )
             }
             if (args.step == "6") {
-                screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
+                // screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToAssessment(
+                        patientItem.resourceId
+                    )
+                )
             }
 
         }

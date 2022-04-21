@@ -46,9 +46,6 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
             if (entry.resource !is Patient) return@launch
             val patient = entry.resource as Patient
 
-
-
-
             if (patient.hasName() &&
                 patient.name[0].hasGiven() &&
                 patient.name[0].hasFamily() &&
