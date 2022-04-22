@@ -22,6 +22,21 @@
         <action
             android:id="@+id/action_patient_list_to_screenerEncounterFragment"
             app:destination="@id/screenerEncounterFragment" />
+        <action
+            android:id="@+id/navigate_to_maternity"
+            app:destination="@id/maternityFragment" />
+        <action
+            android:id="@+id/navigate_to_newborn"
+            app:destination="@id/newBornFragment" />
+        <action
+            android:id="@+id/navigate_to_post_natal"
+            app:destination="@id/postNatalFragment" />
+        <action
+            android:id="@+id/navigate_to_dhm"
+            app:destination="@id/milkFragment" />
+        <action
+            android:id="@+id/navigate_to_assessment"
+            app:destination="@id/assessmentFragment" />
     </fragment>
 
     <fragment
@@ -77,10 +92,70 @@
         android:id="@+id/dashboard"
         android:name="com.intellisoft.nndak.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboard_to_patient_list"
             app:destination="@id/patient_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/maternityFragment"
+        android:name="com.intellisoft.nndak.screens.maternity.MaternityFragment"
+        android:label="fragment_maternity"
+        tools:layout="@layout/fragment_maternity">
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/newBornFragment"
+        android:name="com.intellisoft.nndak.screens.newborn.NewBornFragment"
+        android:label="fragment_new_born"
+        tools:layout="@layout/fragment_new_born">
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/postNatalFragment"
+        android:name="com.intellisoft.nndak.screens.postnatal.PostNatalFragment"
+        android:label="fragment_post_natal"
+        tools:layout="@layout/fragment_post_natal">
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/milkFragment"
+        android:name="com.intellisoft.nndak.screens.milk.MilkFragment"
+        android:label="fragment_milk"
+        tools:layout="@layout/fragment_milk">
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/assessmentFragment"
+        android:name="com.intellisoft.nndak.screens.assessments.AssessmentFragment"
+        android:label="fragment_assessment"
+        tools:layout="@layout/fragment_assessment">
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
     </fragment>
 
 </navigation>

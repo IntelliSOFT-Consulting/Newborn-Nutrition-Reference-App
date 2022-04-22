@@ -34,6 +34,7 @@ import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import com.intellisoft.nndak.viewmodels.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class PatientListFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
@@ -169,25 +170,35 @@ class PatientListFragment : Fragment() {
     private fun onPatientItemClicked(patientItem: PatientItem) {
         if (args.step.isNotEmpty()) {
             if (args.step == "0") {
-
-                screenerScreen(patientItem, "maternity-registration.json", "Maternity Registration")
-               // screenerScreen(patientItem, "apgar-score.json", "Maternity Registration")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToMaternity(
+                        patientItem.resourceId
+                    )
+                )
             }
             if (args.step == "1") {
 
-                screenerScreen(patientItem, "mother-child-assessment.json", "Mother & Child Assessment")
+                screenerScreen(
+                    patientItem,
+                    "mother-child-assessment.json",
+                    "Mother & Child Assessment"
+                )
             }
             if (args.step == "2") {
 
-                screenerScreen(patientItem, "new-born.json", "New Born Unit")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId)
+                )
 
             }
             if (args.step == "3") {
-                screenerScreen(patientItem, "post-natal.json", "Post Natal Unit")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToPostNatal(patientItem.resourceId)
+                )
             }
             if (args.step == "4") {
 
-                Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
+                Timber.e("Resource ID::: " + patientItem.resourceId)
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
@@ -196,10 +207,20 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "5") {
 
-                screenerScreen(patientItem, "human-milk.json", "Human Milk Bank")
+                // screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToDhm(
+                        patientItem.resourceId
+                    )
+                )
             }
             if (args.step == "6") {
-                screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
+                // screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
+                findNavController().navigate(
+                    PatientListFragmentDirections.navigateToAssessment(
+                        patientItem.resourceId
+                    )
+                )
             }
 
         }
@@ -207,7 +228,7 @@ class PatientListFragment : Fragment() {
 
     private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
 
-        Log.e("Patient Details","Resource ID::: ${patientItem.resourceId}")
+        Timber.e("Resource ID::: " + patientItem.resourceId)
         findNavController().navigate(
             PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
                 patientItem.resourceId, asset, title

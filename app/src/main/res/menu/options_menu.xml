@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.NoTitleBar">
+    <item
+        android:id="@+id/menu_new_born"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_new_born"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_assessment"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_assessment"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_prescribe"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_prescribe"
+        app:showAsAction="never" />
+</menu>

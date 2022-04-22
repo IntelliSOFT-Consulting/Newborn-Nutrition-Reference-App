@@ -9,8 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.intellisoft.nndak.databinding.ActivityOtpBinding
-import com.intellisoft.nndak.utils.Common
-import com.intellisoft.nndak.utils.Common.validInput
+import com.intellisoft.nndak.utils.*
 
 
 class OtpActivity : AppCompatActivity() {

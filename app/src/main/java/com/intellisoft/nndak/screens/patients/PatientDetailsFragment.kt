@@ -20,6 +20,7 @@ import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.PatientDetailBinding
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 class PatientDetailsFragment : Fragment() {
 
@@ -97,7 +98,7 @@ class PatientDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_patient_edit -> {
-                Log.e("Patient Details","Resource ID::: ${args.patientId}")
+                Timber.e("Resource ID::: " + args.patientId)
                 findNavController()
                     .navigate(
                         PatientDetailsFragmentDirections.navigateToEditPatient(

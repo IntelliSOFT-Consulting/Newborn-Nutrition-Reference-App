@@ -8,8 +8,8 @@
   },
   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
   "version": "",
-  "name": "maternityQuestionnaire",
-  "title": "Maternity Registration",
+  "name": "apgarQuestionnaire",
+  "title": "Apgar",
   "status": "draft",
   "subjectType": [
     "Encounter"

@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import com.google.android.fhir.get
 import com.intellisoft.nndak.screens.patients.EditPatientFragment
 import com.intellisoft.nndak.FhirApplication
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
     val livePatientData = liveData { emit(prepareEditPatient()) }
 
     private suspend fun prepareEditPatient(): Pair<String, String> {
-        val patient = fhirEngine.load(Patient::class.java, patientId)
+        val patient = fhirEngine.get<Patient>(patientId)
         val question = readFileFromAssets("new-patient-registration.json").trimIndent()
         val parser = FhirContext.forR4().newJsonParser()
         val questionnaire =
@@ -75,7 +76,6 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
                 isPatientSaved.value = true
                 return@launch
             }
-
             isPatientSaved.value = false
         }
     }

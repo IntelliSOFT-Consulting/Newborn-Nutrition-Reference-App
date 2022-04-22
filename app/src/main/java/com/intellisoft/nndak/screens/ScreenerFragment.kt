@@ -88,9 +88,6 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-          val context= FhirContext.forR4()
-         Log.d(TAG,"Questionnaire Response:::: "+context.newJsonParser().encodeResourceToString(questionnaireFragment.getQuestionnaireResponse()))
-
         viewModel.saveScreenerEncounter(
             questionnaireFragment.getQuestionnaireResponse(),
             args.patientId

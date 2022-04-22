@@ -46,9 +46,6 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
             if (entry.resource !is Patient) return@launch
             val patient = entry.resource as Patient
 
-
-
-
             if (patient.hasName() &&
                 patient.name[0].hasGiven() &&
                 patient.name[0].hasFamily() &&
@@ -62,9 +59,10 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 val birthDate = patient.birthDate.toString()
                 val todayDate = FormatHelper().getTodayDate()
                 val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
+
  
                 if (isDateValid && isPhoneNo){
- 
+
                     patient.active = true
                     patient.id = generateUuid()
                     fhirEngine.create(patient)

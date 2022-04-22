@@ -14,20 +14,18 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
-import com.intellisoft.nndak.utils.Common.isValidPassword
-import com.intellisoft.nndak.utils.Common.validEmail
-import com.intellisoft.nndak.utils.Common.validInput
+import com.intellisoft.nndak.utils.*
 import timber.log.Timber
 import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
-
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var progressBar: ProgressBar
     private lateinit var username: TextInputEditText
     private lateinit var password: TextInputEditText
     private var doubleBackToExitPressedOnce = false
+    private val apiService = RestManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.eMail.requestFocus()
                 return@setOnClickListener
             }
-            processAccountRecover(user)
+            processAccountRecovery(user)
         }
     }
 
@@ -91,28 +89,32 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun processAccountRecover(user: String) {
+    private fun processAccountRecovery(email: String) {
         showProgress(binding.pbLoading, binding.btnSubmit)
-        val timer = object : CountDownTimer(3000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                Timber.d("It's just a matter of time $user")
-            }
 
-            override fun onFinish() {
-                hideProgress(binding.pbLoading, binding.btnSubmit)
-                startActivity(Intent(this@LoginActivity, OtpActivity::class.java))
+        val user = LoginData(email = email, password = null)
+        apiService.resetPassword(this, user) {
+
+            hideProgress(progressBar, binding.btnSubmit)
+
+            if (it != null) {
+                Timber.d("Success $it")
+                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
-        timer.start()
+
 
     }
 
     private fun validateLogin(email: String, pass: String) {
 
         showProgress(progressBar, binding.btnSubmit)
-        val apiService = RestManager()
+
         val user = LoginData(email = email, password = pass)
-        apiService.loginUser(this,user) {
+        apiService.loginUser(this, user) {
 
             hideProgress(progressBar, binding.btnSubmit)
 

@@ -1,34 +1,28 @@
 {
-  "resourceType": "Questionnaire",
-  "id": "maternity-registration-questionnaire",
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
   "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
-  "language": "en",
-  "text": {
-    "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"><table border=\"1\" cellpadding=\"0\" cellspacing=\"0\" style=\"border: 1px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top;\"><tr style=\"border: 2px #F0F0F0 solid; font-size: 11px; font-family: verdana; vertical-align: top\"><th style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"The linkId for the item\">LinkId</a></th><th style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"Text for the item\">Text</a></th><th style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"Minimum and Maximum # of times the the itemcan appear in the instance\">Cardinality</a></th><th style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"The type of the item\">Type</a></th><th style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"Additional information about the item\">Description &amp; Constraints</a><span style=\"float: right\"><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"Legend for this format\"><img src=\"http://hl7.org/fhir/R4/help16.png\" alt=\"doco\" style=\"background-color: inherit\"/></a></span></th></tr><tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck1.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon_q_root.gif\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"QuestionnaireRoot\" class=\"hierarchy\"/> FoodAllergyQuestionnaire</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Questionnaire</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">A form for self-reported food allergies, including the basic information and contained valuesets</td></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-display.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"Display\" class=\"hierarchy\"/> title</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Food Allergy report</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-display\">display</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-display.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Display\" class=\"hierarchy\"/> instructions</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Reporting instructions: Please report any allergy or allergic reaction</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-display\">display</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> patient</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Patient ID</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-coding.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Coding\" class=\"hierarchy\"/> allergen</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Substance that the person is allergic to</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-choice\">choice</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Value Set: <a href=\"ValueSet-food-allergy-questionnaire_vs-food-allergy-cont.html\">FoodAllergyVS</a></td></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-coding.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"Coding\" class=\"hierarchy\"/> clinicalStatus</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Status of the allergy - active or resolved</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-choice\">choice</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Value Set: <a href=\"ValueSet-food-allergy-questionnaire_vs-food-allergy-clinstatus-cont.html\">FoodAllergyVS</a></td></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-coding.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Coding\" class=\"hierarchy\"/> verificationStatus</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Verification status of the allergy - confirmed or suspected or refuted</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-choice\">choice</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Value Set: <a href=\"ValueSet-food-allergy-questionnaire_vs-food-allergy-verifstatus-cont.html\">FoodAllergyVerificationStatusVS</a></td></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-date.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"Date\" class=\"hierarchy\"/> recordedDate</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">When was it reported</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-date\">date</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> recorder</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Who recorded the allergy</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck10.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> asserter</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Who asserted the allergy</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck01.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin_end.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-group.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"Group\" class=\"hierarchy\"/> reactions</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Reactions</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-group\">group</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck010.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_blank.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> substance</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Substance that is thought to have triggered the reaction</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: white\"><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck010.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_blank.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: white; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> manifestation</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Manifestation</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: white; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr style=\"border: 1px #F0F0F0 solid; padding:0px; vertical-align: top; background-color: #F7F7F7\"><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px; white-space: nowrap; background-image: url(tbl_bck000.png)\" class=\"hierarchy\"><img src=\"tbl_spacer.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_blank.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"tbl_vjoin_end.png\" alt=\".\" style=\"background-color: inherit\" class=\"hierarchy\"/><img src=\"icon-q-string.png\" alt=\".\" style=\"background-color: #F7F7F7; background-color: inherit\" title=\"String\" class=\"hierarchy\"/> note</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">Note</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\">0..1</td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"><a href=\"http://hl7.org/fhir/R4/codesystem-item-type.html#item-type-string\">string</a></td><td style=\"vertical-align: top; text-align : left; background-color: #F7F7F7; border: 1px #F0F0F0 solid; padding:0px 4px 0px 4px\" class=\"hierarchy\"/></tr>\r\n<tr><td colspan=\"5\" class=\"hierarchy\"><br/><a href=\"http://hl7.org/fhir/R4/formats.html#table\" title=\"Legend for this format\"><img src=\"http://hl7.org/fhir/R4/help16.png\" alt=\"doco\" style=\"background-color: inherit\"/> Documentation for this format</a></td></tr></table></div>"
-  },
-  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-  "version": "",
-  "name": "maternityQuestionnaire",
-  "title": "Maternity Registration",
-  "status": "draft",
+  "resourceType": "Questionnaire",
   "subjectType": [
     "Encounter"
   ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
   "item": [
     {
-      "text": "Mother's Assessment",
+      "text": "Mother’s Health Assessment",
+      "linkId": "6.0.0",
       "type": "group",
-      "linkId": "1.0.0",
       "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "motherAssessment"
-          }
-        },
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
           "valueCodeableConcept": {
@@ -45,89 +39,350 @@
       ],
       "item": [
         {
-          "linkId": "2.0.0",
+          "linkId": "checkList",
           "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "breastProblems"
-              }
-            }
-          ],
           "item": [
             {
-              "text": "Does mother have any breast problems?",
-              "linkId": "2.1.1",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "linkId": "3.1.0",
+              "type": "group",
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Condition",
+                    "name": "checkList"
                   }
                 }
               ],
-              "answerOption": [
+              "item": [
                 {
-                  "valueCoding": {
-                    "code": "None",
-                    "display": "None",
-                    "system": "http://snomed.info/sct"
-                  }
+                  "text": "Has the mother experienced ANY of these symptoms?",
+                  "type": "choice",
+                  "linkId": "1.1.0",
+                  "repeats": true,
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "check-box",
+                            "display": "Checkbox"
+                          }
+                        ],
+                        "text": "Checkbox"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "386661006",
+                        "display": "Fever",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "13645005",
+                        "display": "Shortness of breath",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "49727002",
+                        "display": "Cough",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "44169009",
+                        "display": "Loss of smell",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
                 },
                 {
-                  "valueCoding": {
-                    "code": "Engourged Breasts",
-                    "display": "Engourged Breasts",
-                    "system": "http://snomed.info/sct"
-                  }
+                  "linkId": "1.2.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Condition",
+                        "name": "fever"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "1.1.0",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "386661006",
+                        "display": "Fever",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "type": "choice",
+                      "linkId": "1.2.1",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "extension": [
+                      ],
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "386661006",
+                            "display": "Fever",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "valueCoding": {
-                    "code": "Sore Nipples",
-                    "display": "Sore Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
+                  "linkId": "1.3.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Condition",
+                        "name": "breathShortness"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "1.1.0",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "13645005",
+                        "display": "Shortness of breath",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "linkId": "1.3.1",
+                      "type": "choice",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "13645005",
+                            "display": "Shortness of breath",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "valueCoding": {
-                    "code": "Cracked Nipples",
-                    "display": "Cracked Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
+                  "linkId": "1.4.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "cough"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "1.1.0",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "49727002",
+                        "display": "Cough",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "linkId": "1.4.1",
+                      "type": "choice",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "49727002",
+                            "display": "Cough",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "valueCoding": {
-                    "code": "Bleeding Nipples",
-                    "display": "Bleeding Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
+                  "linkId": "1.5.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "lossOfSmell"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "1.1.0",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "44169009",
+                        "display": "Loss of smell",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "linkId": "1.5.1",
+                      "type": "choice",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "44169009",
+                            "display": "Loss of smell",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "breastProblems",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "3.1.0",
+              "type": "group",
+              "extension": [
                 {
-                  "valueCoding": {
-                    "code": "Inverted Nipples",
-                    "display": "Inverted Nipples",
-                    "system": "http://snomed.info/sct"
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Condition",
+                    "name": "breastProblems"
                   }
-                },
+                }
+              ],
+              "item": [
                 {
-                  "valueCoding": {
-                    "code": "Flat Nipples",
-                    "display": "Flat Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
+                  "text": "Does mother have any breast problems?",
+                  "linkId": "2.1.1",
+                  "type": "choice",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "None",
+                        "display": "None",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Engourged Breasts",
+                        "display": "Engourged Breasts",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Sore Nipples",
+                        "display": "Sore Nipples",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Cracked Nipples",
+                        "display": "Cracked Nipples",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Bleeding Nipples",
+                        "display": "Bleeding Nipples",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Inverted Nipples",
+                        "display": "Inverted Nipples",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Flat Nipples",
+                        "display": "Flat Nipples",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -193,26 +448,31 @@
           ],
           "item": [
             {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.system"
+              "linkId": "3.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "4.1.1",
+                  "type": "string",
+                  "text": "Any additional notes"
+                }
+              ]
             }
           ]
         }
       ]
     },
     {
-      "text": "Child's Assessment",
+      "text": "Newborn’s Health Assessment",
       "type": "group",
-      "linkId": "5.0.0",
+      "linkId": "7.0.0",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "childAssessment"
+            "name": "newbornHealthAssessment"
           }
         },
         {
@@ -231,59 +491,7 @@
       ],
       "item": [
         {
-          "linkId": "5.1.0",
-          "type": "choice",
-          "repeats": true,
-          "text": "Does the child have any existing conditions",
-          "code": [],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "check-box",
-                    "display": "Checkbox"
-                  }
-                ],
-                "text": "Checkbox"
-              }
-            }
-          ],
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Asphyxia",
-                "display": "Asphyxia",
-                "system": "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Neonatal Sepsis",
-                "display": "Neonatal Sepsis",
-                "system": "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Low Birth Weight",
-                "display": "Low Birth Weight",
-                "system" : "http://snomed.info/sct"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Is baby born term",
-                "display": "Is baby born term",
-                "system" : "http://snomed.info/sct"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "5.2.0",
+          "linkId": "checkList",
           "type": "group",
           "extension": [
             {
@@ -291,226 +499,151 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Condition",
-                "name": "asthma"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "5.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Asphyxia",
-                "display": "Asphyxia",
-                "system": "http://snomed.info/sct"
+                "name": "checkList"
               }
             }
           ],
           "item": [
             {
-              "linkId": "5.2.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Asphyxia",
-                    "display": "Asphyxia",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "5.3.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "NeonatalSepsis"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "5.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Neonatal Sepsis",
-                "display": "Neonatal Sepsis",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "5.3.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Neonatal Sepsis",
-                    "display": "Neonatal Sepsis",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "5.4.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "LowBirthWeight"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "5.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Low Birth Weight",
-                "display": "Low Birth Weight",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "5.3.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Low Birth Weight",
-                    "display": "Low Birth Weight",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "5.5.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "IsBabyBornTerm"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "5.1.0",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Is baby born term",
-                "display": "Is baby born term",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "5.5.1",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Is baby born term",
-                    "display": "Is baby born term",
-                    "system": "http://snomed.info/sct"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "5.6.0",
-          "type": "group",
-          "enableWhen": [
-            {
-              "question": "5.5.1",
-              "operator": "!=",
-              "answerCoding": {
-                "code": "Is baby born term",
-                "display": "Is baby born term",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "preterm"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "5.6.1",
+              "linkId": "3.1.0",
               "type": "group",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                  "valueExpression": {
+                    "language": "application/x-fhir-query",
+                    "expression": "Observation",
+                    "name": "checkList"
+                  }
+                }
+              ],
               "item": [
                 {
-                  "linkId": "5.6.2",
+                  "text": "Does the newborn shows any of the following conditions?",
                   "type": "choice",
-                  "text": "Is the baby born preterm?",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "linkId": "newbornConditions",
+                  "repeats": true,
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "check-box",
+                            "display": "Checkbox"
+                          }
+                        ],
+                        "text": "Checkbox"
+                      }
+                    }
+                  ],
                   "answerOption": [
                     {
                       "valueCoding": {
-                        "code": "Yes",
-                        "display": "Yes",
+                        "code": "asphyxia",
+                        "display": "Asphyxia",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "No",
-                        "display": "No",
+                        "code": "neonatalSepsis",
+                        "display": "Neonatal Sepsis",
                         "system": "http://snomed.info/sct"
                       }
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.2.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "asphyxia"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "newbornConditions",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "asphyxia",
+                        "display": "Asphyxia",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "type": "choice",
+                      "linkId": "1.2.1",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "extension": [
+                      ],
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "asphyxia",
+                            "display": "Asphyxia",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "linkId": "1.3.0",
+                  "type": "group",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "neonatalSepsis"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "enableWhen": [
+                    {
+                      "question": "newbornConditions",
+                      "operator": "=",
+                      "answerCoding": {
+                        "code": "neonatalSepsis",
+                        "display": "Neonatal Sepsis",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ],
+                  "item": [
+                    {
+                      "linkId": "1.3.1",
+                      "type": "choice",
+                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
+                      "initial": [
+                        {
+                          "valueCoding": {
+                            "code": "neonatalSepsis",
+                            "display": "Neonatal Sepsis",
+                            "system": "http://snomed.info/sct"
+                          }
+                        }
+                      ]
                     }
                   ]
                 }
@@ -519,7 +652,7 @@
           ]
         },
         {
-          "linkId": "5.7.0",
+          "linkId": "3.0.0",
           "type": "group",
           "extension": [
             {
@@ -533,13 +666,13 @@
           ],
           "item": [
             {
-              "linkId": "5.7.1",
+              "linkId": "3.1.0",
               "type": "group",
               "item": [
                 {
-                  "linkId": "5.7.2",
+                  "linkId": "3.1.1",
                   "type": "choice",
-                  "text": "Baby's health status in regards to the health assessment. Is the Baby well?",
+                  "text": "Low Birth Weight?",
                   "required": true,
                   "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
                   "answerOption": [
@@ -564,7 +697,52 @@
           ]
         },
         {
-          "linkId": "5.4.0",
+          "linkId": "3.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "wellness"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "3.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "3.1.1",
+                  "type": "choice",
+                  "text": "Newborn's health status in regards to the health assessment. Is the newborn well?",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Baby Well",
+                        "display": "Yes",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Baby Unwell",
+                        "display": "No",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
           "type": "group",
           "extension": [
             {
@@ -578,10 +756,55 @@
           ],
           "item": [
             {
-              "linkId": "5.4.1",
+              "extension": [
+              ],
+              "linkId": "4.1.1",
               "type": "string",
               "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.system"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.value"
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "comments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.1.1",
+              "type": "string",
+              "text": "Completed by"
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "DiagnosticReport",
+                "name": "comments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.1.1",
+              "type": "date",
+              "text": "Assessment Date",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueDate"
             }
           ]
         }

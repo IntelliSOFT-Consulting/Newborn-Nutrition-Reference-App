@@ -83,6 +83,12 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                             value = nameQuery
                         }
                     )
+                 /*   filter(
+                        Patient.TELECOM, {
+                           modifier= StringFilterModifier.CONTAINS
+                          value=   nameQuery
+                        }
+                    )*/
                 }
                 filterCity(this)
                 sort(Patient.GIVEN, Order.ASCENDING)

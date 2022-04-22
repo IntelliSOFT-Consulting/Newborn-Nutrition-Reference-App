@@ -8,9 +8,12 @@ import com.google.android.fhir.sync.Sync
 import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
+import com.intellisoft.nndak.utils.Constants.FHIR_BASE_URL
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.USER_ACCOUNT
 import com.intellisoft.nndak.utils.Constants.WELCOME
+import timber.log.Timber
+
 
 class FhirApplication : Application() {
     // Only initiate the FhirEngine when used for the first time, not when the app is created.
@@ -23,17 +26,21 @@ class FhirApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         instance = this.applicationContext
           FhirEngineProvider.init(
             FhirEngineConfiguration(enableEncryptionIfSupported = true,
                 DatabaseErrorStrategy.RECREATE_AT_OPEN,
-                ServerConfiguration("https://hapi.fhir.org/baseR4/")
+                ServerConfiguration(FHIR_BASE_URL)
             )
           )
         Sync.oneTimeSync<FhirPeriodicSyncWorker>(this)
 
         sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
+
     }
 
 

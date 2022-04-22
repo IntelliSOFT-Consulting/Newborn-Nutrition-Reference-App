@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.NoTitleBar">
+    <item
+        android:id="@+id/menu_assess"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_assess"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

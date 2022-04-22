@@ -2,6 +2,7 @@ package com.intellisoft.nndak.api
 
 import ca.uhn.fhir.parser.IParser
 import com.intellisoft.nndak.data.User
+import com.intellisoft.nndak.utils.Constants.FHIR_BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -40,7 +41,6 @@ interface HapiFhirService {
   @POST(".") suspend fun postData(@Body body: RequestBody): Resource
 
   companion object {
-    const val BASE_URL = "https://hapi.fhir.org/baseR4/"
 
     fun create(parser: IParser): HapiFhirService {
       val logger = HttpLoggingInterceptor()
@@ -48,7 +48,7 @@ interface HapiFhirService {
 
       val client = OkHttpClient.Builder().addInterceptor(logger).build()
       return Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(FHIR_BASE_URL)
         .client(client)
         .addConverterFactory(FhirConverterFactory(parser))
         .addConverterFactory(GsonConverterFactory.create())

@@ -17,6 +17,7 @@ import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import timber.log.Timber
 
 const val TAG = "ScreenerViewModel"
 
@@ -40,7 +41,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResource,
                     questionnaireResponse
                 )
-            Log.e("Saving:::: ",bundle.fhirType())
+            val context = FhirContext.forR4()
+            Timber.d(
+                "Questionnaire Response:::: " + context.newJsonParser()
+                    .encodeResourceToString(questionnaireResponse)
+            )
+
+
             val subjectReference = Reference("Patient/$patientId")
             val encounterId = generateUuid()
             if (isRequiredFieldMissing(bundle)) {
@@ -94,13 +101,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
+
                 }
 
-               /* is Condition -> {
-                    if (resource.hasCode() && !resource.hasPrimitiveValue()) {
-                        return true
-                    }
-                }*/
+                /* is Condition -> {
+                     if (resource.hasCode() && !resource.hasPrimitiveValue()) {
+                         return true
+                     }
+                 }*/
                 // TODO check other resources inputs
             }
         }
@@ -191,7 +199,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             .asSequence()
             .filter { it.resource is Observation }
             .map { it.resource as Observation }
-            .filter { it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(Logics.SPO2) }
+            .filter {
+                it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(
+                    Logics.SPO2
+                )
+            }
             .map { it.valueQuantity.value }
             .firstOrNull()
     }
