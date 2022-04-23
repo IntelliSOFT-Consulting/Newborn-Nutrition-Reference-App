@@ -63,15 +63,23 @@ class HealthRepository(private val healthDao: HealthDao) {
 
             val nationalId = dbMotherInfo.nationalId
             val motherInfo = healthDao.getMotherInfo(nationalId)
-            val id = motherInfo.id.toString().toInt()
-
             val motherDob = dbMotherInfo.motherDob
             val firstName = dbMotherInfo.firstName
             val familyName = dbMotherInfo.familyName
             val phoneNumber = dbMotherInfo.phoneNumber
             val fhirId = dbMotherInfo.fhirId
 
-            healthDao.updateMotherInfo(fhirId, phoneNumber, firstName, familyName, motherDob, id)
+            if (motherInfo != null){
+
+                val id = motherInfo.id.toString().toInt()
+                healthDao.updateMotherInfo(fhirId, phoneNumber, firstName, familyName, motherDob, id)
+
+            }else{
+
+                val motherDataInfo = MotherInfo(nationalId, motherDob, firstName, familyName, phoneNumber, fhirId)
+                healthDao.addMotherInfo(motherDataInfo)
+            }
+
 
 
         }
@@ -85,9 +93,11 @@ class HealthRepository(private val healthDao: HealthDao) {
             val natID = DbMotherKey.NATIONALID.name
             val nationalId = getSharedPref(context, natID).toString()
             val motherInfo = healthDao.getMotherInfo(nationalId)
-            val id = motherInfo.id.toString().toInt()
+            if (motherInfo != null){
+                val id = motherInfo.id.toString().toInt()
+                healthDao.deleteMotherInfo(id)
+            }
 
-            healthDao.deleteMotherInfo(id)
 
 
         }

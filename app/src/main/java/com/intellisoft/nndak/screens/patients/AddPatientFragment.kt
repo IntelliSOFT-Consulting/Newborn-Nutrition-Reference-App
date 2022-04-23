@@ -120,6 +120,8 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
 
         }
 
+        builder.setCancelable(false)
+
         builder.show()
     }
 

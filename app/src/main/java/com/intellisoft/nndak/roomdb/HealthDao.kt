@@ -24,7 +24,7 @@ interface HealthDao {
         id: Int)
 
     @Query("SELECT * from mother_info WHERE nationalId LIKE :nationalId")
-    suspend fun getMotherInfo(nationalId: String): MotherInfo
+    suspend fun getMotherInfo(nationalId: String): MotherInfo?
 
     @Query("DELETE FROM mother_info WHERE id =:id")
     suspend fun deleteMotherInfo(id: Int)
