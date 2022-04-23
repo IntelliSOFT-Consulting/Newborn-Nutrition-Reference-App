@@ -45,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
         hideProgress(progressBar, binding.btnSubmit)
 
         binding.btnSubmit.setOnClickListener {
+
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+
             handleDataCheck()
         }
         binding.forgotPass.setOnClickListener {
