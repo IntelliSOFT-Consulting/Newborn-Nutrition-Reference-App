@@ -50,6 +50,19 @@ class PatientDetailsRecyclerViewAdapter(
                         false
                     )
                 )
+
+
+            /***
+             * Add option to display related persons
+             * */
+            ViewTypes.RELATION ->
+                PatientDetailsRelationItemViewHolder(
+                    PatientListItemViewBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                )
             ViewTypes.OBSERVATION ->
                 PatientDetailsObservationItemViewHolder(
                     PatientListItemViewBinding.inflate(
@@ -92,6 +105,7 @@ class PatientDetailsRecyclerViewAdapter(
             is PatientDetailHeader -> ViewTypes.HEADER
             is PatientDetailOverview -> ViewTypes.PATIENT
             is PatientDetailProperty -> ViewTypes.PATIENT_PROPERTY
+            is PatientDetailRelation -> ViewTypes.RELATION
             is PatientDetailObservation -> ViewTypes.OBSERVATION
             is PatientDetailCondition -> ViewTypes.CONDITION
             else -> {
@@ -144,6 +158,21 @@ class PatientDetailsHeaderItemViewHolder(private val binding: PatientDetailsCard
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailHeader).let { binding.header.text = it.header }
+    }
+}
+
+class PatientDetailsRelationItemViewHolder(private val binding: PatientListItemViewBinding) :
+    PatientDetailItemViewHolder(binding.root) {
+    override fun bind(data: PatientDetailData) {
+        (data as PatientDetailRelation).let {
+
+            binding.name.text = it.relation.name
+            binding.fieldName.text = it.relation.dob
+
+        }
+        binding.status.visibility = View.GONE
+        binding.id.visibility = View.GONE
+        binding.tvView.visibility = View.INVISIBLE
     }
 }
 

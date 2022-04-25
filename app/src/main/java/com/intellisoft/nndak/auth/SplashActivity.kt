@@ -14,6 +14,7 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private var isWelcomed: Boolean = false
     private var isLoggedIn: Boolean = false
+    private var isServerSet: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +23,19 @@ class SplashActivity : AppCompatActivity() {
 
         isWelcomed = FhirApplication.isWelcomed(this)
         isLoggedIn = FhirApplication.isLoggedIn(this)
+        isServerSet = FhirApplication.isServerSet(this)
 
         Handler().postDelayed({
             if (isWelcomed) {
-                if (isLoggedIn) {
-                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                if (isServerSet) {
+                    if (isLoggedIn) {
+                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    } else {
+                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                    }
                 } else {
-                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+
+                    startActivity(Intent(this@SplashActivity, SetupActivity::class.java))
                 }
             } else {
                 startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))

@@ -17,4 +17,9 @@
         android:icon="@drawable/baseline_edit_24"
         android:title="@string/menu_prescribe"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_relation"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_relation"
+        app:showAsAction="never" />
 </menu>

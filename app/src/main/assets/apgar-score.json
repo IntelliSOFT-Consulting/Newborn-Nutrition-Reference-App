@@ -36,7 +36,7 @@
           "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
-              "text": "Skin color",
+              "text": "Activity (Muscle Tone)",
               "type": "decimal",
               "linkId": "1.1.1",
               "required": true,
@@ -48,7 +48,7 @@
                 },
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 30
+                  "valueDecimal": 2
                 }
               ]
             },
@@ -100,7 +100,7 @@
             {
               "valueCoding": {
                 "code": "8867-4",
-                "display": "Appearance",
+                "display": "Activity (Muscle Tone)",
                 "system": "http://loinc.org"
               }
             }
@@ -141,7 +141,7 @@
                 },
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDecimal": 30
+                  "valueDecimal": 2
                 }
               ]
             },

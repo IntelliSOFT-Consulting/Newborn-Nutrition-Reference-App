@@ -18,6 +18,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -88,10 +89,19 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        viewModel.saveScreenerEncounter(
-            questionnaireFragment.getQuestionnaireResponse(),
-            args.patientId
-        )
+
+        val isNew = activity?.let { FhirApplication.getNewBorn(it) }
+        if (isNew == true) {
+            viewModel.saveRelatedPerson(
+                questionnaireFragment.getQuestionnaireResponse(),
+                args.patientId
+            )
+        } else {
+            viewModel.saveScreenerEncounter(
+                questionnaireFragment.getQuestionnaireResponse(),
+                args.patientId
+            )
+        }
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {

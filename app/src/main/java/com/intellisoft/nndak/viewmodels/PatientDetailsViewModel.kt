@@ -1,10 +1,8 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
-import android.content.res.ObbScanner
 import android.content.res.Resources
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
@@ -14,14 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
-import com.google.android.fhir.search.Operation
-import com.google.android.fhir.search.has
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.ConditionItem
 import com.intellisoft.nndak.models.ObservationItem
 import com.intellisoft.nndak.models.PatientItem
+import com.intellisoft.nndak.models.RelatedPersonItem
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -49,6 +46,24 @@ class PatientDetailsViewModel(
     private suspend fun getPatient(): PatientItem {
         val patient = fhirEngine.load(Patient::class.java, patientId)
         return patient.toPatientItem(0)
+    }
+
+    private suspend fun getPatientRelatedPersons(): List<RelatedPersonItem> {
+        val relations: MutableList<RelatedPersonItem> = mutableListOf()
+
+        fhirEngine
+            .search<RelatedPerson> {
+                filter(
+                    RelatedPerson.PATIENT, { value = "Patient/$patientId" }
+
+                )
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map { createRelatedPersonItem(it, getApplication<Application>().resources) }
+            .let { relations.addAll(it) }
+
+
+        return relations
     }
 
     private suspend fun getPatientObservations(): List<ObservationItem> {
@@ -84,6 +99,7 @@ class PatientDetailsViewModel(
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
 
+        val relation = getPatientRelatedPersons()
         val observations = getPatientObservations()
         val conditions = getPatientConditions()
 
@@ -121,12 +137,28 @@ class PatientDetailsViewModel(
                         getString(R.string.patient_property_gender),
                         it.gender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
-                    ),lastInGroup = true
+                    ), lastInGroup = true
                 )
             )
 
         }
 
+        if (relation.isNotEmpty()) {
+
+            data.add(PatientDetailHeader(getString(R.string.header_relation)))
+            val relationDataModel =
+                relation.mapIndexed { index, relationItem ->
+
+                    PatientDetailRelation(
+                        relationItem,
+                        firstInGroup = index == 0,
+                        lastInGroup = index == relation.size - 1
+                    )
+
+                }
+
+            data.addAll(relationDataModel)
+        }
         if (observations.isNotEmpty()) {
 
             data.add(PatientDetailHeader(getString(R.string.header_observation)))
@@ -240,6 +272,22 @@ class PatientDetailsViewModel(
 
     companion object {
         /**
+         * Creates RelatedPersonItem objects with displayable values from the Fhir RelatedPerson objects.
+         */
+        private fun createRelatedPersonItem(
+            relation: RelatedPerson,
+            resources: Resources
+        ): RelatedPersonItem {
+
+            return RelatedPersonItem(
+                relation.logicalId,
+                "${relation.name[0].given[0]} ${relation.name[0].family} ",
+                "gender",
+                "dob"
+            )
+        }
+
+        /**
          * Creates ObservationItem objects with displayable values from the Fhir Observation objects.
          */
         private fun createObservationItem(
@@ -247,7 +295,6 @@ class PatientDetailsViewModel(
             resources: Resources
         ): ObservationItem {
             val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
-
 
 
             // Show nothing if no values available for datetime and value quantity.
@@ -333,6 +380,12 @@ data class PatientDetailProperty(
 
 data class PatientDetailOverview(
     val patient: PatientItem,
+    override val firstInGroup: Boolean = false,
+    override val lastInGroup: Boolean = false
+) : PatientDetailData
+
+data class PatientDetailRelation(
+    val relation: RelatedPersonItem,
     override val firstInGroup: Boolean = false,
     override val lastInGroup: Boolean = false
 ) : PatientDetailData

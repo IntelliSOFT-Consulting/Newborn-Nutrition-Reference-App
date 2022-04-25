@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.models
 
+import android.content.res.Resources
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
 
 data class PatientItem(
@@ -20,6 +21,16 @@ data class PatientItem(
     override fun toString(): String = name
 
 
+}
+
+
+data class RelatedPersonItem(
+    val id: String,
+    val name: String,
+    val gender: String,
+    val dob: String
+) {
+    override fun toString(): String = name
 }
 
 

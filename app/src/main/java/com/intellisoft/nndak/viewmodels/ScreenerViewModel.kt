@@ -60,6 +60,35 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                ).entryFirstRep
+            if (bundle.resource !is RelatedPerson) return@launch
+            val relatedPerson = bundle.resource as RelatedPerson
+
+            if (relatedPerson.hasName() &&
+                relatedPerson.name[0].hasGiven() &&
+                relatedPerson.name[0].hasFamily()
+            ) {
+                Timber.d("Name ${relatedPerson.name[0].family}")
+                val subjectReference = Reference("Patient/$patientId")
+                relatedPerson.active = true
+                relatedPerson.id = generateUuid()
+                relatedPerson.patient = subjectReference
+                fhirEngine.create(relatedPerson)
+                isResourcesSaved.value = true
+                return@launch
+
+            }
+            isResourcesSaved.value = false
+        }
+    }
+
     private suspend fun saveResources(
         bundle: Bundle,
         subjectReference: Reference,
@@ -104,11 +133,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 }
 
-                /* is Condition -> {
-                     if (resource.hasCode() && !resource.hasPrimitiveValue()) {
-                         return true
-                     }
-                 }*/
+                is Questionnaire -> {
+                    if (resource.hasCode() && !resource.hasPrimitiveValue()) {
+                        return true
+                    }
+                }
                 // TODO check other resources inputs
             }
         }

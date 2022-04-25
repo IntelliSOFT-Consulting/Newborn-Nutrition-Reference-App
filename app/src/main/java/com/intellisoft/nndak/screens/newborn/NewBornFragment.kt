@@ -110,6 +110,16 @@ class NewBornFragment : Fragment() {
                 )
                 true
             }
+            R.id.menu_relation -> {
+                Timber.e("Resource ID::: " + args.patientId)
+                activity?.let { FhirApplication.setCurrent(it, true) }
+                findNavController().navigate(
+                    NewBornFragmentDirections.navigateToScreening(
+                        args.patientId, "child.json", "Related Person"
+                    )
+                )
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

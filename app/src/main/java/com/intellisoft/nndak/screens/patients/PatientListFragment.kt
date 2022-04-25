@@ -35,6 +35,7 @@ import com.intellisoft.nndak.viewmodels.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 class PatientListFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
@@ -64,32 +65,38 @@ class PatientListFragment : Fragment() {
         }
 
 
-        fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientListViewModel =
-            ViewModelProvider(
-                this,
-                PatientListViewModel.PatientListViewModelFactory(
-                    requireActivity().application,
-                    fhirEngine
+        try {
+            fhirEngine = FhirApplication.fhirEngine(requireContext())
+            patientListViewModel =
+                ViewModelProvider(
+                    this,
+                    PatientListViewModel.PatientListViewModelFactory(
+                        requireActivity().application,
+                        fhirEngine
+                    )
                 )
+                    .get(PatientListViewModel::class.java)
+            val recyclerView: RecyclerView = binding.patientListContainer.patientList
+            val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
+            recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
+
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(ColorDrawable(Color.LTGRAY))
+                }
             )
-                .get(PatientListViewModel::class.java)
-        val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(
-
-            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ColorDrawable(Color.LTGRAY))
+            patientListViewModel.liveSearchedPatients.observe(
+                viewLifecycleOwner
+            ) {
+                Timber.d("Submitting " + it.count() + " patient records")
+                adapter.submitList(it)
             }
-        )
 
-        patientListViewModel.liveSearchedPatients.observe(
-            viewLifecycleOwner
-        ) {
-            Log.d("PatientListActivity", "Submitting ${it.count()} patient records")
-            adapter.submitList(it)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
+
 
         patientListViewModel.patientCount.observe(
             viewLifecycleOwner

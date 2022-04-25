@@ -4,10 +4,11 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 
 object Constants {
-    const val FHIR_BASE_URL = "https://hapi.fhir.org/baseR4/"
-    const val BASE_URL = "https://devnndak.intellisoftkenya.com/api/"
     const val WELCOME = "welcome"
     const val LOGIN = "login"
+    const val SERVER_URL_DEMO = "server_url_demo"
+    const val SERVER_URL = "server_url"
+    const val SERVER_SET = "server_set"
     const val ACCESS_TOKEN = "access_token"
     const val USER_ACCOUNT = "user_account"
     const val STROKE_WIDTH = 2f
