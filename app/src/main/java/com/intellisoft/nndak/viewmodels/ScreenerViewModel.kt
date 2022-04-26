@@ -89,6 +89,32 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    fun saveCarePlan(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                ).entryFirstRep
+            if (bundle.resource !is CarePlan) return@launch
+            val carePlan = bundle.resource as CarePlan
+
+            if (carePlan.hasDescription()
+            ) {
+                val subjectReference = Reference("Patient/$patientId")
+
+                carePlan.id = generateUuid()
+                carePlan.subject = subjectReference
+                fhirEngine.create(carePlan)
+                isResourcesSaved.value = true
+                return@launch
+
+            }
+            isResourcesSaved.value = false
+        }
+    }
+
     private suspend fun saveResources(
         bundle: Bundle,
         subjectReference: Reference,

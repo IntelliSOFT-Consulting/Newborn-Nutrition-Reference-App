@@ -85,6 +85,7 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_new_born -> {
                 Timber.e("Resource ID::: " + args.patientId)
+                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-d2.json", "Rapid Assessment"
@@ -94,6 +95,7 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_assessment -> {
                 Timber.e("Resource ID::: " + args.patientId)
+                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-e7.json", "Rapid Assessment"
@@ -103,6 +105,8 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_prescribe -> {
                 Timber.e("Resource ID::: " + args.patientId)
+
+                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-e4.json", "Prescribe Feeds"

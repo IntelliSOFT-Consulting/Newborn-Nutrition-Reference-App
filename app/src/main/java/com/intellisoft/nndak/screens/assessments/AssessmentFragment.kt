@@ -75,6 +75,7 @@ class AssessmentFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
+        activity?.let { FhirApplication.setCurrent(it, false) }
     }
 
     private fun onAddScreenerClick() {

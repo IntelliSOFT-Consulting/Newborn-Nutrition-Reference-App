@@ -19,6 +19,7 @@ import com.intellisoft.nndak.models.ConditionItem
 import com.intellisoft.nndak.models.ObservationItem
 import com.intellisoft.nndak.models.PatientItem
 import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.utils.getFormattedAge
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -26,6 +27,8 @@ import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import timber.log.Timber
+import java.text.SimpleDateFormat
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -278,12 +281,21 @@ class PatientDetailsViewModel(
             relation: RelatedPerson,
             resources: Resources
         ): RelatedPersonItem {
+            val gender = relation.gender ?: "Unknown"
+            var dob = relation.birthDate ?: ""
+
+            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            if (dob.toString().isNotEmpty()) {
+                val yea = formatter.format(dob)
+                Timber.e("Dob $yea")
+                dob = getFormattedAge(yea.toString(), resources)
+            }
 
             return RelatedPersonItem(
                 relation.logicalId,
                 "${relation.name[0].given[0]} ${relation.name[0].family} ",
-                "gender",
-                "dob"
+                gender.toString(),
+                dob.toString()
             )
         }
 
