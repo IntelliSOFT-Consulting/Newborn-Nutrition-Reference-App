@@ -54,7 +54,6 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
 
             val context = getApplication<Application?>().applicationContext
 
-
             if (patient.hasName() &&
                 patient.name[0].hasGiven() &&
                 patient.name[0].hasFamily() &&
@@ -69,7 +68,6 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 val todayDate = FormatHelper().getTodayDate()
                 val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
 
- 
                 if (isDateValid && isPhoneNo){
 
                     val fhirId = generateUuid()

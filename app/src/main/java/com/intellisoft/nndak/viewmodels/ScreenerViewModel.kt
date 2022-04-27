@@ -10,6 +10,7 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.screens.ScreenerFragment
 import java.math.BigDecimal
@@ -17,6 +18,7 @@ import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import org.json.JSONObject
 import timber.log.Timber
 
 const val TAG = "ScreenerViewModel"
@@ -42,6 +44,83 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val context = FhirContext.forR4()
+
+
+            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+
+            Log.e("------ ", "------------")
+
+            val json = JSONObject(questionnaire)
+            val itemJsonArray = json.getJSONArray("item")
+            for(i in 0 until itemJsonArray.length()){
+
+                val item = itemJsonArray.getJSONObject(i)
+
+                val jsonArrayItem = item.getJSONArray("item")
+                for (j in 0 until jsonArrayItem.length()){
+
+                    val jsonObjectItem = jsonArrayItem.getJSONObject(j)
+
+                    val linkIdPeriods = jsonObjectItem.getString("linkId")
+
+                    if (linkIdPeriods == "2.1.2"){
+
+                        val jsonArrayItem2 = jsonObjectItem.getJSONArray("item")
+
+                        for (k in 0 until jsonArrayItem2.length()){
+
+                            val jsonObjectItem3 = jsonArrayItem2.getJSONObject(k)
+                            val jsonArrayItem3 = jsonObjectItem3.getJSONArray("item")
+
+                            for (l in 0 until jsonArrayItem3.length()){
+
+                                val jsonObjectItem4 = jsonArrayItem3.getJSONObject(l)
+                                val linkIdPeriods1 = jsonObjectItem4.getString("linkId")
+
+                                if (linkIdPeriods1 == "menstrualPeriod"){
+
+                                    val jsonArrayPeriods = jsonObjectItem4.getJSONArray("answer")
+
+                                    for (m in 0 until jsonArrayPeriods.length()){
+
+                                        val jsonObjectItemPeriods = jsonArrayPeriods.getJSONObject(m)
+                                        val valueDate = jsonObjectItemPeriods.getString("valueDate")
+
+                                        //Check if the date is valid
+                                        val todayDate = FormatHelper().getTodayDate()
+                                        val formattedDate =FormatHelper().convertDate(valueDate)
+
+                                        val isDateValid = FormatHelper().checkDate(formattedDate, todayDate)
+                                        if (isDateValid){
+
+
+
+                                        }else{
+                                            //Send error message that date is beyond today
+
+                                        }
+
+
+                                    }
+
+                                }
+
+
+                            }
+
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+
+
             Timber.d(
                 "Questionnaire Response:::: " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)

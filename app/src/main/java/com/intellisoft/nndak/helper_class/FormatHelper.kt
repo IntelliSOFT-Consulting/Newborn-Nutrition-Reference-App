@@ -9,10 +9,20 @@ import java.util.*
 
 class FormatHelper {
 
+    fun convertDate(valueDate: String): String {
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val currentDate = sdf.parse(valueDate)
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        return sdf1.format(currentDate)
+    }
+
     fun checkDate(birthDate: String, d2: String): Boolean {
 
         val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
         val currentdate = sdf1.parse(birthDate)
+
+        println("+++++++ $currentdate")
 
         val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val newCurrentDate = sdf2.format(currentdate)

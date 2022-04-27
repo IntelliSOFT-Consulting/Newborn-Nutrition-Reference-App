@@ -132,7 +132,7 @@
           ]
         },
         {
-          "linkId": "2.1.0",
+          "linkId": "2.1.1",
           "type": "group",
           "required": true,
           "extension": [
@@ -225,7 +225,7 @@
           ]
         },
         {
-          "linkId": "2.1.0",
+          "linkId": "2.1.2",
           "type": "group",
           "required": true,
           "extension": [
@@ -246,7 +246,7 @@
                 {
                   "text": "Last Menstrual Period",
                   "type": "date",
-                  "linkId": "1.1.1",
+                  "linkId": "menstrualPeriod",
                   "required": true,
                   "extension": [
                     {
