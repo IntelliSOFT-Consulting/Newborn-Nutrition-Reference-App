@@ -86,7 +86,9 @@ class MaternityFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-        activity?.let { FhirApplication.setCurrent(it, false) }
+        activity?.let {
+            FhirApplication.setCurrent(it, newBorn = false, apgar = false, maternity = false)
+        }
     }
 
     private fun onAddScreenerClick() {
@@ -108,7 +110,15 @@ class MaternityFragment : Fragment() {
                 true
             }
             R.id.menu_maternity -> {
-                Timber.e("Resource ID::: " + args.patientId)
+
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        newBorn = false,
+                        apgar = false,
+                        maternity = true
+                    )
+                }
                 findNavController().navigate(
                     MaternityFragmentDirections.navigateToScreening(
                         args.patientId, "maternity-registration.json", "Maternity Unit"
@@ -117,10 +127,33 @@ class MaternityFragment : Fragment() {
                 true
             }
             R.id.menu_apgar_score -> {
-                Timber.e("Resource ID::: " + args.patientId)
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        newBorn = false,
+                        apgar = true,
+                        maternity = false
+                    )
+                }
                 findNavController().navigate(
                     MaternityFragmentDirections.navigateToScreening(
                         args.patientId, "apgar-score.json", "Apgar Score"
+                    )
+                )
+                true
+            }
+            R.id.menu_new_born -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        newBorn = true,
+                        apgar = false,
+                        maternity = false,
+                    )
+                }
+                findNavController().navigate(
+                    MaternityFragmentDirections.navigateToScreening(
+                        args.patientId, "child.json", "Maternity Unit"
                     )
                 )
                 true

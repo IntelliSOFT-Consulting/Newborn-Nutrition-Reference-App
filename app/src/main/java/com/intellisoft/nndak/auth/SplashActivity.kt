@@ -27,16 +27,16 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             if (isWelcomed) {
-                if (isServerSet) {
+            /*    if (isServerSet) {*/
                     if (isLoggedIn) {
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     } else {
                         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     }
-                } else {
+             /*   } else {
 
                     startActivity(Intent(this@SplashActivity, SetupActivity::class.java))
-                }
+                }*/
             } else {
                 startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
             }

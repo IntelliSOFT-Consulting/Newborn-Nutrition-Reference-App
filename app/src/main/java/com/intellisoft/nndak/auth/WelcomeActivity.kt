@@ -44,18 +44,13 @@ class WelcomeActivity : AppCompatActivity() {
 
         nextbtn!!.setOnClickListener {
             if (getItem(0) < 3) mSLideViewPager!!.setCurrentItem(getItem(1), true) else {
-                FhirApplication.setWelcomed(this, true)
-                val i = Intent(this@WelcomeActivity, SetupActivity::class.java)
-                startActivity(i)
-                finish()
+
+                actionDone()
             }
         }
 
         skipbtn!!.setOnClickListener {
-            FhirApplication.setWelcomed(this, true)
-            val i = Intent(this@WelcomeActivity, SetupActivity::class.java)
-            startActivity(i)
-            finish()
+            actionDone()
         }
 
         mSLideViewPager = binding.slideViewPager
@@ -67,6 +62,14 @@ class WelcomeActivity : AppCompatActivity() {
 
         setUpIndicator(0)
         mSLideViewPager!!.addOnPageChangeListener(viewListener)
+    }
+
+    private fun actionDone() {
+
+        FhirApplication.setWelcomed(this, true)
+        val i = Intent(this@WelcomeActivity, LoginActivity::class.java)
+        startActivity(i)
+        finish()
     }
 
 

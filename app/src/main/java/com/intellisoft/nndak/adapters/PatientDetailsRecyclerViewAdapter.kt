@@ -15,6 +15,7 @@ import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
+import timber.log.Timber
 
 class PatientDetailsRecyclerViewAdapter(
     private val onScreenerClick: () -> Unit,
@@ -50,7 +51,6 @@ class PatientDetailsRecyclerViewAdapter(
                         false
                     )
                 )
-
 
             /***
              * Add option to display related persons
@@ -113,8 +113,6 @@ class PatientDetailsRecyclerViewAdapter(
             }
         }.ordinal
     }
-
-
 }
 
 abstract class PatientDetailItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -186,17 +184,16 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
             val title = it.observation.code
             val value = it.observation.value
 
-
-            val dbObservation = formatHelper.fhirObservations(title, value)
+        /*    val dbObservation = formatHelper.fhirObservations(title, value)
             val dbTitle = dbObservation.title
             val dbValue = dbObservation.value
 
             Log.e("************", "***************")
             Log.e("------1", dbTitle)
-            Log.e("------2", dbValue)
+            Log.e("------2", dbValue)*/
 
-            binding.name.text = dbTitle
-            binding.fieldName.text = dbValue
+            binding.name.text = title
+            binding.fieldName.text = value
 
         }
         binding.status.visibility = View.GONE

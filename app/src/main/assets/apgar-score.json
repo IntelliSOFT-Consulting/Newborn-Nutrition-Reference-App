@@ -22,26 +22,9 @@
       "linkId": "PR",
       "type": "group",
       "text": "APGAR Score",
-      "_text": {
-        "extension": [
-          {
-            "extension": [
-              {
-                "url": "lang",
-                "valueCode": "sw"
-              },
-              {
-                "url": "content",
-                "valueString": "Maelezo ya mteja"
-              }
-            ],
-            "url": "http://hl7.org/fhir/StructureDefinition/translation"
-          }
-        ]
-      },
       "item": [
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
           "extension": [
             {
@@ -49,18 +32,18 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "wellness"
+                "name": "Appearance"
               }
             }
           ],
           "item": [
             {
-              "linkId": "3.1.1",
+              "linkId": "Appearance",
               "type": "choice",
               "text": "Appearance",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-             "extension": [
+              "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                   "valueCodeableConcept": {
@@ -78,21 +61,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "AP/00",
+                    "code": "Appearance",
                     "display": "0",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "AP/01",
+                    "code": "Appearance",
                     "display": "1",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "AP/02",
+                    "code": "Appearance",
                     "display": "2",
                     "system": "http://snomed.info/sct"
                   }
@@ -102,7 +85,7 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "2.0.0",
           "type": "group",
           "extension": [
             {
@@ -110,18 +93,18 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "wellness"
+                "name": "Pulse"
               }
             }
           ],
           "item": [
             {
-              "linkId": "3.1.1",
+              "linkId": "Pulse",
               "type": "choice",
               "text": "Pulse",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-             "extension": [
+              "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                   "valueCodeableConcept": {
@@ -139,21 +122,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "HR/00",
+                    "code": "Pulse",
                     "display": "0",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "HR/01",
+                    "code": "Pulse",
                     "display": "1",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "HR/02",
+                    "code": "Pulse",
                     "display": "2",
                     "system": "http://snomed.info/sct"
                   }
@@ -171,18 +154,18 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "wellness"
+                "name": "Grimace"
               }
             }
           ],
           "item": [
             {
-              "linkId": "3.1.1",
+              "linkId": "Grimace",
               "type": "choice",
               "text": "Grimace",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-             "extension": [
+              "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                   "valueCodeableConcept": {
@@ -200,21 +183,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "GM/00",
+                    "code": "Grimace",
                     "display": "0",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "GM/01",
+                    "code": "Grimace",
                     "display": "1",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "GM/02",
+                    "code": "Grimace",
                     "display": "2",
                     "system": "http://snomed.info/sct"
                   }
@@ -224,7 +207,7 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "4.0.0",
           "type": "group",
           "extension": [
             {
@@ -232,18 +215,18 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "wellness"
+                "name": "Activity"
               }
             }
           ],
           "item": [
             {
-              "linkId": "3.1.1",
+              "linkId": "Activity",
               "type": "choice",
               "text": "Activity",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-             "extension": [
+              "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                   "valueCodeableConcept": {
@@ -261,21 +244,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "A/00",
+                    "code": "Activity",
                     "display": "0",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "A/01",
+                    "code": "Activity",
                     "display": "1",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "A/02",
+                    "code": "Activity",
                     "display": "2",
                     "system": "http://snomed.info/sct"
                   }
@@ -285,7 +268,7 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "5.0.0",
           "type": "group",
           "extension": [
             {
@@ -293,13 +276,13 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "apgarScore"
+                "name": "Respiration"
               }
             }
           ],
           "item": [
             {
-              "linkId": "3.1.1",
+              "linkId": "Respiration",
               "type": "choice",
               "text": "Respiration",
               "required": true,
@@ -322,21 +305,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "R/00",
+                    "code": "Respiration",
                     "display": "0",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "R/01",
+                    "code": "Respiration",
                     "display": "1",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "R/02",
+                    "code": "Respiration",
                     "display": "2",
                     "system": "http://snomed.info/sct"
                   }

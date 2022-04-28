@@ -12,12 +12,14 @@ import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.screens.ScreenerFragment
 import java.math.BigDecimal
 import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 
@@ -29,6 +31,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     val questionnaire: String
         get() = getQuestionnaireJson()
     val isResourcesSaved = MutableLiveData<Boolean>()
+    val apgarScore = MutableLiveData<ApGar>()
+    var isSafe = false
 
     private val questionnaireResource: Questionnaire
         get() = FhirContext.forR4().newJsonParser().parseResource(questionnaire) as Questionnaire
@@ -44,83 +48,95 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val context = FhirContext.forR4()
+            Timber.d(
+                "Questionnaire Response:::: " + context.newJsonParser()
+                    .encodeResourceToString(questionnaireResponse)
+            )
 
 
-            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            val subjectReference = Reference("Patient/$patientId")
+            val encounterId = generateUuid()
+            if (isRequiredFieldMissing(bundle)) {
+                isResourcesSaved.value = false
+                return@launch
+            }
+            saveResources(bundle, subjectReference, encounterId)
+            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+            isResourcesSaved.value = true
+        }
+    }
+    fun saveChild(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val entry =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+                    .entryFirstRep
+            if (entry.resource !is Patient) return@launch
+            val child = entry.resource as Patient
 
-            Log.e("------ ", "------------")
+            if (child.hasBirthDate() && child.hasGender()) {
 
-            val json = JSONObject(questionnaire)
-            val itemJsonArray = json.getJSONArray("item")
-            for(i in 0 until itemJsonArray.length()){
+                val birthDate = child.birthDate.toString()
+                val todayDate = FormatHelper().getTodayDate()
+                val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
 
-                val item = itemJsonArray.getJSONObject(i)
+                if (isDateValid) {
+                    val subjectReference = Reference("Patient/$patientId")
+                    child.active = true
+                    child.id = generateUuid()
 
-                val jsonArrayItem = item.getJSONArray("item")
-                for (j in 0 until jsonArrayItem.length()){
-
-                    val jsonObjectItem = jsonArrayItem.getJSONObject(j)
-
-                    val linkIdPeriods = jsonObjectItem.getString("linkId")
-
-                    if (linkIdPeriods == "2.1.2"){
-
-                        val jsonArrayItem2 = jsonObjectItem.getJSONArray("item")
-
-                        for (k in 0 until jsonArrayItem2.length()){
-
-                            val jsonObjectItem3 = jsonArrayItem2.getJSONObject(k)
-                            val jsonArrayItem3 = jsonObjectItem3.getJSONArray("item")
-
-                            for (l in 0 until jsonArrayItem3.length()){
-
-                                val jsonObjectItem4 = jsonArrayItem3.getJSONObject(l)
-                                val linkIdPeriods1 = jsonObjectItem4.getString("linkId")
-
-                                if (linkIdPeriods1 == "menstrualPeriod"){
-
-                                    val jsonArrayPeriods = jsonObjectItem4.getJSONArray("answer")
-
-                                    for (m in 0 until jsonArrayPeriods.length()){
-
-                                        val jsonObjectItemPeriods = jsonArrayPeriods.getJSONObject(m)
-                                        val valueDate = jsonObjectItemPeriods.getString("valueDate")
-
-                                        //Check if the date is valid
-                                        val todayDate = FormatHelper().getTodayDate()
-                                        val formattedDate =FormatHelper().convertDate(valueDate)
-
-                                        val isDateValid = FormatHelper().checkDate(formattedDate, todayDate)
-                                        if (isDateValid){
-
-
-
-                                        }else{
-                                            //Send error message that date is beyond today
-
-                                        }
-
-
-                                    }
-
-                                }
-
-
-                            }
-
-
-                        }
-
-                    }
-
+                    fhirEngine.create(child)
+                    isResourcesSaved.value = true
+                    return@launch
 
                 }
 
-
+                isResourcesSaved.value = false
             }
 
+            isResourcesSaved.value = false
+        }
+    }
 
+    fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                ).entryFirstRep
+            if (bundle.resource !is RelatedPerson) return@launch
+            val relatedPerson = bundle.resource as RelatedPerson
 
+            if (relatedPerson.hasBirthDate() && relatedPerson.hasGender()
+            ) {
+                Timber.d("Name ${relatedPerson.name[0].family}")
+                val subjectReference = Reference("Patient/$patientId")
+                relatedPerson.active = true
+                relatedPerson.id = generateUuid()
+                relatedPerson.patient = subjectReference
+                fhirEngine.create(relatedPerson)
+                isResourcesSaved.value = true
+                return@launch
+
+            }
+            isResourcesSaved.value = false
+        }
+    }
+
+    fun saveMaternty(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
             Timber.d(
                 "Questionnaire Response:::: " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)
@@ -139,32 +155,68 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveApgar(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        val score = mutableListOf<Int>()
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
                     getApplication(),
                     questionnaireResource,
                     questionnaireResponse
-                ).entryFirstRep
-            if (bundle.resource !is RelatedPerson) return@launch
-            val relatedPerson = bundle.resource as RelatedPerson
+                )
+            val context = FhirContext.forR4()
 
-            if (relatedPerson.hasName() &&
-                relatedPerson.name[0].hasGiven() &&
-                relatedPerson.name[0].hasFamily()
-            ) {
-                Timber.d("Name ${relatedPerson.name[0].family}")
+
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            Timber.d("Questionnaire Response:::: $questionnaire")
+            try {
+                val json = JSONObject(questionnaire)
+                val item = json.getJSONArray("item")
+                val parent = item.getJSONObject(0).getString("item")
+
+                val common = JSONArray(parent)
+                for (i in 0 until common.length()) {
+
+                    val child = common.getJSONObject(i)
+                    val childItem = child.getJSONArray("item")
+
+                    for (j in 0 until childItem.length()) {
+
+                        val answer = childItem.getJSONObject(j)
+                        val childAnswer = answer.getJSONArray("answer")
+                        val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
+                        val finalAnswer = JSONObject(valueCoding)
+                        val display = finalAnswer.getString("display")
+                        score.add(display.toInt())
+                    }
+                }
+
+                val total = score.sum()
+
+
                 val subjectReference = Reference("Patient/$patientId")
-                relatedPerson.active = true
-                relatedPerson.id = generateUuid()
-                relatedPerson.patient = subjectReference
-                fhirEngine.create(relatedPerson)
-                isResourcesSaved.value = true
-                return@launch
+                val encounterId = generateUuid()
+                if (isRequiredFieldMissing(bundle)) {
+                    apgarScore.value = ApGar("", "Check All Inputs", false)
+                    return@launch
+                }
+                if (total <= 3) {
+                    isSafe = false
+                }
+                if (total in 4..6) {
+                    isSafe = true
+                }
+                if (total > 6) {
+                    isSafe = true
+                }
 
+                saveResources(bundle, subjectReference, encounterId)
+                generateApgarAssessmentResource(bundle, subjectReference, encounterId, total)
+                apgarScore.value = ApGar("$total", "Apgar Score Successfully Recorded", isSafe)
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
             }
-            isResourcesSaved.value = false
         }
     }
 
@@ -265,6 +317,41 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     private fun generateUuid(): String {
         return UUID.randomUUID().toString()
+    }
+
+    private suspend fun generateApgarAssessmentResource(
+        bundle: Bundle,
+        subjectReference: Reference,
+        encounterId: String,
+        total: Int
+    ) {
+        val riskProbability = getProbability(total)
+        riskProbability?.let { rProbability ->
+            val riskAssessment =
+                RiskAssessment().apply {
+                    id = generateUuid()
+                    subject = subjectReference
+                    encounter = Reference("Encounter/$encounterId")
+                    addPrediction().apply {
+                        qualitativeRisk =
+                            CodeableConcept().apply {
+                                addCoding().updateRiskProbability(
+                                    rProbability
+                                )
+                            }
+                    }
+                    occurrence = DateTimeType.now()
+                }
+            saveResourceToDatabase(riskAssessment)
+        }
+
+    }
+
+    private fun getProbability(
+        total: Int
+    ): RiskProbability? {
+        if (total <= 3) return RiskProbability.HIGH else if (total in 4..6) return RiskProbability.MODERATE else if (total > 6) return RiskProbability.LOW
+        return null
     }
 
     private suspend fun generateRiskAssessmentResource(
@@ -379,3 +466,4 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
 
 }
+

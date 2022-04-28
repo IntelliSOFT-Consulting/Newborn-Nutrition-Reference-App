@@ -71,6 +71,9 @@
             android:name="title"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/navigate_to_self"
+            app:destination="@id/screenerEncounterFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPatientFragment"

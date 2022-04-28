@@ -21,8 +21,10 @@ import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import com.intellisoft.nndak.viewmodels.TAG
+import timber.log.Timber
 
 /** A fragment class to show screener questionnaire screen. */
 class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
@@ -91,16 +93,33 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
 
 
         val isNew = activity?.let { FhirApplication.getNewBorn(it) }
-        if (isNew == true) {
-            viewModel.saveRelatedPerson(
-                questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId
-            )
-        } else {
-            viewModel.saveScreenerEncounter(
-                questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId
-            )
+        val apgar = activity?.let { FhirApplication.getApgar(it) }
+        val matenity = activity?.let { FhirApplication.getMaternity(it) }
+        when {
+            isNew == true -> {
+                viewModel.saveRelatedPerson(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            apgar == true -> {
+                viewModel.saveApgar(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            matenity == true -> {
+                viewModel.saveMaternty(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            else -> {
+                viewModel.saveScreenerEncounter(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
         }
     }
 
@@ -137,9 +156,44 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                     .show()
                 return@observe
             }
+
+            /***
+             * If maternity open new born questionnaire
+             * ***/
+
+       /*     val isMaternity = activity?.let { FhirApplication.getMaternity(it) }
+            if (isMaternity == true) {
+                Timber.d("patientId ${args.patientId}")
+                Timber.d("question ${args.quastion}")
+               NavHostFragment.findNavController(this).navigate(
+                   ScreenerFragmentDirections.navigateToSelf(
+                   args.patientId, "new-born.json", "Maternity Unit"
+               ))
+
+            }*/
             Toast.makeText(
                 requireContext(),
                 getString(R.string.resources_saved),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            NavHostFragment.findNavController(this).navigateUp()
+        }
+
+        /***
+         * Listen for APGAR SCORE
+         * ***/
+        viewModel.apgarScore.observe(viewLifecycleOwner) {
+            if (it.score.isEmpty()) {
+                Toast.makeText(
+                    requireContext(), it.message,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                return@observe
+            }
+            Toast.makeText(
+                requireContext(), it?.message,
                 Toast.LENGTH_SHORT
             )
                 .show()

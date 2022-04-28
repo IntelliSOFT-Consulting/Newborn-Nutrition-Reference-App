@@ -290,10 +290,10 @@ class PatientDetailsViewModel(
                 Timber.e("Dob $yea")
                 dob = getFormattedAge(yea.toString(), resources)
             }
-
+            val name = relation.name.firstOrNull()
             return RelatedPersonItem(
                 relation.logicalId,
-                "${relation.name[0].given[0]} ${relation.name[0].family} ",
+                name.toString(),
                 gender.toString(),
                 dob.toString()
             )
@@ -306,7 +306,9 @@ class PatientDetailsViewModel(
             observation: Observation,
             resources: Resources
         ): ObservationItem {
-            val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
+//            val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
+
+            val observationCode = observation.code.codingFirstRep.code
 
 
             // Show nothing if no values available for datetime and value quantity.
@@ -322,7 +324,7 @@ class PatientDetailsViewModel(
                 } else if (observation.hasValueCodeableConcept()) {
                     observation.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
                 } else {
-                    ""
+                    observation.code.text ?: observation.code.codingFirstRep.display
                 }
             val valueUnit =
                 if (observation.hasValueQuantity()) {
@@ -330,23 +332,16 @@ class PatientDetailsViewModel(
                 } else {
                     ""
                 }
-            val notes =
-                if (observation.hasNote()) {
-                    observation.note.toString()
-                } else {
-                    ""
-                }
 
-            val valueString = "$value $valueUnit $notes"
-
-
+            val valueString = "$value $valueUnit"
 
             return ObservationItem(
                 observation.logicalId,
                 observationCode,
                 dateTimeString,
-                valueString
-            )
+                valueString,
+
+                )
         }
 
         /** Creates ConditionItem objects with displayable values from the Fhir Condition objects. */

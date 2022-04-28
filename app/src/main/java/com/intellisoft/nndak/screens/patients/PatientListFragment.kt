@@ -64,7 +64,6 @@ class PatientListFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-
         try {
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientListViewModel =

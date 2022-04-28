@@ -68,6 +68,7 @@ class FhirApplication : Application() {
                 "https://devnndak.intellisoftkenya.com/api/"
             )
         }
+
         fun getHapiServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL_DEMO,
@@ -98,7 +99,7 @@ class FhirApplication : Application() {
 
         fun setServerDetails(context: Context, b: Boolean, url: String, demo: String) {
             (context.applicationContext as FhirApplication).editor.putBoolean(SERVER_SET, b)
-                .putString(SERVER_URL, url).putString(SERVER_URL_DEMO,demo).commit()
+                .putString(SERVER_URL, url).putString(SERVER_URL_DEMO, demo).commit()
         }
 
         fun setWelcomed(context: Context, b: Boolean) {
@@ -133,12 +134,28 @@ class FhirApplication : Application() {
             )
         }
 
-        fun setCurrent(context: Context, b: Boolean) {
-            (context.applicationContext as FhirApplication).editor.putBoolean("NewBorn", b).commit()
+        fun setCurrent(context: Context, newBorn: Boolean, apgar: Boolean, maternity: Boolean) {
+            (context.applicationContext as FhirApplication).editor.putBoolean("NewBorn", newBorn)
+                .putBoolean("Apgar", apgar).putBoolean("Maternity", maternity).commit()
         }
+
         fun getNewBorn(context: Context): Boolean {
             return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
                 "NewBorn",
+                false
+            )
+        }
+
+        fun getApgar(context: Context): Boolean {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+                "Apgar",
+                false
+            )
+        }
+
+        fun getMaternity(context: Context): Boolean {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+                "Maternity",
                 false
             )
         }

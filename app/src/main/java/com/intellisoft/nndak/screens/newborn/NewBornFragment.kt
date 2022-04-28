@@ -63,6 +63,7 @@ class NewBornFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
+        activity?.let { FhirApplication.setCurrent(it, newBorn=false, apgar = false,maternity = false) }
     }
 
     private fun onAddScreenerClick() {
@@ -85,7 +86,6 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_new_born -> {
                 Timber.e("Resource ID::: " + args.patientId)
-                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                       //  args.patientId, "screener-questionnaire.json", "Rapid Assessment"
@@ -96,7 +96,6 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_assessment -> {
                 Timber.e("Resource ID::: " + args.patientId)
-                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-e7.json", "Rapid Assessment"
@@ -107,7 +106,6 @@ class NewBornFragment : Fragment() {
             R.id.menu_prescribe -> {
                 Timber.e("Resource ID::: " + args.patientId)
 
-                activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-e4.json", "Prescribe Feeds"
@@ -117,7 +115,7 @@ class NewBornFragment : Fragment() {
             }
             R.id.menu_relation -> {
                 Timber.e("Resource ID::: " + args.patientId)
-                activity?.let { FhirApplication.setCurrent(it, true) }
+                activity?.let { FhirApplication.setCurrent(it, newBorn=true, apgar = false,maternity = false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "child.json", "Related Person"

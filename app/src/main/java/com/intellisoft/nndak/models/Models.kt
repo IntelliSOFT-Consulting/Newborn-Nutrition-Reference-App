@@ -53,7 +53,14 @@ data class ConditionItem(
 ) {
     override fun toString(): String = code
 }
+
 data class DbObservations(
     val value: String,
-    val title:String
+    val title: String
+)
+
+data class ApGar(
+    val score: String,
+    val message: String,
+    val isSafe: Boolean
 )

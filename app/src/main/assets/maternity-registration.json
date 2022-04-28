@@ -301,14 +301,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "MultiplePregnancyYes",
+                    "code": "Multiple Pregnancy",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "MultiplePregnancyNo",
+                    "code": "Multiple Pregnancy",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -336,7 +336,7 @@
               "question": "multiplePregnancy",
               "operator": "=",
               "answerCoding": {
-                "code": "MultiplePregnancyYes",
+                "code": "Multiple Pregnancy",
                 "display": "Yes",
                 "system": "http://snomed.info/sct"
               }
@@ -345,7 +345,7 @@
           "item": [
             {
               "linkId": "howMany",
-              "text": "The birth of more than one baby from a single pregnancy.",
+              "text": "If yes, how many?.",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -367,49 +367,49 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Twins",
+                    "code": "Pregnancies",
                     "display": "Twins",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Triplets",
+                    "code": "Pregnancies",
                     "display": "Triplets",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Quadruplets",
+                    "code": "Pregnancies",
                     "display": "Quadruplets",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Quintuplets",
+                    "code": "Pregnancies",
                     "display": "Quintuplets",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Sextuplets",
+                    "code": "Pregnancies",
                     "display": "Sextuplets",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Septuplets",
+                    "code": "Pregnancies",
                     "display": "Septuplets",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Other",
+                    "code": "Pregnancies,",
                     "display": "Other",
                     "system": "http://snomed.info/sct"
                   }
@@ -437,7 +437,7 @@
               "question": "howMany",
               "operator": "=",
               "answerCoding": {
-                "code": "Other",
+                "code": "Pregnancies,",
                 "display": "Other",
                 "system": "http://snomed.info/sct"
               }
@@ -450,7 +450,7 @@
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
               "item": [
                 {
-                  "text": "Specify number of babies",
+                  "text": "If other, Specify number of babies",
                   "type": "decimal",
                   "linkId": "1.1.1",
                   "required": true,
@@ -513,7 +513,7 @@
               "initial": [
                 {
                   "valueCoding": {
-                    "code": "TotalBabies",
+                    "code": "Total Babies",
                     "display": "Total Babies",
                     "system": "http://loinc.org"
                   }
@@ -561,21 +561,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "HIVPositive",
+                    "code": "HIV Status",
                     "display": "Positive",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "HIVNegative",
+                    "code": "HIV Status",
                     "display": "Negative",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "HIVUnknown",
+                    "code": "HIV Status",
                     "display": "Unknown",
                     "system": "http://snomed.info/sct"
                   }
@@ -653,21 +653,21 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Early Labor",
+                    "code": "Labour Stage",
                     "display": "Early Labor",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Active Labor",
+                    "code": "Labour Stage",
                     "display": "Active Labor",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Transition",
+                    "code": "Labour Stage",
                     "display": "Transition",
                     "system": "http://snomed.info/sct"
                   }
@@ -713,17 +713,16 @@
                 }
               ],
               "answerOption": [
-
                 {
                   "valueCoding": {
-                    "code": "ROM: Yes",
+                    "code": "ROM",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "ROM: No",
+                    "code": "ROM",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -771,28 +770,28 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "SVD",
+                    "code": "Delivery Method",
                     "display": "SVD",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Vacuum",
+                    "code": "Delivery Method",
                     "display": "Vacuum",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Breech",
+                    "code": "Delivery Method",
                     "display": "Breech",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Cs",
+                    "code": "Delivery Method,",
                     "display": "Cs",
                     "system": "http://snomed.info/sct"
                   }
@@ -820,7 +819,7 @@
               "question": "deliveryMethod",
               "operator": "=",
               "answerCoding": {
-                "code": "Cs",
+                "code": "Delivery Method,",
                 "display": "Cs",
                 "system": "http://snomed.info/sct"
               }
@@ -851,14 +850,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Elective",
+                    "code": "Reason for CS",
                     "display": "Elective",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Emergency",
+                    "code": "Reason for CS",
                     "display": "Emergency",
                     "system": "http://snomed.info/sct"
                   }
@@ -906,14 +905,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Resuscitation: Yes",
+                    "code": "Resuscitation",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Resuscitation: No",
+                    "code": "Resuscitation",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -961,14 +960,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Placenta Complete: Yes",
+                    "code": "Placenta Complete",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Placenta Complete: No",
+                    "code": "Placenta Complete",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -1016,14 +1015,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Vitamin K Given: Yes",
+                    "code": "Vitamin K Given",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Vitamin K Given: No",
+                    "code": "Vitamin K Given",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -1071,15 +1070,70 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Eye Prophylaxis: Yes",
+                    "code": "Eye Prophylaxis",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Eye Prophylaxis: No",
+                    "code": "Eye Prophylaxis",
                     "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.2.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "travel"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "babyState",
+              "text": "Baby's Status",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Baby Status",
+                    "display": "Alive",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Baby Status",
+                    "display": "Dead",
                     "system": "http://snomed.info/sct"
                   }
                 }
@@ -1117,6 +1171,42 @@
         }
       ],
       "item": [
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "comments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.1.1",
+              "type": "string",
+              "text": "Mother's Health Status",
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "text-box",
+                        "display": "Text Box"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
         {
           "linkId": "breastProblems",
           "type": "group",
@@ -1169,49 +1259,49 @@
                   "answerOption": [
                     {
                       "valueCoding": {
-                        "code": "None",
+                        "code": "Breast Problems",
                         "display": "None",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Engourged Breasts",
+                        "code": "Breast Problems",
                         "display": "Engourged Breasts",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Sore Nipples",
+                        "code": "Breast Problems",
                         "display": "Sore Nipples",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Cracked Nipples",
+                        "code": "Breast Problems",
                         "display": "Cracked Nipples",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Bleeding Nipples",
+                        "code": "Breast Problems",
                         "display": "Bleeding Nipples",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Inverted Nipples",
+                        "code": "Breast Problems",
                         "display": "Inverted Nipples",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Flat Nipples",
+                        "code": "Breast Problems",
                         "display": "Flat Nipples",
                         "system": "http://snomed.info/sct"
                       }
@@ -1249,14 +1339,14 @@
                   "answerOption": [
                     {
                       "valueCoding": {
-                        "code": "Yes",
+                        "code": "Is the Mother well",
                         "display": "Yes",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "No",
+                        "code": "Is the Mother well",
                         "display": "No",
                         "system": "http://snomed.info/sct"
                       }
@@ -1264,909 +1354,6 @@
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Any additional notes",
-              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "text-box",
-                        "display": "Text Box"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Newborn Registration",
-      "type": "group",
-      "linkId": "7.0.0",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "newbornRegistration"
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ],
-            "text": "Page"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "group",
-          "linkId": "4.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "multiple"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "10.1.0",
-              "type": "group",
-              "required": true,
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                  "valueExpression": {
-                    "language": "application/x-fhir-query",
-                    "expression": "Observation",
-                    "name": "deliveryMethod"
-                  }
-                }
-              ],
-              "item": [
-                {
-                  "text": "The baby's life state after birth",
-                  "linkId": "10.1.1",
-                  "type": "choice",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "drop-down",
-                            "display": "Drop down"
-                          }
-                        ],
-                        "text": "Drop down"
-                      }
-                    }
-                  ],
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Alive",
-                        "display": "Alive",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "Dead",
-                        "display": "Dead",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "4.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "multiple"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.0",
-              "type": "group",
-              "item": [
-                {
-                  "text": "Date of Birth",
-                  "type": "date",
-                  "linkId": "4.2.1"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "4.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "gender"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "babySex",
-              "type": "group",
-              "item": [
-                {
-                  "linkId": "biologicalSex",
-                  "type": "choice",
-                  "text": "Baby's biological sex",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Male",
-                        "display": "Male",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "Female",
-                        "display": "Female",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "1.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "Appearance"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "1.1.0",
-              "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-              "item": [
-                {
-                  "text": "Baby's Weight at Birth (Kg) ",
-                  "type": "decimal",
-                  "linkId": "1.1.1",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                      "valueDecimal": 0
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 30
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.2",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "kg"
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.3",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "http://unitsofmeasure.org"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "1.2.0",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Birth Weight",
-                    "display": "Birth Weight",
-                    "system": "http://loinc.org"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "1.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "Appearance"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "1.1.0",
-              "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-              "item": [
-                {
-                  "text": "Baby's Temperature (degrees centigrade)",
-                  "type": "decimal",
-                  "linkId": "1.1.1",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                      "valueDecimal": 30
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 45
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.2",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "c"
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.3",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "http://unitsofmeasure.org"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "1.2.0",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Baby's Temperature",
-                    "display": "Baby's Temperature",
-                    "system": "http://loinc.org"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "1.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "Appearance"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "1.1.0",
-              "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-              "item": [
-                {
-                  "text": "Baby's Apgar Score",
-                  "type": "decimal",
-                  "linkId": "1.1.1",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                      "valueDecimal": 0
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 30
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.2",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "%"
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.3",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "http://unitsofmeasure.org"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "1.2.0",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Baby's Apgar Score",
-                    "display": "Baby's Apgar Score",
-                    "system": "http://loinc.org"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "1.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "Appearance"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "1.1.0",
-              "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-              "item": [
-                {
-                  "text": "Baby's Current Weight (Kg) ",
-                  "type": "decimal",
-                  "linkId": "1.1.1",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                      "valueDecimal": 0
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 30
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.2",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "kg"
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.1.3",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "http://unitsofmeasure.org"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "1.2.0",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Current Weight",
-                    "display": "Current Weight",
-                    "system": "http://loinc.org"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "linkId": "4.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "bba"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.0",
-              "type": "group",
-              "item": [
-                {
-                  "linkId": "beforeArrival",
-                  "type": "choice",
-                  "text": " Was baby born before arrival to facility?",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Yes",
-                        "display": "Yes",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "No",
-                        "display": "No",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "where",
-          "type": "group",
-          "enableWhen": [
-            {
-              "question": "beforeArrival",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Yes",
-                "display": "Yes",
-                "system": "http://snomed.info/sct"
-              }
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "If yes, where was baby born?",
-              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Reason for Admission",
-              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Admitted from",
-              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "text": "Newborn’s Health Assessment",
-      "type": "group",
-      "linkId": "7.0.0",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "newbornHealthAssessment"
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ],
-            "text": "Page"
-          }
-        }
-      ],
-      "item": [
-        {
-          "linkId": "3.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "wellness"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "3.1.0",
-              "type": "group",
-              "item": [
-                {
-                  "linkId": "3.1.1",
-                  "type": "choice",
-                  "text": "Low Birth Weight?",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Yes",
-                        "display": "Yes",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "No",
-                        "display": "No",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "3.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "wellness"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "3.1.0",
-              "type": "group",
-              "item": [
-                {
-                  "linkId": "3.1.1",
-                  "type": "choice",
-                  "text": "Newborn's health status in regards to the health assessment. Is the newborn well?",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "radio-button",
-                            "display": "Radio Button"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-                      "valueCode": "horizontal"
-                    }
-                  ],
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Yes",
-                        "display": "Yes",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "No",
-                        "display": "No",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Completed by",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "date",
-              "text": "Assessment Date",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         }

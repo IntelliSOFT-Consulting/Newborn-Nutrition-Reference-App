@@ -44,7 +44,12 @@
               "definition": "http://hl7.org/fhir/StructureDefinition/RelatedPerson#RelatedPerson.name.given",
               "type": "string",
               "required": true,
-              "text": "First Name"
+              "text": "First Name",
+              "initial": [
+                {
+                  "valueString": ","
+                }
+              ]
             },
             {
               "extension": [
@@ -61,7 +66,12 @@
               "definition": "http://hl7.org/fhir/StructureDefinition/datatypes#HumanName.family",
               "type": "string",
               "required": true,
-              "text": "Family Name"
+              "text": "Family Name",
+              "initial": [
+                {
+                  "valueString": ","
+                }
+              ]
             }
           ]
         },
