@@ -13,6 +13,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.button.MaterialButton
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.viewmodels.EditPatientViewModel
@@ -20,6 +21,8 @@ import com.intellisoft.nndak.viewmodels.EditPatientViewModel
 class EditPatientFragment : Fragment(R.layout.add_patient_fragment) {
     private val viewModel: EditPatientViewModel by viewModels()
 
+    private lateinit var cancel: MaterialButton
+    private lateinit var submit: MaterialButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -43,10 +46,27 @@ class EditPatientFragment : Fragment(R.layout.add_patient_fragment) {
             NavHostFragment.findNavController(this).navigateUp()
         }
         (activity as MainActivity).setDrawerEnabled(false)
+        initActions(view)
     }
 
+    private fun initActions(view: View) {
+        cancel = view.findViewById(R.id.btn_cancel)
+        submit = view.findViewById(R.id.btn_submit)
+
+
+        /***
+         * Actions
+         ***/
+        cancel.setOnClickListener {
+            NavHostFragment.findNavController(this).navigateUp()
+        }
+        submit.setOnClickListener {
+            onSubmitAction()
+        }
+
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.add_patient_fragment_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

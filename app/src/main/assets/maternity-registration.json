@@ -686,6 +686,62 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
+                "name": "deliveryROM"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Delivery-ROM",
+              "text": "ROM",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+
+                {
+                  "valueCoding": {
+                    "code": "ROM: Yes",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "ROM: No",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "2.2.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
                 "name": "travel"
               }
             }
@@ -828,7 +884,7 @@
           "item": [
             {
               "linkId": "rs",
-              "text": "Resuscitation",
+              "text": "Was the baby resuscitated?",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -883,7 +939,7 @@
           "item": [
             {
               "linkId": "placentaComplete",
-              "text": "Is Client's placenta Complete?",
+              "text": "Is the Patient's placenta Complete?",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -938,7 +994,7 @@
           "item": [
             {
               "linkId": "vitaminK",
-              "text": "Has baby been given Vitamin K?",
+              "text": "Has the baby been given Vitamin K?",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -993,7 +1049,7 @@
           "item": [
             {
               "linkId": "prophylaxis",
-              "text": "Does baby show signs of Eye Prophylaxis (1% TED)?",
+              "text": "Does the baby show signs of Eye Prophylaxis (1% TED)?",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -1061,271 +1117,6 @@
         }
       ],
       "item": [
-        {
-          "linkId": "checkList",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "checkList"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "3.1.0",
-              "type": "group",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                  "valueExpression": {
-                    "language": "application/x-fhir-query",
-                    "expression": "Condition",
-                    "name": "checkList"
-                  }
-                }
-              ],
-              "item": [
-                {
-                  "text": "Has the mother experienced ANY of these symptoms?",
-                  "type": "choice",
-                  "linkId": "1.1.0",
-                  "repeats": true,
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "check-box",
-                            "display": "Checkbox"
-                          }
-                        ],
-                        "text": "Checkbox"
-                      }
-                    }
-                  ],
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "386661006",
-                        "display": "Fever",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "13645005",
-                        "display": "Shortness of breath",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "49727002",
-                        "display": "Cough",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "44169009",
-                        "display": "Loss of smell",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.2.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "fever"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "1.1.0",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "386661006",
-                        "display": "Fever",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "type": "choice",
-                      "linkId": "1.2.1",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "extension": [
-                      ],
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "386661006",
-                            "display": "Fever",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.3.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "breathShortness"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "1.1.0",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "13645005",
-                        "display": "Shortness of breath",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "linkId": "1.3.1",
-                      "type": "choice",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "13645005",
-                            "display": "Shortness of breath",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.4.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "cough"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "1.1.0",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "49727002",
-                        "display": "Cough",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "linkId": "1.4.1",
-                      "type": "choice",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "49727002",
-                            "display": "Cough",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.5.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "lossOfSmell"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "1.1.0",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "44169009",
-                        "display": "Loss of smell",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "linkId": "1.5.1",
-                      "type": "choice",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "44169009",
-                            "display": "Loss of smell",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
         {
           "linkId": "breastProblems",
           "type": "group",
@@ -1494,6 +1285,7 @@
               "linkId": "4.1.1",
               "type": "string",
               "text": "Any additional notes",
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2125,7 +1917,8 @@
             {
               "linkId": "4.1.1",
               "type": "string",
-              "text": "If yes, where was baby born?"
+              "text": "If yes, where was baby born?",
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
             }
           ]
         },
@@ -2146,7 +1939,8 @@
             {
               "linkId": "4.1.1",
               "type": "string",
-              "text": "Reason for Admission"
+              "text": "Reason for Admission",
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
             }
           ]
         },
@@ -2167,7 +1961,8 @@
             {
               "linkId": "4.1.1",
               "type": "string",
-              "text": "Admitted from"
+              "text": "Admitted from",
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
             }
           ]
         }
@@ -2201,167 +1996,6 @@
         }
       ],
       "item": [
-        {
-          "linkId": "checkList",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Condition",
-                "name": "checkList"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "3.1.0",
-              "type": "group",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                  "valueExpression": {
-                    "language": "application/x-fhir-query",
-                    "expression": "Observation",
-                    "name": "checkList"
-                  }
-                }
-              ],
-              "item": [
-                {
-                  "text": "Does the newborn shows any of the following conditions?",
-                  "type": "choice",
-                  "linkId": "newbornConditions",
-                  "repeats": true,
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "check-box",
-                            "display": "Checkbox"
-                          }
-                        ],
-                        "text": "Checkbox"
-                      }
-                    }
-                  ],
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "asphyxia",
-                        "display": "Asphyxia",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "neonatalSepsis",
-                        "display": "Neonatal Sepsis",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.2.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "asphyxia"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "newbornConditions",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "asphyxia",
-                        "display": "Asphyxia",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "type": "choice",
-                      "linkId": "1.2.1",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "extension": [
-                      ],
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "asphyxia",
-                            "display": "Asphyxia",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1.3.0",
-                  "type": "group",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-                      "valueExpression": {
-                        "language": "application/x-fhir-query",
-                        "expression": "Condition",
-                        "name": "neonatalSepsis"
-                      }
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "enableWhen": [
-                    {
-                      "question": "newbornConditions",
-                      "operator": "=",
-                      "answerCoding": {
-                        "code": "neonatalSepsis",
-                        "display": "Neonatal Sepsis",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ],
-                  "item": [
-                    {
-                      "linkId": "1.3.1",
-                      "type": "choice",
-                      "definition": "http://hl7.org/fhir/StructureDefinition/Condition#Condition.code",
-                      "initial": [
-                        {
-                          "valueCoding": {
-                            "code": "neonatalSepsis",
-                            "display": "Neonatal Sepsis",
-                            "system": "http://snomed.info/sct"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
         {
           "linkId": "3.0.0",
           "type": "group",
@@ -2431,6 +2065,24 @@
                   "text": "Newborn's health status in regards to the health assessment. Is the newborn well?",
                   "required": true,
                   "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "radio-button",
+                            "display": "Radio Button"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                      "valueCode": "horizontal"
+                    }
+                  ],
                   "answerOption": [
                     {
                       "valueCoding": {
@@ -2469,7 +2121,8 @@
             {
               "linkId": "4.1.1",
               "type": "string",
-              "text": "Any additional notes"
+              "text": "Any additional notes",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         },
@@ -2490,7 +2143,8 @@
             {
               "linkId": "4.1.1",
               "type": "string",
-              "text": "Completed by"
+              "text": "Completed by",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         },
@@ -2511,7 +2165,8 @@
             {
               "linkId": "4.1.1",
               "type": "date",
-              "text": "Assessment Date"
+              "text": "Assessment Date",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         }

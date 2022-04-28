@@ -65,13 +65,13 @@ class FhirApplication : Application() {
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL,
-                ""
+                "https://devnndak.intellisoftkenya.com/api/"
             )
         }
         fun getHapiServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL_DEMO,
-                ""
+                "https://hapi.fhir.org/baseR4/"
             )
         }
 

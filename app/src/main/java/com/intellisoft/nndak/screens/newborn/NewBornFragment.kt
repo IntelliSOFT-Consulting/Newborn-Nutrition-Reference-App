@@ -88,6 +88,7 @@ class NewBornFragment : Fragment() {
                 activity?.let { FhirApplication.setCurrent(it, false) }
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
+                      //  args.patientId, "screener-questionnaire.json", "Rapid Assessment"
                         args.patientId, "nn-d2.json", "Rapid Assessment"
                     )
                 )

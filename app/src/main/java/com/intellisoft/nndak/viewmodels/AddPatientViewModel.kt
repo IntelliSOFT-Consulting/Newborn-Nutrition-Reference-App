@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.screens.patients.AddPatientFragment
@@ -36,6 +37,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
      */
     fun savePatient(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
+
             val entry =
                 ResourceMapper.extract(
                     getApplication(),
@@ -60,7 +62,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
                 val todayDate = FormatHelper().getTodayDate()
                 val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
 
- 
+
                 if (isDateValid && isPhoneNo){
 
                     patient.active = true
@@ -76,6 +78,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
             }
 
             isPatientSaved.value = false
+
         }
     }
 
@@ -83,7 +86,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
 
     private fun getQuestionnaireJson(): String {
         questionnaireJson?.let {
-            return it!!
+            return it
         }
         questionnaireJson =
             readFileFromAssets(state[AddPatientFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)

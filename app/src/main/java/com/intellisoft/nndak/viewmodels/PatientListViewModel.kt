@@ -83,12 +83,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                             value = nameQuery
                         }
                     )
-                 /*   filter(
-                        Patient.TELECOM, {
-                           modifier= StringFilterModifier.CONTAINS
-                          value=   nameQuery
-                        }
-                    )*/
+
                 }
                 filterCity(this)
                 sort(Patient.GIVEN, Order.ASCENDING)
@@ -148,6 +143,8 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
     val city = if (hasAddress()) address[0].city else ""
     val country = if (hasAddress()) address[0].country else ""
     val state = if (hasAddress()) address[0].state else ""
+    val district = if (hasAddress()) address[0].district else ""
+    val region = if (hasAddress()) address[0].text else ""
     val isActive = active
     val html: String = if (hasText()) text.div.valueAsString else ""
 
@@ -162,6 +159,8 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
         country = country ?: "",
         isActive = isActive,
         html = html,
-        state = state ?: ""
+        state = state ?: "",
+        district = district ?: "",
+        region = region ?: ""
     )
 }

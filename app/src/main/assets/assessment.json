@@ -191,11 +191,7 @@
               "text": "Additional Comment's",
               "type": "string",
               "linkId": "comments",
-              "initial": [
-                {
-                  "valueString": ""
-                }
-              ]
+              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note"
             }
           ]
         },
@@ -214,14 +210,9 @@
           ],
           "item": [
             {
-              "text": "Date of Assessment",
-              "type": "display",
-              "linkId": "assessmentDate"
-            },
-            {
               "linkId": "assessmentDate",
               "type": "dateTime",
-              "text": "",
+              "text": "Date of Assessment",
               "required": true,
               "extension": [
                 {

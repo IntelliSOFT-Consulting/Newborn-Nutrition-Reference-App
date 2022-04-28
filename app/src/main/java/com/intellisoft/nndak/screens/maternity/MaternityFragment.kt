@@ -114,6 +114,15 @@ class MaternityFragment : Fragment() {
                 )
                 true
             }
+            R.id.menu_apgar_score -> {
+                Timber.e("Resource ID::: " + args.patientId)
+                findNavController().navigate(
+                    MaternityFragmentDirections.navigateToScreening(
+                        args.patientId, "apgar-score.json", "Apgar Score"
+                    )
+                )
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

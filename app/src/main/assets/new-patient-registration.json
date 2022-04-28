@@ -277,12 +277,62 @@
             }
           ]
         },
-
         {
           "linkId": "PR-address",
           "type": "group",
           "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.address",
           "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.address.line",
+                    "name": "patientRegion"
+                  }
+                }
+              ],
+              "linkId": "PR-address-region",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.address.line",
+              "type": "string",
+              "text": "Region",
+              "required": true
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.address.text",
+                    "name": "patientStreet"
+                  }
+                }
+              ],
+              "linkId": "PR-address-district",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.address.text",
+              "type": "string",
+              "text": "Street",
+              "required": true
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.address.district",
+                    "name": "patientDistrict"
+                  }
+                }
+              ],
+              "linkId": "PR-address-district",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.address.district",
+              "type": "string",
+              "text": "District/County",
+              "required": true
+            },
             {
               "extension": [
                 {
@@ -376,7 +426,6 @@
                   "valueString": "Pumwani Maternity Hospital"
                 }
               ]
-
             }
           ]
         }

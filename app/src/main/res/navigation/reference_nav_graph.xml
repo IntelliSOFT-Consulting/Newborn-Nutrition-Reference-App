@@ -90,7 +90,7 @@
 
     <fragment
         android:id="@+id/dashboard"
-        android:name="com.intellisoft.nndak.dashboard.DashboardFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard">
         <action

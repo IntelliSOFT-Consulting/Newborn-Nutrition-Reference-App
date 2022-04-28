@@ -156,14 +156,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
-
                 }
 
-                is Questionnaire -> {
-                    if (resource.hasCode() && !resource.hasPrimitiveValue()) {
-                        return true
-                    }
-                }
+
                 // TODO check other resources inputs
             }
         }
@@ -203,7 +198,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val isSymptomPresent = isSymptomPresent(bundle)
             val isComorbidityPresent = isComorbidityPresent(bundle)
             val riskProbability = getRiskProbability(isSymptomPresent, isComorbidityPresent, it)
-            riskProbability?.let { riskProbability ->
+            riskProbability?.let { rProbability ->
                 val riskAssessment =
                     RiskAssessment().apply {
                         id = generateUuid()
@@ -213,7 +208,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             qualitativeRisk =
                                 CodeableConcept().apply {
                                     addCoding().updateRiskProbability(
-                                        riskProbability
+                                        rProbability
                                     )
                                 }
                         }
@@ -298,6 +293,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private fun isComorbidityPresent(comorbidity: String): Boolean {
         return Logics.comorbidities.contains(comorbidity)
     }
+
+    /***
+     * apgar score
+     * ***/
 
 
 }

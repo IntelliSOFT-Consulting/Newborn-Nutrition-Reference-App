@@ -10,6 +10,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.button.MaterialButton
 import com.intellisoft.nndak.viewmodels.AddPatientViewModel
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -20,6 +21,8 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
 
     private val viewModel: AddPatientViewModel by viewModels()
 
+    private lateinit var cancel: MaterialButton
+    private lateinit var submit: MaterialButton
     private val TAG = "AddPatientFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,11 +35,29 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
         }
         observePatientSaveAction()
         (activity as MainActivity).setDrawerEnabled(false)
+        initActions(view)
+    }
+
+    private fun initActions(view: View) {
+        cancel = view.findViewById(R.id.btn_cancel)
+        submit = view.findViewById(R.id.btn_submit)
+
+
+        /***
+         * Actions
+         * **/
+        cancel.setOnClickListener {
+            NavHostFragment.findNavController(this).navigateUp()
+        }
+        submit.setOnClickListener {
+            onSubmitAction()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.add_patient_fragment_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -78,7 +99,7 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-      //  val context=FhirContext.forR4()
+        //  val context=FhirContext.forR4()
         //Log.d(TAG,context.newJsonParser().encodeResourceToString(questionnaireFragment.getQuestionnaireResponse()))
         savePatient(questionnaireFragment.getQuestionnaireResponse())
     }

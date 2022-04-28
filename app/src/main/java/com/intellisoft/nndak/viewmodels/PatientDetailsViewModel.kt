@@ -122,7 +122,7 @@ class PatientDetailsViewModel(
                 PatientDetailProperty(
                     PatientProperty(
                         getString(R.string.patient_property_address),
-                        "${it.city}, ${it.country} "
+                        "${it.region},${it.district},${it.city}, ${it.country} "
                     )
                 )
             )
@@ -330,7 +330,14 @@ class PatientDetailsViewModel(
                 } else {
                     ""
                 }
-            val valueString = "$value $valueUnit"
+            val notes =
+                if (observation.hasNote()) {
+                    observation.note.toString()
+                } else {
+                    ""
+                }
+
+            val valueString = "$value $valueUnit $notes"
 
 
 

@@ -140,5 +140,7 @@
     <string name="action_server_url_demo">Demo Fhir URL</string>
     <string name="menu_relation">Relation</string>
     <string name="header_relation">Child/Children</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="menu_apgar_score">"Apgar "</string>
 
 </resources>

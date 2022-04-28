@@ -207,7 +207,7 @@
                       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
                       "valueExpression": {
                         "language": "application/x-fhir-query",
-                        "expression": "Observation",
+                        "expression": "Condition",
                         "name": "cough"
                       }
                     },
@@ -252,7 +252,7 @@
                       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
                       "valueExpression": {
                         "language": "application/x-fhir-query",
-                        "expression": "Observation",
+                        "expression": "Condition",
                         "name": "lossOfSmell"
                       }
                     },
@@ -442,7 +442,7 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "comments"
+                "name": "additionalNotes"
               }
             }
           ],
@@ -454,7 +454,8 @@
                 {
                   "linkId": "4.1.1",
                   "type": "string",
-                  "text": "Any additional notes"
+                  "text": "Any additional notes",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
                 }
               ]
             }
@@ -563,7 +564,7 @@
                       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
                       "valueExpression": {
                         "language": "application/x-fhir-query",
-                        "expression": "Observation",
+                        "expression": "Condition",
                         "name": "asphyxia"
                       }
                     },
@@ -610,7 +611,7 @@
                       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
                       "valueExpression": {
                         "language": "application/x-fhir-query",
-                        "expression": "Observation",
+                        "expression": "Condition",
                         "name": "neonatalSepsis"
                       }
                     },
@@ -761,7 +762,29 @@
               "linkId": "4.1.1",
               "type": "string",
               "text": "Any additional notes",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.value"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "completedBy"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "4.1.1",
+              "type": "string",
+              "text": "Completed by",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         },
@@ -781,30 +804,9 @@
           "item": [
             {
               "linkId": "4.1.1",
-              "type": "string",
-              "text": "Completed by"
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "DiagnosticReport",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
               "type": "date",
               "text": "Assessment Date",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueDate"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
             }
           ]
         }
