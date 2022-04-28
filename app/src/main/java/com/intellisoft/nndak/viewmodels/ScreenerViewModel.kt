@@ -9,8 +9,9 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
-import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.screens.ScreenerFragment
 import java.math.BigDecimal
@@ -18,6 +19,7 @@ import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 
@@ -48,13 +50,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
-            Log.e("------ ", "------------")
+
 
             val json = JSONObject(questionnaire)
             val itemJsonArray = json.getJSONArray("item")
             for(i in 0 until itemJsonArray.length()){
 
                 val item = itemJsonArray.getJSONObject(i)
+                var jsonObject = JSONObject()
 
                 val jsonArrayItem = item.getJSONArray("item")
                 for (j in 0 until jsonArrayItem.length()){
@@ -93,7 +96,26 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         val isDateValid = FormatHelper().checkDate(formattedDate, todayDate)
                                         if (isDateValid){
 
+                                            //Get the calculations
 
+                                            val edd = FormatHelper().getCalculations(formattedDate)
+
+                                            val dbAnswer = DbAnswer(edd)
+                                            val dbAnswerList = ArrayList<DbAnswer>()
+                                            dbAnswerList.add(dbAnswer)
+
+                                            val dbValueDate = DbValueDate("2.1.3", dbAnswerList)
+                                            val dbValueDateList = ArrayList<DbValueDate>()
+                                            dbValueDateList.add(dbValueDate)
+
+                                            val dbItem = DbItem("1.1.0", dbValueDateList)
+                                            val dbItemList = ArrayList<DbItem>()
+                                            dbItemList.add(dbItem)
+
+                                            val eddJson =  DbQuestionnaireData("expectedDateDelivery", dbItemList)
+                                            val outputJson = Gson().toJson(eddJson)
+                                            jsonObject = JSONObject(outputJson)
+                                            jsonArrayItem.put(jsonObject)
 
                                         }else{
                                             //Send error message that date is beyond today
@@ -118,7 +140,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
 
             }
+            //Add Edd to Questionnaire
 
+            Log.e("-------- ", json.toString())
 
 
             Timber.d(
