@@ -1,5 +1,7 @@
 package com.intellisoft.nndak.helper_class
 
+import android.content.Context
+import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
@@ -7,10 +9,20 @@ import java.util.*
 
 class FormatHelper {
 
+    fun convertDate(valueDate: String): String {
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val currentDate = sdf.parse(valueDate)
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        return sdf1.format(currentDate)
+    }
+
     fun checkDate(birthDate: String, d2: String): Boolean {
 
         val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
         val currentdate = sdf1.parse(birthDate)
+
+        println("+++++++ $currentdate")
 
         val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val newCurrentDate = sdf2.format(currentdate)
@@ -98,5 +110,27 @@ class FormatHelper {
 
     }
 
+    fun saveSharedPreference(
+        context: Context,
+        sharedKey: String,
+        sharedValue: String){
+
+        val appName = context.getString(R.string.app_name)
+        val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(sharedKey, sharedValue)
+        editor.apply()
+    }
+
+    fun retrieveSharedPreference(
+        context: Context,
+        sharedKey: String): String? {
+
+        val appName = context.getString(R.string.app_name)
+
+        val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(sharedKey, null)
+
+    }
 
 }

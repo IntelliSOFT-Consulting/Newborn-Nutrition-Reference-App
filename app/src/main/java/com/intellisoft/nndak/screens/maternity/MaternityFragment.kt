@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.screens.maternity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -61,6 +62,7 @@ class MaternityFragment : Fragment() {
         _binding = FragmentMaternityBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,9 +1,17 @@
 package com.intellisoft.nndak.screens.patients
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.text.TextUtils
+import android.util.Log
 import android.view.*
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -14,6 +22,9 @@ import com.google.android.material.button.MaterialButton
 import com.intellisoft.nndak.viewmodels.AddPatientViewModel
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.helper_class.DbMotherKey
+import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.roomdb.HealthViewModel
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 
 
@@ -25,6 +36,10 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
     private lateinit var submit: MaterialButton
     private val TAG = "AddPatientFragment"
 
+    private lateinit var healthViewModel: HealthViewModel
+
+    private val formatHelper = FormatHelper()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpActionBar()
@@ -34,6 +49,8 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
             addQuestionnaireFragment()
         }
         observePatientSaveAction()
+
+        healthViewModel = HealthViewModel(requireActivity().application)
         (activity as MainActivity).setDrawerEnabled(false)
         initActions(view)
     }
@@ -79,6 +96,54 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
             title = requireContext().getString(R.string.add_patient)
             setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        showDialog()
+    }
+
+    private fun showDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+
+        builder.setTitle("National ID Number")
+        builder.setMessage("Provide the patient's National/Passport No.")
+        val input = EditText(requireContext())
+
+        input.hint = "ID Number (33745...)"
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+
+        builder.setView(input)
+        builder.setPositiveButton("OK") { _, _ ->
+            val nationalId  = input.text.toString()
+            if (!TextUtils.isEmpty(nationalId)){
+
+                val natID = DbMotherKey.NATIONALID.name
+                formatHelper.saveSharedPreference(requireContext(), natID, nationalId)
+
+                Toast.makeText(requireContext(), "ID Number has been captured. Please proceed with the other fields.", Toast.LENGTH_SHORT).show()
+
+
+            }else{
+                input.error = "Field cannot be empty."
+                Toast.makeText(requireContext(), "You cannot proceed without the ID Number.", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+
+            Toast.makeText(requireContext(), "You cannot proceed without the ID Number.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+//            activity?.finish()
+
+//            dialog.cancel()
+
+        }
+
+        builder.setCancelable(false)
+
+        builder.show()
     }
 
     private fun updateArguments() {
