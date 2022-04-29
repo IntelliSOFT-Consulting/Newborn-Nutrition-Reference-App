@@ -45,6 +45,10 @@ class PatientDetailsViewModel(
         viewModelScope.launch { livePatientData.value = getPatientDetailDataModel() }
     }
 
+    fun getMaternityDetailData() {
+        viewModelScope.launch { livePatientData.value = getMaternityDetailDataModel() }
+    }
+
     /***
      * Retrive Details of the Child
      * ***/
@@ -70,9 +74,9 @@ class PatientDetailsViewModel(
         val relations: MutableList<RelatedPersonItem> = mutableListOf()
 
         fhirEngine
-            .search<RelatedPerson> {
+            .search<Patient> {
                 filter(
-                    RelatedPerson.PATIENT, { value = "Patient/$patientId" }
+                    Patient.LINK, { value = "Patient/$patientId" }
 
                 )
             }
@@ -185,7 +189,7 @@ class PatientDetailsViewModel(
         return data
     }
 
-    private suspend fun getPatientDetailDataModel(): List<PatientDetailData> {
+    private suspend fun getMaternityDetailDataModel(): List<PatientDetailData> {
         val data = mutableListOf<PatientDetailData>()
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
@@ -250,6 +254,90 @@ class PatientDetailsViewModel(
 
             data.addAll(relationDataModel)
         }
+        if (observations.isNotEmpty()) {
+
+            data.add(PatientDetailHeader(getString(R.string.header_observation)))
+
+            val observationDataModel =
+                observations.mapIndexed { index, observationItem ->
+
+                    PatientDetailObservation(
+                        observationItem,
+                        firstInGroup = index == 0,
+                        lastInGroup = index == observations.size - 1
+                    )
+
+                }
+
+            data.addAll(observationDataModel)
+
+        }
+
+        if (conditions.isNotEmpty()) {
+            data.add(PatientDetailHeader(getString(R.string.header_conditions)))
+            val conditionDataModel =
+                conditions.mapIndexed { index, conditionItem ->
+                    PatientDetailCondition(
+                        conditionItem,
+                        firstInGroup = index == 0,
+                        lastInGroup = index == conditions.size - 1
+                    )
+                }
+            data.addAll(conditionDataModel)
+        }
+
+        return data
+    }
+
+    private suspend fun getPatientDetailDataModel(): List<PatientDetailData> {
+        val data = mutableListOf<PatientDetailData>()
+        val patient = getPatient()
+        patient.riskItem = getPatientRiskAssessment()
+
+        val relation = getPatientRelatedPersons()
+        val observations = getPatientObservations()
+        val conditions = getPatientConditions()
+
+        patient.let {
+            data.add(PatientDetailOverview(it, firstInGroup = true))
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(getString(R.string.patient_property_mobile), it.phone)
+                )
+            )
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(getString(R.string.patient_property_id), it.resourceId)
+                )
+            )
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(
+                        getString(R.string.patient_property_address),
+                        "${it.region},${it.district},${it.city}, ${it.country} "
+                    )
+                )
+            )
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(
+                        getString(R.string.patient_property_dob),
+                        it.dob
+                    )
+                )
+            )
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(
+                        getString(R.string.patient_property_gender),
+                        it.gender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+                    ), lastInGroup = true
+                )
+            )
+
+        }
+
         if (observations.isNotEmpty()) {
 
             data.add(PatientDetailHeader(getString(R.string.header_observation)))
@@ -390,7 +478,7 @@ class PatientDetailsViewModel(
          * Creates RelatedPersonItem objects with displayable values from the Fhir RelatedPerson objects.
          */
         private fun createRelatedPersonItem(
-            relation: RelatedPerson,
+            relation: Patient,
             resources: Resources
         ): RelatedPersonItem {
             val gender = relation.gender ?: "Unknown"

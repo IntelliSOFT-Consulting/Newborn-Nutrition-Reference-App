@@ -86,7 +86,7 @@ class MaternityFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getMaternityDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
         activity?.let {
             FhirApplication.setCurrent(it, newBorn = false, apgar = false, maternity = false)

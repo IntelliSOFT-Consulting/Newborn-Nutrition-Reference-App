@@ -51,53 +51,55 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
 
 
-            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
-
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
 
             val json = JSONObject(questionnaire)
             val itemJsonArray = json.getJSONArray("item")
-            for(i in 0 until itemJsonArray.length()){
+            for (i in 0 until itemJsonArray.length()) {
 
                 val item = itemJsonArray.getJSONObject(i)
                 var jsonObject = JSONObject()
 
                 val jsonArrayItem = item.getJSONArray("item")
-                for (j in 0 until jsonArrayItem.length()){
+                for (j in 0 until jsonArrayItem.length()) {
 
                     val jsonObjectItem = jsonArrayItem.getJSONObject(j)
 
                     val linkIdPeriods = jsonObjectItem.getString("linkId")
 
-                    if (linkIdPeriods == "2.1.2"){
+                    if (linkIdPeriods == "2.1.2") {
 
                         val jsonArrayItem2 = jsonObjectItem.getJSONArray("item")
 
-                        for (k in 0 until jsonArrayItem2.length()){
+                        for (k in 0 until jsonArrayItem2.length()) {
 
                             val jsonObjectItem3 = jsonArrayItem2.getJSONObject(k)
                             val jsonArrayItem3 = jsonObjectItem3.getJSONArray("item")
 
-                            for (l in 0 until jsonArrayItem3.length()){
+                            for (l in 0 until jsonArrayItem3.length()) {
 
                                 val jsonObjectItem4 = jsonArrayItem3.getJSONObject(l)
                                 val linkIdPeriods1 = jsonObjectItem4.getString("linkId")
 
-                                if (linkIdPeriods1 == "menstrualPeriod"){
+                                if (linkIdPeriods1 == "menstrualPeriod") {
 
                                     val jsonArrayPeriods = jsonObjectItem4.getJSONArray("answer")
 
-                                    for (m in 0 until jsonArrayPeriods.length()){
+                                    for (m in 0 until jsonArrayPeriods.length()) {
 
-                                        val jsonObjectItemPeriods = jsonArrayPeriods.getJSONObject(m)
+                                        val jsonObjectItemPeriods =
+                                            jsonArrayPeriods.getJSONObject(m)
                                         val valueDate = jsonObjectItemPeriods.getString("valueDate")
 
                                         //Check if the date is valid
                                         val todayDate = FormatHelper().getTodayDate()
-                                        val formattedDate =FormatHelper().convertDate(valueDate)
+                                        val formattedDate = FormatHelper().convertDate(valueDate)
 
-                                        val isDateValid = FormatHelper().checkDate(formattedDate, todayDate)
-                                        if (isDateValid){
+                                        val isDateValid =
+                                            FormatHelper().checkDate(formattedDate, todayDate)
+                                        if (isDateValid) {
 
                                             //Get the calculations
 
@@ -115,12 +117,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             val dbItemList = ArrayList<DbItem>()
                                             dbItemList.add(dbItem)
 
-                                            val eddJson =  DbQuestionnaireData("expectedDateDelivery", dbItemList)
+                                            val eddJson = DbQuestionnaireData(
+                                                "expectedDateDelivery",
+                                                dbItemList
+                                            )
                                             val outputJson = Gson().toJson(eddJson)
                                             jsonObject = JSONObject(outputJson)
                                             jsonArrayItem.put(jsonObject)
 
-                                        }else{
+                                        } else {
                                             //Send error message that date is beyond today
 
                                         }
@@ -165,6 +170,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             isResourcesSaved.value = true
         }
     }
+
     fun saveChild(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val entry =
@@ -209,8 +215,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResource,
                     questionnaireResponse
                 ).entryFirstRep
-            if (bundle.resource !is RelatedPerson) return@launch
-            val relatedPerson = bundle.resource as RelatedPerson
+            if (bundle.resource !is Patient) return@launch
+            val relatedPerson = bundle.resource as Patient
 
             if (relatedPerson.hasBirthDate() && relatedPerson.hasGender()
             ) {
@@ -218,7 +224,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val subjectReference = Reference("Patient/$patientId")
                 relatedPerson.active = true
                 relatedPerson.id = generateUuid()
-                relatedPerson.patient = subjectReference
+                relatedPerson.linkFirstRep.other = subjectReference
                 fhirEngine.create(relatedPerson)
                 isResourcesSaved.value = true
                 return@launch
@@ -228,7 +234,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun saveMaternty(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveMaternity(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -295,7 +301,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val total = score.sum()
 
 
-                val subjectReference = Reference("RelatedPerson/$patientId")
+                val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 if (isRequiredFieldMissing(bundle)) {
                     apgarScore.value = ApGar("", "Check All Inputs", false)

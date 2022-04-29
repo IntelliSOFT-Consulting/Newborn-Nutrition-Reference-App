@@ -19,8 +19,10 @@ import com.intellisoft.nndak.databinding.FragmentMaternityBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentArgs
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
+import com.intellisoft.nndak.screens.patients.PatientDetailsFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +77,7 @@ class ChildFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getChildDetailData()
+        patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
         activity?.let {
             FhirApplication.setCurrent(it, newBorn = false, apgar = false, maternity = false)
@@ -102,13 +104,23 @@ class ChildFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.hidden_menu, menu)
+        inflater.inflate(R.menu.details_options_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 NavHostFragment.findNavController(this).navigateUp()
+                true
+            }
+            R.id.menu_patient_edit -> {
+
+                findNavController()
+                    .navigate(
+                        ChildFragmentDirections.navigateToEditPatient(
+                            args.patientId
+                        )
+                    )
                 true
             }
             else -> super.onOptionsItemSelected(item)

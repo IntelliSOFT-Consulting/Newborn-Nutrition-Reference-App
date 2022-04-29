@@ -70,7 +70,7 @@ class RestManager {
         getService(context).loadUser().enqueue(
             object : Callback<UserResponse> {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
+                  //  Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -79,7 +79,7 @@ class RestManager {
                     call: Call<UserResponse>,
                     response: Response<UserResponse>
                 ) {
-                    Timber.e("onResponse " + response.headers())
+                 //   Timber.e("onResponse " + response.headers())
                     onResult(response.body())
                 }
             }

@@ -109,7 +109,7 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 )
             }
             matenity == true -> {
-                viewModel.saveMaternty(
+                viewModel.saveMaternity(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )

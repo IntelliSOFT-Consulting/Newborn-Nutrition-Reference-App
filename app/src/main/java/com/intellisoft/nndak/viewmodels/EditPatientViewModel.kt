@@ -28,10 +28,28 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
 
     private val patientId: String = requireNotNull(state["patient_id"])
     val livePatientData = liveData { emit(prepareEditPatient()) }
+    val liveChildData = liveData { emit(prepareEditChild()) }
 
     private suspend fun prepareEditPatient(): Pair<String, String> {
         val patient = fhirEngine.get<Patient>(patientId)
         val question = readFileFromAssets("new-patient-registration.json").trimIndent()
+        val parser = FhirContext.forR4().newJsonParser()
+        val questionnaire =
+            parser.parseResource(org.hl7.fhir.r4.model.Questionnaire::class.java, question) as
+                    Questionnaire
+
+        val questionnaireResponse: QuestionnaireResponse =
+            ResourceMapper.populate(questionnaire, patient)
+        val questionnaireResponseJson = parser.encodeResourceToString(questionnaireResponse)
+        return question to questionnaireResponseJson
+    }
+
+    /**
+     * Edit Child
+     * **/
+    private suspend fun prepareEditChild(): Pair<String, String> {
+        val patient = fhirEngine.get<Patient>(patientId)
+        val question = readFileFromAssets("child.json").trimIndent()
         val parser = FhirContext.forR4().newJsonParser()
         val questionnaire =
             parser.parseResource(org.hl7.fhir.r4.model.Questionnaire::class.java, question) as
@@ -59,7 +77,11 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
      */
     fun updatePatient(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
-            val entry = ResourceMapper.extract(getApplication(),questionnaireResource, questionnaireResponse).entryFirstRep
+            val entry = ResourceMapper.extract(
+                getApplication(),
+                questionnaireResource,
+                questionnaireResponse
+            ).entryFirstRep
             if (entry.resource !is Patient) return@launch
             val patient = entry.resource as Patient
             if (patient.hasName() &&
@@ -79,11 +101,36 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
         }
     }
 
+    fun updateChild(questionnaireResponse: QuestionnaireResponse) {
+        viewModelScope.launch {
+            val entry = ResourceMapper.extract(
+                getApplication(),
+                questionnaireResource,
+                questionnaireResponse
+            ).entryFirstRep
+            if (entry.resource !is Patient) return@launch
+            val patient = entry.resource as Patient
+            if (patient.hasName() &&
+                patient.name[0].hasGiven() &&
+                patient.name[0].hasFamily() &&
+                patient.hasBirthDate()
+            ) {
+                patient.id = patientId
+                fhirEngine.update(patient)
+                isPatientSaved.value = true
+                return@launch
+            }
+
+            isPatientSaved.value = false
+        }
+    }
+
     private fun getQuestionnaireJson(): String {
         questionnaireJson?.let {
             return it
         }
-        questionnaireJson = readFileFromAssets(state[EditPatientFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
+        questionnaireJson =
+            readFileFromAssets(state[EditPatientFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
         return questionnaireJson!!
     }
 

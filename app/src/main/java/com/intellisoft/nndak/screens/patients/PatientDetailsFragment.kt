@@ -98,7 +98,6 @@ class PatientDetailsFragment : Fragment() {
                 true
             }
             R.id.menu_patient_edit -> {
-                Timber.e("Resource ID::: " + args.patientId)
                 findNavController()
                     .navigate(
                         PatientDetailsFragmentDirections.navigateToEditPatient(
