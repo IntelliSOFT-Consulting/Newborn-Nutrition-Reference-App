@@ -15,8 +15,10 @@ import com.google.android.fhir.search.search
 import com.intellisoft.nndak.SYNC_VALUE
 import com.intellisoft.nndak.USER_ADDRESS
 import com.intellisoft.nndak.models.PatientItem
+import com.intellisoft.nndak.models.RelatedPersonItem
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Patient
+import org.hl7.fhir.r4.model.RelatedPerson
 import org.hl7.fhir.r4.model.RiskAssessment
 
 /**
@@ -162,5 +164,24 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
         state = state ?: "",
         district = district ?: "",
         region = region ?: ""
+    )
+}
+
+
+/***
+ * Child details
+ * ***/
+internal fun RelatedPerson.toRelatedPersonItem(position: Int): RelatedPersonItem {
+    // Show nothing if no values available for gender and date of birth.
+    val patientId = if (hasIdElement()) idElement.idPart else ""
+    val name = if (hasName()) name[0].nameAsSingleString else ""
+    val gender = if (hasGenderElement()) genderElement.valueAsString else ""
+    val dob = if (hasBirthDateElement()) birthDateElement.valueAsString else ""
+
+    return RelatedPersonItem(
+        id = patientId,
+        name = name,
+        gender = gender ?: "",
+        dob = dob ?: "",
     )
 }

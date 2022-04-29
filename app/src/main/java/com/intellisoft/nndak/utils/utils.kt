@@ -179,7 +179,6 @@ enum class ViewTypes {
     HEADER,
     PATIENT,
     PATIENT_PROPERTY,
-    RELATION,
     OBSERVATION,
     CONDITION;
 
@@ -196,6 +195,10 @@ enum class ViewTypes {
  *Only display patient header*/
 enum class ViewType {
     HEADER,
+    PATIENT,
+    CHILD,
+    PATIENT_PROPERTY,
+    RELATION,
     OBSERVATION,
     CONDITION;
 

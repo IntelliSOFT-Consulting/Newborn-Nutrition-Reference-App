@@ -20,9 +20,11 @@ import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
 import com.intellisoft.nndak.databinding.FragmentNewBornBinding
+import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.screens.ScreenerFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
@@ -77,7 +79,7 @@ class MaternityFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        val adapter = MaternityDetails(this::onAddScreenerClick)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Maternity Unit"
@@ -91,12 +93,10 @@ class MaternityFragment : Fragment() {
         }
     }
 
-    private fun onAddScreenerClick() {
-
-    }
-
-    private fun onMaternityClick() {
-
+    private fun onAddScreenerClick(related: RelatedPersonItem) {
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToChild(related.id)
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

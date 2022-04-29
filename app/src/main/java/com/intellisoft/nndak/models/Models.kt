@@ -30,7 +30,8 @@ data class RelatedPersonItem(
     val id: String,
     val name: String,
     val gender: String,
-    val dob: String
+    val dob: String,
+    var riskItem: RiskAssessmentItem? = null,
 ) {
     override fun toString(): String = name
 }

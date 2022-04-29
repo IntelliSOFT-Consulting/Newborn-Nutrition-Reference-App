@@ -157,20 +157,6 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 return@observe
             }
 
-            /***
-             * If maternity open new born questionnaire
-             * ***/
-
-       /*     val isMaternity = activity?.let { FhirApplication.getMaternity(it) }
-            if (isMaternity == true) {
-                Timber.d("patientId ${args.patientId}")
-                Timber.d("question ${args.quastion}")
-               NavHostFragment.findNavController(this).navigate(
-                   ScreenerFragmentDirections.navigateToSelf(
-                   args.patientId, "new-born.json", "Maternity Unit"
-               ))
-
-            }*/
             Toast.makeText(
                 requireContext(),
                 getString(R.string.resources_saved),

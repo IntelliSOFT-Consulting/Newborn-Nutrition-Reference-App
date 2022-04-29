@@ -143,5 +143,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="menu_apgar_score">"Apgar "</string>
     <string name="menu_new">New Born</string>
+    <string name="action_score">Apgar Score</string>
+    <string name="action_assess">Assessment</string>
 
 </resources>

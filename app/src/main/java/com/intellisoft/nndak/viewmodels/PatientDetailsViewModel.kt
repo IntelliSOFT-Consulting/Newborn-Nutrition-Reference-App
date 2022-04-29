@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
-import timber.log.Timber
 import java.text.SimpleDateFormat
 
 /**
@@ -46,9 +45,25 @@ class PatientDetailsViewModel(
         viewModelScope.launch { livePatientData.value = getPatientDetailDataModel() }
     }
 
+    /***
+     * Retrive Details of the Child
+     * ***/
+    fun getChildDetailData() {
+        viewModelScope.launch { livePatientData.value = getChildDetailDataModel() }
+    }
+
     private suspend fun getPatient(): PatientItem {
         val patient = fhirEngine.load(Patient::class.java, patientId)
         return patient.toPatientItem(0)
+    }
+
+    /***
+     * Child details from fhir
+     * ***/
+
+    private suspend fun getChild(): RelatedPersonItem {
+        val child = fhirEngine.load(RelatedPerson::class.java, patientId)
+        return child.toRelatedPersonItem(0)
     }
 
     private suspend fun getPatientRelatedPersons(): List<RelatedPersonItem> {
@@ -87,6 +102,27 @@ class PatientDetailsViewModel(
         return observations
     }
 
+    /**
+     * Child Observations
+     * **/
+    private suspend fun getChildObservations(): List<ObservationItem> {
+        val observations: MutableList<ObservationItem> = mutableListOf()
+
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.SUBJECT, { value = "RelatedPerson/$patientId" }
+
+                )
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map { createObservationItem(it, getApplication<Application>().resources) }
+            .let { observations.addAll(it) }
+
+
+        return observations
+    }
+
     private suspend fun getPatientConditions(): List<ConditionItem> {
         val conditions: MutableList<ConditionItem> = mutableListOf()
         fhirEngine
@@ -95,6 +131,58 @@ class PatientDetailsViewModel(
             .map { createConditionItem(it, getApplication<Application>().resources) }
             .let { conditions.addAll(it) }
         return conditions
+    }
+
+
+    /***
+     * Load Child Details
+     * ***/
+    private suspend fun getChildDetailDataModel(): List<PatientDetailData> {
+        val data = mutableListOf<PatientDetailData>()
+        val child = getChild()
+        child.riskItem = getChildRiskAssessment()
+        val observations = getChildObservations()
+
+        child.let {
+            data.add(ChildDetailOverview(it, firstInGroup = true))
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(
+                        getString(R.string.patient_property_dob),
+                        it.dob
+                    )
+                )
+            )
+            data.add(
+                PatientDetailProperty(
+                    PatientProperty(
+                        getString(R.string.patient_property_gender),
+                        it.gender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+                    ), lastInGroup = true
+                )
+            )
+        }
+        if (observations.isNotEmpty()) {
+
+            data.add(PatientDetailHeader(getString(R.string.header_observation)))
+
+            val observationDataModel =
+                observations.mapIndexed { index, observationItem ->
+
+                    PatientDetailObservation(
+                        observationItem,
+                        firstInGroup = index == 0,
+                        lastInGroup = index == observations.size - 1
+                    )
+
+                }
+
+            data.addAll(observationDataModel)
+
+        }
+
+        return data
     }
 
     private suspend fun getPatientDetailDataModel(): List<PatientDetailData> {
@@ -199,6 +287,25 @@ class PatientDetailsViewModel(
 
     private fun getString(resId: Int) = getApplication<Application>().resources.getString(resId)
 
+
+    /**
+     * Child Risk Assessment
+     *
+     * **/
+    private suspend fun getChildRiskAssessment(): RiskAssessmentItem {
+        val riskAssessment =
+            fhirEngine
+                .search<RiskAssessment> {
+                    filter(
+                        RiskAssessment.SUBJECT,
+                        { value = "RelatedPerson/$patientId" })
+                }
+                .filter { it.hasOccurrence() }
+                .sortedByDescending { it.occurrenceDateTimeType.value }
+                .firstOrNull()
+        return Risk(riskAssessment)
+    }
+
     private suspend fun getPatientRiskAssessment(): RiskAssessmentItem {
         val riskAssessment =
             fhirEngine
@@ -210,6 +317,11 @@ class PatientDetailsViewModel(
                 .filter { it.hasOccurrence() }
                 .sortedByDescending { it.occurrenceDateTimeType.value }
                 .firstOrNull()
+        return Risk(riskAssessment)
+
+    }
+
+    private fun Risk(riskAssessment: RiskAssessment?): RiskAssessmentItem {
         return RiskAssessmentItem(
             getRiskAssessmentStatusColor(riskAssessment),
             getRiskAssessmentStatus(riskAssessment),
@@ -283,14 +395,20 @@ class PatientDetailsViewModel(
         ): RelatedPersonItem {
             val gender = relation.gender ?: "Unknown"
             var dob = relation.birthDate ?: ""
+            var name: String? = null
+            var yea: String? = null
 
             val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             if (dob.toString().isNotEmpty()) {
-                val yea = formatter.format(dob)
-                Timber.e("Dob $yea")
+                yea = formatter.format(dob)
                 dob = getFormattedAge(yea.toString(), resources)
             }
-            val name = relation.name.firstOrNull()
+            name =
+                if (relation.hasName()) relation.name[0].nameAsSingleString else relation.logicalId.substring(
+                    0,
+                    8
+                )
+
             return RelatedPersonItem(
                 relation.logicalId,
                 name.toString(),
@@ -398,6 +516,15 @@ data class PatientDetailOverview(
     override val lastInGroup: Boolean = false
 ) : PatientDetailData
 
+/**
+ * Child Overview
+ **/
+data class ChildDetailOverview(
+    val relation: RelatedPersonItem,
+    override val firstInGroup: Boolean = false,
+    override val lastInGroup: Boolean = false
+) : PatientDetailData
+
 data class PatientDetailRelation(
     val relation: RelatedPersonItem,
     override val firstInGroup: Boolean = false,
@@ -426,6 +553,35 @@ class PatientDetailsViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         require(modelClass.isAssignableFrom(PatientDetailsViewModel::class.java)) {
+            "Unknown ViewModel class"
+        }
+        return PatientDetailsViewModel(application, fhirEngine, patientId) as T
+    }
+
+
+}
+
+
+/***
+ *
+ * Related Person Details
+ * ***/
+class RelatedPersonDetailsViewModel(
+    application: Application,
+    private val fhirEngine: FhirEngine,
+    private val patientId: String
+) : AndroidViewModel(application) {
+
+}
+
+class RelatedPersonDetailsViewModelFactory(
+    private val application: Application,
+    private val fhirEngine: FhirEngine,
+    private val patientId: String
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        require(modelClass.isAssignableFrom(RelatedPersonDetailsViewModel::class.java)) {
             "Unknown ViewModel class"
         }
         return PatientDetailsViewModel(application, fhirEngine, patientId) as T

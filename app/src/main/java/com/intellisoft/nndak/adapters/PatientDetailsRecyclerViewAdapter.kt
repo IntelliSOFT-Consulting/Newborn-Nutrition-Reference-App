@@ -2,7 +2,6 @@ package com.intellisoft.nndak.adapters
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
-import timber.log.Timber
 
 class PatientDetailsRecyclerViewAdapter(
     private val onScreenerClick: () -> Unit,
@@ -52,17 +50,6 @@ class PatientDetailsRecyclerViewAdapter(
                     )
                 )
 
-            /***
-             * Add option to display related persons
-             * */
-            ViewTypes.RELATION ->
-                PatientDetailsRelationItemViewHolder(
-                    PatientListItemViewBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                )
             ViewTypes.OBSERVATION ->
                 PatientDetailsObservationItemViewHolder(
                     PatientListItemViewBinding.inflate(
@@ -105,7 +92,6 @@ class PatientDetailsRecyclerViewAdapter(
             is PatientDetailHeader -> ViewTypes.HEADER
             is PatientDetailOverview -> ViewTypes.PATIENT
             is PatientDetailProperty -> ViewTypes.PATIENT_PROPERTY
-            is PatientDetailRelation -> ViewTypes.RELATION
             is PatientDetailObservation -> ViewTypes.OBSERVATION
             is PatientDetailCondition -> ViewTypes.CONDITION
             else -> {
@@ -139,7 +125,10 @@ class PatientOverviewItemViewHolder(
     }
 }
 
-class PatientPropertyItemViewHolder(private val binding: PatientListItemViewBinding) :
+class PatientPropertyItemViewHolder(
+    private val binding: PatientListItemViewBinding,
+
+    ) :
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailProperty).let {
@@ -159,20 +148,6 @@ class PatientDetailsHeaderItemViewHolder(private val binding: PatientDetailsCard
     }
 }
 
-class PatientDetailsRelationItemViewHolder(private val binding: PatientListItemViewBinding) :
-    PatientDetailItemViewHolder(binding.root) {
-    override fun bind(data: PatientDetailData) {
-        (data as PatientDetailRelation).let {
-
-            binding.name.text = it.relation.name
-            binding.fieldName.text = it.relation.dob
-
-        }
-        binding.status.visibility = View.GONE
-        binding.id.visibility = View.GONE
-        binding.tvView.visibility = View.INVISIBLE
-    }
-}
 
 class PatientDetailsObservationItemViewHolder(private val binding: PatientListItemViewBinding) :
     PatientDetailItemViewHolder(binding.root) {
@@ -184,13 +159,13 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
             val title = it.observation.code
             val value = it.observation.value
 
-        /*    val dbObservation = formatHelper.fhirObservations(title, value)
-            val dbTitle = dbObservation.title
-            val dbValue = dbObservation.value
+            /*    val dbObservation = formatHelper.fhirObservations(title, value)
+                val dbTitle = dbObservation.title
+                val dbValue = dbObservation.value
 
-            Log.e("************", "***************")
-            Log.e("------1", dbTitle)
-            Log.e("------2", dbValue)*/
+                Log.e("************", "***************")
+                Log.e("------1", dbTitle)
+                Log.e("------2", dbValue)*/
 
             binding.name.text = title
             binding.fieldName.text = value

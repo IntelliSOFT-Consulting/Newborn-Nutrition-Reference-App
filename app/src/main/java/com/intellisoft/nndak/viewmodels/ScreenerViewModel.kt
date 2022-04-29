@@ -295,7 +295,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val total = score.sum()
 
 
-                val subjectReference = Reference("Patient/$patientId")
+                val subjectReference = Reference("RelatedPerson/$patientId")
                 val encounterId = generateUuid()
                 if (isRequiredFieldMissing(bundle)) {
                     apgarScore.value = ApGar("", "Check All Inputs", false)
