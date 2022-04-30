@@ -126,22 +126,6 @@ class MaternityFragment : Fragment() {
                 )
                 true
             }
-            R.id.menu_apgar_score -> {
-                activity?.let {
-                    FhirApplication.setCurrent(
-                        it,
-                        newBorn = false,
-                        apgar = true,
-                        maternity = false
-                    )
-                }
-                findNavController().navigate(
-                    MaternityFragmentDirections.navigateToScreening(
-                        args.patientId, "apgar-score.json", "Apgar Score"
-                    )
-                )
-                true
-            }
             R.id.menu_new_born -> {
                 activity?.let {
                     FhirApplication.setCurrent(

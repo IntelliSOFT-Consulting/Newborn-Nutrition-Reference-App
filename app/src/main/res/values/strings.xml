@@ -146,5 +146,6 @@
     <string name="action_score">Apgar Score</string>
     <string name="action_assess">Assessment</string>
     <string name="edit_child">Edit Child</string>
+    <string name="action_additional">Complete</string>
 
 </resources>

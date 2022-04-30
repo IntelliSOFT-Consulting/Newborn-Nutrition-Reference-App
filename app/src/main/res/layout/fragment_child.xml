@@ -48,7 +48,7 @@
             android:drawableStart="@drawable/ic_baseline_add_24"
             android:drawablePadding="2dp"
             android:paddingStart="2dp"
-            android:text="@string/action_assess"
+            android:text="@string/action_additional"
             android:textAppearance="?attr/textAppearanceBody2" />
     </LinearLayout>
 

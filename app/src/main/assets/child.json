@@ -43,7 +43,6 @@
               "linkId": "PR-name-text",
               "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name.given",
               "type": "string",
-              "required": true,
               "text": "First Name"
             },
             {
@@ -60,7 +59,6 @@
               "linkId": "PR-name-family",
               "definition": "http://hl7.org/fhir/StructureDefinition/datatypes#HumanName.family",
               "type": "string",
-              "required": true,
               "text": "Family Name"
             }
           ]

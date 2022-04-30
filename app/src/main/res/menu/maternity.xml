@@ -12,9 +12,5 @@
         android:icon="@drawable/baseline_edit_24"
         android:title="@string/menu_new"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_apgar_score"
-        android:icon="@drawable/baseline_edit_24"
-        android:title="@string/menu_apgar_score"
-        app:showAsAction="never" />
+
 </menu>

@@ -275,14 +275,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            Timber.d("Questionnaire Response:::: $questionnaire")
             try {
                 val json = JSONObject(questionnaire)
                 val item = json.getJSONArray("item")
                 val parent = item.getJSONObject(0).getString("item")
 
                 val common = JSONArray(parent)
-                for (i in 0 until common.length()) {
+                /**
+                 * Skip the 1st item
+                 * **/
+                for (i in 1 until common.length()) {
 
                     val child = common.getJSONObject(i)
                     val childItem = child.getJSONArray("item")
@@ -322,6 +324,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 apgarScore.value = ApGar("$total", "Apgar Score Successfully Recorded", isSafe)
             } catch (e: Exception) {
                 Timber.d("Exception:::: ${e.printStackTrace()}")
+                apgarScore.value = ApGar("", "Check All Inputs", false)
+                return@launch
             }
         }
     }

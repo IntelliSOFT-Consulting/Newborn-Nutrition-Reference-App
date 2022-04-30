@@ -301,7 +301,7 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Multiple Pregnancy",
+                    "code": "Multiple Pregnancy,",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
@@ -336,7 +336,7 @@
               "question": "multiplePregnancy",
               "operator": "=",
               "answerCoding": {
-                "code": "Multiple Pregnancy",
+                "code": "Multiple Pregnancy,",
                 "display": "Yes",
                 "system": "http://snomed.info/sct"
               }
@@ -1189,7 +1189,7 @@
               "linkId": "4.1.1",
               "type": "string",
               "text": "Mother's Health Status",
-              "definition": "https://www.hl7.org/fhir/observation-definitions.html#Observation.note",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",

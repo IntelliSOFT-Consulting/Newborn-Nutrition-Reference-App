@@ -97,6 +97,21 @@ class ChildFragment : Fragment() {
                 )
             )
         }
+        binding.actionAssess.setOnClickListener {
+            activity?.let {
+                FhirApplication.setCurrent(
+                    it,
+                    newBorn = false,
+                    apgar = false,
+                    maternity = false
+                )
+            }
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+                    args.patientId, "nn-a5.json", "NewBorn Registration"
+                )
+            )
+        }
     }
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {
