@@ -391,7 +391,7 @@ class PatientDetailsViewModel(
                 .filter { it.hasOccurrence() }
                 .sortedByDescending { it.occurrenceDateTimeType.value }
                 .firstOrNull()
-        return Risk(riskAssessment)
+        return riskReport(riskAssessment)
     }
 
     private suspend fun getPatientRiskAssessment(): RiskAssessmentItem {
@@ -405,11 +405,11 @@ class PatientDetailsViewModel(
                 .filter { it.hasOccurrence() }
                 .sortedByDescending { it.occurrenceDateTimeType.value }
                 .firstOrNull()
-        return Risk(riskAssessment)
+        return riskReport(riskAssessment)
 
     }
 
-    private fun Risk(riskAssessment: RiskAssessment?): RiskAssessmentItem {
+    private fun riskReport(riskAssessment: RiskAssessment?): RiskAssessmentItem {
         return RiskAssessmentItem(
             getRiskAssessmentStatusColor(riskAssessment),
             getRiskAssessmentStatus(riskAssessment),

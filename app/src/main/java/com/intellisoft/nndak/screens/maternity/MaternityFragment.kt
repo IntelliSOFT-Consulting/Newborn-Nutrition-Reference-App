@@ -79,7 +79,8 @@ class MaternityFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = MaternityDetails(this::onAddScreenerClick)
+        val adapter =
+            MaternityDetails(this::onAddScreenerClick, this::newBorn, this::maternityClick, true)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Maternity Unit"
@@ -99,8 +100,40 @@ class MaternityFragment : Fragment() {
         )
     }
 
+    private fun newBorn() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                newBorn = true,
+                apgar = false,
+                maternity = false,
+            )
+        }
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToScreening(
+                args.patientId, "child.json", "Maternity Unit"
+            )
+        )
+    }
+
+    private fun maternityClick() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                newBorn = false,
+                apgar = false,
+                maternity = true
+            )
+        }
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToScreening(
+                args.patientId, "maternity-registration.json", "Maternity Unit"
+            )
+        )
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.maternity, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -109,39 +142,7 @@ class MaternityFragment : Fragment() {
                 NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-            R.id.menu_maternity -> {
 
-                activity?.let {
-                    FhirApplication.setCurrent(
-                        it,
-                        newBorn = false,
-                        apgar = false,
-                        maternity = true
-                    )
-                }
-                findNavController().navigate(
-                    MaternityFragmentDirections.navigateToScreening(
-                        args.patientId, "maternity-registration.json", "Maternity Unit"
-                    )
-                )
-                true
-            }
-            R.id.menu_new_born -> {
-                activity?.let {
-                    FhirApplication.setCurrent(
-                        it,
-                        newBorn = true,
-                        apgar = false,
-                        maternity = false,
-                    )
-                }
-                findNavController().navigate(
-                    MaternityFragmentDirections.navigateToScreening(
-                        args.patientId, "child.json", "Maternity Unit"
-                    )
-                )
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }

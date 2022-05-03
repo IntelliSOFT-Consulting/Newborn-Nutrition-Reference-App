@@ -6,22 +6,15 @@ import androidx.recyclerview.widget.ListAdapter
 import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
-import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
 
-class MaternityDetails(
-    private val onScreenerClick: (RelatedPersonItem) -> Unit,
-    private val newBornClick: () -> Unit,
-    private val maternityClick: () -> Unit,
-    val show: (Boolean),
-) :
-
+class ChildDetails(val show: (Boolean)) :
     ListAdapter<PatientDetailData, PatientDetailItemViewHolder>(PatientDetailDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientDetailItemViewHolder {
-        return when (ViewType.from(viewType)) {
-            ViewType.HEADER ->
+        return when (ViewTypes.from(viewType)) {
+            ViewTypes.HEADER ->
                 PatientDetailsHeaderItemViewHolder(
                     PatientDetailsCardViewBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -29,36 +22,18 @@ class MaternityDetails(
                         false
                     )
                 )
-            ViewType.PATIENT ->
-                if (show) {
-                    OverviewItemViewHolder(
-                        PatientDetailsHeaderBinding.inflate(
-                            LayoutInflater.from(parent.context),
-                            parent,
-                            false
-                        ), newBornClick, maternityClick, show
+            ViewTypes.PATIENT ->
 
-                    )
-                } else {
-                    RelatedOverviewItemViewHolder(
-                        PatientDetailsHeaderBinding.inflate(
-                            LayoutInflater.from(parent.context),
-                            parent,
-                            false
-                        ), show
-
-                    )
-                }
-            ViewType.CHILD ->
-                ChildOverviewItemViewHolder(
+                RelatedOverviewItemViewHolder(
                     PatientDetailsHeaderBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    ),
+                    ), show
 
-                    )
-            ViewType.PATIENT_PROPERTY ->
+                )
+
+            ViewTypes.PATIENT_PROPERTY ->
                 PatientPropertyItemViewHolder(
                     PatientListItemViewBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -67,19 +42,7 @@ class MaternityDetails(
                     )
                 )
 
-            /***
-             * Add option to display related persons
-             * */
-            ViewType.RELATION ->
-                PatientDetailsRelationItemViewHolder(
-                    PatientListItemViewBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    ),
-                    onScreenerClick
-                )
-            ViewType.OBSERVATION ->
+            ViewTypes.OBSERVATION ->
                 PatientDetailsObservationItemViewHolder(
                     PatientListItemViewBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -87,7 +50,7 @@ class MaternityDetails(
                         false
                     )
                 )
-            ViewType.CONDITION ->
+            ViewTypes.CONDITION ->
                 PatientDetailsConditionItemViewHolder(
                     PatientListItemViewBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -118,13 +81,11 @@ class MaternityDetails(
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         return when (item) {
-            is PatientDetailHeader -> ViewType.HEADER
-            is PatientDetailOverview -> ViewType.PATIENT
-            is ChildDetailOverview -> ViewType.CHILD
-            is PatientDetailProperty -> ViewType.PATIENT_PROPERTY
-            is PatientDetailRelation -> ViewType.RELATION
-            is PatientDetailObservation -> ViewType.OBSERVATION
-            is PatientDetailCondition -> ViewType.CONDITION
+            is PatientDetailHeader -> ViewTypes.HEADER
+            is PatientDetailOverview -> ViewTypes.PATIENT
+            is PatientDetailProperty -> ViewTypes.PATIENT_PROPERTY
+            is PatientDetailObservation -> ViewTypes.OBSERVATION
+            is PatientDetailCondition -> ViewTypes.CONDITION
             else -> {
                 throw IllegalArgumentException("Undefined Item type")
             }

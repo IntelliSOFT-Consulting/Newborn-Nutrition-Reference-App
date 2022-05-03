@@ -13,6 +13,7 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.ChildDetails
 import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.databinding.FragmentChildBinding
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
@@ -70,7 +71,7 @@ class ChildFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = MaternityDetails(this::onAddScreenerClick)
+        val adapter = ChildDetails(false)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Maternity Unit"
@@ -108,15 +109,12 @@ class ChildFragment : Fragment() {
             }
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "nn-a5.json", "NewBorn Registration"
+                    args.patientId, "nn-a5.json", "Maternity Unit"
                 )
             )
         }
     }
 
-    private fun onAddScreenerClick(related: RelatedPersonItem) {
-        // Toast.makeText(context, related.id, Toast.LENGTH_SHORT).show()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.details_options_menu, menu)
