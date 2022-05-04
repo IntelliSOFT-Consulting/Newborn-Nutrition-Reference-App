@@ -22,6 +22,11 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
+import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
+import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
+import com.intellisoft.nndak.utils.Constants.MATERNITY
+import com.intellisoft.nndak.utils.Constants.NEWBORN
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import com.intellisoft.nndak.viewmodels.TAG
 import timber.log.Timber
@@ -91,25 +96,27 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-
-        val isNew = activity?.let { FhirApplication.getNewBorn(it) }
-        val apgar = activity?.let { FhirApplication.getApgar(it) }
-        val matenity = activity?.let { FhirApplication.getMaternity(it) }
-        when {
-            isNew == true -> {
+        when (activity?.let { FhirApplication.getCurrent(it) }) {
+            NEWBORN -> {
                 viewModel.saveRelatedPerson(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
-            apgar == true -> {
+            APGAR_SCORE -> {
                 viewModel.saveApgar(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
-            matenity == true -> {
+            MATERNITY -> {
                 viewModel.saveMaternity(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            ASSESS_CHILD -> {
+                viewModel.saveChildAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )

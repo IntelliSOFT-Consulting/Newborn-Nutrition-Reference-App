@@ -6,6 +6,7 @@ import android.view.View
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.utils.allCornersRounded
 import com.intellisoft.nndak.viewmodels.ChildDetailOverview
 import com.intellisoft.nndak.viewmodels.PatientDetailData
@@ -17,12 +18,15 @@ class OverviewItemViewHolder(
     private val binding: PatientDetailsHeaderBinding,
     private val newBornClick: () -> Unit,
     private val maternityClick: () -> Unit,
+    val steps: Steps,
     val show: Boolean,
 ) : PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailOverview).let { binding.title.text = it.patient.name }
         if (show) {
             binding.appRegistration.visibility = View.VISIBLE
+            binding.screener.text = steps.lastIn
+            binding.maternity.text = steps.fistIn
             binding.screener.setOnClickListener { newBornClick() }
             binding.maternity.setOnClickListener { maternityClick() }
         }

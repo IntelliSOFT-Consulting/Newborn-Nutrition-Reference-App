@@ -25,9 +25,12 @@ import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
 import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.screens.ScreenerFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
+import com.intellisoft.nndak.utils.Constants.MATERNITY
+import com.intellisoft.nndak.utils.Constants.NEWBORN
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -79,8 +82,10 @@ class MaternityFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+
+        var steps= Steps(fistIn = "Record Maternity", lastIn = "New Born")
         val adapter =
-            MaternityDetails(this::onAddScreenerClick, this::newBorn, this::maternityClick, true)
+            MaternityDetails(this::onAddScreenerClick, this::newBorn, this::maternityClick,steps, true)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Maternity Unit"
@@ -89,9 +94,7 @@ class MaternityFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getMaternityDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-        activity?.let {
-            FhirApplication.setCurrent(it, newBorn = false, apgar = false, maternity = false)
-        }
+
     }
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {
@@ -104,9 +107,7 @@ class MaternityFragment : Fragment() {
         activity?.let {
             FhirApplication.setCurrent(
                 it,
-                newBorn = true,
-                apgar = false,
-                maternity = false,
+              NEWBORN
             )
         }
         findNavController().navigate(
@@ -120,9 +121,7 @@ class MaternityFragment : Fragment() {
         activity?.let {
             FhirApplication.setCurrent(
                 it,
-                newBorn = false,
-                apgar = false,
-                maternity = true
+            MATERNITY
             )
         }
         findNavController().navigate(

@@ -7,6 +7,7 @@ import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
 
@@ -14,6 +15,7 @@ class MaternityDetails(
     private val onScreenerClick: (RelatedPersonItem) -> Unit,
     private val newBornClick: () -> Unit,
     private val maternityClick: () -> Unit,
+    private val steps: (Steps),
     val show: (Boolean),
 ) :
 
@@ -36,7 +38,7 @@ class MaternityDetails(
                             LayoutInflater.from(parent.context),
                             parent,
                             false
-                        ), newBornClick, maternityClick, show
+                        ), newBornClick, maternityClick,steps, show
 
                     )
                 } else {

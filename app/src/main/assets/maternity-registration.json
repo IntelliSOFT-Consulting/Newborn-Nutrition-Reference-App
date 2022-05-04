@@ -1145,7 +1145,7 @@
     },
     {
       "text": "Mother’s Health Assessment",
-      "linkId": "6.0.0",
+      "linkId": "Mother-Health-Assessment",
       "type": "group",
       "extension": [
         {
@@ -1153,7 +1153,7 @@
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "mha"
+            "name": "Mother-Health-Assessment"
           }
         },
         {
@@ -1172,7 +1172,7 @@
       ],
       "item": [
         {
-          "linkId": "4.0.0",
+          "linkId": "Health-Assessment",
           "type": "group",
           "extension": [
             {
@@ -1180,30 +1180,15 @@
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "comments"
+                "name": "Health-Assessment"
               }
             }
           ],
           "item": [
             {
-              "linkId": "4.1.1",
+              "linkId": "Assessment",
               "type": "string",
-              "text": "Mother's Health Status",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "text-box",
-                        "display": "Text Box"
-                      }
-                    ]
-                  }
-                }
-              ]
+              "text": "Mother's Health Status"
             }
           ]
         },

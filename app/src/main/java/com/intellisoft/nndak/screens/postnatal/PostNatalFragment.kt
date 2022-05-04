@@ -62,7 +62,6 @@ class PostNatalFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-        activity?.let { FhirApplication.setCurrent(it, newBorn=false, apgar = false,maternity = false) }
     }
 
     private fun onAddScreenerClick() {

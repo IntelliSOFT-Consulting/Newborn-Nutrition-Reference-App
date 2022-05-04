@@ -256,16 +256,128 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     .encodeResourceToString(questionnaireResponse)
             )
 
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                val json = JSONObject(questionnaire)
+                val item = json.getJSONArray("item")
+                val parent = item.getJSONObject(2).getString("item")
+                val common = JSONArray(parent)
+                val health = common.getJSONObject(0).getString("item")
+                val commonAnswer = JSONArray(health)
+                val answer = commonAnswer.getJSONObject(0).getString("answer")
+                val valueString = JSONArray(answer)
+                val value = valueString.getJSONObject(0).getString("valueString")
 
-            val subjectReference = Reference("Patient/$patientId")
-            val encounterId = generateUuid()
-            if (isRequiredFieldMissing(bundle)) {
+
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
+                val qh = QuestionnaireHelper()
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Mother's Health",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+
+                val subjectReference = Reference("Patient/$patientId")
+                val encounterId = generateUuid()
+                saveResources(bundle, subjectReference, encounterId)
+                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                isResourcesSaved.value = true
+
+
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                apgarScore.value = ApGar("", "Check All Inputs", false)
+                return@launch
+            }
+
+
+        }
+    }
+
+    fun saveChildAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
+
+
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                val json = JSONObject(questionnaire)
+                val common = json.getJSONArray("item")
+                for (i in 0 until common.length()) {
+
+                    val item = common.getJSONObject(i)
+                    val parent = item.getJSONArray("item")
+                    Timber.d("parent:::: $parent")
+                    for (j in 0 until parent.length()) {
+
+                        val itemChild = parent.getJSONObject(j)
+                        val child = itemChild.getJSONArray("item")
+                        Timber.d("child:::: $child")
+                    }
+                }
+
+                /**
+                 * Skip the 1st item
+                 * **/
+                /*  for (i in 1 until common.length()) {
+
+                      val child = common.getJSONObject(i)
+                      val childItem = child.getJSONArray("item")
+
+                      for (j in 0 until childItem.length()) {
+
+                          val answer = childItem.getJSONObject(j)
+                          val childAnswer = answer.getJSONArray("answer")
+                          val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
+                          val finalAnswer = JSONObject(valueCoding)
+                          val display = finalAnswer.getString("display")
+
+                      }
+                  }
+  */
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
+
+
+                /*    val qh = QuestionnaireHelper()
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Apgar Score",
+                                total.toString(),
+                                total.toString()
+                            )
+                        )
+                        .request.url = "Observation"*/
+
+                val subjectReference = Reference("Patient/$patientId")
+                val encounterId = generateUuid()
+                saveResources(bundle, subjectReference, encounterId)
+                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                isResourcesSaved.value = true
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
                 isResourcesSaved.value = false
                 return@launch
             }
-            saveResources(bundle, subjectReference, encounterId)
-            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-            isResourcesSaved.value = true
         }
     }
 
@@ -326,6 +438,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 if (total > 6) {
                     isSafe = true
                 }
+
+
+                val qh = QuestionnaireHelper()
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Apgar Score",
+                            total.toString(),
+                            total.toString()
+                        )
+                    )
+                    .request.url = "Observation"
 
                 saveResources(bundle, subjectReference, encounterId)
                 generateApgarAssessmentResource(bundle, subjectReference, encounterId, total)

@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.newborn
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -12,8 +13,12 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentNewBornBinding
+import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.screens.patients.PatientListFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -54,28 +59,51 @@ class NewBornFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        var steps = Steps(fistIn = "Assessment", lastIn = "Record Feeding")
+        val adapter = MaternityDetails(
+            this::onAddScreenerClick,
+            this::recordFeeding,
+            this::assessmentClick,
+            steps,
+            true
+        )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "New Born Unit"
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getMaternityDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-        activity?.let { FhirApplication.setCurrent(it, newBorn=false, apgar = false,maternity = false) }
-    }
-
-    private fun onAddScreenerClick() {
 
     }
 
-    private fun onMaternityClick() {
 
+    private fun onAddScreenerClick(related: RelatedPersonItem) {
+        findNavController().navigate(
+            NewBornFragmentDirections.navigateToChild(related.id)
+        )
     }
+
+    private fun recordFeeding() {
+        findNavController().navigate(
+            NewBornFragmentDirections.navigateToScreening(
+                args.patientId, "nn-e7.json", "Rapid Assessment"
+            )
+        )
+    }
+
+    private fun assessmentClick() {
+        findNavController().navigate(
+            NewBornFragmentDirections.navigateToScreening(
+                args.patientId, "nn-d2.json", "Rapid Assessment"
+            )
+        )
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.options_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -84,41 +112,13 @@ class NewBornFragment : Fragment() {
                 NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-            R.id.menu_new_born -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    NewBornFragmentDirections.navigateToScreening(
-                      //  args.patientId, "screener-questionnaire.json", "Rapid Assessment"
-                        args.patientId, "nn-d2.json", "Rapid Assessment"
-                    )
-                )
-                true
-            }
-            R.id.menu_assessment -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    NewBornFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-e7.json", "Rapid Assessment"
-                    )
-                )
-                true
-            }
+
             R.id.menu_prescribe -> {
                 Timber.e("Resource ID::: " + args.patientId)
 
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(
                         args.patientId, "nn-e4.json", "Prescribe Feeds"
-                    )
-                )
-                true
-            }
-            R.id.menu_relation -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                activity?.let { FhirApplication.setCurrent(it, newBorn=true, apgar = false,maternity = false) }
-                findNavController().navigate(
-                    NewBornFragmentDirections.navigateToScreening(
-                        args.patientId, "child.json", "Related Person"
                     )
                 )
                 true

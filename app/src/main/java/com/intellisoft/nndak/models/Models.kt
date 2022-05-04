@@ -65,3 +65,8 @@ data class ApGar(
     val message: String,
     val isSafe: Boolean
 )
+
+data class Steps(
+    val fistIn: String?,
+    val lastIn: String?
+)

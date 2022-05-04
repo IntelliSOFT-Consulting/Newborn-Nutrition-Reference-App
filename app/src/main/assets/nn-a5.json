@@ -735,8 +735,8 @@
           ]
         },
         {
+          "linkId": "Completer-Name",
           "type": "group",
-          "linkId": "1.0.0",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -757,8 +757,8 @@
           ]
         },
         {
+          "linkId": "Date-Of-Assessment",
           "type": "group",
-          "linkId": "1.0.0",
           "item": [
             {
               "linkId": "Assessment-Date",

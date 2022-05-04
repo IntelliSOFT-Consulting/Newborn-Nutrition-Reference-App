@@ -21,6 +21,8 @@ import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentArgs
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.screens.patients.PatientDetailsFragmentDirections
+import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
+import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -80,16 +82,12 @@ class ChildFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-        activity?.let {
-            FhirApplication.setCurrent(it, newBorn = false, apgar = false, maternity = false)
-        }
+
         binding.actionScore.setOnClickListener {
             activity?.let {
                 FhirApplication.setCurrent(
                     it,
-                    newBorn = false,
-                    apgar = true,
-                    maternity = false
+                    APGAR_SCORE
                 )
             }
             findNavController().navigate(
@@ -102,9 +100,7 @@ class ChildFragment : Fragment() {
             activity?.let {
                 FhirApplication.setCurrent(
                     it,
-                    newBorn = false,
-                    apgar = false,
-                    maternity = false
+                    ASSESS_CHILD
                 )
             }
             findNavController().navigate(

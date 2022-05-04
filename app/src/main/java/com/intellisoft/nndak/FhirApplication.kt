@@ -134,32 +134,15 @@ class FhirApplication : Application() {
             )
         }
 
-        fun setCurrent(context: Context, newBorn: Boolean, apgar: Boolean, maternity: Boolean) {
-            (context.applicationContext as FhirApplication).editor.putBoolean("NewBorn", newBorn)
-                .putBoolean("Apgar", apgar).putBoolean("Maternity", maternity).commit()
+        fun setCurrent(context: Context, state: String) {
+            (context.applicationContext as FhirApplication).editor.putString("State", state).commit()
         }
 
-        fun getNewBorn(context: Context): Boolean {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
-                "NewBorn",
-                false
-            )
+        fun getCurrent(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "State",""
+                ).toString()
         }
-
-        fun getApgar(context: Context): Boolean {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
-                "Apgar",
-                false
-            )
-        }
-
-        fun getMaternity(context: Context): Boolean {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
-                "Maternity",
-                false
-            )
-        }
-
 
     }
 }
