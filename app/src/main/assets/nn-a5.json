@@ -573,7 +573,6 @@
           ]
         },
         {
-
           "linkId": "Neonatal-Sepsis",
           "type": "group",
           "extension": [
@@ -760,22 +759,12 @@
         {
           "type": "group",
           "linkId": "1.0.0",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "AssessmentDate"
-              }
-            }
-          ],
           "item": [
             {
               "linkId": "Assessment-Date",
               "type": "date",
               "text": "Assessment Date",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueDate.value"
             }
           ]
         }

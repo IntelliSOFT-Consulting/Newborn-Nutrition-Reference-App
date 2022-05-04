@@ -514,7 +514,7 @@ class PatientDetailsViewModel(
         ): ObservationItem {
 //            val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
 
-            val observationCode = observation.code.codingFirstRep.code
+            val observationCode = observation.code.codingFirstRep.code ?: ""
 
 
             // Show nothing if no values available for datetime and value quantity.
@@ -525,12 +525,19 @@ class PatientDetailsViewModel(
                     resources.getText(R.string.message_no_datetime).toString()
                 }
             val value =
-                if (observation.hasValueQuantity()) {
-                    observation.valueQuantity.value.toString()
-                } else if (observation.hasValueCodeableConcept()) {
-                    observation.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
-                } else {
-                    observation.code.text ?: observation.code.codingFirstRep.display
+                when {
+                    observation.hasValueQuantity() -> {
+                        observation.valueQuantity.value.toString()
+                    }
+                    observation.hasValueCodeableConcept() -> {
+                        observation.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+                    }
+                    observation.hasNote() -> {
+                        observation.note.firstOrNull()?.author
+                    }
+                    else -> {
+                        observation.code.text ?: observation.code.codingFirstRep.display
+                    }
                 }
             val valueUnit =
                 if (observation.hasValueQuantity()) {

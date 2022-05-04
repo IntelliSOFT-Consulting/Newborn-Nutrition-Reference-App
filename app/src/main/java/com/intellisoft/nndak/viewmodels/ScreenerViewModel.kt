@@ -15,14 +15,15 @@ import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.screens.ScreenerFragment
-import java.math.BigDecimal
-import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
+import java.math.BigDecimal
+import java.util.*
+
 
 const val TAG = "ScreenerViewModel"
 
@@ -220,14 +221,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             if (relatedPerson.hasBirthDate() && relatedPerson.hasGender()
             ) {
-                Timber.d("Name ${relatedPerson.name[0].family}")
-                val subjectReference = Reference("Patient/$patientId")
-                relatedPerson.active = true
-                relatedPerson.id = generateUuid()
-                relatedPerson.linkFirstRep.other = subjectReference
-                fhirEngine.create(relatedPerson)
-                isResourcesSaved.value = true
-                return@launch
+                val birthDate = relatedPerson.birthDate.toString()
+                val todayDate = FormatHelper().getTodayDate()
+                val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
+
+                if (isDateValid) {
+                    val subjectReference = Reference("Patient/$patientId")
+                    relatedPerson.active = true
+                    relatedPerson.id = generateUuid()
+                    relatedPerson.linkFirstRep.other = subjectReference
+                    fhirEngine.create(relatedPerson)
+                    isResourcesSaved.value = true
+                    return@launch
+                } else {
+                    isResourcesSaved.value = false
+                }
 
             }
             isResourcesSaved.value = false
@@ -397,6 +405,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
+
                 }
 
 
