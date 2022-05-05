@@ -2,7 +2,6 @@ package com.intellisoft.nndak.helper_class
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
 import java.lang.Double.parseDouble
@@ -62,12 +61,13 @@ class FormatHelper {
 
     }
 
-    fun convertDate(valueDate: String): String {
+    fun convertDate(valueDate: String): Date {
 
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val currentDate = sdf.parse(valueDate)
         val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
-        return sdf1.format(currentDate)
+        val newDateStr = sdf1.format(currentDate)
+        return sdf1.parse(newDateStr)
     }
 
     fun checkDate(birthDate: String, d2: String): Boolean {

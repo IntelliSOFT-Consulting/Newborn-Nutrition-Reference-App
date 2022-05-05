@@ -6,7 +6,10 @@ import org.hl7.fhir.r4.model.Questionnaire
 
 class QuestionnaireHelper {
 
-    fun codingQuestionnaire(code: String, display: String, text: String): Observation {
+    fun codingQuestionnaire(code: String,
+                            display: String,
+                            text: String):
+            Observation {
         val observation = Observation()
         observation
             .code

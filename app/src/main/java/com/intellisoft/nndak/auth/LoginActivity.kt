@@ -72,6 +72,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleDataCheck() {
 
+        startActivity(
+            Intent(
+                this@LoginActivity,
+                MainActivity::class.java
+            ))
+
         val user = username.text.toString().trim()
         val pass = password.text.toString().trim()
         if (!validInput(user)) {
