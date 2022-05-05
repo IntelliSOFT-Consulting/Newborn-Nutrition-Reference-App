@@ -323,17 +323,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val item = common.getJSONObject(i)
                     val parent = item.getJSONArray("item")
-                    Timber.d("parent:::: $parent")
                     for (j in 0 until parent.length()) {
 
                         val itemChild = parent.getJSONObject(j)
                         val child = itemChild.getJSONArray("item")
-                        Timber.d("child:::: $child")
                         for (k in 0 until child.length()) {
 
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
-                            Timber.d("childChild:::: $childChild")
                             if (childChild == "Born-Where") {
 
                                 val childAnswer = inner.getJSONArray("answer")
