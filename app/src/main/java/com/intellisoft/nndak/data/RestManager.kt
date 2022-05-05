@@ -2,9 +2,9 @@ package com.intellisoft.nndak.data
 
 import android.content.Context
 import android.util.Log
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.api.AuthInterceptor
 import com.intellisoft.nndak.api.AuthService
-import com.intellisoft.nndak.utils.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,16 +17,21 @@ class RestManager {
     private lateinit var apiService: AuthService
 
     fun getService(context: Context): AuthService {
-
+        val base = FhirApplication.getServerURL(context)
+        Timber.e(base)
         // Initialize ApiService if not initialized yet
         if (!::apiService.isInitialized) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okhttpClient(context))
-                .build()
+            val retrofit = base?.let {
+                Retrofit.Builder()
+                    .baseUrl(it)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(okhttpClient(context))
+                    .build()
+            }
 
-            apiService = retrofit.create(AuthService::class.java)
+            if (retrofit != null) {
+                apiService = retrofit.create(AuthService::class.java)
+            }
         }
 
         return apiService
@@ -65,7 +70,7 @@ class RestManager {
         getService(context).loadUser().enqueue(
             object : Callback<UserResponse> {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
+                  //  Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -74,7 +79,7 @@ class RestManager {
                     call: Call<UserResponse>,
                     response: Response<UserResponse>
                 ) {
-                    Timber.e("onResponse " + response.headers())
+                 //   Timber.e("onResponse " + response.headers())
                     onResult(response.body())
                 }
             }

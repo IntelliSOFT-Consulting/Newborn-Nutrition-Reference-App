@@ -35,6 +35,7 @@ import com.intellisoft.nndak.viewmodels.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 class PatientListFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
@@ -63,33 +64,38 @@ class PatientListFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-
-        fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientListViewModel =
-            ViewModelProvider(
-                this,
-                PatientListViewModel.PatientListViewModelFactory(
-                    requireActivity().application,
-                    fhirEngine
+        try {
+            fhirEngine = FhirApplication.fhirEngine(requireContext())
+            patientListViewModel =
+                ViewModelProvider(
+                    this,
+                    PatientListViewModel.PatientListViewModelFactory(
+                        requireActivity().application,
+                        fhirEngine
+                    )
                 )
+                    .get(PatientListViewModel::class.java)
+            val recyclerView: RecyclerView = binding.patientListContainer.patientList
+            val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
+            recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
+
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(ColorDrawable(Color.LTGRAY))
+                }
             )
-                .get(PatientListViewModel::class.java)
-        val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(
-
-            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ColorDrawable(Color.LTGRAY))
+            patientListViewModel.liveSearchedPatients.observe(
+                viewLifecycleOwner
+            ) {
+                Timber.d("Submitting " + it.count() + " patient records")
+                adapter.submitList(it)
             }
-        )
 
-        patientListViewModel.liveSearchedPatients.observe(
-            viewLifecycleOwner
-        ) {
-            Log.d("PatientListActivity", "Submitting ${it.count()} patient records")
-            adapter.submitList(it)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
+
 
         patientListViewModel.patientCount.observe(
             viewLifecycleOwner
@@ -172,7 +178,7 @@ class PatientListFragment : Fragment() {
             if (args.step == "0") {
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToMaternity(
-                        patientItem.resourceId
+                        patientItem.resourceId,"0"
                     )
                 )
             }
@@ -187,7 +193,7 @@ class PatientListFragment : Fragment() {
             if (args.step == "2") {
 
                 findNavController().navigate(
-                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId)
+                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId,"1")
                 )
 
             }
@@ -198,7 +204,6 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "4") {
 
-                Timber.e("Resource ID::: " + patientItem.resourceId)
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
@@ -207,7 +212,6 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "5") {
 
-                // screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToDhm(
                         patientItem.resourceId
@@ -215,7 +219,6 @@ class PatientListFragment : Fragment() {
                 )
             }
             if (args.step == "6") {
-                // screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToAssessment(
                         patientItem.resourceId
@@ -228,7 +231,6 @@ class PatientListFragment : Fragment() {
 
     private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
 
-        Timber.e("Resource ID::: " + patientItem.resourceId)
         findNavController().navigate(
             PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
                 patientItem.resourceId, asset, title

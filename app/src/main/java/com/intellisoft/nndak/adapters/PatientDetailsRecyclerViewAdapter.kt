@@ -2,7 +2,6 @@ package com.intellisoft.nndak.adapters
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +49,7 @@ class PatientDetailsRecyclerViewAdapter(
                         false
                     )
                 )
+
             ViewTypes.OBSERVATION ->
                 PatientDetailsObservationItemViewHolder(
                     PatientListItemViewBinding.inflate(
@@ -99,8 +99,6 @@ class PatientDetailsRecyclerViewAdapter(
             }
         }.ordinal
     }
-
-
 }
 
 abstract class PatientDetailItemViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -127,7 +125,10 @@ class PatientOverviewItemViewHolder(
     }
 }
 
-class PatientPropertyItemViewHolder(private val binding: PatientListItemViewBinding) :
+class PatientPropertyItemViewHolder(
+    private val binding: PatientListItemViewBinding,
+
+    ) :
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailProperty).let {
@@ -147,6 +148,7 @@ class PatientDetailsHeaderItemViewHolder(private val binding: PatientDetailsCard
     }
 }
 
+
 class PatientDetailsObservationItemViewHolder(private val binding: PatientListItemViewBinding) :
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
@@ -157,17 +159,16 @@ class PatientDetailsObservationItemViewHolder(private val binding: PatientListIt
             val title = it.observation.code
             val value = it.observation.value
 
+            /*    val dbObservation = formatHelper.fhirObservations(title, value)
+                val dbTitle = dbObservation.title
+                val dbValue = dbObservation.value
 
-            val dbObservation = formatHelper.fhirObservations(title, value)
-            val dbTitle = dbObservation.title
-            val dbValue = dbObservation.value
+                Log.e("************", "***************")
+                Log.e("------1", dbTitle)
+                Log.e("------2", dbValue)*/
 
-            Log.e("************", "***************")
-            Log.e("------1", dbTitle)
-            Log.e("------2", dbValue)
-
-            binding.name.text = dbTitle
-            binding.fieldName.text = dbValue
+            binding.name.text = title
+            binding.fieldName.text = value
 
         }
         binding.status.visibility = View.GONE

@@ -2,7 +2,7 @@ package com.intellisoft.nndak.logic
 
 class Logics {
 
-     companion object {
+    companion object {
         const val ASTHMA = "161527007"
         const val LUNG_DISEASE = "13645005"
         const val DEPRESSION = "35489007"
@@ -28,6 +28,6 @@ class Logics {
                 HEART_DISEASE,
                 HIGH_BLOOD_LIPIDS
             )
-         val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
+        val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
     }
 }

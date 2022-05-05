@@ -19,7 +19,7 @@
   ],
   "item": [
     {
-      "text": "",
+      "text": "Mother's Medical Condition",
       "linkId": "2.0.0",
       "type": "group",
       "extension": [
@@ -77,14 +77,14 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Corticosteroids: Yes",
+                    "code": "Antenatal Corticosteroids",
                     "display": "Yes",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Corticosteroids: No",
+                    "code": "Antenatal Corticosteroids",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
@@ -96,7 +96,7 @@
         {
           "linkId": "2.2.0",
           "type": "group",
-          "required": true,
+          "text": "Baby’s medical condition",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -132,13 +132,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "KMCY",
+                    "code": " Baby on KMC",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "KMCN",
+                    "code": " Baby on KMC",
                     "display": "No"
                   }
                 }
@@ -185,13 +185,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "CPAPY",
+                    "code": " Baby on CPAP",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "CPAPN",
+                    "code": " Baby on CPAP",
                     "display": "No"
                   }
                 }
@@ -238,66 +238,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "CHXY",
+                    "code": "CHX Used",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "CHXN",
-                    "display": "No"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "2.3.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "unwell"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "2.3.1",
-              "text": "Has CHX Ever been used?",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "CHXY",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "CHXN",
+                    "code": "CHX Used",
                     "display": "No"
                   }
                 }
@@ -344,13 +291,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "On Oxygen Yes",
+                    "code": "Baby on Oxygen",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "On Oxygen No",
+                    "code": "Baby on Oxygen",
                     "display": "No"
                   }
                 }
@@ -397,66 +344,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Resuscitated Yes",
+                    "code": "Resuscitated at Birth",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Resuscitated No",
-                    "display": "No"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "2.3.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "unwell"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "2.3.1",
-              "text": "Was baby Resuscitated at Birth?",
-              "type": "choice",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Resuscitated Yes",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Resuscitated No",
+                    "code": "Resuscitated at Birth",
                     "display": "No"
                   }
                 }
@@ -503,13 +397,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "Antibiotics Yes",
+                    "code": "Antibiotics Given",
                     "display": "Yes"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "Antibiotics No",
+                    "code": "Antibiotics Given",
                     "display": "No"
                   }
                 }

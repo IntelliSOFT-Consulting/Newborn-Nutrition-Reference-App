@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.dashboard
+package com.intellisoft.nndak.screens.dashboard
 
 import android.graphics.Bitmap
 import android.os.Build

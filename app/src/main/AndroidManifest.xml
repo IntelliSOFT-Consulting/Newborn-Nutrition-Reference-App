@@ -14,7 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".auth.SetupActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screens.profile.ProfileActivity"
             android:exported="false"
@@ -37,11 +41,11 @@
             android:name=".auth.SplashActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+              <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
         </activity>
         <activity
             android:name=".auth.LoginActivity"
@@ -53,12 +57,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
 
-        <!--     <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+         <!--   <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
     </application>
 

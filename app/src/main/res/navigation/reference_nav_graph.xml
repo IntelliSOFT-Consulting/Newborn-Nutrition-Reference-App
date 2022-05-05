@@ -71,6 +71,9 @@
             android:name="title"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/navigate_to_self"
+            app:destination="@id/screenerEncounterFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPatientFragment"
@@ -83,6 +86,7 @@
         android:name="com.intellisoft.nndak.screens.patients.EditPatientFragment"
         android:label="Edit Patient"
         tools:layout="@layout/add_patient_fragment">
+
         <argument
             android:name="patient_id"
             app:argType="string" />
@@ -90,7 +94,7 @@
 
     <fragment
         android:id="@+id/dashboard"
-        android:name="com.intellisoft.nndak.dashboard.DashboardFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard">
         <action
@@ -108,6 +112,12 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_child"
+            app:destination="@id/childFragment" />
     </fragment>
     <fragment
         android:id="@+id/newBornFragment"
@@ -120,6 +130,12 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_child"
+            app:destination="@id/childFragment" />
     </fragment>
     <fragment
         android:id="@+id/postNatalFragment"
@@ -153,6 +169,36 @@
         <action
             android:id="@+id/navigate_to_screening"
             app:destination="@id/screenerEncounterFragment" />
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/childFragment"
+        android:name="com.intellisoft.nndak.screens.children.ChildFragment"
+        android:label="fragment_child"
+        tools:layout="@layout/fragment_child">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_screening"
+            app:destination="@id/screenerEncounterFragment" />
+
+        <action
+            android:id="@+id/navigate_to_edit_patient"
+            app:destination="@id/editChildFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editChildFragment"
+        android:name="com.intellisoft.nndak.screens.children.EditChildFragment"
+        android:label="EditChildFragment">
         <argument
             android:name="patient_id"
             app:argType="string" />

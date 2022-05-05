@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.models
 
+import android.content.res.Resources
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
 
 data class PatientItem(
@@ -15,11 +16,24 @@ data class PatientItem(
     val html: String,
     var risk: String? = "",
     var riskItem: RiskAssessmentItem? = null,
-    var state: String
+    var state: String,
+    var district: String,
+    var region: String
 ) {
     override fun toString(): String = name
 
 
+}
+
+
+data class RelatedPersonItem(
+    val id: String,
+    val name: String,
+    val gender: String,
+    val dob: String,
+    var riskItem: RiskAssessmentItem? = null,
+) {
+    override fun toString(): String = name
 }
 
 
@@ -40,7 +54,19 @@ data class ConditionItem(
 ) {
     override fun toString(): String = code
 }
+
 data class DbObservations(
     val value: String,
-    val title:String
+    val title: String
+)
+
+data class ApGar(
+    val score: String,
+    val message: String,
+    val isSafe: Boolean
+)
+
+data class Steps(
+    val fistIn: String?,
+    val lastIn: String?
 )

@@ -3,9 +3,6 @@ package com.intellisoft.nndak
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -20,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.fhir.sync.State
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
-import com.intellisoft.nndak.dashboard.DashboardFragment
+import com.intellisoft.nndak.screens.dashboard.DashboardFragment
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.screens.profile.ProfileActivity

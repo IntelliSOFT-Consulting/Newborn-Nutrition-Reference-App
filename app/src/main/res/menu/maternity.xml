@@ -7,4 +7,10 @@
         android:icon="@drawable/baseline_edit_24"
         android:title="@string/menu_maternity"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_new_born"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/menu_new"
+        app:showAsAction="never" />
+
 </menu>

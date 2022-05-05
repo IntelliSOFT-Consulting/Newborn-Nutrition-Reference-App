@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.*
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
@@ -15,6 +17,7 @@ import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
 import com.intellisoft.nndak.utils.*
+import org.hl7.fhir.r4.model.Flag
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -45,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
         hideProgress(progressBar, binding.btnSubmit)
 
         binding.btnSubmit.setOnClickListener {
+
             handleDataCheck()
         }
         binding.forgotPass.setOnClickListener {
@@ -67,6 +71,12 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun handleDataCheck() {
+
+        startActivity(
+            Intent(
+                this@LoginActivity,
+                MainActivity::class.java
+            ))
 
         val user = username.text.toString().trim()
         val pass = password.text.toString().trim()
@@ -98,8 +108,19 @@ class LoginActivity : AppCompatActivity() {
             hideProgress(progressBar, binding.btnSubmit)
 
             if (it != null) {
-                Timber.d("Success $it")
-                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                val message = it.message
+                val alertDialog: AlertDialog =
+                    this.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.apply {
+                            setTitle("Success")
+                            setMessage(message)
+                            setPositiveButton(getString(android.R.string.yes)) { _, _ ->
+                            }
+                        }
+                        builder.create()
+                    }
+                alertDialog.show()
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()
@@ -119,11 +140,15 @@ class LoginActivity : AppCompatActivity() {
             hideProgress(progressBar, binding.btnSubmit)
 
             if (it != null) {
-                Timber.d("Success $it")
                 FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                startActivity(
+                    Intent(
+                        this@LoginActivity,
+                        MainActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()

@@ -1,11 +1,74 @@
 package com.intellisoft.nndak.helper_class
 
+import android.content.Context
+import android.os.Build
+import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
+
 class FormatHelper {
+
+    fun getCalculations(dateStr: String): String {
+
+        val tripleData = getDateDetails(dateStr)
+        val month = tripleData.second.toString().toInt()
+        var year = tripleData.third.toString().toInt()
+
+        val cal = Calendar.getInstance()
+        val sdf = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+        val date = sdf.parse(dateStr)
+        cal.time = date
+
+        if (month > 3) {
+            cal.add(Calendar.YEAR, 1)
+        }
+
+        cal.add(Calendar.MONTH, -3)
+        cal.add(Calendar.DATE, 7)
+
+        if (month < 4) {
+            cal.add(Calendar.YEAR, 1)
+        }
+
+        val sdf1 = SimpleDateFormat("dd-MMM-yyyy")
+
+        val newDate = cal.time
+
+        return sdf1.format(newDate)
+
+
+    }
+
+    private fun getDateDetails(dateStr:String):Triple<Int?, Int?, Int?> {
+
+        val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+        } else {
+            return Triple(null, null, null)
+        }
+        val date = LocalDate.parse(dateStr, formatter)
+
+        val day = date.dayOfMonth
+        val month = date.monthValue
+        val year = date.year
+
+        return Triple(day, month, year)
+
+    }
+
+    fun convertDate(valueDate: String): Date {
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val currentDate = sdf.parse(valueDate)
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        val newDateStr = sdf1.format(currentDate)
+        return sdf1.parse(newDateStr)
+    }
 
     fun checkDate(birthDate: String, d2: String): Boolean {
 
@@ -98,5 +161,27 @@ class FormatHelper {
 
     }
 
+    fun saveSharedPreference(
+        context: Context,
+        sharedKey: String,
+        sharedValue: String){
+
+        val appName = context.getString(R.string.app_name)
+        val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(sharedKey, sharedValue)
+        editor.apply()
+    }
+
+    fun retrieveSharedPreference(
+        context: Context,
+        sharedKey: String): String? {
+
+        val appName = context.getString(R.string.app_name)
+
+        val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(sharedKey, null)
+
+    }
 
 }

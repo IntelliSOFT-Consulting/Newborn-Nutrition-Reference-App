@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard.DashboardFragment">
+    tools:context=".screens.dashboard.DashboardFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,8 +78,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside">
 
+
             <RelativeLayout
-                android:id="@+id/rlt_assessment"
+                android:id="@+id/rlt_all_patients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -87,7 +88,7 @@
                 android:focusable="true">
 
                 <ImageView
-                    android:id="@+id/newBornButton"
+                    android:id="@+id/allPatientsButton"
                     android:layout_width="@dimen/dashboard_icon_height_width"
                     android:layout_height="@dimen/dashboard_icon_height_width"
                     android:layout_alignParentTop="true"
@@ -96,22 +97,20 @@
                     android:layout_marginTop="@dimen/dashboard_icon_margin"
                     android:layout_marginEnd="@dimen/dashboard_icon_margin"
                     android:layout_marginBottom="@dimen/dashboard_icon_margin"
-                    android:contentDescription="@string/dashboard_newborn_icon_label"
-                    android:src="@drawable/behavior"
+                    android:contentDescription="@string/action_patient_list"
+                    android:src="@drawable/list"
                     app:tint="@color/colorPrimary" />
 
                 <TextView
-                    android:id="@+id/activeVisitsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/newBornButton"
+                    android:layout_below="@id/allPatientsButton"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dashboard_text_top_margin"
                     android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                    android:text="@string/dashboard_newborn_icon_label" />
+                    android:text="@string/action_patient_list" />
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
 
 
@@ -225,8 +224,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerPatientCardView">
 
+
             <RelativeLayout
-                android:id="@+id/rlt_all_patients"
+                android:id="@+id/rlt_assessment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
@@ -234,7 +234,7 @@
                 android:focusable="true">
 
                 <ImageView
-                    android:id="@+id/allPatientsButton"
+                    android:id="@+id/newBornButton"
                     android:layout_width="@dimen/dashboard_icon_height_width"
                     android:layout_height="@dimen/dashboard_icon_height_width"
                     android:layout_alignParentTop="true"
@@ -243,21 +243,21 @@
                     android:layout_marginTop="@dimen/dashboard_icon_margin"
                     android:layout_marginEnd="@dimen/dashboard_icon_margin"
                     android:layout_marginBottom="@dimen/dashboard_icon_margin"
-                    android:contentDescription="@string/action_patient_list"
-                    android:src="@drawable/list"
+                    android:contentDescription="@string/dashboard_newborn_icon_label"
+                    android:src="@drawable/behavior"
                     app:tint="@color/colorPrimary" />
 
                 <TextView
+                    android:id="@+id/activeVisitsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/allPatientsButton"
+                    android:layout_below="@id/newBornButton"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dashboard_text_top_margin"
                     android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                    android:text="@string/action_patient_list" />
+                    android:text="@string/dashboard_newborn_icon_label" />
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView

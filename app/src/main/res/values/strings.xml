@@ -133,5 +133,21 @@
     <string name="menu_dhm_reception">Receive DHM</string>
     <string name="menu_assess">Assess</string>
     <string name="menu_maternity">Record Details</string>
+    <string name="action_configure">Configuration</string>
+    <string name="action_server_url">Server Url</string>
+    <string name="enter_server_url">Enter Server URL</string>
+    <string name="enter_valid_server_url">Enter Valid Server Url</string>
+    <string name="action_server_url_demo">Demo Fhir URL</string>
+    <string name="menu_relation">Relation</string>
+    <string name="header_relation">Child/Children</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="menu_apgar_score">"Apgar "</string>
+    <string name="menu_new">New Born</string>
+    <string name="action_score">Apgar Score</string>
+    <string name="action_assess">Assessment</string>
+    <string name="edit_child">Edit Child</string>
+    <string name="action_additional">Complete</string>
+    <string name="action_rapid">Rapid Assessment</string>
+    <string name="action_new_admission">Admission</string>
 
 </resources>

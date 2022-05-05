@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.screens.maternity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,12 +20,17 @@ import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
 import com.intellisoft.nndak.databinding.FragmentNewBornBinding
+import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.screens.ScreenerFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
+import com.intellisoft.nndak.utils.Constants.MATERNITY
+import com.intellisoft.nndak.utils.Constants.NEWBORN
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -44,6 +50,7 @@ class MaternityFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: MaternityFragmentArgs by navArgs()
+    private lateinit var unit: String
     private var _binding: FragmentMaternityBinding? = null
     private val binding
         get() = _binding!!
@@ -62,6 +69,7 @@ class MaternityFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fhirEngine = FhirApplication.fhirEngine(requireContext())
@@ -75,27 +83,64 @@ class MaternityFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+
+        val steps = Steps(fistIn = "Record Maternity", lastIn = "New Born")
+        unit = "Maternity Unit"
+        val adapter =
+            MaternityDetails(
+                this::onAddScreenerClick,
+                this::newBorn,
+                this::maternityClick,
+                steps,
+                true
+            )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Maternity Unit"
+            title = unit
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getMaternityDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
-    }
-
-    private fun onAddScreenerClick() {
 
     }
 
-    private fun onMaternityClick() {
+    private fun onAddScreenerClick(related: RelatedPersonItem) {
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToChild(related.id, args.code, unit)
+        )
+    }
 
+    private fun newBorn() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                NEWBORN
+            )
+        }
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToScreening(
+                args.patientId, "child.json", "Maternity Unit"
+            )
+        )
+    }
+
+    private fun maternityClick() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                MATERNITY
+            )
+        }
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToScreening(
+                args.patientId, "maternity-registration.json", "Maternity Unit"
+            )
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.maternity, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -104,15 +149,7 @@ class MaternityFragment : Fragment() {
                 NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-            R.id.menu_maternity -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    MaternityFragmentDirections.navigateToScreening(
-                        args.patientId, "maternity-registration.json", "Maternity Unit"
-                    )
-                )
-                true
-            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

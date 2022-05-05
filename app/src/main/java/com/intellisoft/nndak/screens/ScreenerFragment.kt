@@ -18,10 +18,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
+import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
+import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
+import com.intellisoft.nndak.utils.Constants.MATERNITY
+import com.intellisoft.nndak.utils.Constants.NEWBORN
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import com.intellisoft.nndak.viewmodels.TAG
+import timber.log.Timber
 
 /** A fragment class to show screener questionnaire screen. */
 class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
@@ -88,10 +96,38 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        viewModel.saveScreenerEncounter(
-            questionnaireFragment.getQuestionnaireResponse(),
-            args.patientId
-        )
+        when (activity?.let { FhirApplication.getCurrent(it) }) {
+            NEWBORN -> {
+                viewModel.saveRelatedPerson(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            APGAR_SCORE -> {
+                viewModel.saveApgar(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            MATERNITY -> {
+                viewModel.saveMaternity(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            ASSESS_CHILD -> {
+                viewModel.saveChildAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            else -> {
+                viewModel.saveScreenerEncounter(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+        }
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
@@ -127,9 +163,30 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                     .show()
                 return@observe
             }
+
             Toast.makeText(
                 requireContext(),
                 getString(R.string.resources_saved),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            NavHostFragment.findNavController(this).navigateUp()
+        }
+
+        /***
+         * Listen for APGAR SCORE
+         * ***/
+        viewModel.apgarScore.observe(viewLifecycleOwner) {
+            if (it.score.isEmpty()) {
+                Toast.makeText(
+                    requireContext(), it.message,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                return@observe
+            }
+            Toast.makeText(
+                requireContext(), it?.message,
                 Toast.LENGTH_SHORT
             )
                 .show()

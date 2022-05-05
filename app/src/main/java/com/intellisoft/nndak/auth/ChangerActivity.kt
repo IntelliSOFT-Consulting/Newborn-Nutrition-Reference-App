@@ -34,7 +34,7 @@ class ChangerActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.screen_encounter_fragment_menu, menu)
+        menuInflater.inflate(R.menu.hidden_menu, menu)
         return true
     }
 
