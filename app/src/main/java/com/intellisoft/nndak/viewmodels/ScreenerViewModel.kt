@@ -329,44 +329,79 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val itemChild = parent.getJSONObject(j)
                         val child = itemChild.getJSONArray("item")
                         Timber.d("child:::: $child")
+                        for (k in 0 until child.length()) {
+
+                            val inner = child.getJSONObject(k)
+                            val childChild = inner.getString("linkId")
+                            Timber.d("childChild:::: $childChild")
+                            if (childChild == "Born-Where") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                val qh = QuestionnaireHelper()
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Born Where",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Admission-Reason") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                val qh = QuestionnaireHelper()
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Admission Reason",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Completed-By") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                val qh = QuestionnaireHelper()
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Completed By",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Assessment-Date") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+                                val qh = QuestionnaireHelper()
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Assessment Date",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                        }
                     }
                 }
 
-                /**
-                 * Skip the 1st item
-                 * **/
-                /*  for (i in 1 until common.length()) {
-
-                      val child = common.getJSONObject(i)
-                      val childItem = child.getJSONArray("item")
-
-                      for (j in 0 until childItem.length()) {
-
-                          val answer = childItem.getJSONObject(j)
-                          val childAnswer = answer.getJSONArray("answer")
-                          val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
-                          val finalAnswer = JSONObject(valueCoding)
-                          val display = finalAnswer.getString("display")
-
-                      }
-                  }
-  */
                 if (isRequiredFieldMissing(bundle)) {
                     isResourcesSaved.value = false
                     return@launch
                 }
-
-
-                /*    val qh = QuestionnaireHelper()
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Apgar Score",
-                                total.toString(),
-                                total.toString()
-                            )
-                        )
-                        .request.url = "Observation"*/
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
