@@ -27,6 +27,7 @@ import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
 import com.intellisoft.nndak.utils.Constants.MATERNITY
 import com.intellisoft.nndak.utils.Constants.NEWBORN
+import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import com.intellisoft.nndak.viewmodels.TAG
 import timber.log.Timber
@@ -116,6 +117,12 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 )
             }
             ASSESS_CHILD -> {
+                viewModel.saveChildAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            NEWBORN_ADMISSION -> {
                 viewModel.saveChildAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId

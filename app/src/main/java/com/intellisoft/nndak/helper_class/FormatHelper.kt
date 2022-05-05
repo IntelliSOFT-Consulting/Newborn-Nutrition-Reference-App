@@ -44,7 +44,7 @@ class FormatHelper {
 
     }
 
-    private fun getDateDetails(dateStr:String):Triple<Int?, Int?, Int?> {
+    private fun getDateDetails(dateStr: String): Triple<Int?, Int?, Int?> {
 
         val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
@@ -89,6 +89,8 @@ class FormatHelper {
         return true
 
     }
+
+
 
     fun getTodayDate(): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
@@ -137,7 +139,7 @@ class FormatHelper {
         } else if (value == "Elective" || value == "Emergency") {
             title = "Reason for CS"
 
-        } else if (value == "Other" ) {
+        } else if (value == "Other") {
             title = "Multiple Pregnancy"
 
         } else if (value == "Twins" || value == "Triplets" || value == "Quadruplets"
@@ -164,7 +166,8 @@ class FormatHelper {
     fun saveSharedPreference(
         context: Context,
         sharedKey: String,
-        sharedValue: String){
+        sharedValue: String
+    ) {
 
         val appName = context.getString(R.string.app_name)
         val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
@@ -175,7 +178,8 @@ class FormatHelper {
 
     fun retrieveSharedPreference(
         context: Context,
-        sharedKey: String): String? {
+        sharedKey: String
+    ): String? {
 
         val appName = context.getString(R.string.app_name)
 

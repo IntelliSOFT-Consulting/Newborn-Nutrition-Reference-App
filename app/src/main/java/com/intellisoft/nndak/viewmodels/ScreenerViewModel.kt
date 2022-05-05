@@ -74,21 +74,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
 
-    private suspend fun getEDD
-                (itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>):String{
+    private suspend fun getEDD(itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>): String {
 
         val formatHelper = FormatHelper()
 
         var edd: Date? = null
         var eddString = ""
 
-        for(mainItem in itemsList1){
+        for (mainItem in itemsList1) {
 
             val mainLinkId = mainItem.linkId
             val subItemList = mainItem.item
-            if (mainLinkId == "2.0.0"){
+            if (mainLinkId == "2.0.0") {
 
-                for (subItem in subItemList){
+                for (subItem in subItemList) {
 
                     val subItemLinkId = subItem.linkId
                     val subSubItemList = subItem.item
@@ -96,18 +95,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val job = Job()
 
                     CoroutineScope(Dispatchers.IO + job).launch {
-                        if (subItemLinkId == "2.1.2"){
+                        if (subItemLinkId == "2.1.2") {
 
-                            for (subSubItem in subSubItemList){
+                            for (subSubItem in subSubItemList) {
 
                                 val pregnancyDetailsList = subSubItem.item
 
-                                for (pregnancyDetails in pregnancyDetailsList){
+                                for (pregnancyDetails in pregnancyDetailsList) {
 
                                     val menstrualAnswerList = pregnancyDetails.answer
                                     val linkId = pregnancyDetails.linkId
 
-                                    for (pregnancyDetailsItem in menstrualAnswerList){
+                                    for (pregnancyDetailsItem in menstrualAnswerList) {
                                         val lmp = pregnancyDetailsItem.value.dateTimeValue().value
                                         val eddStr = formatHelper.getCalculations(lmp.toString())
 //                                        edd = formatHelper.convertDate(eddStr)
@@ -286,7 +285,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val context = FhirContext.forR4()
-
+            val qh = QuestionnaireHelper()
 
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
@@ -305,11 +304,38 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
+                            if (childChild == "Time-Seen") {
+                                val childAnswer = inner.getJSONArray("item")
+                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+                                val value = ans.getJSONObject(0).getString("valueDateTime")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time Baby Seen",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+
+                            }
                             if (childChild == "Born-Where") {
 
                                 val childAnswer = inner.getJSONArray("answer")
                                 val value = childAnswer.getJSONObject(0).getString("valueString")
-                                val qh = QuestionnaireHelper()
+
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -324,7 +350,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 val childAnswer = inner.getJSONArray("answer")
                                 val value = childAnswer.getJSONObject(0).getString("valueString")
-                                val qh = QuestionnaireHelper()
+
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -339,7 +365,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 val childAnswer = inner.getJSONArray("answer")
                                 val value = childAnswer.getJSONObject(0).getString("valueString")
-                                val qh = QuestionnaireHelper()
+
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -354,7 +380,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 val childAnswer = inner.getJSONArray("answer")
                                 val value = childAnswer.getJSONObject(0).getString("valueDate")
-                                val qh = QuestionnaireHelper()
+
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(

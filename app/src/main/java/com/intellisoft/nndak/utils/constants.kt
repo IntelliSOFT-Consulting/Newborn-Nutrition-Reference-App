@@ -27,7 +27,7 @@ object Constants {
     const val NEWBORN = "1"
     const val APGAR_SCORE = "2"
     const val ASSESS_CHILD = "3"
-    const val CHILD_RAPID_ASSESSMENT = "4"
+    const val FEEDING_NEEDS = "4"
     const val NEWBORN_ADMISSION = "5"
     const val HMB = "6"
 

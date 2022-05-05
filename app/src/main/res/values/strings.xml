@@ -149,5 +149,6 @@
     <string name="action_additional">Complete</string>
     <string name="action_rapid">Rapid Assessment</string>
     <string name="action_new_admission">Admission</string>
+    <string name="action_feeding_needs">Feeding Needs</string>
 
 </resources>

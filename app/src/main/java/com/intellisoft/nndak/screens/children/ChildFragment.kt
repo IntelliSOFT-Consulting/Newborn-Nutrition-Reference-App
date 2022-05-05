@@ -2,7 +2,6 @@ package com.intellisoft.nndak.screens.children
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -14,16 +13,10 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ChildDetails
-import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.databinding.FragmentChildBinding
-import com.intellisoft.nndak.databinding.FragmentMaternityBinding
-import com.intellisoft.nndak.models.RelatedPersonItem
-import com.intellisoft.nndak.screens.maternity.MaternityFragmentArgs
-import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
-import com.intellisoft.nndak.screens.patients.PatientDetailsFragmentDirections
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
-import com.intellisoft.nndak.utils.Constants.CHILD_RAPID_ASSESSMENT
+import com.intellisoft.nndak.utils.Constants.FEEDING_NEEDS
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -149,12 +142,12 @@ class ChildFragment : Fragment() {
                 activity?.let {
                     FhirApplication.setCurrent(
                         it,
-                        CHILD_RAPID_ASSESSMENT
+                        FEEDING_NEEDS
                     )
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-d2.json", "Rapid Assessment"
+                        args.patientId, "nn-e2.json", "Feeding Needs"
                     )
                 )
             }
@@ -172,7 +165,7 @@ class ChildFragment : Fragment() {
                 binding.actionAssess.text = getString(R.string.action_additional)
             }
             "1" -> {
-                binding.actionScore.text = getString(R.string.action_rapid)
+                binding.actionScore.text = getString(R.string.action_feeding_needs)
                 binding.actionAssess.text = getString(R.string.action_new_admission)
             }
             else -> {
