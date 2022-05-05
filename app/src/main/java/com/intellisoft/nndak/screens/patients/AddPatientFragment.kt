@@ -119,7 +119,8 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
             if (!TextUtils.isEmpty(nationalId)){
 
                 val natID = DbMotherKey.NATIONALID.name
-                formatHelper.saveSharedPreference(requireContext(), natID, nationalId)
+                formatHelper.saveSharedPreference(requireContext(),
+                    natID, nationalId)
 
                 Toast.makeText(requireContext(), "ID Number has been captured. Please proceed with the other fields.", Toast.LENGTH_SHORT).show()
 

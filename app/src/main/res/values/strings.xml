@@ -148,4 +148,13 @@
     <string name="edit_child">Edit Child</string>
     <string name="action_additional">Complete</string>
 
+    <string name="spinner">Q39</string>
+    <string-array name="birds">
+        <item>Filter By:</item>
+        <item>Patient Name</item>
+        <item>National Id</item>
+        <item>Phone Number</item>
+        <item>Mother DoB</item>
+    </string-array>
+
 </resources>
