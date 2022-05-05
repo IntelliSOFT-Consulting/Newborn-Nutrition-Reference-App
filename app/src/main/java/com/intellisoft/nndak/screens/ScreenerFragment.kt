@@ -16,12 +16,18 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
-import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
-import com.intellisoft.nndak.viewmodels.TAG
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.QuestionnaireResponse
+import java.util.*
+import kotlin.collections.ArrayList
 
 /** A fragment class to show screener questionnaire screen. */
 class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
@@ -88,11 +94,16 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
+
+
+
         viewModel.saveScreenerEncounter(
             questionnaireFragment.getQuestionnaireResponse(),
-            args.patientId
-        )
+            args.patientId)
+
     }
+
+
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
         val alertDialog: AlertDialog? =

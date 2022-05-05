@@ -1,27 +1,33 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.screens.ScreenerFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import java.math.BigDecimal
-import java.util.UUID
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 const val TAG = "ScreenerViewModel"
 
@@ -45,104 +51,37 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResource,
                     questionnaireResponse
                 )
+
+            val itemsList1 = questionnaireResponse.item
+            val edd = getEDD(itemsList1)
+
             val context = FhirContext.forR4()
 
+            Log.e("------ ", "-------")
+            println(edd)
 
-            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            val subjectReference = Reference("Patient/$patientId")
+            val encounterId = generateUuid()
 
-
-
-            val json = JSONObject(questionnaire)
-            val itemJsonArray = json.getJSONArray("item")
-            for(i in 0 until itemJsonArray.length()){
-
-                val item = itemJsonArray.getJSONObject(i)
-                var jsonObject = JSONObject()
-
-                val jsonArrayItem = item.getJSONArray("item")
-                for (j in 0 until jsonArrayItem.length()){
-
-                    val jsonObjectItem = jsonArrayItem.getJSONObject(j)
-
-                    val linkIdPeriods = jsonObjectItem.getString("linkId")
-
-                    if (linkIdPeriods == "2.1.2"){
-
-                        val jsonArrayItem2 = jsonObjectItem.getJSONArray("item")
-
-                        for (k in 0 until jsonArrayItem2.length()){
-
-                            val jsonObjectItem3 = jsonArrayItem2.getJSONObject(k)
-                            val jsonArrayItem3 = jsonObjectItem3.getJSONArray("item")
-
-                            for (l in 0 until jsonArrayItem3.length()){
-
-                                val jsonObjectItem4 = jsonArrayItem3.getJSONObject(l)
-                                val linkIdPeriods1 = jsonObjectItem4.getString("linkId")
-
-                                if (linkIdPeriods1 == "menstrualPeriod"){
-
-                                    val jsonArrayPeriods = jsonObjectItem4.getJSONArray("answer")
-
-                                    for (m in 0 until jsonArrayPeriods.length()){
-
-                                        val jsonObjectItemPeriods = jsonArrayPeriods.getJSONObject(m)
-                                        val valueDate = jsonObjectItemPeriods.getString("valueDate")
-
-                                        //Check if the date is valid
-                                        val todayDate = FormatHelper().getTodayDate()
-                                        val formattedDate =FormatHelper().convertDate(valueDate)
-
-                                        val isDateValid = FormatHelper().checkDate(formattedDate, todayDate)
-                                        if (isDateValid){
-
-                                            //Get the calculations
-
-                                            val edd = FormatHelper().getCalculations(formattedDate)
-
-                                            val dbAnswer = DbAnswer(edd)
-                                            val dbAnswerList = ArrayList<DbAnswer>()
-                                            dbAnswerList.add(dbAnswer)
-
-                                            val dbValueDate = DbValueDate("2.1.3", dbAnswerList)
-                                            val dbValueDateList = ArrayList<DbValueDate>()
-                                            dbValueDateList.add(dbValueDate)
-
-                                            val dbItem = DbItem("1.1.0", dbValueDateList)
-                                            val dbItemList = ArrayList<DbItem>()
-                                            dbItemList.add(dbItem)
-
-                                            val eddJson =  DbQuestionnaireData("expectedDateDelivery", dbItemList)
-                                            val outputJson = Gson().toJson(eddJson)
-                                            jsonObject = JSONObject(outputJson)
-                                            jsonArrayItem.put(jsonObject)
-
-                                        }else{
-                                            //Send error message that date is beyond today
-
-                                        }
-
-
-                                    }
-
-                                }
-
-
-                            }
-
-
-                        }
-
-                    }
-
-
-                }
-
-
+            if (isRequiredFieldMissing(bundle)) {
+                isResourcesSaved.value = false
+                return@launch
             }
-            //Add Edd to Questionnaire
 
-            Log.e("-------- ", json.toString())
+            val formatHelper = FormatHelper()
+            val date = Date()
+
+//            val observation = Observation()
+//            observation
+//                .code
+//                .addCoding()
+//                .setSystem("http://loinc.org")
+//                .setCode("edd").display ="Expected Date of Delivery"
+//            observation.value = Quantity().dateTimeValue()
+//
+//            bundle.addEntry()
+//                .setResource(observation)
+//                .request.url = "Observation"
 
 
             Timber.d(
@@ -150,17 +89,70 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     .encodeResourceToString(questionnaireResponse)
             )
 
-
-            val subjectReference = Reference("Patient/$patientId")
-            val encounterId = generateUuid()
-            if (isRequiredFieldMissing(bundle)) {
-                isResourcesSaved.value = false
-                return@launch
-            }
             saveResources(bundle, subjectReference, encounterId)
             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
             isResourcesSaved.value = true
         }
+    }
+
+    private suspend fun getEDD
+                (itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>):Date?{
+
+        val formatHelper = FormatHelper()
+
+        var edd: Date? = null
+
+        for(mainItem in itemsList1){
+
+            val mainLinkId = mainItem.linkId
+            val subItemList = mainItem.item
+            if (mainLinkId == "2.0.0"){
+
+                for (subItem in subItemList){
+
+                    val subItemLinkId = subItem.linkId
+                    val subSubItemList = subItem.item
+
+                    val job = Job()
+
+                    CoroutineScope(Dispatchers.IO + job).launch {
+                        if (subItemLinkId == "2.1.2"){
+
+                            for (subSubItem in subSubItemList){
+
+                                val pregnancyDetailsList = subSubItem.item
+
+                                for (pregnancyDetails in pregnancyDetailsList){
+
+                                    val menstrualAnswerList = pregnancyDetails.answer
+                                    val linkId = pregnancyDetails.linkId
+
+                                    for (pregnancyDetailsItem in menstrualAnswerList){
+                                        val lmp = pregnancyDetailsItem.value.dateTimeValue().value
+                                        val eddStr = formatHelper.getCalculations(lmp.toString())
+                                        edd = formatHelper.convertDate(eddStr)
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+                    }.join()
+
+
+                }
+
+            }
+
+        }
+
+        return edd
+
+
+
+
     }
 
     private suspend fun saveResources(
@@ -168,6 +160,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         subjectReference: Reference,
         encounterId: String
     ) {
+
         val encounterReference = Reference("Encounter/$encounterId")
         bundle.entry.forEach {
             when (val resource = it.resource) {
@@ -226,7 +219,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireJson?.let {
             return it
         }
-        questionnaireJson =
+         questionnaireJson =
             readFileFromAssets(state[ScreenerFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
         return questionnaireJson!!
     }
@@ -345,6 +338,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     private fun isComorbidityPresent(comorbidity: String): Boolean {
         return Logics.comorbidities.contains(comorbidity)
+    }
+    private fun customMessage(text: String, context: Context){
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+
     }
 
 

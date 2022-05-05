@@ -36,7 +36,7 @@ class FormatHelper {
             cal.add(Calendar.YEAR, 1)
         }
 
-        val sdf1 = SimpleDateFormat("dd-MMM-yyyy")
+        val sdf1 = SimpleDateFormat("yyyy-MM-dd")
 
         val newDate = cal.time
 
@@ -62,12 +62,14 @@ class FormatHelper {
 
     }
 
-    fun convertDate(valueDate: String): String {
+    fun convertDate(valueDate: String): Date {
 
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val currentDate = sdf.parse(valueDate)
         val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
-        return sdf1.format(currentDate)
+        val newDateStr = sdf1.format(currentDate)
+        val newDate = sdf1.parse(newDateStr)
+        return newDate
     }
 
     fun checkDate(birthDate: String, d2: String): Boolean {

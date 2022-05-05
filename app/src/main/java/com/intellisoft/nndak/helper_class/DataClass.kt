@@ -1,5 +1,7 @@
 package com.intellisoft.nndak.helper_class
 
+import org.hl7.fhir.r4.model.QuestionnaireResponse
+
 enum class DbMotherKey {
     NATIONALID, FHIRID
 }
@@ -25,4 +27,7 @@ data class DbValueDate(
 )
 data class DbAnswer(
     val valueDate: String
+)
+data class DbFhirQuestion(
+    val item: List<QuestionnaireResponse.QuestionnaireResponseItemComponent>
 )
