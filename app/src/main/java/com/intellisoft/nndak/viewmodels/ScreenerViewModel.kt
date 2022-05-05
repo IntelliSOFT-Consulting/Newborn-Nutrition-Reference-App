@@ -15,6 +15,9 @@ import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.screens.ScreenerFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
@@ -51,109 +54,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
             val context = FhirContext.forR4()
 
-
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
-
-
-            val json = JSONObject(questionnaire)
-            val itemJsonArray = json.getJSONArray("item")
-            for (i in 0 until itemJsonArray.length()) {
-
-                val item = itemJsonArray.getJSONObject(i)
-                var jsonObject = JSONObject()
-
-                val jsonArrayItem = item.getJSONArray("item")
-                for (j in 0 until jsonArrayItem.length()) {
-
-                    val jsonObjectItem = jsonArrayItem.getJSONObject(j)
-
-                    val linkIdPeriods = jsonObjectItem.getString("linkId")
-
-                    if (linkIdPeriods == "2.1.2") {
-
-                        val jsonArrayItem2 = jsonObjectItem.getJSONArray("item")
-
-                        for (k in 0 until jsonArrayItem2.length()) {
-
-                            val jsonObjectItem3 = jsonArrayItem2.getJSONObject(k)
-                            val jsonArrayItem3 = jsonObjectItem3.getJSONArray("item")
-
-                            for (l in 0 until jsonArrayItem3.length()) {
-
-                                val jsonObjectItem4 = jsonArrayItem3.getJSONObject(l)
-                                val linkIdPeriods1 = jsonObjectItem4.getString("linkId")
-
-                                if (linkIdPeriods1 == "menstrualPeriod") {
-
-                                    val jsonArrayPeriods = jsonObjectItem4.getJSONArray("answer")
-
-                                    for (m in 0 until jsonArrayPeriods.length()) {
-
-                                        val jsonObjectItemPeriods =
-                                            jsonArrayPeriods.getJSONObject(m)
-                                        val valueDate = jsonObjectItemPeriods.getString("valueDate")
-
-                                        //Check if the date is valid
-                                        val todayDate = FormatHelper().getTodayDate()
-                                        val formattedDate = FormatHelper().convertDate(valueDate)
-
-                                        val isDateValid =
-                                            FormatHelper().checkDate(formattedDate, todayDate)
-                                        if (isDateValid) {
-
-                                            //Get the calculations
-
-                                            val edd = FormatHelper().getCalculations(formattedDate)
-
-                                            val dbAnswer = DbAnswer(edd)
-                                            val dbAnswerList = ArrayList<DbAnswer>()
-                                            dbAnswerList.add(dbAnswer)
-
-                                            val dbValueDate = DbValueDate("2.1.3", dbAnswerList)
-                                            val dbValueDateList = ArrayList<DbValueDate>()
-                                            dbValueDateList.add(dbValueDate)
-
-                                            val dbItem = DbItem("1.1.0", dbValueDateList)
-                                            val dbItemList = ArrayList<DbItem>()
-                                            dbItemList.add(dbItem)
-
-                                            val eddJson = DbQuestionnaireData(
-                                                "expectedDateDelivery",
-                                                dbItemList
-                                            )
-                                            val outputJson = Gson().toJson(eddJson)
-                                            jsonObject = JSONObject(outputJson)
-                                            jsonArrayItem.put(jsonObject)
-
-                                        } else {
-                                            //Send error message that date is beyond today
-
-                                        }
-
-
-                                    }
-
-                                }
-
-
-                            }
-
-
-                        }
-
-                    }
-
-
-                }
-
-
-            }
-            //Add Edd to Questionnaire
-
-            Log.e("-------- ", json.toString())
-
-
             Timber.d(
                 "Questionnaire Response:::: " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)
@@ -166,10 +66,70 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 isResourcesSaved.value = false
                 return@launch
             }
+
             saveResources(bundle, subjectReference, encounterId)
             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
             isResourcesSaved.value = true
         }
+    }
+
+
+    private suspend fun getEDD
+                (itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>):String{
+
+        val formatHelper = FormatHelper()
+
+        var edd: Date? = null
+        var eddString = ""
+
+        for(mainItem in itemsList1){
+
+            val mainLinkId = mainItem.linkId
+            val subItemList = mainItem.item
+            if (mainLinkId == "2.0.0"){
+
+                for (subItem in subItemList){
+
+                    val subItemLinkId = subItem.linkId
+                    val subSubItemList = subItem.item
+
+                    val job = Job()
+
+                    CoroutineScope(Dispatchers.IO + job).launch {
+                        if (subItemLinkId == "2.1.2"){
+
+                            for (subSubItem in subSubItemList){
+
+                                val pregnancyDetailsList = subSubItem.item
+
+                                for (pregnancyDetails in pregnancyDetailsList){
+
+                                    val menstrualAnswerList = pregnancyDetails.answer
+                                    val linkId = pregnancyDetails.linkId
+
+                                    for (pregnancyDetailsItem in menstrualAnswerList){
+                                        val lmp = pregnancyDetailsItem.value.dateTimeValue().value
+                                        val eddStr = formatHelper.getCalculations(lmp.toString())
+//                                        edd = formatHelper.convertDate(eddStr)
+                                        eddString = eddStr
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+                    }.join()
+
+
+                }
+
+            }
+
+        }
+
+        return eddString
     }
 
     fun saveChild(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -252,7 +212,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
             val context = FhirContext.forR4()
             Timber.d(
-                "Questionnaire Response:::: " + context.newJsonParser()
+                "Questionnaire Response::::1 " + context.newJsonParser()
                     .encodeResourceToString(questionnaireResponse)
             )
 
@@ -281,6 +241,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             "Mother's Health",
                             value,
                             value
+                        )
+                    )
+                    .request.url = "Observation"
+
+                val itemsList1 = questionnaireResponse.item
+                val edd = getEDD(itemsList1)
+
+                val eddQh = QuestionnaireHelper()
+                bundle.addEntry()
+                    .setResource(
+                        eddQh.codingQuestionnaire(
+                            "Expected Date of Delivery",
+                            "Expected Date of Delivery",
+                            edd
                         )
                     )
                     .request.url = "Observation"
