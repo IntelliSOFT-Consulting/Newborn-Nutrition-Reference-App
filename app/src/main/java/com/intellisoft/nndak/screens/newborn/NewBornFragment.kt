@@ -28,6 +28,7 @@ class NewBornFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: NewBornFragmentArgs by navArgs()
+    private lateinit var unit: String
     private var _binding: FragmentNewBornBinding? = null
     private val binding
         get() = _binding!!
@@ -59,7 +60,8 @@ class NewBornFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        var steps = Steps(fistIn = "Assessment", lastIn = "Record Feeding")
+        val steps = Steps(fistIn = "Assessment", lastIn = "Record Feeding")
+        unit = "New Born Unit"
         val adapter = MaternityDetails(
             this::onAddScreenerClick,
             this::recordFeeding,
@@ -69,7 +71,7 @@ class NewBornFragment : Fragment() {
         )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "New Born Unit"
+            title = unit
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
@@ -81,7 +83,7 @@ class NewBornFragment : Fragment() {
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {
         findNavController().navigate(
-            NewBornFragmentDirections.navigateToChild(related.id)
+            NewBornFragmentDirections.navigateToChild(related.id, args.code, unit)
         )
     }
 
@@ -114,7 +116,6 @@ class NewBornFragment : Fragment() {
             }
 
             R.id.menu_prescribe -> {
-                Timber.e("Resource ID::: " + args.patientId)
 
                 findNavController().navigate(
                     NewBornFragmentDirections.navigateToScreening(

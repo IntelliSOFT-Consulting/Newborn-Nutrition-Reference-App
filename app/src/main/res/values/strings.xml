@@ -147,5 +147,7 @@
     <string name="action_assess">Assessment</string>
     <string name="edit_child">Edit Child</string>
     <string name="action_additional">Complete</string>
+    <string name="action_rapid">Rapid Assessment</string>
+    <string name="action_new_admission">Admission</string>
 
 </resources>

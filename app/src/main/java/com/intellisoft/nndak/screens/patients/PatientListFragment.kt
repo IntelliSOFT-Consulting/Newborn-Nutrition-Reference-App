@@ -178,7 +178,7 @@ class PatientListFragment : Fragment() {
             if (args.step == "0") {
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToMaternity(
-                        patientItem.resourceId
+                        patientItem.resourceId,"0"
                     )
                 )
             }
@@ -193,7 +193,7 @@ class PatientListFragment : Fragment() {
             if (args.step == "2") {
 
                 findNavController().navigate(
-                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId)
+                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId,"1")
                 )
 
             }
@@ -204,7 +204,6 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "4") {
 
-                Timber.e("Resource ID::: " + patientItem.resourceId)
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
                         patientItem.resourceId
@@ -213,7 +212,6 @@ class PatientListFragment : Fragment() {
             }
             if (args.step == "5") {
 
-                // screenerScreen(patientItem, "nn-f2.json", "Human Milk Bank")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToDhm(
                         patientItem.resourceId
@@ -221,7 +219,6 @@ class PatientListFragment : Fragment() {
                 )
             }
             if (args.step == "6") {
-                // screenerScreen(patientItem, "assessment.json", "Monitoring & Assessment")
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToAssessment(
                         patientItem.resourceId
@@ -234,7 +231,6 @@ class PatientListFragment : Fragment() {
 
     private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
 
-        Timber.e("Resource ID::: " + patientItem.resourceId)
         findNavController().navigate(
             PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
                 patientItem.resourceId, asset, title

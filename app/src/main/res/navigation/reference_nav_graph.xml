@@ -112,6 +112,9 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="string" />
         <action
             android:id="@+id/navigate_to_child"
             app:destination="@id/childFragment" />
@@ -126,6 +129,9 @@
             app:destination="@id/screenerEncounterFragment" />
         <argument
             android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="code"
             app:argType="string" />
         <action
             android:id="@+id/navigate_to_child"
@@ -174,6 +180,12 @@
         tools:layout="@layout/fragment_child">
         <argument
             android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="code"
+            app:argType="string" />
+        <argument
+            android:name="title"
             app:argType="string" />
         <action
             android:id="@+id/navigate_to_screening"

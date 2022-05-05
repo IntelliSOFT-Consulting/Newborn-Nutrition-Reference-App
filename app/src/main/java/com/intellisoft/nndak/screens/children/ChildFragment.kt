@@ -23,6 +23,8 @@ import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.screens.patients.PatientDetailsFragmentDirections
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
+import com.intellisoft.nndak.utils.Constants.CHILD_RAPID_ASSESSMENT
+import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -76,38 +78,108 @@ class ChildFragment : Fragment() {
         val adapter = ChildDetails(false)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Maternity Unit"
+            title = args.title
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getPatientDetailData()
         (activity as MainActivity).setDrawerEnabled(false)
+        updateTitles()
 
         binding.actionScore.setOnClickListener {
-            activity?.let {
-                FhirApplication.setCurrent(
-                    it,
-                    APGAR_SCORE
-                )
-            }
-            findNavController().navigate(
-                ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "apgar-score.json", "Apgar Score"
-                )
-            )
+            firstButtonClick()
         }
         binding.actionAssess.setOnClickListener {
-            activity?.let {
-                FhirApplication.setCurrent(
-                    it,
-                    ASSESS_CHILD
+            lastButtonClick()
+
+        }
+    }
+
+    private fun lastButtonClick() {
+        when (this.args.code) {
+            "0" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        ASSESS_CHILD
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "nn-a5.json", "Maternity Unit"
+                    )
                 )
             }
-            findNavController().navigate(
-                ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "nn-a5.json", "Maternity Unit"
+            "1" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        NEWBORN_ADMISSION
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "nn-d4.json", "New Born Unit"
+                    )
                 )
-            )
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun firstButtonClick() {
+
+        when (this.args.code) {
+            "0" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        APGAR_SCORE
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "apgar-score.json", "Apgar Score"
+                    )
+                )
+            }
+            "1" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        CHILD_RAPID_ASSESSMENT
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "nn-d2.json", "Rapid Assessment"
+                    )
+                )
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    private fun updateTitles() {
+
+        when (this.args.code) {
+            "0" -> {
+                binding.actionScore.text = getString(R.string.action_score)
+                binding.actionAssess.text = getString(R.string.action_additional)
+            }
+            "1" -> {
+                binding.actionScore.text = getString(R.string.action_rapid)
+                binding.actionAssess.text = getString(R.string.action_new_admission)
+            }
+            else -> {
+
+                binding.actionScore.text = getString(R.string.action_score)
+                binding.actionAssess.text = getString(R.string.action_additional)
+            }
         }
     }
 

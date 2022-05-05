@@ -50,6 +50,7 @@ class MaternityFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: MaternityFragmentArgs by navArgs()
+    private lateinit var unit: String
     private var _binding: FragmentMaternityBinding? = null
     private val binding
         get() = _binding!!
@@ -83,12 +84,19 @@ class MaternityFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
 
-        var steps= Steps(fistIn = "Record Maternity", lastIn = "New Born")
+        val steps = Steps(fistIn = "Record Maternity", lastIn = "New Born")
+        unit = "Maternity Unit"
         val adapter =
-            MaternityDetails(this::onAddScreenerClick, this::newBorn, this::maternityClick,steps, true)
+            MaternityDetails(
+                this::onAddScreenerClick,
+                this::newBorn,
+                this::maternityClick,
+                steps,
+                true
+            )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Maternity Unit"
+            title = unit
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
@@ -99,7 +107,7 @@ class MaternityFragment : Fragment() {
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {
         findNavController().navigate(
-            MaternityFragmentDirections.navigateToChild(related.id)
+            MaternityFragmentDirections.navigateToChild(related.id, args.code, unit)
         )
     }
 
@@ -107,7 +115,7 @@ class MaternityFragment : Fragment() {
         activity?.let {
             FhirApplication.setCurrent(
                 it,
-              NEWBORN
+                NEWBORN
             )
         }
         findNavController().navigate(
@@ -121,7 +129,7 @@ class MaternityFragment : Fragment() {
         activity?.let {
             FhirApplication.setCurrent(
                 it,
-            MATERNITY
+                MATERNITY
             )
         }
         findNavController().navigate(
