@@ -23,10 +23,19 @@ interface HealthDao {
         motherDob: String,
         id: Int)
 
-    @Query("SELECT * from mother_info WHERE nationalId LIKE :nationalId")
-    suspend fun getMotherInfo(nationalId: String): MotherInfo?
-
     @Query("DELETE FROM mother_info WHERE id =:id")
     suspend fun deleteMotherInfo(id: Int)
+
+    //National Id
+    @Query("SELECT * from mother_info WHERE nationalId LIKE :nationalId || '%'")
+    suspend fun getMotherInfoNational(nationalId: String): MotherInfo?
+
+    //Phone Number
+    @Query("SELECT * from mother_info WHERE phoneNumber LIKE :phoneNumber || '%'")
+    suspend fun getMotherInfoPhone(phoneNumber: String): MotherInfo?
+
+    //Mother DoB
+    @Query("SELECT * from mother_info WHERE motherDob LIKE :motherDob || '%'")
+    suspend fun getMotherInfoMotherDoB(motherDob: String): MotherInfo?
 
 }

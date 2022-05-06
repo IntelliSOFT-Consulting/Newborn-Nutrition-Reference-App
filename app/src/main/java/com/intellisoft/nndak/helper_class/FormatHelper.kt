@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 
 class FormatHelper {
@@ -160,7 +161,6 @@ class FormatHelper {
 
         return DbObservations(dbValue, title)
 
-
     }
 
     fun saveSharedPreference(
@@ -185,6 +185,32 @@ class FormatHelper {
 
         val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
         return sharedPreferences.getString(sharedKey, null)
+
+    }
+
+    fun getSearchQuery(spinnerValue: String, context: Context):String{
+
+        val birds = context.resources.getStringArray(R.array.birds)
+
+        val queryParam = when (spinnerValue) {
+            birds[0].toString() -> {
+                DbMotherKey.PATIENT_NAME.name
+            }
+            birds[1].toString() -> {
+                DbMotherKey.PATIENT_NAME.name
+            }
+            birds[2].toString() -> {
+                DbMotherKey.NATIONALID.name
+            }
+            birds[3].toString() -> {
+                DbMotherKey.PHONE_NUMBER.name
+            }
+            birds[4].toString() -> {
+                DbMotherKey.MOTHER_DOB.name
+            }
+            else -> DbMotherKey.PATIENT_NAME.name
+        }
+        return queryParam
 
     }
 

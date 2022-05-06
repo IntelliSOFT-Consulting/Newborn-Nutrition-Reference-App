@@ -11,6 +11,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +32,10 @@ import com.google.android.fhir.sync.State
 import com.intellisoft.nndak.*
 import com.intellisoft.nndak.adapters.PatientItemRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentPatientListBinding
+import com.intellisoft.nndak.helper_class.DbMotherKey
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PatientItem
+import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import com.intellisoft.nndak.viewmodels.TAG
@@ -37,7 +44,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
 
-class PatientListFragment : Fragment() {
+class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
@@ -46,6 +53,14 @@ class PatientListFragment : Fragment() {
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val args: PatientListFragmentArgs by navArgs()
+
+    private lateinit var mySpinner: Spinner
+
+    private var formatter = FormatHelper()
+
+    private var filterData : String? = null
+
+    private lateinit var healthViewModel: HealthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,9 +99,9 @@ class PatientListFragment : Fragment() {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
-            patientListViewModel.liveSearchedPatients.observe(
-                viewLifecycleOwner
-            ) {
+
+
+            patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
                 adapter.submitList(it)
             }
@@ -95,6 +110,18 @@ class PatientListFragment : Fragment() {
             e.printStackTrace()
         }
 
+        healthViewModel = HealthViewModel(requireActivity().application)
+
+        mySpinner = binding.mySpinner
+
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.birds,
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mySpinner.adapter = adapter
+        mySpinner.onItemSelectedListener = this
 
 
         patientListViewModel.patientCount.observe(
@@ -104,7 +131,35 @@ class PatientListFragment : Fragment() {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-                    patientListViewModel.searchPatientsByName(newText)
+
+                    if (filterData == DbMotherKey.PATIENT_NAME.name){
+                        patientListViewModel.searchPatientsByName(newText)
+                    }else {
+
+                        formatter.saveSharedPreference(requireContext(),
+                            "queryValue", newText.toString())
+
+                        val motherInfo =
+                            filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
+
+                        if (motherInfo != null){
+
+                            val patientName = motherInfo.familyName
+                            patientListViewModel.searchPatientsByName(patientName)
+
+                        }else{
+
+                            patientListViewModel.searchPatientsByName(newText)
+
+                            Toast.makeText(requireContext(),
+                                "We could not find the patient.",
+                                Toast.LENGTH_SHORT).show()
+                        }
+
+
+                    }
+
+
                     return true
                 }
 
@@ -240,5 +295,15 @@ class PatientListFragment : Fragment() {
 
     private fun onAddPatientClick() {
         findNavController().navigate(PatientListFragmentDirections.actionPatientListToAddPatientFragment())
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        val text: String = p0?.getItemAtPosition(p2).toString()
+        filterData = formatter.getSearchQuery(text, requireContext())
+
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }
