@@ -39,7 +39,7 @@ class ChildDetails(val show: (Boolean)) :
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
                 )
 
             ViewTypes.OBSERVATION ->

@@ -1,7 +1,6 @@
 package com.intellisoft.nndak.screens.patients
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,7 +19,6 @@ import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.PatientDetailBinding
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 class PatientDetailsFragment : Fragment() {
 
@@ -65,7 +63,7 @@ class PatientDetailsFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getPatientDetailData(true)
         (activity as MainActivity).setDrawerEnabled(false)
     }
 

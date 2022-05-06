@@ -391,6 +391,36 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Date-Of-Discharge"){
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Date Of Discharge",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Diagnosis-At-Discharge") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Diagnosis At Discharge",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                         }
                     }
                 }

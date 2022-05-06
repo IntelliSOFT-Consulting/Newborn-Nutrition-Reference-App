@@ -179,6 +179,10 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
               "valueCode": "horizontal"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
             }
           ],
           "initial": [

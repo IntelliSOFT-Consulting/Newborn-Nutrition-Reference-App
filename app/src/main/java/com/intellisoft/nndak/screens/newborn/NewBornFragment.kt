@@ -20,6 +20,8 @@ import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.screens.patients.PatientListFragmentDirections
+import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.utils.Constants.MOTHER_ASSESSMENT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -96,6 +98,12 @@ class NewBornFragment : Fragment() {
     }
 
     private fun assessmentClick() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                MOTHER_ASSESSMENT
+            )
+        }
         findNavController().navigate(
             NewBornFragmentDirections.navigateToScreening(
                 args.patientId, "nn-d2.json", "Rapid Assessment"

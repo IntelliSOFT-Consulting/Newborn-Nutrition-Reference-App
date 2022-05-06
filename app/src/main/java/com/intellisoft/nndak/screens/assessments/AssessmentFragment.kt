@@ -14,8 +14,6 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentAssessmentBinding
-import com.intellisoft.nndak.databinding.FragmentMilkBinding
-import com.intellisoft.nndak.screens.milk.MilkFragmentDirections
 import com.intellisoft.nndak.screens.postnatal.PostNatalFragmentArgs
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -73,7 +71,7 @@ class AssessmentFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getPatientDetailData(false)
         (activity as MainActivity).setDrawerEnabled(false)
 
     }

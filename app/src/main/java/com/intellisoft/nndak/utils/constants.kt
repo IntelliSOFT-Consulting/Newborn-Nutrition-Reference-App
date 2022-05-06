@@ -29,6 +29,6 @@ object Constants {
     const val ASSESS_CHILD = "3"
     const val FEEDING_NEEDS = "4"
     const val NEWBORN_ADMISSION = "5"
-    const val HMB = "6"
+    const val MOTHER_ASSESSMENT = "6"
 
 }

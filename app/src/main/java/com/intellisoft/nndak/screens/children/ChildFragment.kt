@@ -20,7 +20,6 @@ import com.intellisoft.nndak.utils.Constants.FEEDING_NEEDS
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +74,7 @@ class ChildFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData()
+        patientDetailsViewModel.getPatientDetailData(false)
         (activity as MainActivity).setDrawerEnabled(false)
         updateTitles()
 

@@ -41,8 +41,8 @@ class PatientDetailsViewModel(
     val livePatientData = MutableLiveData<List<PatientDetailData>>()
 
     /** Emits list of [PatientDetailData]. */
-    fun getPatientDetailData() {
-        viewModelScope.launch { livePatientData.value = getPatientDetailDataModel() }
+    fun getPatientDetailData(show: Boolean) {
+        viewModelScope.launch { livePatientData.value = getPatientDetailDataModel(show) }
     }
 
     fun getMaternityDetailData() {
@@ -289,7 +289,7 @@ class PatientDetailsViewModel(
         return data
     }
 
-    private suspend fun getPatientDetailDataModel(): List<PatientDetailData> {
+    private suspend fun getPatientDetailDataModel(show: Boolean): List<PatientDetailData> {
         val data = mutableListOf<PatientDetailData>()
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
@@ -300,24 +300,28 @@ class PatientDetailsViewModel(
 
         patient.let {
             data.add(PatientDetailOverview(it, firstInGroup = true))
-            data.add(
-                PatientDetailProperty(
-                    PatientProperty(getString(R.string.patient_property_mobile), it.phone)
+            if (show) {
+                data.add(
+                    PatientDetailProperty(
+                        PatientProperty(getString(R.string.patient_property_mobile), it.phone)
+                    )
                 )
-            )
+            }
             data.add(
                 PatientDetailProperty(
                     PatientProperty(getString(R.string.patient_property_id), it.resourceId)
                 )
             )
-            data.add(
-                PatientDetailProperty(
-                    PatientProperty(
-                        getString(R.string.patient_property_address),
-                        "${it.region},${it.district},${it.city}, ${it.country} "
+            if (show) {
+                data.add(
+                    PatientDetailProperty(
+                        PatientProperty(
+                            getString(R.string.patient_property_address),
+                            "${it.region},${it.district},${it.city}, ${it.country} "
+                        )
                     )
                 )
-            )
+            }
             data.add(
                 PatientDetailProperty(
                     PatientProperty(
