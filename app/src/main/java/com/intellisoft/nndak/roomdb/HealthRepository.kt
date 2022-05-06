@@ -1,26 +1,10 @@
 package com.intellisoft.nndak.roomdb
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 
 import com.intellisoft.nndak.helper_class.*
 import kotlinx.coroutines.*
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class HealthRepository(private val healthDao: HealthDao) {
@@ -62,8 +46,10 @@ class HealthRepository(private val healthDao: HealthDao) {
         CoroutineScope(Dispatchers.IO).launch {
 
             val nationalId = dbMotherInfo.nationalId
-            val motherInfo = healthDao.getMotherInfo(nationalId)
+            val motherInfo = healthDao.getMotherInfoNational(nationalId)
             val motherDob = dbMotherInfo.motherDob
+
+
             val firstName = dbMotherInfo.firstName
             val familyName = dbMotherInfo.familyName
             val phoneNumber = dbMotherInfo.phoneNumber
@@ -92,7 +78,7 @@ class HealthRepository(private val healthDao: HealthDao) {
 
             val natID = DbMotherKey.NATIONALID.name
             val nationalId = getSharedPref(context, natID).toString()
-            val motherInfo = healthDao.getMotherInfo(nationalId)
+            val motherInfo = healthDao.getMotherInfoNational(nationalId)
             if (motherInfo != null){
                 val id = motherInfo.id.toString().toInt()
                 healthDao.deleteMotherInfo(id)
@@ -104,6 +90,38 @@ class HealthRepository(private val healthDao: HealthDao) {
 
     }
 
+    suspend fun getMotherInfo(queryString: String, context: Context): MotherInfo? {
+        return getMotherData(queryString, context)
+    }
+
+    private suspend fun getMotherData(queryString: String,
+                                      context: Context):MotherInfo?{
+
+        val queryValue = FormatHelper().retrieveSharedPreference(
+                context,
+                "queryValue").toString()
+
+        var motherInfo : MotherInfo? = null
+        val job = Job()
+        CoroutineScope(Dispatchers.IO + job).launch{
+
+            when (queryString) {
+                DbMotherKey.NATIONALID.name -> {
+                    motherInfo = healthDao.getMotherInfoNational(queryValue)
+                }
+                DbMotherKey.PHONE_NUMBER.name -> {
+                    motherInfo = healthDao.getMotherInfoPhone(queryValue)
+                }
+                DbMotherKey.MOTHER_DOB.name -> {
+                    motherInfo = healthDao.getMotherInfoMotherDoB(queryValue)
+                }
+            }
+
+        }.join()
+
+        return motherInfo
+
+    }
 
 
 }

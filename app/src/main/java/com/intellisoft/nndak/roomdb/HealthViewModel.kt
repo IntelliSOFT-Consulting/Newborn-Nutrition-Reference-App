@@ -32,5 +32,8 @@ class HealthViewModel(application: Application) : AndroidViewModel(application) 
     fun updateMotherInfo(context: Context, dbMotherInfo: DbMotherInfo){
         repository.updateMotherInfo(context, dbMotherInfo)
     }
+    fun getMotherInfo(queryString: String, context: Context) = runBlocking {
+        repository.getMotherInfo(queryString, context)
+    }
 
 }
