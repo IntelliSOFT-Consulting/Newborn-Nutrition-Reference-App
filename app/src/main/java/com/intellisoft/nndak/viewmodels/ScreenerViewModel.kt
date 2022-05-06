@@ -243,7 +243,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                     )
                     .request.url = "Observation"
-
                 val itemsList1 = questionnaireResponse.item
                 val edd = getEDD(itemsList1)
 
@@ -258,6 +257,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                     .request.url = "Observation"
 
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 saveResources(bundle, subjectReference, encounterId)
@@ -391,7 +394,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
-                            if (childChild == "Date-Of-Discharge"){
+                            if (childChild == "Date-Of-Discharge") {
 
                                 val childAnswer = inner.getJSONArray("answer")
                                 val value = childAnswer.getJSONObject(0).getString("valueDate")
@@ -415,6 +418,51 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     .setResource(
                                         qh.codingQuestionnaire(
                                             "Diagnosis At Discharge",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Assessment") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Mother's Medical Condition",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Feeding-Status-Discharge") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Feeding Status on Discharge",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Outcome-Status-Discharge") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueString")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Outcome Status on Discharge",
                                             value,
                                             value
                                         )

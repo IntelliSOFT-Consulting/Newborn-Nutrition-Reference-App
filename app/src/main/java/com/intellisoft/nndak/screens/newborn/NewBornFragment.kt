@@ -106,7 +106,7 @@ class NewBornFragment : Fragment() {
         }
         findNavController().navigate(
             NewBornFragmentDirections.navigateToScreening(
-                args.patientId, "nn-d2.json", "Rapid Assessment"
+                args.patientId, "mothers-medical.json", "Rapid Assessment"
             )
         )
     }

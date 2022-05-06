@@ -25,6 +25,7 @@ import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
+import com.intellisoft.nndak.utils.Constants.CHILD_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.MATERNITY
 import com.intellisoft.nndak.utils.Constants.MOTHER_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.NEWBORN
@@ -130,6 +131,12 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 )
             }
             MOTHER_ASSESSMENT -> {
+                viewModel.saveChildAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId
+                )
+            }
+            CHILD_ASSESSMENT -> {
                 viewModel.saveChildAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId

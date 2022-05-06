@@ -16,6 +16,7 @@ import com.intellisoft.nndak.adapters.ChildDetails
 import com.intellisoft.nndak.databinding.FragmentChildBinding
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
+import com.intellisoft.nndak.utils.Constants.CHILD_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.FEEDING_NEEDS
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -141,12 +142,12 @@ class ChildFragment : Fragment() {
                 activity?.let {
                     FhirApplication.setCurrent(
                         it,
-                        FEEDING_NEEDS
+                        CHILD_ASSESSMENT
                     )
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-e2.json", "Feeding Needs"
+                        args.patientId, "child-medical.json", "Rapid Assessment"
                     )
                 )
             }
@@ -164,7 +165,7 @@ class ChildFragment : Fragment() {
                 binding.actionAssess.text = getString(R.string.action_additional)
             }
             "1" -> {
-                binding.actionScore.text = getString(R.string.action_feeding_needs)
+                binding.actionScore.text = getString(R.string.action_assess)
                 binding.actionAssess.text = getString(R.string.action_new_admission)
             }
             else -> {

@@ -30,5 +30,6 @@ object Constants {
     const val FEEDING_NEEDS = "4"
     const val NEWBORN_ADMISSION = "5"
     const val MOTHER_ASSESSMENT = "6"
+    const val CHILD_ASSESSMENT = "7"
 
 }
