@@ -18,7 +18,7 @@ class OverviewItemViewHolder(
     private val binding: PatientDetailsHeaderBinding,
     private val newBornClick: () -> Unit,
     private val maternityClick: () -> Unit,
-    val steps: Steps,
+    private val steps: Steps,
     val show: Boolean,
 ) : PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
@@ -29,6 +29,9 @@ class OverviewItemViewHolder(
             binding.maternity.text = steps.fistIn
             binding.screener.setOnClickListener { newBornClick() }
             binding.maternity.setOnClickListener { maternityClick() }
+            if (!steps.secondButton!!) {
+                binding.screener.visibility = View.INVISIBLE
+            }
         }
         data.patient.riskItem?.let {
             binding.patientContainer.setBackgroundColor(it.patientCardColor)

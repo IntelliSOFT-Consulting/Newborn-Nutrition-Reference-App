@@ -62,7 +62,7 @@ class NewBornFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val steps = Steps(fistIn = "Assessment", lastIn = "Record Feeding")
+        val steps = Steps(fistIn = "Assessment", lastIn = "Record Feeding", secondButton = false)
         unit = "New Born Unit"
         val adapter = MaternityDetails(
             this::onAddScreenerClick,
@@ -90,11 +90,11 @@ class NewBornFragment : Fragment() {
     }
 
     private fun recordFeeding() {
-        findNavController().navigate(
+      /*  findNavController().navigate(
             NewBornFragmentDirections.navigateToScreening(
                 args.patientId, "nn-e7.json", "Rapid Assessment"
             )
-        )
+        )*/
     }
 
     private fun assessmentClick() {

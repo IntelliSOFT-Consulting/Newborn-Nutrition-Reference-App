@@ -278,7 +278,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun saveChildAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
 
         viewModelScope.launch {
             val bundle =
@@ -307,6 +307,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
+
                             if (childChild == "Time-Seen") {
                                 val childAnswer = inner.getJSONArray("item")
                                 val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
@@ -439,10 +440,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
-                            if (childChild == "Feeding-Status-Discharge") {
+                            if (childChild == "Feeding-Status") {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                val childAnswer = inner.getJSONArray("item")
+                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+                                val value = ans.getJSONObject(0).getString("valueString")
 
                                 bundle.addEntry()
                                     .setResource(
@@ -454,11 +457,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
-                            if (childChild == "Outcome-Status-Discharge") {
+                            if (childChild == "Outcome-Status") {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                val childAnswer = inner.getJSONArray("item")
+                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
 
+                                val value = ans.getJSONObject(0).getString("valueString")
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -483,6 +487,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 saveResources(bundle, subjectReference, encounterId)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                 isResourcesSaved.value = true
+
             } catch (e: Exception) {
                 Timber.d("Exception:::: ${e.printStackTrace()}")
                 isResourcesSaved.value = false

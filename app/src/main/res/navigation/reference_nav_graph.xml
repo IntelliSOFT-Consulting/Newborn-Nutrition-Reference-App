@@ -65,7 +65,7 @@
             android:name="patient_id"
             app:argType="string" />
         <argument
-            android:name="quastion"
+            android:name="question"
             app:argType="string" />
         <argument
             android:name="title"

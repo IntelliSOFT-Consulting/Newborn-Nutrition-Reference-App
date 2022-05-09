@@ -7,13 +7,8 @@ import com.intellisoft.nndak.SYNC_PARAM
 import com.intellisoft.nndak.SYNC_VALUE
 import java.util.LinkedList
 import org.hl7.fhir.exceptions.FHIRException
-import org.hl7.fhir.r4.model.Bundle
-import org.hl7.fhir.r4.model.ListResource
-import org.hl7.fhir.r4.model.OperationOutcome
-import org.hl7.fhir.r4.model.Reference
-import org.hl7.fhir.r4.model.Resource
-import org.hl7.fhir.r4.model.ResourceType
-
+import org.hl7.fhir.r4.model.*
+import timber.log.Timber
 
 
 class DownloadManagerImpl : DownloadWorkManager {
@@ -39,7 +34,6 @@ class DownloadManagerImpl : DownloadWorkManager {
         if (response is OperationOutcome) {
             throw FHIRException(response.issueFirstRep.diagnostics)
         }
-
         // If the resource returned is a List containing Patients, extract Patient references and fetch
         // all resources related to the patient using the $everything operation.
         if (response is ListResource) {
@@ -52,10 +46,17 @@ class DownloadManagerImpl : DownloadWorkManager {
             }
         }
 
+
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
-            val nextUrl = response.link.firstOrNull { component -> component.relation == "next" }?.url
+
+            for (i in 0 until response.total) {
+                val u = "${response.entry[i].fullUrl}/\$everything"
+                urls.add(u)
+            }
+            val nextUrl =
+                response.link.firstOrNull { component -> component.relation == "next" }?.url
             if (nextUrl != null) {
                 urls.add(nextUrl)
             }

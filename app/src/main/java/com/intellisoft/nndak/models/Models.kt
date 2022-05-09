@@ -68,5 +68,6 @@ data class ApGar(
 
 data class Steps(
     val fistIn: String?,
-    val lastIn: String?
+    val lastIn: String?,
+    val secondButton: Boolean?
 )

@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         observeLastSyncTime()
         observeSyncState()
         viewModel.updateLastSyncTimestamp()
-        cacheDir.deleteRecursively()
+        //cacheDir.deleteRecursively()
     }
 
     override fun onBackPressed() {

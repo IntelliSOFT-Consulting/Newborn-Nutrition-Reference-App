@@ -152,6 +152,7 @@
     <string name="action_feeding_needs">Feeding Needs</string>
 
     <string name="spinner">Q39</string>
+    <string name="resources_child_assessed">Assessment Details Saved</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

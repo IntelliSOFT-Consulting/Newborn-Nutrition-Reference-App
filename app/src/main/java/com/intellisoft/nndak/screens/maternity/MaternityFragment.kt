@@ -84,7 +84,7 @@ class MaternityFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
 
-        val steps = Steps(fistIn = "Record Maternity", lastIn = "New Born")
+        val steps = Steps(fistIn = "Record Maternity", lastIn = "New Born", secondButton = true)
         unit = "Maternity Unit"
         val adapter =
             MaternityDetails(

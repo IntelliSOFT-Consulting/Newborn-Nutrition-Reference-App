@@ -83,7 +83,7 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
     }
 
     private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, args.quastion)
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, args.question)
     }
 
     private fun addQuestionnaireFragment() {
@@ -119,31 +119,31 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 )
             }
             ASSESS_CHILD -> {
-                viewModel.saveChildAssessment(
+                viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
             NEWBORN_ADMISSION -> {
-                viewModel.saveChildAssessment(
+                viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
             MOTHER_ASSESSMENT -> {
-                viewModel.saveChildAssessment(
+                viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
             CHILD_ASSESSMENT -> {
-                viewModel.saveChildAssessment(
+                viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
             }
             else -> {
-                viewModel.saveScreenerEncounter(
+                viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
                     args.patientId
                 )
@@ -185,15 +185,37 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                 return@observe
             }
 
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.resources_saved),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            NavHostFragment.findNavController(this).navigateUp()
-        }
 
+
+            when (activity?.let { FhirApplication.getCurrent(it) }) {
+                CHILD_ASSESSMENT -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.resources_child_assessed),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+
+                    /**
+                     * Reload Page with feeding needs assessment questionnaire
+                     */
+
+
+                    NavHostFragment.findNavController(this).navigateUp()
+
+                }
+                else -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.resources_saved),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    NavHostFragment.findNavController(this).navigateUp()
+                }
+            }
+        }
         /***
          * Listen for APGAR SCORE
          * ***/
