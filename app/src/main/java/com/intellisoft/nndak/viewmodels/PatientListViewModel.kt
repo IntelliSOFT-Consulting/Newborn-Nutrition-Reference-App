@@ -108,6 +108,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
         search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
     }
 
+
     private suspend fun getRiskAssessments(): Map<String, RiskAssessment?> {
         return fhirEngine.search<RiskAssessment> {}.groupBy { it.subject.reference }
             .mapValues { entry

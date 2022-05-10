@@ -19,11 +19,10 @@
   ],
   "item": [
     {
-      "text": "Record Feeding Data",
+      "text": "Feeding Data",
       "linkId": "2.0.0",
       "type": "group",
       "item": [
-
         {
           "linkId": "timeSeen",
           "type": "group",
@@ -48,94 +47,6 @@
                   "type": "dateTime",
                   "linkId": "1.1.1",
                   "required": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "3.0.0",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "wellness"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "3.1.0",
-              "type": "group",
-              "item": [
-                {
-                  "linkId": "3.1.1",
-                  "type": "choice",
-                  "text": "Method of feeding",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "drop-down",
-                            "display": "Drop down"
-                          }
-                        ],
-                        "text": "Drop down"
-                      }
-                    }
-                  ],
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "code": "Breast Feed",
-                        "display": "Breast Feed",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "EBM",
-                        "display": "EBM",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "Term Formula",
-                        "display": "Term Formula",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "Pre-Term Formula",
-                        "display": "Pre-Term Formula",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "Term DHM",
-                        "display": "Term DHM",
-                        "system": "http://snomed.info/sct"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "IV Fluid and Additives",
-                        "display": "IV Fluid and Additives",
-                        "system": "http://snomed.info/sct"
-                      }
-                    }
-                  ]
                 }
               ]
             }
@@ -369,14 +280,14 @@
                   "answerOption": [
                     {
                       "valueCoding": {
-                        "code": "Wet Diapers: Yes",
+                        "code": "Wet Diapers",
                         "display": "Yes",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Wet Diapers: No",
+                        "code": "Wet Diapers",
                         "display": "No",
                         "system": "http://snomed.info/sct"
                       }
@@ -429,14 +340,14 @@
                   "answerOption": [
                     {
                       "valueCoding": {
-                        "code": "Soiled Diapers: Yes",
+                        "code": "Soiled Diapers",
                         "display": "Yes",
                         "system": "http://snomed.info/sct"
                       }
                     },
                     {
                       "valueCoding": {
-                        "code": "Soiled Diapers: No",
+                        "code": "Soiled Diapers",
                         "display": "No",
                         "system": "http://snomed.info/sct"
                       }
@@ -444,29 +355,6 @@
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "linkId": "4.0.0",
-          "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "comments"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "4.1.1",
-              "type": "string",
-              "text": "Any other remarks",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueString.value"
             }
           ]
         },
@@ -519,7 +407,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "gm"
+                      "valueString": "g"
                     }
                   ]
                 },
@@ -558,6 +446,34 @@
                     "display": "Baby's current weight",
                     "system": "http://loinc.org"
                   }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "13.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "OutcomeStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Any-Remarks",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Completed",
+                  "text": "Any Other Remarks",
+                  "type": "string",
+                  "required": true
                 }
               ]
             }

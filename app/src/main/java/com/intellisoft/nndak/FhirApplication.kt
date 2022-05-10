@@ -72,6 +72,7 @@ class FhirApplication : Application() {
         fun getHapiServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL_DEMO,
+//                "https://devnndak.intellisoftkenya.com/fhir/"
                 "https://hapi.fhir.org/baseR4/"
             )
         }

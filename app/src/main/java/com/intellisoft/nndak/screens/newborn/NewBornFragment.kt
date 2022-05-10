@@ -92,7 +92,7 @@ class NewBornFragment : Fragment() {
     private fun recordFeeding() {
       /*  findNavController().navigate(
             NewBornFragmentDirections.navigateToScreening(
-                args.patientId, "nn-e7.json", "Rapid Assessment"
+                args.patientId, "record-feeding-data.json", "Rapid Assessment"
             )
         )*/
     }

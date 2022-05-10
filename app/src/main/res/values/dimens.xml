@@ -35,4 +35,6 @@
     <dimen name="_50dp">50dp</dimen>
     <dimen name="_5dp">5dp</dimen>
     <dimen name="_100dp">100dp</dimen>
+    <dimen name="smallmargin">10dp</dimen>
+    <dimen name="mediumpadding">5dp</dimen>
 </resources>

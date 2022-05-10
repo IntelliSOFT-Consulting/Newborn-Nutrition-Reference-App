@@ -153,6 +153,11 @@
 
     <string name="spinner">Q39</string>
     <string name="resources_child_assessed">Assessment Details Saved</string>
+    <string name="app_feeding_needs">Feeding Needs</string>
+    <string name="app_feeding_prescribe">Prescribe Feeds</string>
+    <string name="app_feeding_data">Feeding Data</string>
+    <string name="app_health">Health Monitoring</string>
+    <string name="action_assess_child">Child Asessment</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

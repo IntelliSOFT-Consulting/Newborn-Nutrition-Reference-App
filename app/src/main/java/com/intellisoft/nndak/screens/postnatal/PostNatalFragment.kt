@@ -95,7 +95,7 @@ class PostNatalFragment : Fragment() {
                 Timber.e("Resource ID::: " + args.patientId)
                 findNavController().navigate(
                     PostNatalFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-e7.json", "Rapid Assessment"
+                        args.patientId, "record-feeding-data.json", "Rapid Assessment"
                     )
                 )
                 true

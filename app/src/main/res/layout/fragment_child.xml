@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.children.ChildFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/_150dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="@dimen/_15dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_150dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_score"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_baseline_add_24"
-            android:drawablePadding="2dp"
-            android:paddingStart="2dp"
-            android:text="@string/action_score"
-            android:textAppearance="?attr/textAppearanceBody2" />
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="@dimen/_15dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_assess"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_baseline_add_24"
-            android:drawablePadding="2dp"
-            android:paddingStart="2dp"
-            android:text="@string/action_additional"
-            android:textAppearance="?attr/textAppearanceBody2" />
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/action_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_baseline_add_24"
+                android:drawablePadding="2dp"
+                android:paddingStart="2dp"
+                android:text="@string/action_score"
+                android:textAppearance="?attr/textAppearanceBody2"
+                app:cornerRadius="@dimen/_35dp" />
 
-</RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/action_assess"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_baseline_add_24"
+                android:drawablePadding="2dp"
+                android:paddingStart="2dp"
+                android:text="@string/action_additional"
+                android:textAppearance="?attr/textAppearanceBody2"
+                app:cornerRadius="@dimen/_35dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/child"
+        layout="@layout/bottom_sheet_assessment" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

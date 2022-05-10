@@ -14,6 +14,7 @@ import timber.log.Timber
 class DownloadManagerImpl : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
     private val urls = LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE"))
+  //  private val urls = LinkedList(listOf("Patient"))
 
     override suspend fun getNextRequestUrl(context: SyncDownloadContext): String? {
         var url = urls.poll() ?: return null
@@ -21,7 +22,7 @@ class DownloadManagerImpl : DownloadWorkManager {
         val resourceTypeToDownload =
             ResourceType.fromCode(url.findAnyOf(resourceTypeList, ignoreCase = true)!!.second)
         context.getLatestTimestampFor(resourceTypeToDownload)?.let {
-            url = affixLastUpdatedTimestamp(url!!, it)
+            url = affixLastUpdatedTimestamp(url, it)
         }
         return url
     }

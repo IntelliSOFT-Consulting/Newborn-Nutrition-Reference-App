@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -21,6 +23,7 @@ import com.intellisoft.nndak.utils.Constants.FEEDING_NEEDS
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +40,8 @@ class ChildFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: ChildFragmentArgs by navArgs()
     private var _binding: FragmentChildBinding? = null
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
     private val binding
         get() = _binding!!
 
@@ -78,12 +83,84 @@ class ChildFragment : Fragment() {
         patientDetailsViewModel.getPatientDetailData(false)
         (activity as MainActivity).setDrawerEnabled(false)
         updateTitles()
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.child.bottomSheet)
 
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                val text = when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> "Close Persistent Bottom Sheet"
+                    BottomSheetBehavior.STATE_COLLAPSED -> "Open Persistent Bottom Sheet"
+                    else -> "Persistent Bottom Sheet"
+                }
+                Timber.e("State:::: $text")
+            }
+        })
+        bottomSheetButtons()
         binding.actionScore.setOnClickListener {
             firstButtonClick()
         }
         binding.actionAssess.setOnClickListener {
             lastButtonClick()
+
+        }
+
+    }
+
+    private fun bottomSheetButtons() {
+
+        binding.child.imgExit.setOnClickListener {
+            toggleSheet()
+
+        }
+        binding.child.imgNeeds.setOnClickListener {
+            toggleSheet()
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+                    args.patientId, "feeding-needs-assessment.json", "Feeding Needs Assessment"
+                )
+            )
+        }
+        binding.child.imgFeeds.setOnClickListener {
+            toggleSheet()
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+                    args.patientId, "prescribe-feeds.json", "Prescribe Feeds"
+                )
+            )
+
+        }
+        binding.child.imgData.setOnClickListener {
+            toggleSheet()
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+                    args.patientId, "record-feeding-data.json", "Record Feeding Data"
+                )
+            )
+
+        }
+        binding.child.imgHealth.setOnClickListener {
+            toggleSheet()
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+                    args.patientId,
+                    "health-monitoring-information.json",
+                    "Health Monitoring Information"
+                )
+            )
+
+        }
+        binding.child.btnAssess.setOnClickListener {
+            toggleSheet()
+            findNavController().navigate(
+                ChildFragmentDirections.navigateToScreening(
+
+                    args.patientId, "child-medical.json", "Rapid Assessment"
+                )
+            )
 
         }
     }
@@ -145,16 +222,21 @@ class ChildFragment : Fragment() {
                         CHILD_ASSESSMENT
                     )
                 }
-                findNavController().navigate(
-                    ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "child-medical.json", "Rapid Assessment"
-                    )
-                )
+                toggleSheet()
             }
             else -> {
 
             }
         }
+    }
+
+    private fun toggleSheet() {
+
+        val state = if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED)
+            BottomSheetBehavior.STATE_COLLAPSED
+        else
+            BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = state
     }
 
     private fun updateTitles() {
