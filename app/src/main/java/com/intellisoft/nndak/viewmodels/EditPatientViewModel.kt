@@ -49,7 +49,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
      * **/
     private suspend fun prepareEditChild(): Pair<String, String> {
         val patient = fhirEngine.get<Patient>(patientId)
-        val question = readFileFromAssets("child.json").trimIndent()
+        val question = readFileFromAssets("maternal-child-registration.json").trimIndent()
         val parser = FhirContext.forR4().newJsonParser()
         val questionnaire =
             parser.parseResource(org.hl7.fhir.r4.model.Questionnaire::class.java, question) as

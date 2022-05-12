@@ -137,12 +137,14 @@ class LoginActivity : AppCompatActivity() {
                 FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
-                startActivity(
-                    Intent(
-                        this@LoginActivity,
-                        MainActivity::class.java
-                    ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                )
+           /*     if (it.newUser == true) {*/
+                    startActivity(
+                        Intent(
+                            this@LoginActivity,
+                            MainActivity::class.java
+                        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
+               /* }*/
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()

@@ -918,6 +918,10 @@
                 "expression": "Observation",
                 "name": "OutcomeStatus"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
             }
           ],
           "item": [

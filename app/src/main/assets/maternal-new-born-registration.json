@@ -474,21 +474,21 @@
                 {
                   "valueCoding": {
                     "code": "Admitted From",
-                    "display": "Option 1",
+                    "display": "Internal",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
                     "code": "Admitted From",
-                    "display": "Option 2",
+                    "display": "Clinic",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
                     "code": "Admitted From",
-                    "display": "Option 3",
+                    "display": "Home",
                     "system": "http://snomed.info/sct"
                   }
                 }
@@ -745,14 +745,24 @@
                 "expression": "Observation",
                 "name": "CompletedBy"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
             }
           ],
           "item": [
             {
-              "linkId": "Completed-By",
-              "type": "string",
-              "text": "Completed by",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+              "linkId": "Done-Status",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Completed-By",
+                  "type": "string",
+                  "text": "Completed by",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+                }
+              ]
             }
           ]
         },

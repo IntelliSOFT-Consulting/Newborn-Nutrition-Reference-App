@@ -208,43 +208,45 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val itemsList1 = questionnaireResponse.item
                 val basicThree = getEDD(itemsList1)
 
-                bundle.addEntry()
-                    .setResource(
-                        qh.codingQuestionnaire(
-                            "Expected Date of Delivery",
-                            "Expected Date of Delivery",
-                            basicThree.edd
+                if (basicThree.edd.isNotEmpty() && basicThree.lmp.isNotEmpty()) {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Expected Date of Delivery",
+                                "Expected Date of Delivery",
+                                basicThree.edd
+                            )
                         )
-                    )
-                    .request.url = "Observation"
-                bundle.addEntry()
-                    .setResource(
-                        qh.codingQuestionnaire(
-                            "Last Menstrual Period",
-                            "Last Menstrual Period",
-                            basicThree.lmp
+                        .request.url = "Observation"
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Last Menstrual Period",
+                                "Last Menstrual Period",
+                                basicThree.lmp
+                            )
                         )
-                    )
-                    .request.url = "Observation"
+                        .request.url = "Observation"
+                }
 
 
-           /*     bundle.addEntry()
-                    .setResource(
-                        qh.codingQuestionnaire(
-                            "Gestation",
-                            "Gestation",
-                            basicThree.gestation
-                        )
-                    )
-                    .request.url = "Observation"
-*/
+                /*     bundle.addEntry()
+                         .setResource(
+                             qh.codingQuestionnaire(
+                                 "Gestation",
+                                 "Gestation",
+                                 basicThree.gestation
+                             )
+                         )
+                         .request.url = "Observation"
+     */
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 saveResources(bundle, subjectReference, encounterId)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                isResourcesSaved.value = false
-                return@launch
+                isResourcesSaved.value = true
+                // return@launch
 
 
             } catch (e: Exception) {
@@ -259,14 +261,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     private fun extractStatus(questionnaire: String): String {
         val json = JSONObject(questionnaire)
-        val item = json.getJSONArray("item")
-        val parent = item.getJSONObject(2).getString("item")
-        val common = JSONArray(parent)
-        val health = common.getJSONObject(0).getString("item")
-        val commonAnswer = JSONArray(health)
-        val answer = commonAnswer.getJSONObject(0).getString("answer")
-        val valueString = JSONArray(answer)
-        return valueString.getJSONObject(0).getString("valueString")
+        val common = json.getJSONArray("item")
+        var value = ""
+        for (i in 0 until common.length()) {
+
+            val item = common.getJSONObject(i)
+            val parent = item.getJSONArray("item")
+            for (j in 0 until parent.length()) {
+
+                val itemChild = parent.getJSONObject(j)
+                val child = itemChild.getJSONArray("item")
+                for (k in 0 until child.length()) {
+                    val inner = child.getJSONObject(k)
+                    val childChild = inner.getString("linkId")
+
+                    if (childChild == "Mothers-Status") {
+
+                        value = extractValueString(inner)
+
+                    }
+                }
+            }
+        }
+        return value
     }
 
     fun saveAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -663,6 +680,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     .setResource(
                                         qh.codingQuestionnaire(
                                             "Prescription Time",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Time-Of-Feeding") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time of Feeding",
                                             "${value.substring(0, 10)} - ${
                                                 value.substring(
                                                     11,

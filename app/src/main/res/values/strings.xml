@@ -164,6 +164,8 @@
     <string name="action_supplements">Supplements</string>
     <string name="action_update_details">Update Details</string>
     <string name="action_dhm_receival">DHM Receival</string>
+    <string name="starting">First Timer</string>
+    <string name="existing">Existing</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

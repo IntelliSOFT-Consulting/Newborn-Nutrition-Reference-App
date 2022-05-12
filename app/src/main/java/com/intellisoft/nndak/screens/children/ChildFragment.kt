@@ -120,7 +120,7 @@ class ChildFragment : Fragment() {
             toggleSheet()
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "feeding-needs-assessment.json", "Feeding Needs Assessment"
+                    args.patientId, "new-born-feeding-needs.json", "Feeding Needs Assessment"
                 )
             )
         }
@@ -128,7 +128,7 @@ class ChildFragment : Fragment() {
             toggleSheet()
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "prescribe-feeds.json", "Prescribe Feeds"
+                    args.patientId, "new-born-prescribe-feeds.json", "Prescribe Feeds"
                 )
             )
 
@@ -137,7 +137,7 @@ class ChildFragment : Fragment() {
             toggleSheet()
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
-                    args.patientId, "record-feeding-data.json", "Record Feeding Data"
+                    args.patientId, "new-born-record-feeding-data.json", "Record Feeding Data"
                 )
             )
 
@@ -147,7 +147,7 @@ class ChildFragment : Fragment() {
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
                     args.patientId,
-                    "health-monitoring-information.json",
+                    "new-born-monitoring-information.json",
                     "Health Monitoring Information"
                 )
             )
@@ -158,7 +158,7 @@ class ChildFragment : Fragment() {
             findNavController().navigate(
                 ChildFragmentDirections.navigateToScreening(
 
-                    args.patientId, "child-medical.json", "Rapid Assessment"
+                    args.patientId, "new-born-child-medical.json", "Rapid Assessment"
                 )
             )
 
@@ -176,7 +176,7 @@ class ChildFragment : Fragment() {
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "new-born-registration.json", "Maternity Unit"
+                        args.patientId, "maternal-new-born-registration.json", "Maternity Unit"
                     )
                 )
             }

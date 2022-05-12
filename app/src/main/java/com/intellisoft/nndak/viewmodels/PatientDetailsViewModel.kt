@@ -12,12 +12,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
+import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.logic.Logics.Companion.assessment_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.child_feed_prescription
+import com.intellisoft.nndak.logic.Logics.Companion.child_feeding_data
+import com.intellisoft.nndak.logic.Logics.Companion.child_feeding_needs
+import com.intellisoft.nndak.logic.Logics.Companion.child_newborn_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.custom_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.human_milk_details
+import com.intellisoft.nndak.logic.Logics.Companion.maternity_baby_registration
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_child_details
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.newborn_unit_details
@@ -110,8 +116,10 @@ class PatientDetailsViewModel(
                     Observation.SUBJECT, { value = "Patient/$patientId" }
 
                 )
+                sort(Observation.DATE, Order.DESCENDING)
             }
             .take(MAX_RESOURCE_COUNT)
+
             .map { createObservationItem(it, getApplication<Application>().resources) }
             .let { data ->
                 /**
@@ -122,12 +130,25 @@ class PatientDetailsViewModel(
                         observations.addAll(
                             getAssessmentDetails(
                                 data,
-                                concatenate(maternity_unit_details, maternity_unit_child_details)
+                                concatenate(
+                                    maternity_unit_details,
+                                    maternity_unit_child_details,
+                                    maternity_baby_registration
+                                )
                             )
                         )
                     }
                     "1" -> {
-                        observations.addAll(getAssessmentDetails(data, newborn_unit_details))
+                        observations.addAll(
+                            getAssessmentDetails(
+                                data,
+                                concatenate(
+                                    newborn_unit_details,
+                                    child_newborn_unit_details,
+                                    child_feeding_needs, child_feed_prescription,child_feeding_data
+                                )
+                            )
+                        )
                     }
                     "2" -> {
                         observations.addAll(getAssessmentDetails(data, postnatal_unit_details))
@@ -174,7 +195,7 @@ class PatientDetailsViewModel(
             }
 
         }
-        return minor.distinct()
+        return minor.distinctBy { it.code }
     }
 
 
@@ -376,6 +397,7 @@ class PatientDetailsViewModel(
         val relation = getPatientRelatedPersons()
         val observations = getPatientObservations(context, code)
         val conditions = getPatientConditions()
+        data.clear()
 
         patient.let {
             data.add(PatientDetailOverview(it, firstInGroup = true))

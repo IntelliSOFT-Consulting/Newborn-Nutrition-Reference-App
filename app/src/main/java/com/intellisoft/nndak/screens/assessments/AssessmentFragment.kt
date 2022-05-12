@@ -97,7 +97,7 @@ class AssessmentFragment : Fragment() {
                 Timber.e("Resource ID::: " + args.patientId)
                 findNavController().navigate(
                     AssessmentFragmentDirections.navigateToScreening(
-                        args.patientId, "health-monitoring-information.json", "Health Monitoring"
+                        args.patientId, "new-born-monitoring-information.json", "Health Monitoring"
                     )
                 )
                 true

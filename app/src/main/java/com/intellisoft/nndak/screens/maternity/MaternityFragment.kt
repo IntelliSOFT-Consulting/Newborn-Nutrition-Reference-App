@@ -1,7 +1,9 @@
 package com.intellisoft.nndak.screens.maternity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +15,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.MaternityDetails
+import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
@@ -105,23 +108,45 @@ class MaternityFragment : Fragment() {
         }
         findNavController().navigate(
             MaternityFragmentDirections.navigateToScreening(
-                args.patientId, "child.json", "Maternity Unit"
+                args.patientId, "maternal-child-registration.json", "Maternity Unit"
             )
         )
     }
 
     private fun maternityClick() {
+        requestStage()
         activity?.let {
             FhirApplication.setCurrent(
                 it,
                 MATERNITY
             )
         }
-        findNavController().navigate(
-            MaternityFragmentDirections.navigateToScreening(
-                args.patientId, "maternity-registration.json", "Maternity Unit"
+
+    }
+
+    private fun requestStage() {
+        val builder = activity?.let { AlertDialog.Builder(it) }
+        builder?.setTitle("Select Option")
+        builder?.setMessage("Please select an option below")
+
+        builder?.setPositiveButton(getString(R.string.starting)) { dialog, which ->
+            dialog.dismiss()
+            findNavController().navigate(
+                MaternityFragmentDirections.navigateToScreening(
+                    args.patientId, "maternal-first-time-registration.json", "Maternity Unit"
+                )
             )
-        )
+        }
+
+        builder?.setNegativeButton(getString(R.string.existing)) { dialog, which ->
+            dialog.dismiss()
+            findNavController().navigate(
+                MaternityFragmentDirections.navigateToScreening(
+                    args.patientId, "maternal-maternity-registration.json", "Maternity Unit"
+                )
+            )
+        }
+        builder?.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

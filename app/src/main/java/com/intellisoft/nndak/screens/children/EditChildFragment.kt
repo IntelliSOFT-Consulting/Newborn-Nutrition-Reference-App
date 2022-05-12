@@ -34,7 +34,7 @@ class EditChildFragment : Fragment(R.layout.add_patient_fragment) {
             title = requireContext().getString(R.string.edit_child)
         }
         requireArguments()
-            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "child.json")
+            .putString(QUESTIONNAIRE_FILE_PATH_KEY, "maternal-child-registration.json")
 
         viewModel.liveChildData.observe(viewLifecycleOwner) { addQuestionnaireFragment(it) }
         viewModel.isPatientSaved.observe(viewLifecycleOwner) {
