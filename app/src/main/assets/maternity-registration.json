@@ -87,7 +87,7 @@
                   ],
                   "initial": [
                     {
-                      "valueString": "weeks"
+                      "valueString": "times"
                     }
                   ]
                 },
@@ -246,7 +246,7 @@
                 {
                   "text": "Last Menstrual Period",
                   "type": "date",
-                  "linkId": "menstrualPeriod",
+                  "linkId": "Last-Menstrual-Period",
                   "required": true,
                   "extension": [
                     {
@@ -654,21 +654,28 @@
                 {
                   "valueCoding": {
                     "code": "Labour Stage",
-                    "display": "Early Labor",
+                    "display": "Latent First Stage",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
                     "code": "Labour Stage",
-                    "display": "Active Labor",
+                    "display": "Active First Stage",
                     "system": "http://snomed.info/sct"
                   }
                 },
                 {
                   "valueCoding": {
                     "code": "Labour Stage",
-                    "display": "Transition",
+                    "display": "Second Stage",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Labour Stage",
+                    "display": "Third Stage",
                     "system": "http://snomed.info/sct"
                   }
                 }

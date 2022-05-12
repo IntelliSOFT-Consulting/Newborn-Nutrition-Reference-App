@@ -29,5 +29,51 @@ class Logics {
                 HIGH_BLOOD_LIPIDS
             )
         val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
+
+        val maternity_unit_details = listOf(
+            "Labour Stage", "Expected Date of Delivery", "Last Menstrual Period", "Gestation",
+        )
+        val maternity_unit_child_details = listOf(
+            "Appearance", "Time of Record", "Activity", "Grimace", "Pulse", "Respiration",
+        )
+        val newborn_unit_details = listOf(
+            "Hospital Receiving DHM",
+        )
+        val postnatal_unit_details = listOf(
+            "Hospital Receiving DHM",
+        )
+        val custom_unit_details = listOf(
+            "Hospital Receiving DHM",
+        )
+        val human_milk_details = listOf(
+            "Hospital Receiving DHM",
+            "Recipient Gestation",
+            "Recipient Location",
+            "Consent Given,",
+            "Consent Given",
+            "Consent Date",
+            "Clinician Designation",
+            "Clinician Name",
+            "Volume Prescribed per feed",
+            "DHM Volume Ordered",
+            "Legal Guardian Signature",
+            "Name of Prescriber", "Dispensing Staff Name",
+            "Nursing Staff Name", "Receiving Staff Name",
+            "Preterm or Term Milk", "Expiry Date",
+            "Hospital Receiving DHM", "Volume Dispensed",
+            "Time of DHM Order", "Number of Bottles",
+            "Order Accepted,", "Volume Dispensed",
+            "Order Accepted", "Number of Bottles",
+            "Total DHM Available", "Donor ID",
+            "Reason for Receiving DHM", "Batch Number",
+            "DHM Available,", "DHM Available", "DHM Volume Ordered",
+        )
+        val assessment_unit_details = listOf(
+            "Hospital Receiving DHM",
+        )
+
+        val monitoring_unit_details = listOf(
+            "Hospital Receiving DHM",
+        )
     }
 }

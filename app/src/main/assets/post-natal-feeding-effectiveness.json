@@ -1,0 +1,814 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "1.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Feeding-Readiness-Cues",
+              "text": "Wakes and shows feeding readiness cues",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Feeding Readiness Cues",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Feeding Readiness Cues",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "2.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Latches",
+              "text": "Latches",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Latches",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Latches",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "3.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Sucks-Steadily",
+              "text": "Sucks steadily and pauses:",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Sucks Steadily",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Sucks Steadily",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "4.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Swallows-Audibly",
+              "text": "Swallows audibly",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Swallows Audibly",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Swallows Audibly",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "5.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Feeds-Without-Chocking",
+              "text": "Feeds without chocking, turning blue or pale",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Feeds Without Chocking",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Feeds Without Chocking",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "6.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breasts-Softening",
+              "text": "Mother reports breasts softening",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Breasts Softening",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breasts Softening",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "7.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breasts-Softening",
+              "text": "Feeds for at least 10 mins per side",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "10 mins per side",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "10 mins per side",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "8.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breasts-Softening",
+              "text": "Sleeps comfortably between feeding every 2-3 hrs:",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Sleeps Comfortably",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Sleeps Comfortably",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "9.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breasts-Softening",
+              "text": "Has 6-8 wet diapers a day:",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "6-8 Wet Diaper",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "6-8 Wet Diaper",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "10.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breasts-Softening",
+              "text": "Loses no more than 10% of birth weight",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Loses no more than 10% of birth weight",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Loses no more than 10% of birth weight",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "11.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breast-Feeding-Efficient",
+              "text": "Breast feeding efficient",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Breast Feeding Efficient",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Feeding Efficient",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "12.0.0",
+      "type": "group",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "unwell"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.1.0",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Breast-Feeding-Sufficient",
+              "text": "Is breast feeding sufficient?",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Breast Feeding Sufficient",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Feeding Sufficient",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "13.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "additionalComments"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "Additional-Comments",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Completed",
+              "text": "Additional comments",
+              "type": "string",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "14.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
+        }
+      ],
+      "item": [
+        {
+          "linkId": "Done-Status",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "Completed",
+              "text": "Completed By",
+              "type": "string",
+              "required": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

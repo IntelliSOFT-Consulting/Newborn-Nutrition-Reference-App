@@ -15,6 +15,13 @@ import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.logic.Logics.Companion.assessment_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.custom_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.human_milk_details
+import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_child_details
+import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.newborn_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.ConditionItem
 import com.intellisoft.nndak.models.ObservationItem
 import com.intellisoft.nndak.models.PatientItem
@@ -39,18 +46,21 @@ class PatientDetailsViewModel(
     private val patientId: String
 ) : AndroidViewModel(application) {
     val livePatientData = MutableLiveData<List<PatientDetailData>>()
+    val context: Application = application
 
     /** Emits list of [PatientDetailData]. */
-    fun getPatientDetailData(show: Boolean) {
-        viewModelScope.launch { livePatientData.value = getPatientDetailDataModel(show) }
+    fun getPatientDetailData(show: Boolean, code: String) {
+        viewModelScope.launch {
+            livePatientData.value = getPatientDetailDataModel(show, context, code)
+        }
     }
 
-    fun getMaternityDetailData() {
-        viewModelScope.launch { livePatientData.value = getMaternityDetailDataModel() }
+    fun getMaternityDetailData(code: String) {
+        viewModelScope.launch { livePatientData.value = getMaternityDetailDataModel(context, code) }
     }
 
     /***
-     * Retrive Details of the Child
+     * Retrieve Details of the Child
      * ***/
     fun getChildDetailData() {
         viewModelScope.launch { livePatientData.value = getChildDetailDataModel() }
@@ -88,7 +98,10 @@ class PatientDetailsViewModel(
         return relations
     }
 
-    private suspend fun getPatientObservations(): List<ObservationItem> {
+    private suspend fun getPatientObservations(
+        context: Application,
+        code: String
+    ): List<ObservationItem> {
         val observations: MutableList<ObservationItem> = mutableListOf()
 
         fhirEngine
@@ -100,11 +113,70 @@ class PatientDetailsViewModel(
             }
             .take(MAX_RESOURCE_COUNT)
             .map { createObservationItem(it, getApplication<Application>().resources) }
-            .let { observations.addAll(it) }
+            .let { data ->
+                /**
+                 * Check the current Unit and return related data
+                 */
+                when (code) {
+                    "0" -> {
+                        observations.addAll(
+                            getAssessmentDetails(
+                                data,
+                                concatenate(maternity_unit_details, maternity_unit_child_details)
+                            )
+                        )
+                    }
+                    "1" -> {
+                        observations.addAll(getAssessmentDetails(data, newborn_unit_details))
+                    }
+                    "2" -> {
+                        observations.addAll(getAssessmentDetails(data, postnatal_unit_details))
+                    }
+                    "3" -> {
+                        observations.addAll(getAssessmentDetails(data, custom_unit_details))
+                    }
+                    "4" -> {
+                        observations.addAll(getAssessmentDetails(data, human_milk_details))
+                    }
+                    "5" -> {
+                        observations.addAll(getAssessmentDetails(data, assessment_unit_details))
+                    }
+                    else -> {
+                        observations.addAll(data)
+                    }
+
+                }
+            }
 
 
-        return observations
+        return observations.distinct()
     }
+
+    private fun <T> concatenate(vararg lists: List<T>): List<T> {
+        val result: MutableList<T> = ArrayList()
+        lists.forEach { list: List<T> -> result.addAll(list) }
+        return result
+    }
+
+    private fun getAssessmentDetails(
+        data: List<ObservationItem>,
+        human_milk_details: List<String>
+    ): Collection<ObservationItem> {
+        val minor: MutableList<ObservationItem> = mutableListOf()
+
+        for (i in data.indices) {
+            human_milk_details.forEach {
+                if (data[i].code == it) {
+                    val one =
+                        ObservationItem(data[i].id, data[i].code, data[i].effective, data[i].value)
+                    minor.add(one)
+                }
+            }
+
+        }
+        return minor.distinct()
+    }
+
 
     /**
      * Child Observations
@@ -189,13 +261,16 @@ class PatientDetailsViewModel(
         return data
     }
 
-    private suspend fun getMaternityDetailDataModel(): List<PatientDetailData> {
+    private suspend fun getMaternityDetailDataModel(
+        context: Application,
+        code: String
+    ): List<PatientDetailData> {
         val data = mutableListOf<PatientDetailData>()
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
 
         val relation = getPatientRelatedPersons()
-        val observations = getPatientObservations()
+        val observations = getPatientObservations(context, code)
         val conditions = getPatientConditions()
 
         patient.let {
@@ -289,13 +364,17 @@ class PatientDetailsViewModel(
         return data
     }
 
-    private suspend fun getPatientDetailDataModel(show: Boolean): List<PatientDetailData> {
+    private suspend fun getPatientDetailDataModel(
+        show: Boolean,
+        context: Application,
+        code: String
+    ): List<PatientDetailData> {
         val data = mutableListOf<PatientDetailData>()
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
 
         val relation = getPatientRelatedPersons()
-        val observations = getPatientObservations()
+        val observations = getPatientObservations(context, code)
         val conditions = getPatientConditions()
 
         patient.let {
@@ -516,8 +595,6 @@ class PatientDetailsViewModel(
             observation: Observation,
             resources: Resources
         ): ObservationItem {
-//            val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
-
             val observationCode = observation.code.codingFirstRep.code ?: ""
 
 
@@ -589,6 +666,8 @@ class PatientDetailsViewModel(
                 value
             )
         }
+
+
     }
 }
 

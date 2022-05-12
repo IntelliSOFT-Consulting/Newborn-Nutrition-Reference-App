@@ -19,7 +19,7 @@ import com.intellisoft.nndak.databinding.FragmentChildBinding
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
 import com.intellisoft.nndak.utils.Constants.CHILD_ASSESSMENT
-import com.intellisoft.nndak.utils.Constants.FEEDING_NEEDS
+import com.intellisoft.nndak.utils.Constants.CHILD_FEEDING_EFFECTIVENESS
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -80,7 +80,7 @@ class ChildFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData(false)
+        patientDetailsViewModel.getPatientDetailData(false, args.code)
         (activity as MainActivity).setDrawerEnabled(false)
         updateTitles()
         bottomSheetBehavior = BottomSheetBehavior.from(binding.child.bottomSheet)
@@ -176,7 +176,7 @@ class ChildFragment : Fragment() {
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-a5.json", "Maternity Unit"
+                        args.patientId, "new-born-registration.json", "Maternity Unit"
                     )
                 )
             }
@@ -189,7 +189,20 @@ class ChildFragment : Fragment() {
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-d4.json", "New Born Unit"
+                        args.patientId, "new-born-admission.json", "New Born Unit"
+                    )
+                )
+            }
+            "2" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        NEWBORN_ADMISSION
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "post-natal-supplements.json", "Supplements Consideration"
                     )
                 )
             }
@@ -224,6 +237,19 @@ class ChildFragment : Fragment() {
                 }
                 toggleSheet()
             }
+            "2" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        CHILD_FEEDING_EFFECTIVENESS
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "post-natal-feeding-effectiveness.json", "Baby’s Feeding Effectiveness"
+                    )
+                )
+            }
             else -> {
 
             }
@@ -249,6 +275,10 @@ class ChildFragment : Fragment() {
             "1" -> {
                 binding.actionScore.text = getString(R.string.action_assess)
                 binding.actionAssess.text = getString(R.string.action_new_admission)
+            }
+            "2" -> {
+                binding.actionScore.text = getString(R.string.action_feeding_effectiveness)
+                binding.actionAssess.text = getString(R.string.action_supplements)
             }
             else -> {
 

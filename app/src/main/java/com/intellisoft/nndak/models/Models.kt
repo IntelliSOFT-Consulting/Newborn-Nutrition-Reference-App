@@ -25,6 +25,11 @@ data class PatientItem(
 
 }
 
+data class BasicThree(
+    val lmp: String,
+    val edd: String,
+    val gestation: String,
+)
 
 data class RelatedPersonItem(
     val id: String,

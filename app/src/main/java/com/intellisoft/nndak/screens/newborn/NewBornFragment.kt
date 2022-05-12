@@ -2,7 +2,6 @@ package com.intellisoft.nndak.screens.newborn
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -14,17 +13,12 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.MaternityDetails
-import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
-import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
-import com.intellisoft.nndak.screens.patients.PatientListFragmentDirections
-import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MOTHER_ASSESSMENT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 class NewBornFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
@@ -77,7 +71,7 @@ class NewBornFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getMaternityDetailData()
+        patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
 
     }

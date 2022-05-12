@@ -85,12 +85,13 @@
                             app:tint="@color/colorPrimary" />
 
                         <TextView
+                            android:id="@+id/tv_first_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="@dimen/smallmargin"
-                            android:text="@string/app_feeding_needs"
+                            android:text="@string/app_lactation"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="normal"
@@ -99,10 +100,11 @@
                             app:layout_constraintTop_toBottomOf="@+id/img_needs" />
 
                         <TextView
+                            android:id="@+id/tv_last_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/smallmargin"
-                            android:text="@string/app_feeding_prescribe"
+                            android:text="@string/app_milk_expression"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="normal"
@@ -113,86 +115,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:padding="@dimen/mediumpadding"
-                        tools:layout_editor_absoluteX="5dp"
-                        tools:layout_editor_absoluteY="5dp">
-
-                        <ImageView
-                            android:id="@+id/img_health"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/round_basic_button"
-                            android:padding="10dp"
-                            android:src="@drawable/heart"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/img_data"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/colorPrimary" />
-
-                        <ImageView
-                            android:id="@+id/img_data"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/round_basic_button"
-                            android:padding="10dp"
-                            android:src="@drawable/behavior"
-                            app:layout_constraintEnd_toStartOf="@+id/img_health"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/colorPrimary" />
-
-                        <TextView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/app_feeding_data"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="normal"
-                            app:layout_constraintEnd_toEndOf="@+id/img_data"
-                            app:layout_constraintStart_toStartOf="@+id/img_data"
-                            app:layout_constraintTop_toBottomOf="@+id/img_data" />
-
-                        <TextView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/smallmargin"
-                            android:text="@string/app_health"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="normal"
-                            app:layout_constraintEnd_toEndOf="@+id/img_health"
-                            app:layout_constraintStart_toStartOf="@+id/img_health"
-                            app:layout_constraintTop_toBottomOf="@+id/img_health" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_assess"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:drawableStart="@drawable/ic_baseline_add_24"
-                    android:drawablePadding="2dp"
-                    android:paddingStart="2dp"
-                    android:text="@string/action_assess_child"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    app:cornerRadius="@dimen/_35dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

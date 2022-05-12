@@ -63,7 +63,7 @@ class PatientDetailsFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData(true)
+        patientDetailsViewModel.getPatientDetailData(true, args.code)
         (activity as MainActivity).setDrawerEnabled(false)
     }
 

@@ -38,13 +38,12 @@ import com.intellisoft.nndak.models.PatientItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
-import com.intellisoft.nndak.viewmodels.TAG
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.lang.Exception
 
-class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
+class PatientListFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
@@ -58,7 +57,7 @@ class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
 
     private var formatter = FormatHelper()
 
-    private var filterData : String? = null
+    private var filterData: String? = null
 
     private lateinit var healthViewModel: HealthViewModel
 
@@ -132,28 +131,32 @@ class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
 
-                    if (filterData == DbMotherKey.PATIENT_NAME.name){
+                    if (filterData == DbMotherKey.PATIENT_NAME.name) {
                         patientListViewModel.searchPatientsByName(newText)
-                    }else {
+                    } else {
 
-                        formatter.saveSharedPreference(requireContext(),
-                            "queryValue", newText.toString())
+                        formatter.saveSharedPreference(
+                            requireContext(),
+                            "queryValue", newText.toString()
+                        )
 
                         val motherInfo =
                             filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
 
-                        if (motherInfo != null){
+                        if (motherInfo != null) {
 
                             val patientName = motherInfo.familyName
                             patientListViewModel.searchPatientsByName(patientName)
 
-                        }else{
+                        } else {
 
                             patientListViewModel.searchPatientsByName(newText)
 
-                            Toast.makeText(requireContext(),
+                            Toast.makeText(
+                                requireContext(),
                                 "We could not find the patient.",
-                                Toast.LENGTH_SHORT).show()
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
 
@@ -233,7 +236,7 @@ class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
             if (args.step == "0") {
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToMaternity(
-                        patientItem.resourceId,"0"
+                        patientItem.resourceId, "0"
                     )
                 )
             }
@@ -248,20 +251,21 @@ class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
             if (args.step == "2") {
 
                 findNavController().navigate(
-                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId,"1")
+                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId, "1")
                 )
 
             }
             if (args.step == "3") {
+
                 findNavController().navigate(
-                    PatientListFragmentDirections.navigateToPostNatal(patientItem.resourceId)
+                    PatientListFragmentDirections.navigateToPostNatal(patientItem.resourceId, "2")
                 )
             }
             if (args.step == "4") {
 
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToProductDetail(
-                        patientItem.resourceId
+                        patientItem.resourceId, "3"
                     )
                 )
             }
@@ -269,14 +273,15 @@ class PatientListFragment : Fragment() , AdapterView.OnItemSelectedListener{
 
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToDhm(
-                        patientItem.resourceId
+                        patientItem.resourceId, "4"
                     )
                 )
             }
             if (args.step == "6") {
+
                 findNavController().navigate(
                     PatientListFragmentDirections.navigateToAssessment(
-                        patientItem.resourceId
+                        patientItem.resourceId, "5"
                     )
                 )
             }

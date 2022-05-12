@@ -1,7 +1,6 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -11,9 +10,11 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
+import com.intellisoft.nndak.models.BasicThree
 import com.intellisoft.nndak.screens.ScreenerFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +44,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         get() = FhirContext.forR4().newJsonParser().parseResource(questionnaire) as Questionnaire
     private var questionnaireJson: String? = null
     private var fhirEngine: FhirEngine = FhirApplication.fhirEngine(application.applicationContext)
+
+    private val user = FhirApplication.getProfile(application.applicationContext)
+    private val gson = Gson()
+
 
     fun saveScreenerEncounter(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
@@ -74,12 +79,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
 
-    private suspend fun getEDD(itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>): String {
+    private suspend fun getEDD(itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>): BasicThree {
 
         val formatHelper = FormatHelper()
 
-        var edd: Date? = null
-        var eddString = ""
+        var basicThree = BasicThree("", "", "")
 
         for (mainItem in itemsList1) {
 
@@ -104,13 +108,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 for (pregnancyDetails in pregnancyDetailsList) {
 
                                     val menstrualAnswerList = pregnancyDetails.answer
-                                    val linkId = pregnancyDetails.linkId
 
                                     for (pregnancyDetailsItem in menstrualAnswerList) {
                                         val lmp = pregnancyDetailsItem.value.dateTimeValue().value
                                         val eddStr = formatHelper.getCalculations(lmp.toString())
-//                                        edd = formatHelper.convertDate(eddStr)
-                                        eddString = eddStr
+                                        val ges = formatHelper.calculateGestation(lmp.toString())
+                                        basicThree = BasicThree(
+                                            formatHelper.refineLMP(lmp.toString()),
+                                            eddStr,
+                                            ges
+                                        )
                                     }
 
                                 }
@@ -128,44 +135,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
         }
 
-        return eddString
+        return basicThree
     }
 
-    fun saveChild(questionnaireResponse: QuestionnaireResponse, patientId: String) {
-        viewModelScope.launch {
-            val entry =
-                ResourceMapper.extract(
-                    getApplication(),
-                    questionnaireResource,
-                    questionnaireResponse
-                )
-                    .entryFirstRep
-            if (entry.resource !is Patient) return@launch
-            val child = entry.resource as Patient
-
-            if (child.hasBirthDate() && child.hasGender()) {
-
-                val birthDate = child.birthDate.toString()
-                val todayDate = FormatHelper().getTodayDate()
-                val isDateValid = FormatHelper().checkDate(birthDate, todayDate)
-
-                if (isDateValid) {
-                    val subjectReference = Reference("Patient/$patientId")
-                    child.active = true
-                    child.id = generateUuid()
-
-                    fhirEngine.create(child)
-                    isResourcesSaved.value = true
-                    return@launch
-
-                }
-
-                isResourcesSaved.value = false
-            }
-
-            isResourcesSaved.value = false
-        }
-    }
 
     fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
@@ -210,29 +182,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val context = FhirContext.forR4()
-            Timber.d(
-                "Questionnaire Response::::1 " + context.newJsonParser()
-                    .encodeResourceToString(questionnaireResponse)
-            )
+
 
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
             try {
-                val json = JSONObject(questionnaire)
-                val item = json.getJSONArray("item")
-                val parent = item.getJSONObject(2).getString("item")
-                val common = JSONArray(parent)
-                val health = common.getJSONObject(0).getString("item")
-                val commonAnswer = JSONArray(health)
-                val answer = commonAnswer.getJSONObject(0).getString("answer")
-                val valueString = JSONArray(answer)
-                val value = valueString.getJSONObject(0).getString("valueString")
-
-
                 if (isRequiredFieldMissing(bundle)) {
                     isResourcesSaved.value = false
                     return@launch
                 }
+
+                val value = extractStatus(questionnaire)
+
+
                 val qh = QuestionnaireHelper()
                 bundle.addEntry()
                     .setResource(
@@ -244,38 +206,67 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                     .request.url = "Observation"
                 val itemsList1 = questionnaireResponse.item
-                val edd = getEDD(itemsList1)
+                val basicThree = getEDD(itemsList1)
 
-                val eddQh = QuestionnaireHelper()
                 bundle.addEntry()
                     .setResource(
-                        eddQh.codingQuestionnaire(
+                        qh.codingQuestionnaire(
                             "Expected Date of Delivery",
                             "Expected Date of Delivery",
-                            edd
+                            basicThree.edd
+                        )
+                    )
+                    .request.url = "Observation"
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Last Menstrual Period",
+                            "Last Menstrual Period",
+                            basicThree.lmp
                         )
                     )
                     .request.url = "Observation"
 
-                if (isRequiredFieldMissing(bundle)) {
-                    isResourcesSaved.value = false
-                    return@launch
-                }
+
+           /*     bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Gestation",
+                            "Gestation",
+                            basicThree.gestation
+                        )
+                    )
+                    .request.url = "Observation"
+*/
+
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 saveResources(bundle, subjectReference, encounterId)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                isResourcesSaved.value = true
+                isResourcesSaved.value = false
+                return@launch
 
 
             } catch (e: Exception) {
                 Timber.d("Exception:::: ${e.printStackTrace()}")
-                apgarScore.value = ApGar("", "Check All Inputs", false)
+                isResourcesSaved.value = false
                 return@launch
             }
 
 
         }
+    }
+
+    private fun extractStatus(questionnaire: String): String {
+        val json = JSONObject(questionnaire)
+        val item = json.getJSONArray("item")
+        val parent = item.getJSONObject(2).getString("item")
+        val common = JSONArray(parent)
+        val health = common.getJSONObject(0).getString("item")
+        val commonAnswer = JSONArray(health)
+        val answer = commonAnswer.getJSONObject(0).getString("answer")
+        val valueString = JSONArray(answer)
+        return valueString.getJSONObject(0).getString("valueString")
     }
 
     fun saveAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -292,6 +283,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            Timber.e("Questionnaire  $questionnaire")
             try {
                 val json = JSONObject(questionnaire)
                 val common = json.getJSONArray("item")
@@ -307,12 +299,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
 
-                            Timber.e("Answers:::: $inner")
                             if (childChild == "Time-Seen") {
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
 
-                                val value = ans.getJSONObject(0).getString("valueDateTime")
+                                val value = extractValueDateTime(inner)
 
                                 bundle.addEntry()
                                     .setResource(
@@ -336,10 +325,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                             }
                             if (childChild == "Shift-Time") {
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
 
-                                val value = ans.getJSONObject(0).getString("valueDateTime")
+                                val value = extractValueDateTime(inner)
 
                                 bundle.addEntry()
                                     .setResource(
@@ -394,8 +381,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Completed-By") {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                /*   val childAnswer = inner.getJSONArray("answer")
+                                   val value = childAnswer.getJSONObject(0).getString("valueString")
+   */
+                                /**
+                                 * Retrieve Logged User
+                                 */
+                                val value = retrieveUser(false)
 
                                 bundle.addEntry()
                                     .setResource(
@@ -469,10 +461,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Feeding-Status") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
 
                                 bundle.addEntry()
                                     .setResource(
@@ -486,10 +475,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Outcome-Status") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -502,10 +488,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Diagnosis-Status") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -518,10 +501,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Intervention-Status") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -532,12 +512,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Recipient-Location") {
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Recipient Location",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Done-Status") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = retrieveUser(false)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -548,12 +538,61 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Name-Of-Prescriber") {
+
+                                val value = retrieveUser(false)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Name of Prescriber",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Nursing-Staff-Name") {
+
+                                val value = retrieveUser(false)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Nursing Staff Name",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Clinician-Name") {
+
+                                val value = retrieveUser(false)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Clinician Name",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Clinician-Designation") {
+
+                                val value = retrieveUser(true)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Clinician Designation",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Treatment-Duration") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -566,10 +605,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Prescribing-Instructions") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -580,12 +616,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Reason-For-Receiving") {
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Reason for Receiving DHM",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Any-Remarks") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -598,10 +644,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Nursing-Plan") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
 
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -614,10 +658,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Prescription-Time") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueDateTime")
+                                val value = extractValueDateTime(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -638,12 +679,101 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "DHM-Time") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time of DHM Order",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Time-Lactation-Support") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time of Lactation Support",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Time-of-Storage") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time of Storage",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Time-of-Expression") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time of Expression",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Nursing-Plan") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -654,16 +784,137 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Batch-Number") {
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Batch Number",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Donor-ID") {
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Donor ID",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Shift-Notes") {
 
-                                val childAnswer = inner.getJSONArray("item")
-                                val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
-
-                                val value = ans.getJSONObject(0).getString("valueString")
+                                val value = extractValueString(inner)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
                                             "Shift Notes",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Additional-Comments") {
+
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Additional Comments",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Feeding-Considered") {
+
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Feeding Considered",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Legal-Guardian-Signature") {
+
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Legal Guardian Signature",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Dispensing-Staff-Name") {
+
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Dispensing Staff Name",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Receiving-Staff-Name") {
+
+
+                                val value = extractValueString(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Dispensing Staff Name",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Consent-Date") {
+
+
+                                val value = extractValueDate(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Consent Date",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Expiry-Date") {
+
+
+                                val value = extractValueDate(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Expiry Date",
                                             value,
                                             value
                                         )
@@ -691,6 +942,46 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 return@launch
             }
         }
+    }
+
+    private fun extractValueDate(inner: JSONObject): String {
+
+        val childAnswer = inner.getJSONArray("item")
+        val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+        return ans.getJSONObject(0).getString("valueDate")
+    }
+
+    private fun retrieveUser(isRole: Boolean): String {
+        val name = try {
+            val it: User = gson.fromJson(user, User::class.java)
+            if (isRole) {
+                it.role
+            } else {
+                it.names
+            }
+        } catch (e: Exception) {
+            ""
+        }
+        return name
+    }
+
+
+    private fun extractValueString(inner: JSONObject): String {
+
+        val childAnswer = inner.getJSONArray("item")
+        val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+        return ans.getJSONObject(0).getString("valueString")
+    }
+
+    private fun extractValueDateTime(inner: JSONObject): String {
+
+        val childAnswer = inner.getJSONArray("item")
+        val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+        return ans.getJSONObject(0).getString("valueDateTime")
+
     }
 
     fun saveApgar(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -880,6 +1171,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         encounterId: String,
         total: Int
     ) {
+        Timber.e("Bundle $bundle")
         val riskProbability = getProbability(total)
         riskProbability?.let { rProbability ->
             val riskAssessment =
@@ -1019,6 +1311,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
      * apgar score
      * ***/
 
+
+}
+
+private operator fun String.div(divisor: Int): Int {
+    return divisor
+
+}
+
+private operator fun String.rem(divisor: Int): Int {
+    return divisor
 
 }
 

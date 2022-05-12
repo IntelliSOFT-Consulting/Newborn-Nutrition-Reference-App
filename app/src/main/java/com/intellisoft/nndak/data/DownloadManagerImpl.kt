@@ -52,10 +52,11 @@ class DownloadManagerImpl : DownloadWorkManager {
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
 
-            for (i in 0 until response.total) {
+         /*   for (i in 0 until response.total) {
+                //if (response.entry[i].)
                 val u = "${response.entry[i].fullUrl}/\$everything"
                 urls.add(u)
-            }
+            }*/
             val nextUrl =
                 response.link.firstOrNull { component -> component.relation == "next" }?.url
             if (nextUrl != null) {

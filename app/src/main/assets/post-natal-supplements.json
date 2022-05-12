@@ -1,0 +1,150 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "1.0.0",
+      "type": "group",
+      "text": "Consider Feeding Supplements",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "mha"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "2.0.0",
+          "type": "group",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "expressingMilk"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Feeding-Supplements",
+              "text": "Do feeding supplements need to be considered?",
+              "type": "choice",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Feeding Supplements Considered",
+                    "display": "Yes",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Feeding Supplements Considered",
+                    "display": "No",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "OutcomeStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Feeding-Considered",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Completed",
+                  "text": "Feeding supplements to be considered",
+                  "type": "string",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "4.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "additionalComments"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Additional-Comments",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Completed",
+                  "text": "Any additional comments",
+                  "type": "string",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

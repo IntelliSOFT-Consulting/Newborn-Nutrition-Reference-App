@@ -2,14 +2,17 @@ package com.intellisoft.nndak.helper_class
 
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
+import timber.log.Timber
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.concurrent.fixedRateTimer
+import java.util.concurrent.TimeUnit
 
 
 class FormatHelper {
@@ -36,12 +39,57 @@ class FormatHelper {
             cal.add(Calendar.YEAR, 1)
         }
 
-        val sdf1 = SimpleDateFormat("dd-MMM-yyyy")
+        val sdf1 = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
 
         val newDate = cal.time
 
         return sdf1.format(newDate)
 
+
+    }
+
+    fun refineLMP(dateStr: String): String {
+
+        val tripleData = getDateDetails(dateStr)
+
+        val day = tripleData.first.toString().toInt()
+        val month = tripleData.second.toString().toInt()
+        val year = tripleData.third.toString().toInt()
+
+        return "$day-$month-$year"
+    }
+
+    fun calculateGestation(lmpDate: String): String {
+
+        val days = try {
+         /*   val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+            val today = getTodayDateNoTime()
+            val formatted = getRefinedDate(lmpDate)
+            *//*   Timber.e("Current $today")
+               Timber.e("Previous $formatted")
+               val date1: Date = sdf.parse(today)
+               val date2: Date = sdf.parse(formatted)*//*
+            val totalDays = Period.between(LocalDate.parse(lmpDate), LocalDate.now()).let {
+                when {
+                    it.days > 0 -> it.days
+                    else -> it.days
+                }
+            }
+*//*
+            val diff: Long = date1.time - date2.time*//*
+           // val totalDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+            val daysOfWeek = 7
+            val weeks = totalDays / daysOfWeek
+            val days = totalDays % daysOfWeek
+
+            Timber.e("$totalDays total $weeks weeks $days days")
+            "$totalDays total $weeks weeks $days days"*/
+            "40"
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "0 "
+        }
+        return days
 
     }
 
@@ -64,22 +112,22 @@ class FormatHelper {
 
     fun convertDate(valueDate: String): Date {
 
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val currentDate = sdf.parse(valueDate)
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
         val newDateStr = sdf1.format(currentDate)
         return sdf1.parse(newDateStr)
     }
 
     fun checkDate(birthDate: String, d2: String): Boolean {
 
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
         val currentdate = sdf1.parse(birthDate)
 
-        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val newCurrentDate = sdf2.format(currentdate)
 
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val date1 = sdf.parse(newCurrentDate)
         val date2 = sdf.parse(d2)
 
@@ -92,11 +140,26 @@ class FormatHelper {
     }
 
 
-
     fun getTodayDate(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val date = Date()
         return formatter.format(date)
+    }
+
+    fun getTodayDateNoTime(): String {
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val date = Date()
+        return formatter.format(date)
+    }
+
+    private fun getRefinedDate(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
     }
 
     fun checkPhoneNo(string: String): Boolean {
@@ -188,7 +251,7 @@ class FormatHelper {
 
     }
 
-    fun getSearchQuery(spinnerValue: String, context: Context):String{
+    fun getSearchQuery(spinnerValue: String, context: Context): String {
 
         val birds = context.resources.getStringArray(R.array.birds)
 
@@ -214,4 +277,14 @@ class FormatHelper {
 
     }
 
+    fun formatDate(toString: String): String {
+
+        val sdf1 = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+        return sdf1.format(toString)
+
+    }
+
+
 }
+
+

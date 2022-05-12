@@ -40,7 +40,7 @@
           "item": [
             {
               "text": "Identification number of hospital receiving the DHM",
-              "linkId": "10.1.1",
+              "linkId": "1.1.1",
               "type": "choice",
               "required": true,
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",

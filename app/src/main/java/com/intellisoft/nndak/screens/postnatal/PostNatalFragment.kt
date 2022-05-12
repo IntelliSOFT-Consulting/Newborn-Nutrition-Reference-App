@@ -4,16 +4,22 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
+import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.databinding.FragmentPostNatalBinding
+import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.utils.Constants.POST_LACTATION_ASSESSMENT
+import com.intellisoft.nndak.utils.Constants.POST_MOTHER_ASSESSMENT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -22,10 +28,12 @@ class PostNatalFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: PostNatalFragmentArgs by navArgs()
+    private lateinit var unit: String
     private var _binding: FragmentPostNatalBinding? = null
     private val binding
         get() = _binding!!
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -53,27 +61,117 @@ class PostNatalFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        val steps = Steps(fistIn = "Assessment", lastIn = "Lactation Support", secondButton = true)
+        unit = "Post Natal Unit"
+        val adapter =
+            MaternityDetails(
+                this::onAddScreenerClick,
+                this::lactationClick,
+                this::assessmentClick,
+                steps,
+                true
+            )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Post Natal Unit"
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData(false)
+        patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.post.bottomSheet)
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                val text = when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> "Close Persistent Bottom Sheet"
+                    BottomSheetBehavior.STATE_COLLAPSED -> "Open Persistent Bottom Sheet"
+                    else -> "Persistent Bottom Sheet"
+                }
+                Timber.e("State:::: $text")
+            }
+        })
+        bottomSheetButtons()
     }
 
-    private fun onAddScreenerClick() {
+    private fun bottomSheetButtons() {
+        binding.post.imgExit.setOnClickListener {
+            toggleSheet()
+
+        }
+        binding.post.imgNeeds.setOnClickListener {
+            toggleSheet()
+            activity?.let {
+                FhirApplication.setCurrent(
+                    it,
+                    POST_LACTATION_ASSESSMENT
+                )
+            }
+            findNavController().navigate(
+                PostNatalFragmentDirections.navigateToScreening(
+                    args.patientId,
+                    "post-natal-lactation-assessment.json",
+                    "Lactation Support Assessment"
+                )
+            )
+        }
+        binding.post.imgFeeds.setOnClickListener {
+            toggleSheet()
+            activity?.let {
+                FhirApplication.setCurrent(
+                    it,
+                    POST_LACTATION_ASSESSMENT
+                )
+            }
+            findNavController().navigate(
+                PostNatalFragmentDirections.navigateToScreening(
+                    args.patientId, "post-milk-expression.json", "Milk Expression and Storage"
+                )
+            )
+        }
 
     }
 
-    private fun onMaternityClick() {
+    private fun toggleSheet() {
 
+        val state = if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED)
+            BottomSheetBehavior.STATE_COLLAPSED
+        else
+            BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = state
+    }
+
+    private fun onAddScreenerClick(related: RelatedPersonItem) {
+        findNavController().navigate(
+            PostNatalFragmentDirections.navigateToChild(related.id, args.code, unit)
+        )
+    }
+
+    private fun assessmentClick() {
+        activity?.let {
+            FhirApplication.setCurrent(
+                it,
+                POST_MOTHER_ASSESSMENT
+            )
+        }
+        findNavController().navigate(
+            PostNatalFragmentDirections.navigateToScreening(
+                args.patientId, "post-natal-mother-assessment.json", "Mother’s Health Assessment"
+            )
+        )
+
+    }
+
+    private fun lactationClick() {
+        toggleSheet()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.post_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -82,33 +180,7 @@ class PostNatalFragment : Fragment() {
                 NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-            R.id.menu_new_born -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    PostNatalFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-f3.json", "Post Natal Unit"
-                    )
-                )
-                true
-            }
-            R.id.menu_assessment -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    PostNatalFragmentDirections.navigateToScreening(
-                        args.patientId, "record-feeding-data.json", "Rapid Assessment"
-                    )
-                )
-                true
-            }
-            R.id.menu_prescribe -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    PostNatalFragmentDirections.navigateToScreening(
-                        args.patientId, "nn-e4.json", "Prescribe Feeds"
-                    )
-                )
-                true
-            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

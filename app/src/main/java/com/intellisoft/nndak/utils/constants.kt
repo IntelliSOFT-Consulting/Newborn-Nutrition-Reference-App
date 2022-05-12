@@ -31,5 +31,13 @@ object Constants {
     const val NEWBORN_ADMISSION = "5"
     const val MOTHER_ASSESSMENT = "6"
     const val CHILD_ASSESSMENT = "7"
+    const val POST_MOTHER_ASSESSMENT = "8"
+    const val POST_LACTATION_ASSESSMENT = "9"
+    const val CHILD_FEEDING_EFFECTIVENESS = "10"
+    const val MILK_CONSENT_FORM = "11"
+    const val MILK_PRESCRIPTION = "12"
+    const val MILK_RECEIVABLE = "10"
+
+
 
 }
