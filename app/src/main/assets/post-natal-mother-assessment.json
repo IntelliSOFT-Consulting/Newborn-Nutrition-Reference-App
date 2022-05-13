@@ -193,6 +193,13 @@
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Lactation Support Required",
+                    "display": "NA",
+                    "system": "http://snomed.info/sct"
+                  }
                 }
               ]
             }

@@ -190,7 +190,6 @@
                     android:drawableStart="@drawable/ic_baseline_add_24"
                     android:drawablePadding="2dp"
                     android:paddingStart="2dp"
-                    android:visibility="gone"
                     android:text="@string/action_assess_child"
                     android:textAppearance="?attr/textAppearanceBody2"
                     app:cornerRadius="@dimen/_35dp" />

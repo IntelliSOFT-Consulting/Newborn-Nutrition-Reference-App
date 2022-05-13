@@ -62,32 +62,27 @@ class FormatHelper {
     fun calculateGestation(lmpDate: String): String {
 
         val days = try {
-         /*   val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             val today = getTodayDateNoTime()
             val formatted = getRefinedDate(lmpDate)
-            *//*   Timber.e("Current $today")
-               Timber.e("Previous $formatted")
-               val date1: Date = sdf.parse(today)
-               val date2: Date = sdf.parse(formatted)*//*
-            val totalDays = Period.between(LocalDate.parse(lmpDate), LocalDate.now()).let {
-                when {
-                    it.days > 0 -> it.days
-                    else -> it.days
-                }
-            }
-*//*
-            val diff: Long = date1.time - date2.time*//*
-           // val totalDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+            Timber.e("Current $today")
+            Timber.e("Previous $formatted")
+            val date1 = sdf.parse(today)
+            val date2 = sdf.parse(formatted)
+
+            val diff: Long = date1.time - date2.time
+
+             val totalDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
             val daysOfWeek = 7
             val weeks = totalDays / daysOfWeek
             val days = totalDays % daysOfWeek
 
             Timber.e("$totalDays total $weeks weeks $days days")
-            "$totalDays total $weeks weeks $days days"*/
-            "40"
+            "$weeks week(s) $days days"
+
         } catch (e: Exception) {
             e.printStackTrace()
-            "0 "
+            "0"
         }
         return days
 

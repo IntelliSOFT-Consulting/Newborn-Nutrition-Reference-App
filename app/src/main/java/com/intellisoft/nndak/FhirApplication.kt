@@ -8,6 +8,8 @@ import com.google.android.fhir.sync.Sync
 import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
+import com.intellisoft.nndak.utils.Constants.DEMO_API_SERVER
+import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
@@ -64,16 +66,13 @@ class FhirApplication : Application() {
 
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL,
-                "https://devnndak.intellisoftkenya.com/api/"
+                SERVER_URL, DEMO_API_SERVER
             )
         }
 
         fun getHapiServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL_DEMO,
-//                "https://devnndak.intellisoftkenya.com/fhir/"
-                "https://hapi.fhir.org/baseR4/"
+                SERVER_URL_DEMO, DEMO_SERVER
             )
         }
 
@@ -136,13 +135,14 @@ class FhirApplication : Application() {
         }
 
         fun setCurrent(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("State", state).commit()
+            (context.applicationContext as FhirApplication).editor.putString("State", state)
+                .commit()
         }
 
         fun getCurrent(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "State",""
-                ).toString()
+                "State", ""
+            ).toString()
         }
 
     }

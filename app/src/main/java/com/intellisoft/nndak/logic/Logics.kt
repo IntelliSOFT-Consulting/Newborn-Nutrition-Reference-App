@@ -5,17 +5,49 @@ import org.hl7.fhir.r4.model.codesystems.ListOrder
 class Logics {
 
     companion object {
-        const val ASTHMA = "161527007"
-        const val LUNG_DISEASE = "13645005"
-        const val DEPRESSION = "35489007"
-        const val DIABETES = "161445009"
-        const val HYPER_TENSION = "161501007"
-        const val HEART_DISEASE = "56265001"
-        const val HIGH_BLOOD_LIPIDS = "161450003"
-        const val FEVER = "386661006"
-        const val SHORTNESS_BREATH = "13645005"
-        const val COUGH = "49727002"
-        const val LOSS_OF_SMELL = "44169009"
+        private const val ASTHMA = "161527007"
+        private const val LUNG_DISEASE = "13645005"
+        private const val DEPRESSION = "35489007"
+        private const val DIABETES = "161445009"
+        private const val HYPER_TENSION = "161501007"
+        private const val HEART_DISEASE = "56265001"
+        private const val HIGH_BLOOD_LIPIDS = "161450003"
+        private const val FEVER = "386661006"
+        private const val SHORTNESS_BREATH = "13645005"
+        private const val COUGH = "49727002"
+        private const val LOSS_OF_SMELL = "44169009"
+
+        /**
+         * Common Section
+         */
+        private const val COMPLETED_BY = "Completed By"
+
+        /**
+         * Mother's Assessment
+         */
+        private const val LACTATION_SUPPORT = "Lactation Support Required"
+        private const val CONTRAINDICATED = "Contraindicated"
+        private const val BM_THROUGH_BF = "Provide BM through BF"
+
+        /**
+         * Lactation Assessment
+         */
+        private const val LACTATION_SUPPORT_TIME = "Time of Lactation Support"
+        private const val PROPER_POSITIONING = "Proper Positioning"
+        private const val EARLY_LICKING = "Early Licking"
+        private const val MANUAL_EXPRESSION = "Manual Expression"
+        private const val AWAKENING_BABY = "Awakening Baby"
+        private const val SUPPORT_SUCCESSFUL = "Lactation Support Successful"
+        private const val EFFECTIVE_EXPRESSION = "Effectively Expressing Milk"
+        private const val ADDITIONAL_COMMENTS = "Additional comments"
+
+        /**
+         * Milk Expression
+         */
+
+        private const val AMOUNT_EXPRESSED = "Amount Expressed"
+        private const val EXPRESSION_TIME = "Time of Expression"
+        private const val STORAGE_TIME = "Time of Storage"
 
         const val SPO2 = "59408-5"
 
@@ -33,7 +65,7 @@ class Logics {
 
         val maternity_unit_details = listOf(
             "Labour Stage", "Vitamin K Given", "Is the Mother well",
-            "Expected Date of Delivery", "Pregnancies,","Parity","Gravidity",
+            "Expected Date of Delivery", "Pregnancies,", "Parity", "Gravidity",
             "Last Menstrual Period", "Baby Status", "Placenta Complete",
             "Gestation", "HIV Status", "Total Babies", "Delivery Method",
             "Eye Prophylaxis", "Reason for CS", "Delivery Method,",
@@ -55,7 +87,7 @@ class Logics {
                 "Gestation", "Neonatal Sepsis",
                 "Asphyxia", "Born Before Arrival,",
                 "Born Before Arrival", "Low Birth Weight",
-                "Assessment Date", "Completed By",
+                "Assessment Date", COMPLETED_BY,
                 "BirthWeight", "Baby is Well",
             )
         val newborn_unit_details = listOf(
@@ -86,14 +118,14 @@ class Logics {
             "Difficulty Feeding",
             "Diagnosis",
             "Intervention",
-            "Completed By",
+            COMPLETED_BY,
             "Respiratory Distress",
         )
         val child_feed_prescription = listOf(
             "Difficulty Feeding",
             "Diagnosis",
             "Intervention",
-            "Completed By",
+            COMPLETED_BY,
             "Respiratory Distress",
             "Feeding volume required",
             "Total 24hr volume required",
@@ -115,7 +147,12 @@ class Logics {
             "Baby's current weight", "Time of Feeding",
         )
         val postnatal_unit_details = listOf(
-            "Difficulty Feeding",
+            LACTATION_SUPPORT, CONTRAINDICATED, BM_THROUGH_BF, LACTATION_SUPPORT_TIME,
+            COMPLETED_BY, PROPER_POSITIONING, EARLY_LICKING, MANUAL_EXPRESSION, AWAKENING_BABY,
+            SUPPORT_SUCCESSFUL, EFFECTIVE_EXPRESSION, ADDITIONAL_COMMENTS
+        )
+        val post_natal_milk_expression = listOf(
+            AMOUNT_EXPRESSED, EXPRESSION_TIME, STORAGE_TIME, COMPLETED_BY
         )
         val custom_unit_details = listOf(
             "Hospital Receiving DHM",

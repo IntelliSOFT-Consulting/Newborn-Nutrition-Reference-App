@@ -129,7 +129,7 @@ class PostNatalFragment : Fragment() {
             }
             findNavController().navigate(
                 PostNatalFragmentDirections.navigateToScreening(
-                    args.patientId, "post-milk-expression.json", "Milk Expression and Storage"
+                    args.patientId, "post-natal-milk-expression.json", "Milk Expression and Storage"
                 )
             )
         }

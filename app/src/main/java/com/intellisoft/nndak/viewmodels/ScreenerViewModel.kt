@@ -192,23 +192,24 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     return@launch
                 }
 
+                val qh = QuestionnaireHelper()
                 val value = extractStatus(questionnaire)
 
-
-                val qh = QuestionnaireHelper()
-                bundle.addEntry()
-                    .setResource(
-                        qh.codingQuestionnaire(
-                            "Mother's Health",
-                            value,
-                            value
+                if (value.isNotEmpty()) {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Mother's Health",
+                                value,
+                                value
+                            )
                         )
-                    )
-                    .request.url = "Observation"
+                        .request.url = "Observation"
+                }
                 val itemsList1 = questionnaireResponse.item
                 val basicThree = getEDD(itemsList1)
 
-                if (basicThree.edd.isNotEmpty() && basicThree.lmp.isNotEmpty()) {
+                if (basicThree.edd.isNotEmpty() && basicThree.lmp.isNotEmpty() && basicThree.gestation.isNotEmpty()) {
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
@@ -227,19 +228,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             )
                         )
                         .request.url = "Observation"
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Gestation",
+                                "Gestation",
+                                basicThree.gestation
+                            )
+                        )
+                        .request.url = "Observation"
                 }
 
-
-                /*     bundle.addEntry()
-                         .setResource(
-                             qh.codingQuestionnaire(
-                                 "Gestation",
-                                 "Gestation",
-                                 basicThree.gestation
-                             )
-                         )
-                         .request.url = "Observation"
-     */
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()

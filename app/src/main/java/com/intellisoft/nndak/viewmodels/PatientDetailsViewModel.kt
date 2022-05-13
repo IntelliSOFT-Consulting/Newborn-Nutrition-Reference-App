@@ -27,6 +27,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.maternity_baby_registration
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_child_details
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.newborn_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.post_natal_milk_expression
 import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.ConditionItem
 import com.intellisoft.nndak.models.ObservationItem
@@ -145,13 +146,18 @@ class PatientDetailsViewModel(
                                 concatenate(
                                     newborn_unit_details,
                                     child_newborn_unit_details,
-                                    child_feeding_needs, child_feed_prescription,child_feeding_data
+                                    child_feeding_needs, child_feed_prescription, child_feeding_data
                                 )
                             )
                         )
                     }
                     "2" -> {
-                        observations.addAll(getAssessmentDetails(data, postnatal_unit_details))
+                        observations.addAll(
+                            getAssessmentDetails(
+                                data,
+                                concatenate(postnatal_unit_details, post_natal_milk_expression)
+                            )
+                        )
                     }
                     "3" -> {
                         observations.addAll(getAssessmentDetails(data, custom_unit_details))
@@ -353,6 +359,7 @@ class PatientDetailsViewModel(
         if (observations.isNotEmpty()) {
 
             data.add(PatientDetailHeader(getString(R.string.header_observation)))
+
 
             val observationDataModel =
                 observations.mapIndexed { index, observationItem ->
