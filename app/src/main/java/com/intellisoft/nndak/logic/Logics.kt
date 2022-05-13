@@ -30,16 +30,23 @@ class Logics {
         private const val BM_THROUGH_BF = "Provide BM through BF"
 
         /**
+         * New Born Unit- Mothers Details
+         */
+        private const val MOTHER_MEDICAL = "Mother's Medical Condition"
+        private const val ANTENATAL = "Antenatal Corticosteroids"
+
+        /**
          * Lactation Assessment
          */
         private const val LACTATION_SUPPORT_TIME = "Time of Lactation Support"
         private const val PROPER_POSITIONING = "Proper Positioning"
+        private const val NIPPLE_STIMULATION = "Nipple Stimulation"
         private const val EARLY_LICKING = "Early Licking"
         private const val MANUAL_EXPRESSION = "Manual Expression"
         private const val AWAKENING_BABY = "Awakening Baby"
         private const val SUPPORT_SUCCESSFUL = "Lactation Support Successful"
         private const val EFFECTIVE_EXPRESSION = "Effectively Expressing Milk"
-        private const val ADDITIONAL_COMMENTS = "Additional comments"
+        private const val ADDITIONAL_COMMENTS = "Additional Comments"
 
         /**
          * Milk Expression
@@ -49,8 +56,43 @@ class Logics {
         private const val EXPRESSION_TIME = "Time of Expression"
         private const val STORAGE_TIME = "Time of Storage"
 
+        /**
+         * Child Feeding
+         */
+        private const val FEEDING_CUES = "Feeding Readiness Cues"
+        private const val LATCHES = "Latches"
+        private const val STEADY_SUCK = "Sucks Steadily"
+        private const val AUDIBLE_SWALLOW = "Swallows Audibly"
+        private const val NO_CHOCKING = "Feeds Without Chocking"
+        private const val BREAST_SOFTENING = "Breasts Softening"
+        private const val TIME_PER_SIDE = "10 mins per side"
+        private const val COMFORTABLE_SLEEP = "Sleeps Comfortably"
+        private const val WET_DIAPER = "6-8 Wet Diaper"
+        private const val MORE_WEIGHT_LOSS = "Loses no more than 10% of birth weight"
+        private const val EFFICIENT_BF = "Breast Feeding Efficient"
+        private const val SUFFICIENT_BF = "Breast Feeding Sufficient"
+
+        /**
+         * Child Supplements
+         */
+
+        private const val SUPPLEMENTS_CONSIDERED = "Feeding Supplements Considered"
+        private const val FEEDING_CONSIDERED = "Feeding Considered"
+
         const val SPO2 = "59408-5"
 
+        val post_natal_milk_expression = listOf(
+            AMOUNT_EXPRESSED, EXPRESSION_TIME, STORAGE_TIME, COMPLETED_BY
+        )
+        val post_natal_child_feeding = listOf(
+            FEEDING_CUES, LATCHES, STEADY_SUCK, AUDIBLE_SWALLOW, NO_CHOCKING,
+            BREAST_SOFTENING, TIME_PER_SIDE, COMFORTABLE_SLEEP, WET_DIAPER, MORE_WEIGHT_LOSS,
+            EFFICIENT_BF, SUFFICIENT_BF
+
+        )
+        val post_natal_child_supplements = listOf(
+            SUPPLEMENTS_CONSIDERED, FEEDING_CONSIDERED
+        )
         val comorbidities: Set<String> =
             setOf(
                 ASTHMA,
@@ -91,7 +133,7 @@ class Logics {
                 "BirthWeight", "Baby is Well",
             )
         val newborn_unit_details = listOf(
-            "Mother's Medical Condition", "Antenatal Corticosteroids"
+            MOTHER_MEDICAL, ANTENATAL
         )
         val child_newborn_unit_details = listOf(
             "Antibiotics Given",
@@ -149,13 +191,11 @@ class Logics {
         val postnatal_unit_details = listOf(
             LACTATION_SUPPORT, CONTRAINDICATED, BM_THROUGH_BF, LACTATION_SUPPORT_TIME,
             COMPLETED_BY, PROPER_POSITIONING, EARLY_LICKING, MANUAL_EXPRESSION, AWAKENING_BABY,
-            SUPPORT_SUCCESSFUL, EFFECTIVE_EXPRESSION, ADDITIONAL_COMMENTS
+            SUPPORT_SUCCESSFUL, EFFECTIVE_EXPRESSION, ADDITIONAL_COMMENTS, NIPPLE_STIMULATION
         )
-        val post_natal_milk_expression = listOf(
-            AMOUNT_EXPRESSED, EXPRESSION_TIME, STORAGE_TIME, COMPLETED_BY
-        )
+
         val custom_unit_details = listOf(
-            "Hospital Receiving DHM",
+            ADDITIONAL_COMMENTS
         )
         val human_milk_details = listOf(
             "Hospital Receiving DHM", "Recipient Gestation", "Recipient Location", "Consent Given,",

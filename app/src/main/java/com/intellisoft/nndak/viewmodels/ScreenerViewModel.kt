@@ -286,6 +286,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return value
     }
 
+
     fun saveAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
 
         viewModelScope.launch {
@@ -398,9 +399,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Completed-By") {
 
-                                /*   val childAnswer = inner.getJSONArray("answer")
-                                   val value = childAnswer.getJSONObject(0).getString("valueString")
-   */
                                 /**
                                  * Retrieve Logged User
                                  */

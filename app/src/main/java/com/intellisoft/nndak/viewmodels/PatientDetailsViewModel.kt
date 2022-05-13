@@ -27,6 +27,8 @@ import com.intellisoft.nndak.logic.Logics.Companion.maternity_baby_registration
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_child_details
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.newborn_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_feeding
+import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_supplements
 import com.intellisoft.nndak.logic.Logics.Companion.post_natal_milk_expression
 import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.ConditionItem
@@ -144,7 +146,7 @@ class PatientDetailsViewModel(
                             getAssessmentDetails(
                                 data,
                                 concatenate(
-                                    newborn_unit_details,
+                                     newborn_unit_details,
                                     child_newborn_unit_details,
                                     child_feeding_needs, child_feed_prescription, child_feeding_data
                                 )
@@ -155,7 +157,13 @@ class PatientDetailsViewModel(
                         observations.addAll(
                             getAssessmentDetails(
                                 data,
-                                concatenate(postnatal_unit_details, post_natal_milk_expression)
+                                concatenate(
+                                    postnatal_unit_details,
+                                    post_natal_milk_expression,
+                                    post_natal_child_feeding,
+                                    post_natal_child_supplements,
+                                    custom_unit_details
+                                )
                             )
                         )
                     }

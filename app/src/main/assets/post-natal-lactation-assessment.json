@@ -53,7 +53,7 @@
               "item": [
                 {
                   "linkId": "Time-Completed",
-                  "text":, "Time of Lactation Support"
+                  "text": "Time of Lactation Support",
                   "type": "dateTime",
                   "required": true
                 }
@@ -162,7 +162,7 @@
                 },
                 {
                   "valueCoding": {
-                    "code": "Nipple Positioning",
+                    "code": "Proper Positioning",
                     "display": "No",
                     "system": "http://snomed.info/sct"
                   }
