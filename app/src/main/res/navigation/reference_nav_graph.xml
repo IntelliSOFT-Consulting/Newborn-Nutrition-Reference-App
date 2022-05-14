@@ -182,6 +182,9 @@
         <action
             android:id="@+id/navigate_to_screening"
             app:destination="@id/screenerEncounterFragment" />
+        <action
+            android:id="@+id/navigate_to_child"
+            app:destination="@id/childFragment" />
         <argument
             android:name="patient_id"
             app:argType="string" />

@@ -88,12 +88,16 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
     }
 
     private fun addQuestionnaireFragment() {
-        val fragment = QuestionnaireFragment()
-        fragment.arguments =
-            bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
-        childFragmentManager.commit {
-            add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
-        }
+      try {
+          val fragment = QuestionnaireFragment()
+          fragment.arguments =
+              bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
+          childFragmentManager.commit {
+              add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
+          }
+      }catch (e:Exception){
+          Timber.e("Exception ${e.localizedMessage}")
+      }
     }
 
     private fun onSubmitAction() {

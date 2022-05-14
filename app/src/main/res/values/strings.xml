@@ -33,7 +33,7 @@
     <string name="message_input_missing">Inputs are missing.</string>
     <string name="message_patient_updated">Patient is updated.</string>
     <string name="inputs_missing">Inputs are missing.</string>
-    <string name="resources_saved">Resources are saved.</string>
+    <string name="resources_saved">Record added successfully.</string>
     <string name="response_received">questionnaire response is received.</string>
     <string name="html_text">Current status: <font color="#ddd">UNKNOWN</font></string>
     <string name="header_observation">Observations</string>
@@ -157,7 +157,7 @@
     <string name="app_feeding_prescribe">Prescribe Feeds</string>
     <string name="app_feeding_data">Feeding Data</string>
     <string name="app_health">Health Monitoring</string>
-    <string name="action_assess_child">Child Asessment</string>
+    <string name="action_assess_child">Child Assessment</string>
     <string name="app_lactation">Lactation Assessment</string>
     <string name="app_milk_expression">Milk Expression</string>
     <string name="action_feeding_effectiveness">Feeding Effectiveness</string>
@@ -166,6 +166,8 @@
     <string name="action_dhm_receival">DHM Receival</string>
     <string name="starting">First Timer</string>
     <string name="existing">Existing</string>
+    <string name="action_assessment">Assess Child</string>
+    <string name="action_discharge">Discharge Details</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

@@ -12,8 +12,13 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentAssessmentBinding
+import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -32,6 +37,7 @@ class AssessmentFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: AssessmentFragmentArgs by navArgs()
+    private lateinit var unit: String
     private var _binding: FragmentAssessmentBinding? = null
     private val binding
         get() = _binding!!
@@ -63,43 +69,50 @@ class AssessmentFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        val steps = Steps(fistIn = "Assessment", lastIn = "Child Assessment", secondButton = true)
+        unit = "Assessment"
+        val adapter =
+            MaternityDetails(
+                this::onAddScreenerClick,
+                this::childAssessmentClick,
+                this::assessmentClick,
+                steps,
+                false
+            )
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Assessment"
             setDisplayHomeAsUpEnabled(true)
         }
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getPatientDetailData(false, args.code)
+        patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
 
     }
 
-    private fun onAddScreenerClick() {
+    private fun onAddScreenerClick(related: RelatedPersonItem) {
+        findNavController().navigate(
+            AssessmentFragmentDirections.navigateToChild(related.id, args.code, unit)
+        )
+    }
+
+    private fun childAssessmentClick() {
 
     }
 
-    private fun onMaternityClick() {
+    private fun assessmentClick() {
+
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.assess_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 NavHostFragment.findNavController(this).navigateUp()
-                true
-            }
-            R.id.menu_assess -> {
-                Timber.e("Resource ID::: " + args.patientId)
-                findNavController().navigate(
-                    AssessmentFragmentDirections.navigateToScreening(
-                        args.patientId, "new-born-monitoring-information.json", "Health Monitoring"
-                    )
-                )
                 true
             }
 

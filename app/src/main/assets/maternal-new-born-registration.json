@@ -759,8 +759,7 @@
                 {
                   "linkId": "Completed-By",
                   "type": "string",
-                  "text": "Completed by",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+                  "text": "Completed by"
                 }
               ]
             }
@@ -773,8 +772,7 @@
             {
               "linkId": "Assessment-Date",
               "type": "date",
-              "text": "Assessment Date",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueDate.value"
+              "text": "Assessment Date"
             }
           ]
         }

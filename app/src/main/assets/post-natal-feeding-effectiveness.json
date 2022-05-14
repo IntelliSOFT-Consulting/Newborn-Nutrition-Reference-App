@@ -532,7 +532,7 @@
               "item": [
                 {
                   "linkId": "Breasts-Softening",
-                  "text": "Has 6-8 wet diapers a day:",
+                  "text": "Has 6-8 wet diapers a day?",
                   "type": "choice",
                   "required": true,
                   "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",

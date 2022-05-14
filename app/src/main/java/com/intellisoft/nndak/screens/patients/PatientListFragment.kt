@@ -233,70 +233,67 @@ class PatientListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun onPatientItemClicked(patientItem: PatientItem) {
         if (args.step.isNotEmpty()) {
-            if (args.step == "0") {
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToMaternity(
-                        patientItem.resourceId, "0"
+            when (args.step) {
+                "0" -> {
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToMaternity(
+                            patientItem.resourceId, "0"
+                        )
                     )
-                )
-            }
-            if (args.step == "1") {
-
-                screenerScreen(
-                    patientItem,
-                    "mother-child-assessment.json",
-                    "Mother & Child Assessment"
-                )
-            }
-            if (args.step == "2") {
-
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId, "1")
-                )
-
-            }
-            if (args.step == "3") {
-
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToPostNatal(patientItem.resourceId, "2")
-                )
-            }
-            if (args.step == "4") {
-
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToProductDetail(
-                        patientItem.resourceId, "3"
+                }
+                "1" -> {
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToAssessment(
+                            patientItem.resourceId, "6"
+                        )
                     )
-                )
-            }
-            if (args.step == "5") {
 
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToDhm(
-                        patientItem.resourceId, "4"
+                }
+                "2" -> {
+
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToNewborn(patientItem.resourceId, "1")
                     )
-                )
-            }
-            if (args.step == "6") {
 
-                findNavController().navigate(
-                    PatientListFragmentDirections.navigateToAssessment(
-                        patientItem.resourceId, "5"
+                }
+                "3" -> {
+
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToPostNatal(
+                            patientItem.resourceId,
+                            "2"
+                        )
                     )
-                )
-            }
+                }
+                "4" -> {
 
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToProductDetail(
+                            patientItem.resourceId, "3"
+                        )
+                    )
+                }
+                "5" -> {
+
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToDhm(
+                            patientItem.resourceId, "4"
+                        )
+                    )
+                }
+                else -> {
+                    findNavController().navigate(
+                        PatientListFragmentDirections.navigateToAssessment(
+                            patientItem.resourceId, "5"
+                        )
+                    )
+                }
+
+
+            }
         }
     }
 
-    private fun screenerScreen(patientItem: PatientItem, asset: String, title: String) {
-
-        findNavController().navigate(
-            PatientListFragmentDirections.actionPatientListToScreenerEncounterFragment(
-                patientItem.resourceId, asset, title
-            )
-        )
-    }
 
     private fun onAddPatientClick() {
         findNavController().navigate(PatientListFragmentDirections.actionPatientListToAddPatientFragment())

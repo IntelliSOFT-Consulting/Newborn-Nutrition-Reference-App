@@ -431,8 +431,7 @@
             {
               "linkId": "4.1.1",
               "type": "date",
-              "text": "Assessment Date",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.note"
+              "text": "Assessment Date"
             }
           ]
         }

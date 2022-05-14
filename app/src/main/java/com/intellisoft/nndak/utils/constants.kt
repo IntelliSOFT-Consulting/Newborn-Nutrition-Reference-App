@@ -41,6 +41,8 @@ object Constants {
     const val MILK_CONSENT_FORM = "11"
     const val MILK_PRESCRIPTION = "12"
     const val MILK_RECEIVABLE = "10"
+    const val HEALTH_ASSESSMENT = "11"
+    const val DISCHARGE = "12"
 
 
 

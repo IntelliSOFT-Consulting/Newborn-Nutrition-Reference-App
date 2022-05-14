@@ -22,6 +22,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.child_feeding_data
 import com.intellisoft.nndak.logic.Logics.Companion.child_feeding_needs
 import com.intellisoft.nndak.logic.Logics.Companion.child_newborn_unit_details
 import com.intellisoft.nndak.logic.Logics.Companion.custom_unit_details
+import com.intellisoft.nndak.logic.Logics.Companion.discharge_details
 import com.intellisoft.nndak.logic.Logics.Companion.human_milk_details
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_baby_registration
 import com.intellisoft.nndak.logic.Logics.Companion.maternity_unit_child_details
@@ -146,8 +147,9 @@ class PatientDetailsViewModel(
                             getAssessmentDetails(
                                 data,
                                 concatenate(
-                                     newborn_unit_details,
+                                    newborn_unit_details,
                                     child_newborn_unit_details,
+                                    assessment_unit_details,
                                     child_feeding_needs, child_feed_prescription, child_feeding_data
                                 )
                             )
@@ -174,7 +176,20 @@ class PatientDetailsViewModel(
                         observations.addAll(getAssessmentDetails(data, human_milk_details))
                     }
                     "5" -> {
-                        observations.addAll(getAssessmentDetails(data, assessment_unit_details))
+                        observations.addAll(
+                            getAssessmentDetails(
+                                data,
+                                concatenate(assessment_unit_details)
+                            )
+                        )
+                    }
+                    "6" -> {
+                        observations.addAll(
+                            getAssessmentDetails(
+                                data,
+                                concatenate(discharge_details)
+                            )
+                        )
                     }
                     else -> {
                         observations.addAll(data)

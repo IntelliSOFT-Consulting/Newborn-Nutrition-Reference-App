@@ -429,6 +429,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                     .request.url = "Observation"
                             }
+                            if (childChild == "Today-Date") {
+
+                                val childAnswer = inner.getJSONArray("answer")
+                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Today's Date",
+                                            value,
+                                            value
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
                             if (childChild == "Date-Of-Discharge") {
 
                                 val childAnswer = inner.getJSONArray("answer")
@@ -793,6 +808,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     .setResource(
                                         qh.codingQuestionnaire(
                                             "Time of Expression",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                            "${value.substring(0, 10)} - ${
+                                                value.substring(
+                                                    11,
+                                                    16
+                                                )
+                                            }",
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Assessment-Date-Time") {
+
+                                val value = extractValueDateTime(inner)
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Date of Assessment",
                                             "${value.substring(0, 10)} - ${
                                                 value.substring(
                                                     11,

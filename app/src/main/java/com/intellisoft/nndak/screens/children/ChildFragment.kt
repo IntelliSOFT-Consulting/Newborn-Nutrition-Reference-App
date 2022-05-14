@@ -20,6 +20,8 @@ import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
 import com.intellisoft.nndak.utils.Constants.CHILD_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.CHILD_FEEDING_EFFECTIVENESS
+import com.intellisoft.nndak.utils.Constants.DISCHARGE
+import com.intellisoft.nndak.utils.Constants.HEALTH_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.NEWBORN_ADMISSION
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -246,7 +248,35 @@ class ChildFragment : Fragment() {
                 }
                 findNavController().navigate(
                     ChildFragmentDirections.navigateToScreening(
-                        args.patientId, "post-natal-feeding-effectiveness.json", "Baby’s Feeding Effectiveness"
+                        args.patientId,
+                        "post-natal-feeding-effectiveness.json",
+                        "Baby’s Feeding Effectiveness"
+                    )
+                )
+            }
+            "5" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        HEALTH_ASSESSMENT
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "new-born-monitoring-information.json", "Health Monitoring"
+                    )
+                )
+            }
+            "6" -> {
+                activity?.let {
+                    FhirApplication.setCurrent(
+                        it,
+                        DISCHARGE
+                    )
+                }
+                findNavController().navigate(
+                    ChildFragmentDirections.navigateToScreening(
+                        args.patientId, "discharge-assessment.json", "Assessment Remarks"
                     )
                 )
             }
@@ -279,6 +309,16 @@ class ChildFragment : Fragment() {
             "2" -> {
                 binding.actionScore.text = getString(R.string.action_feeding_effectiveness)
                 binding.actionAssess.text = getString(R.string.action_supplements)
+            }
+            "5" -> {
+                binding.actionScore.text = getString(R.string.action_assessment)
+                binding.actionAssess.text = getString(R.string.action_supplements)
+                binding.actionAssess.visibility = View.INVISIBLE
+            }
+            "6" -> {
+                binding.actionScore.text = getString(R.string.action_discharge)
+                binding.actionAssess.text = getString(R.string.action_supplements)
+                binding.actionAssess.visibility = View.INVISIBLE
             }
             else -> {
 

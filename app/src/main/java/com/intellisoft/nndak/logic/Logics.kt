@@ -28,6 +28,7 @@ class Logics {
         private const val LACTATION_SUPPORT = "Lactation Support Required"
         private const val CONTRAINDICATED = "Contraindicated"
         private const val BM_THROUGH_BF = "Provide BM through BF"
+        private const val BREATHING_DIFFICULTY = "Difficulty Feeding"
 
         /**
          * New Born Unit- Mothers Details
@@ -79,8 +80,50 @@ class Logics {
         private const val SUPPLEMENTS_CONSIDERED = "Feeding Supplements Considered"
         private const val FEEDING_CONSIDERED = "Feeding Considered"
 
+        /**
+         * Child Health Monitoring
+         */
+        private const val TEMP = "Baby's Temperature"
+        private const val RESP_RATE = "Baby's Respiration Rate"
+        private const val PULSE = "Baby's Pulse"
+        private const val OXY = "Baby's Oxy Sat"
+        private const val DISTRESS = "Respiration Distress"
+        private const val APNOEA = "Apnoea"
+        private const val BLOOD_SUGAR = "Blood Sugar"
+        private const val VOLUME_EXPRESSED = "Volume Expressed"
+        private const val VOLUME_GIVEN = "Volume Given"
+        private const val NURSING_PLAN = "Nursing Plan"
+        private const val IV_VOLUME = "IV volume given"
+        private const val IV_LINE = "IV line Working"
+        private const val DIAPERS_CHANGED = "Diapers Changed"
+        private const val SOILED_DIAPER = "Soiled Diaper"
+        private const val VOMITED = "Baby Vomited"
+        private const val SHIFT_NOTES = "Shift Notes"
+
+        /**
+         * Discharge Details
+         */
+        private const val ASSESSMENT_DATE = "Date of Assessment"
+        private const val FEED_ADJUSTMENT = "Feed Adjustment"
+        private const val READY_FOR_DISCHARGE = "Ready for Discharge"
+        private const val DATE_TODAY = "Today's Date"
+
+        /**
+         * APGAR Score
+         */
+        private const val APPEARANCE = "Appearance"
+        private const val RECORD_TIME = "Time of Record"
+        private const val ACTIVITY = "Activity"
+        private const val GRIMACE = "Grimace"
+        private const val PULSE_S = "Pulse"
+        private const val RESPIRATION = "Respiration"
+        private const val TOTAL_SCORE = "Apgar Score"
+
         const val SPO2 = "59408-5"
 
+        val discharge_details = listOf(
+            ASSESSMENT_DATE, FEED_ADJUSTMENT, ADDITIONAL_COMMENTS, READY_FOR_DISCHARGE, DATE_TODAY
+        )
         val post_natal_milk_expression = listOf(
             AMOUNT_EXPRESSED, EXPRESSION_TIME, STORAGE_TIME, COMPLETED_BY
         )
@@ -105,6 +148,14 @@ class Logics {
             )
         val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
 
+        val assessment_unit_details = listOf(
+            TEMP, RESP_RATE, PULSE, OXY, DISTRESS, BLOOD_SUGAR, VOLUME_EXPRESSED,
+            VOLUME_GIVEN, NURSING_PLAN, IV_VOLUME, IV_LINE, DIAPERS_CHANGED,
+            SOILED_DIAPER, VOMITED, SHIFT_NOTES
+        )
+        val custom_unit_details = listOf(
+            ADDITIONAL_COMMENTS, APNOEA, SUFFICIENT_BF, BREATHING_DIFFICULTY, DISTRESS
+        )
         val maternity_unit_details = listOf(
             "Labour Stage", "Vitamin K Given", "Is the Mother well",
             "Expected Date of Delivery", "Pregnancies,", "Parity", "Gravidity",
@@ -114,13 +165,8 @@ class Logics {
             "Breast Problems", "Mother's Health", "ROM",
         )
         val maternity_unit_child_details = listOf(
-            "Appearance",
-            "Time of Record",
-            "Activity",
-            "Grimace",
-            "Pulse",
-            "Respiration",
-            "Apgar Score",
+            APPEARANCE, RECORD_TIME, ACTIVITY, GRIMACE,
+            PULSE, RESPIRATION, TOTAL_SCORE
         )
         val maternity_baby_registration =
             listOf(
@@ -133,14 +179,13 @@ class Logics {
                 "BirthWeight", "Baby is Well",
             )
         val newborn_unit_details = listOf(
-            MOTHER_MEDICAL, ANTENATAL
+            MOTHER_MEDICAL, ANTENATAL,
         )
         val child_newborn_unit_details = listOf(
             "Antibiotics Given",
             "Head Circumference",
             "Pulse Rate",
             "Baby has Fever",
-            "Difficulty Feeding",
             "Antibiotics Given",
             "Baby on KMC",
             "Care Given",
@@ -157,18 +202,13 @@ class Logics {
         )
 
         val child_feeding_needs = listOf(
-            "Difficulty Feeding",
             "Diagnosis",
             "Intervention",
-            COMPLETED_BY,
-            "Respiratory Distress",
         )
         val child_feed_prescription = listOf(
             "Difficulty Feeding",
             "Diagnosis",
             "Intervention",
-            COMPLETED_BY,
-            "Respiratory Distress",
             "Feeding volume required",
             "Total 24hr volume required",
             "Feeding Method",
@@ -194,9 +234,7 @@ class Logics {
             SUPPORT_SUCCESSFUL, EFFECTIVE_EXPRESSION, ADDITIONAL_COMMENTS, NIPPLE_STIMULATION
         )
 
-        val custom_unit_details = listOf(
-            ADDITIONAL_COMMENTS
-        )
+
         val human_milk_details = listOf(
             "Hospital Receiving DHM", "Recipient Gestation", "Recipient Location", "Consent Given,",
             "Consent Given", "Consent Date", "Clinician Designation", "Clinician Name",
@@ -208,9 +246,7 @@ class Logics {
             "Donor ID", "Reason for Receiving DHM", "Batch Number", "DHM Available,",
             "DHM Available", "DHM Volume Ordered",
         )
-        val assessment_unit_details = listOf(
-            "Hospital Receiving DHM",
-        )
+
 
         val monitoring_unit_details = listOf(
             "Hospital Receiving DHM",
