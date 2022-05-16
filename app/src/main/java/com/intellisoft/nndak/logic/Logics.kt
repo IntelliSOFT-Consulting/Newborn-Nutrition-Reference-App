@@ -119,8 +119,32 @@ class Logics {
         private const val RESPIRATION = "Respiration"
         private const val TOTAL_SCORE = "Apgar Score"
 
-        const val SPO2 = "59408-5"
+        /**
+         * Child Details:: New Born
+         */
+        private const val ANTI_GIVEN = "Antibiotics Given"
+        private const val HEAD_CIRCUMFERENCE = "Head Circumference"
+        private const val PULSE_RATE = "Pulse Rate"
+        private const val HAS_FEVER = "Baby has Fever"
+        private const val KMC = "Baby on KMC"
+        private const val CARE = "Care Given"
+        private const val TEMP_C = "Temperature (Centigrade)"
+        private const val CONVULSIONS = "Convulsions"
+        private const val TIME_SEEN = "Time Baby Seen"
+        private const val RESUSCITATED = "Resuscitated at Birth"
+        private const val BREATHING_DIFF = "Breathing Difficulty"
+        private const val ON_OXYGEN = "Baby on Oxygen"
+        private const val RES_RATE = "Respiration Rate (bpm)"
+        private const val OXY_SATE = "Oxygen Sat"
+        private const val CHX = "CHX Used"
 
+        const val SPO2 = "59408-5"
+        val child_newborn_unit_details = listOf(
+            ANTI_GIVEN, HEAD_CIRCUMFERENCE, PULSE_RATE, HAS_FEVER, KMC, CARE, TEMP_C, CONVULSIONS,
+            TIME_SEEN, RESUSCITATED, BREATHING_DIFF, ON_OXYGEN, RES_RATE,
+            OXY_SATE, APNOEA, CHX,
+
+            )
         val discharge_details = listOf(
             ASSESSMENT_DATE, FEED_ADJUSTMENT, ADDITIONAL_COMMENTS, READY_FOR_DISCHARGE, DATE_TODAY
         )
@@ -166,7 +190,7 @@ class Logics {
         )
         val maternity_unit_child_details = listOf(
             APPEARANCE, RECORD_TIME, ACTIVITY, GRIMACE,
-            PULSE, RESPIRATION, TOTAL_SCORE
+            PULSE_S, RESPIRATION, TOTAL_SCORE
         )
         val maternity_baby_registration =
             listOf(
@@ -181,25 +205,7 @@ class Logics {
         val newborn_unit_details = listOf(
             MOTHER_MEDICAL, ANTENATAL,
         )
-        val child_newborn_unit_details = listOf(
-            "Antibiotics Given",
-            "Head Circumference",
-            "Pulse Rate",
-            "Baby has Fever",
-            "Antibiotics Given",
-            "Baby on KMC",
-            "Care Given",
-            "Temperature (Centigrade)",
-            "Convulsions",
-            "Time Baby Seen",
-            "Resuscitated at Birth",
-            "Breathing Difficulty",
-            "Baby on Oxygen",
-            "Respiration Rate (bpm)",
-            "Oxygen Sat",
-            "Apnoea",
-            "CHX Used",
-        )
+
 
         val child_feeding_needs = listOf(
             "Diagnosis",

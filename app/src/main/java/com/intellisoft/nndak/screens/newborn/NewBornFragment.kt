@@ -65,11 +65,13 @@ class NewBornFragment : Fragment() {
             steps,
             true
         )
-        binding.recycler.adapter = adapter
+
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = unit
             setDisplayHomeAsUpEnabled(true)
         }
+
+        binding.recycler.adapter = adapter
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
@@ -84,11 +86,11 @@ class NewBornFragment : Fragment() {
     }
 
     private fun recordFeeding() {
-      /*  findNavController().navigate(
-            NewBornFragmentDirections.navigateToScreening(
-                args.patientId, "new-born-record-feeding-data.json", "Rapid Assessment"
-            )
-        )*/
+        /*  findNavController().navigate(
+              NewBornFragmentDirections.navigateToScreening(
+                  args.patientId, "new-born-record-feeding-data.json", "Rapid Assessment"
+              )
+          )*/
     }
 
     private fun assessmentClick() {

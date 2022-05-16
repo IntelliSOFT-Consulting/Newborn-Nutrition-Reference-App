@@ -47,6 +47,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     private val user = FhirApplication.getProfile(application.applicationContext)
     private val gson = Gson()
+    private var frequency: Int = 0
+    private var volume: String = "0"
 
 
     fun saveScreenerEncounter(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -317,6 +319,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
 
+                            if (childChild == "Feeding-Frequency") {
+
+                                val value = extractValueOption(inner)
+                                frequency = Integer.parseInt(value.substring(0, 1))
+                            }
+                            if (childChild == "Volume-Required") {
+                                volume = extractValueDecimal(inner)
+
+                            }
                             if (childChild == "Time-Seen") {
 
                                 val value = extractValueDateTime(inner)
@@ -1006,6 +1017,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     return@launch
                 }
 
+
+                if (frequency > 0 && volume.isNotEmpty()) {
+                    val value = calculete24HourFeed(frequency, volume)
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                "Total 24hr volume required",
+                                "Total 24hr volume required",
+                                "Total 24hr volume required",
+                                value,
+                                "ml(s)"
+                            )
+                        )
+                        .request.url = "Observation"
+                }
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 saveResources(bundle, subjectReference, encounterId)
@@ -1018,6 +1044,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 return@launch
             }
         }
+    }
+
+    private fun calculete24HourFeed(frequency: Int, volume: String): String {
+        var total = 0.0
+        val times = 24 / frequency
+        val j: Float = times.toFloat()
+        val k: Float = volume.toFloat()
+        total = (j * k).toDouble()
+
+        return total.toString()
     }
 
     private fun extractValueDate(inner: JSONObject): String {
@@ -1051,12 +1087,28 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return ans.getJSONObject(0).getString("valueString")
     }
 
+    private fun extractValueDecimal(inner: JSONObject): String {
+
+        val childAnswer = inner.getJSONArray("item")
+        val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+
+        return ans.getJSONObject(0).getString("valueDecimal")
+    }
+
     private fun extractValueDateTime(inner: JSONObject): String {
 
         val childAnswer = inner.getJSONArray("item")
         val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
 
         return ans.getJSONObject(0).getString("valueDateTime")
+
+    }
+
+    private fun extractValueOption(inner: JSONObject): String {
+
+        val childAnswer = inner.getJSONArray("answer")
+        val ans = childAnswer.getJSONObject(0).getJSONObject("valueCoding")
+        return ans.getString("display")
 
     }
 

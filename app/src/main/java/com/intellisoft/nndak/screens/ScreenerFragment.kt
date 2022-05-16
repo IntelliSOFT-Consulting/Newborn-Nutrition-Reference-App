@@ -88,16 +88,16 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
     }
 
     private fun addQuestionnaireFragment() {
-      try {
-          val fragment = QuestionnaireFragment()
-          fragment.arguments =
-              bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
-          childFragmentManager.commit {
-              add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
-          }
-      }catch (e:Exception){
-          Timber.e("Exception ${e.localizedMessage}")
-      }
+        try {
+            val fragment = QuestionnaireFragment()
+            fragment.arguments =
+                bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
+            childFragmentManager.commit {
+                add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
+            }
+        } catch (e: Exception) {
+            Timber.e("Exception ${e.localizedMessage}")
+        }
     }
 
     private fun onSubmitAction() {
@@ -123,36 +123,7 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
                     args.patientId
                 )
             }
-            ASSESS_CHILD -> {
-                viewModel.saveAssessment(
-                    questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
-                )
-            }
-            NEWBORN_ADMISSION -> {
-                viewModel.saveAssessment(
-                    questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
-                )
-            }
-            MOTHER_ASSESSMENT -> {
-                viewModel.saveAssessment(
-                    questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
-                )
-            }
-            CHILD_ASSESSMENT -> {
-                viewModel.saveAssessment(
-                    questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
-                )
-            }
-            POST_LACTATION_ASSESSMENT -> {
-                viewModel.saveAssessment(
-                    questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
-                )
-            }
+
             else -> {
                 viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),

@@ -92,7 +92,6 @@ class PostNatalFragment : Fragment() {
                     BottomSheetBehavior.STATE_COLLAPSED -> "Open Persistent Bottom Sheet"
                     else -> "Persistent Bottom Sheet"
                 }
-                Timber.e("State:::: $text")
             }
         })
         bottomSheetButtons()

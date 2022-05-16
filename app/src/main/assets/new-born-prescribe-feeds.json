@@ -478,7 +478,7 @@
           ],
           "item": [
             {
-              "linkId": "IV Fluids",
+              "linkId": "Feeding-Frequency",
               "text": "Feeding Frequency",
               "type": "choice",
               "required": true,
@@ -533,7 +533,7 @@
           ],
           "item": [
             {
-              "linkId": "7.1.1",
+              "linkId": "Volume-Required",
               "type": "group",
               "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
               "item": [
@@ -603,99 +603,6 @@
                   "valueCoding": {
                     "code": "Feeding volume required",
                     "display": "Feeding volume required",
-                    "system": "http://loinc.org"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "8.0.0",
-          "type": "group",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "totalVolume"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "8.1.1",
-              "type": "group",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
-              "item": [
-                {
-                  "text": "Total 24hr volume required(ml)",
-                  "type": "decimal",
-                  "linkId": "8.1.2",
-                  "required": true,
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                      "valueDecimal": 1
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                      "valueDecimal": 45000
-                    }
-                  ]
-                },
-                {
-                  "linkId": "8.1.3",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "ml(s)"
-                    }
-                  ]
-                },
-                {
-                  "linkId": "8.1.4",
-                  "type": "string",
-                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                      "valueBoolean": true
-                    }
-                  ],
-                  "initial": [
-                    {
-                      "valueString": "http://unitsofmeasure.org"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "6.2.0",
-              "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-                  "valueBoolean": true
-                }
-              ],
-              "initial": [
-                {
-                  "valueCoding": {
-                    "code": "Total 24hr volume required",
-                    "display": "Total 24hr volume required",
                     "system": "http://loinc.org"
                   }
                 }

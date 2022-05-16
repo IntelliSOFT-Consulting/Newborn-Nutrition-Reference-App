@@ -98,7 +98,6 @@ class ChildFragment : Fragment() {
                     BottomSheetBehavior.STATE_COLLAPSED -> "Open Persistent Bottom Sheet"
                     else -> "Persistent Bottom Sheet"
                 }
-                Timber.e("State:::: $text")
             }
         })
         bottomSheetButtons()
@@ -313,12 +312,12 @@ class ChildFragment : Fragment() {
             "5" -> {
                 binding.actionScore.text = getString(R.string.action_assessment)
                 binding.actionAssess.text = getString(R.string.action_supplements)
-                binding.actionAssess.visibility = View.INVISIBLE
+                binding.actionAssess.visibility = View.GONE
             }
             "6" -> {
                 binding.actionScore.text = getString(R.string.action_discharge)
                 binding.actionAssess.text = getString(R.string.action_supplements)
-                binding.actionAssess.visibility = View.INVISIBLE
+                binding.actionAssess.visibility = View.GONE
             }
             else -> {
 

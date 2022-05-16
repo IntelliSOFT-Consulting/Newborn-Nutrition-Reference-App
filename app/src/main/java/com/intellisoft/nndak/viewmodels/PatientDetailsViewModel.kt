@@ -608,6 +608,10 @@ class PatientDetailsViewModel(
         return getString(R.string.none)
     }
 
+    fun clearLiveData() {
+        livePatientData.value = null
+    }
+
     companion object {
         /**
          * Creates RelatedPersonItem objects with displayable values from the Fhir RelatedPerson objects.

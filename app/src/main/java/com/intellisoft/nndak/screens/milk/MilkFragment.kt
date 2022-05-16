@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -107,7 +108,6 @@ class MilkFragment : Fragment() {
                     BottomSheetBehavior.STATE_COLLAPSED -> "Open Persistent Bottom Sheet"
                     else -> "Persistent Bottom Sheet"
                 }
-                Timber.e("State:::: $text")
             }
         })
         bottomSheetButtons()
@@ -115,8 +115,7 @@ class MilkFragment : Fragment() {
 
 
     private fun bottomSheetButtons() {
-        binding.post.tvFirstTitle.text = getString(R.string.action_update_details)
-        binding.post.tvLastTitle.text = getString(R.string.action_dhm_receival)
+        updateTitleIcons()
         binding.post.imgExit.setOnClickListener {
             toggleSheet()
 
@@ -149,6 +148,30 @@ class MilkFragment : Fragment() {
                 )
             )
         }
+
+    }
+
+    private fun updateTitleIcons() {
+
+        binding.post.tvFirstTitle.text = getString(R.string.action_update_details)
+        binding.post.tvLastTitle.text = getString(R.string.action_dhm_receival)
+
+        binding.post.imgNeeds.setImageDrawable(
+            activity?.let {
+                ContextCompat.getDrawable(
+                    it.applicationContext,
+                    R.drawable.update
+                )
+            }
+        )
+        binding.post.imgFeeds.setImageDrawable(
+            activity?.let {
+                ContextCompat.getDrawable(
+                    it.applicationContext,
+                    R.drawable.received
+                )
+            }
+        )
 
     }
 
