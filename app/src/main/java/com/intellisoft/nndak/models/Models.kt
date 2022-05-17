@@ -50,7 +50,6 @@ data class ObservationItem(
 ) {
     override fun toString(): String = code
 }
-
 data class ConditionItem(
     val id: String,
     val code: String,
@@ -59,6 +58,15 @@ data class ConditionItem(
 ) {
     override fun toString(): String = code
 }
+data class EncounterItem(
+    val id: String,
+    val code: String,
+    val effective: String,
+    val value: String
+) {
+    override fun toString(): String = code
+}
+
 
 data class DbObservations(
     val value: String,

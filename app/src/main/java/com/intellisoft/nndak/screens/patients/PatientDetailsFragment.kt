@@ -17,6 +17,8 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.*
 import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.PatientDetailBinding
+import com.intellisoft.nndak.models.EncounterItem
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 
@@ -56,7 +58,7 @@ class PatientDetailsFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick)
+        val adapter = PatientDetailsRecyclerViewAdapter(::onAddScreenerClick, ::onMaternityClick,::encounterClick)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "Patient Card"
@@ -66,7 +68,14 @@ class PatientDetailsFragment : Fragment() {
         patientDetailsViewModel.getPatientDetailData(true, args.code)
         (activity as MainActivity).setDrawerEnabled(false)
     }
-
+    private fun encounterClick(encounter: EncounterItem) {
+        findNavController().navigate(
+            PatientDetailsFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
+    }
     private fun onAddScreenerClick() {
         findNavController()
             .navigate(

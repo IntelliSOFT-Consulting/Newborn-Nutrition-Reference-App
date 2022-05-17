@@ -8,16 +8,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.intellisoft.nndak.databinding.EncounterListItemViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
 
 class PatientDetailsRecyclerViewAdapter(
     private val onScreenerClick: () -> Unit,
-    private val onMaternityClick: () -> Unit
+    private val onMaternityClick: () -> Unit,
+    private val encounterClick: (EncounterItem) -> Unit
 ) :
 
     ListAdapter<PatientDetailData, PatientDetailItemViewHolder>(PatientDetailDiffUtil()) {
@@ -58,6 +61,14 @@ class PatientDetailsRecyclerViewAdapter(
                         false
                     )
                 )
+            ViewTypes.ENCOUNTER ->
+                PatientDetailsEncounterItemViewHolder(
+                    EncounterListItemViewBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    ), encounterClick
+                )
             ViewTypes.CONDITION ->
                 PatientDetailsConditionItemViewHolder(
                     PatientListItemViewBinding.inflate(
@@ -73,6 +84,7 @@ class PatientDetailsRecyclerViewAdapter(
         val model = getItem(position)
         holder.bind(model)
         if (holder is PatientDetailsHeaderItemViewHolder) return
+        if (holder is PatientDetailsEncounterItemViewHolder) return
 
         holder.itemView.background =
             if (model.firstInGroup && model.lastInGroup) {
@@ -93,6 +105,7 @@ class PatientDetailsRecyclerViewAdapter(
             is PatientDetailOverview -> ViewTypes.PATIENT
             is PatientDetailProperty -> ViewTypes.PATIENT_PROPERTY
             is PatientDetailObservation -> ViewTypes.OBSERVATION
+            is PatientDetailEncounter -> ViewTypes.ENCOUNTER
             is PatientDetailCondition -> ViewTypes.CONDITION
             else -> {
                 throw IllegalArgumentException("Undefined Item type")
@@ -187,6 +200,21 @@ class PatientDetailsConditionItemViewHolder(private val binding: PatientListItem
         binding.status.visibility = View.GONE
         binding.id.visibility = View.GONE
         binding.tvView.visibility = View.INVISIBLE
+    }
+}
+
+class PatientDetailsEncounterItemViewHolder(
+    private val binding: EncounterListItemViewBinding,
+    private val encounterClick: (EncounterItem) -> Unit
+) :
+    PatientDetailItemViewHolder(binding.root) {
+    override fun bind(data: PatientDetailData) {
+        (data as PatientDetailEncounter).let {
+            binding.tvReference.text = it.encounter.id.substring(0,8)
+            binding.tvName.text = it.encounter.code
+
+            binding.root.setOnClickListener { encounterClick(data.encounter) }
+        }
     }
 }
 

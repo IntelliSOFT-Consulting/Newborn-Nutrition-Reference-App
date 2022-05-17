@@ -27,6 +27,7 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.math.BigDecimal
 import java.util.*
+import kotlin.math.min
 
 
 const val TAG = "ScreenerViewModel"
@@ -74,7 +75,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 return@launch
             }
 
-            saveResources(bundle, subjectReference, encounterId)
+            saveResources(bundle, subjectReference, encounterId, "Pregnancy Details")
             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
             isResourcesSaved.value = true
         }
@@ -175,7 +176,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun saveMaternity(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveMaternity(
+        questionnaireResponse: QuestionnaireResponse,
+        patientId: String,
+        reason: String
+    ) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -245,7 +250,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
-                saveResources(bundle, subjectReference, encounterId)
+                saveResources(bundle, subjectReference, encounterId, reason)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                 isResourcesSaved.value = true
                 // return@launch
@@ -279,7 +284,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     if (childChild == "Mothers-Status") {
 
-                        value = extractValueString(inner)
+                        value = extractValueString(inner, 0)
 
                     }
                 }
@@ -289,7 +294,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
 
-    fun saveAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveAssessment(
+        questionnaireResponse: QuestionnaireResponse,
+        patientId: String,
+        reason: String
+    ) {
 
         viewModelScope.launch {
             val bundle =
@@ -433,7 +442,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
-                                            "Assessment Date",
+                                            "Date of Assessment",
                                             value,
                                             value
                                         )
@@ -502,7 +511,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Feeding-Status") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
 
                                 bundle.addEntry()
                                     .setResource(
@@ -516,7 +525,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Outcome-Status") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -529,7 +538,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Diagnosis-Status") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -542,7 +551,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Intervention-Status") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -555,7 +564,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Recipient-Location") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -633,7 +642,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Treatment-Duration") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -646,7 +655,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Prescribing-Instructions") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -659,7 +668,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Reason-For-Receiving") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -672,7 +681,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Any-Remarks") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -686,7 +695,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Nursing-Plan") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -860,7 +869,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Nursing-Plan") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -873,7 +882,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Batch-Number") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -886,7 +895,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Donor-ID") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -899,7 +908,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             if (childChild == "Shift-Notes") {
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -913,7 +922,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Additional-Comments") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -927,7 +936,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Feeding-Considered") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -941,7 +950,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Legal-Guardian-Signature") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -955,7 +964,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Dispensing-Staff-Name") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -969,7 +978,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (childChild == "Receiving-Staff-Name") {
 
 
-                                val value = extractValueString(inner)
+                                val value = extractValueString(inner, 0)
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -1019,7 +1028,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
 
                 if (frequency > 0 && volume.isNotEmpty()) {
-                    val value = calculete24HourFeed(frequency, volume)
+                    val value = calculate24HourFeed(frequency, volume)
                     bundle.addEntry()
                         .setResource(
                             qh.quantityQuestionnaire(
@@ -1034,7 +1043,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
-                saveResources(bundle, subjectReference, encounterId)
+                saveResources(bundle, subjectReference, encounterId, reason)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                 isResourcesSaved.value = true
 
@@ -1046,7 +1055,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    private fun calculete24HourFeed(frequency: Int, volume: String): String {
+    private fun calculate24HourFeed(frequency: Int, volume: String): String {
         var total = 0.0
         val times = 24 / frequency
         val j: Float = times.toFloat()
@@ -1079,12 +1088,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
 
-    private fun extractValueString(inner: JSONObject): String {
+    private fun extractValueString(inner: JSONObject, index: Int): String {
 
         val childAnswer = inner.getJSONArray("item")
-        val ans = childAnswer.getJSONObject(0).getJSONArray("answer")
+        val ans = childAnswer.getJSONObject(index).getJSONArray("answer")
 
-        return ans.getJSONObject(0).getString("valueString")
+        return ans.getJSONObject(index).getString("valueString")
     }
 
     private fun extractValueDecimal(inner: JSONObject): String {
@@ -1112,7 +1121,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     }
 
-    fun saveApgar(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun saveApgar(questionnaireResponse: QuestionnaireResponse, patientId: String, reason: String) {
         val score = mutableListOf<Int>()
         viewModelScope.launch {
             val bundle =
@@ -1132,21 +1141,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val parent = item.getJSONObject(0).getString("item")
 
                 val common = JSONArray(parent)
+
                 /**
-                 * Skip the 1st item
+                 * Extract time then Skip the 1st item
                  * **/
+
+                val title = common.getJSONObject(0)
+                val childTitle = title.getJSONArray("item")
+                val minute = extractValueCodingTitle(childTitle, 0)
+
                 for (i in 1 until common.length()) {
 
                     val child = common.getJSONObject(i)
                     val childItem = child.getJSONArray("item")
 
                     for (j in 0 until childItem.length()) {
-
-                        val answer = childItem.getJSONObject(j)
-                        val childAnswer = answer.getJSONArray("answer")
-                        val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
-                        val finalAnswer = JSONObject(valueCoding)
-                        val display = finalAnswer.getString("display")
+                        val display = extractValueCoding(childItem, j)
                         score.add(display.toInt())
                     }
                 }
@@ -1174,15 +1184,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val qh = QuestionnaireHelper()
                 bundle.addEntry()
                     .setResource(
-                        qh.codingQuestionnaire(
-                            "Apgar Score",
+                        qh.quantityQuestionnaire(
+                            minute,
+                            minute,
+                            minute,
                             total.toString(),
-                            total.toString()
+                            "pts"
+
                         )
                     )
                     .request.url = "Observation"
 
-                saveResources(bundle, subjectReference, encounterId)
+                saveResources(bundle, subjectReference, encounterId, minute)
                 generateApgarAssessmentResource(bundle, subjectReference, encounterId, total)
                 apgarScore.value = ApGar("$total", "Apgar Score Successfully Recorded", isSafe)
             } catch (e: Exception) {
@@ -1191,6 +1204,33 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 return@launch
             }
         }
+    }
+
+    private fun extractValueCodingTitle(childTitle: JSONArray, i: Int): String {
+        var time = ""
+        val display = extractValueCoding(childTitle, i)
+        if (display == "1 min") {
+            time = "Apgar at 1 minute"
+        }
+        if (display == "5 mins") {
+
+            time = "Apgar at 5 minutes"
+        }
+        if (display == "10 mins") {
+
+            time = "Apgar at 10 minutes"
+        }
+
+        return time
+    }
+
+    private fun extractValueCoding(childItem: JSONArray, j: Int): String {
+
+        val answer = childItem.getJSONObject(j)
+        val childAnswer = answer.getJSONArray("answer")
+        val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
+        val finalAnswer = JSONObject(valueCoding)
+        return finalAnswer.getString("display")
     }
 
     fun saveCarePlan(questionnaireResponse: QuestionnaireResponse, patientId: String) {
@@ -1222,7 +1262,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private suspend fun saveResources(
         bundle: Bundle,
         subjectReference: Reference,
-        encounterId: String
+        encounterId: String,
+        reason: String
     ) {
         val encounterReference = Reference("Encounter/$encounterId")
         bundle.entry.forEach {
@@ -1246,6 +1287,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 is Encounter -> {
                     resource.subject = subjectReference
                     resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
                     saveResourceToDatabase(resource)
                 }
             }

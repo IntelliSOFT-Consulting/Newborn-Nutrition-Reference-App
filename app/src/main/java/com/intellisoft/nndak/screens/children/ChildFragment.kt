@@ -16,6 +16,8 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ChildDetails
 import com.intellisoft.nndak.databinding.FragmentChildBinding
+import com.intellisoft.nndak.models.EncounterItem
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.utils.Constants.APGAR_SCORE
 import com.intellisoft.nndak.utils.Constants.ASSESS_CHILD
 import com.intellisoft.nndak.utils.Constants.CHILD_ASSESSMENT
@@ -75,7 +77,7 @@ class ChildFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        val adapter = ChildDetails(false)
+        val adapter = ChildDetails(false, this::encounterClick)
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = args.title
@@ -109,6 +111,15 @@ class ChildFragment : Fragment() {
 
         }
 
+    }
+
+    private fun encounterClick(encounter: EncounterItem) {
+        findNavController().navigate(
+           ChildFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
     }
 
     private fun bottomSheetButtons() {

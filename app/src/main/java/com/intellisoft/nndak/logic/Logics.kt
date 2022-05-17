@@ -138,7 +138,62 @@ class Logics {
         private const val OXY_SATE = "Oxygen Sat"
         private const val CHX = "CHX Used"
 
+        /**
+         * Maternity Unit Details
+         */
+
+        private const val LABOR_STAGE = "Labour Stage"
+        private const val VITAMIN_K = "Vitamin K Given"
+        private const val MOTHER_WELL = "Is the Mother well"
+        private const val EDD = "Expected Date of Delivery"
+        private const val PREGNANCIES = "Pregnancies,"
+        private const val PARITY = "Parity"
+        private const val GRAVIDITY = "Gravidity"
+        private const val LMP = "Last Menstrual Period"
+        private const val BABY_STATUS = "Baby Status"
+        private const val COMPLETE_PLACENTA = "Placenta Complete"
+        private const val GESTATION = "Gestation"
+        private const val HIV_STATUS = "HIV Status"
+        private const val TOTAL_BABIES = "Total Babies"
+        private const val DELIVERY_METHOD = "Delivery Method"
+        private const val EYE_PROPHYLAXIS = "Eye Prophylaxis"
+        private const val CS_REASON = "Reason for CS"
+        private const val CS_DELIVERY = "Delivery Method,"
+        private const val BREAST_PROBLEMS = "Breast Problems"
+        private const val MOTHER_STATUS = "Mother's Health"
+        private const val ROM = "ROM"
+
+
+        /**
+         * Maternity Baby's Registration Details
+         */
+        private const val ADMITTED_FROM = "Admitted From"
+        private const val ADMISSION_REASON = "Admission Reason"
+        private const val BORN_WHERE = "Born Where"
+        private const val NEONATAL_SEPSIS = "Neonatal Sepsis"
+        private const val ASPHYXIA = "Asphyxia"
+        private const val BBA = "Born Before Arrival,"
+        private const val BBA_A = "Born Before Arrival"
+        private const val LBW = "Low Birth Weight"
+        private const val BIRTH_WEIGHT = "BirthWeight"
+        private const val BABY_WELL = "Baby is Well"
+
+        val maternity_baby_registration =
+            listOf(
+                TEMP_C, ASSESSMENT_DATE, ADMISSION_REASON, BORN_WHERE, NEONATAL_SEPSIS,
+                GESTATION, ASPHYXIA, BBA, BBA_A, LBW, BIRTH_WEIGHT, BIRTH_WEIGHT,
+                ADMITTED_FROM, BABY_WELL, COMPLETED_BY,
+            )
+
         const val SPO2 = "59408-5"
+
+        val maternity_unit_details = listOf(
+            LABOR_STAGE, VITAMIN_K, MOTHER_WELL, EDD, PREGNANCIES,
+            PARITY, GRAVIDITY, LMP, BABY_STATUS, COMPLETE_PLACENTA,
+            GESTATION, HIV_STATUS, TOTAL_BABIES, DELIVERY_METHOD,
+            EYE_PROPHYLAXIS, CS_REASON, CS_DELIVERY, BREAST_PROBLEMS,
+            MOTHER_STATUS, ROM
+        )
         val child_newborn_unit_details = listOf(
             ANTI_GIVEN, HEAD_CIRCUMFERENCE, PULSE_RATE, HAS_FEVER, KMC, CARE, TEMP_C, CONVULSIONS,
             TIME_SEEN, RESUSCITATED, BREATHING_DIFF, ON_OXYGEN, RES_RATE,
@@ -180,28 +235,12 @@ class Logics {
         val custom_unit_details = listOf(
             ADDITIONAL_COMMENTS, APNOEA, SUFFICIENT_BF, BREATHING_DIFFICULTY, DISTRESS
         )
-        val maternity_unit_details = listOf(
-            "Labour Stage", "Vitamin K Given", "Is the Mother well",
-            "Expected Date of Delivery", "Pregnancies,", "Parity", "Gravidity",
-            "Last Menstrual Period", "Baby Status", "Placenta Complete",
-            "Gestation", "HIV Status", "Total Babies", "Delivery Method",
-            "Eye Prophylaxis", "Reason for CS", "Delivery Method,",
-            "Breast Problems", "Mother's Health", "ROM",
-        )
+
         val maternity_unit_child_details = listOf(
             APPEARANCE, RECORD_TIME, ACTIVITY, GRIMACE,
             PULSE_S, RESPIRATION, TOTAL_SCORE
         )
-        val maternity_baby_registration =
-            listOf(
-                "Admitted From", "Temperature (Centigrade)",
-                "Admission Reason", "Born Where",
-                "Gestation", "Neonatal Sepsis",
-                "Asphyxia", "Born Before Arrival,",
-                "Born Before Arrival", "Low Birth Weight",
-                "Assessment Date", COMPLETED_BY,
-                "BirthWeight", "Baby is Well",
-            )
+
         val newborn_unit_details = listOf(
             MOTHER_MEDICAL, ANTENATAL,
         )

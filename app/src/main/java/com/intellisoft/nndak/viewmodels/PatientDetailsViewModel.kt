@@ -32,15 +32,13 @@ import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_feeding
 import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_supplements
 import com.intellisoft.nndak.logic.Logics.Companion.post_natal_milk_expression
 import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
-import com.intellisoft.nndak.models.ConditionItem
-import com.intellisoft.nndak.models.ObservationItem
-import com.intellisoft.nndak.models.PatientItem
-import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.getFormattedAge
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.coroutines.launch
+import okhttp3.internal.http.toHttpDateString
 import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
@@ -107,6 +105,27 @@ class PatientDetailsViewModel(
 
         return relations
     }
+
+    private suspend fun getPatientEncounters(): List<EncounterItem> {
+        val relations: MutableList<EncounterItem> = mutableListOf()
+
+        fhirEngine
+            .search<Encounter> {
+                filter(
+                    Encounter.SUBJECT, { value = "Patient/$patientId" }
+
+                )
+
+                sort(Encounter.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+            .let { relations.addAll(it) }
+
+
+        return relations
+    }
+
 
     private suspend fun getPatientObservations(
         context: Application,
@@ -291,7 +310,7 @@ class PatientDetailsViewModel(
         }
         if (observations.isNotEmpty()) {
 
-            data.add(PatientDetailHeader(getString(R.string.header_observation)))
+            data.add(PatientDetailHeader(getString(R.string.header_encounters)))
 
             val observationDataModel =
                 observations.mapIndexed { index, observationItem ->
@@ -319,6 +338,7 @@ class PatientDetailsViewModel(
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
 
+        val encounters = getPatientEncounters()
         val relation = getPatientRelatedPersons()
         val observations = getPatientObservations(context, code)
         val conditions = getPatientConditions()
@@ -379,41 +399,58 @@ class PatientDetailsViewModel(
 
             data.addAll(relationDataModel)
         }
-        if (observations.isNotEmpty()) {
-
-            data.add(PatientDetailHeader(getString(R.string.header_observation)))
-
+        if (encounters.isNotEmpty()) {
+            data.add(PatientDetailHeader(getString(R.string.header_encounters)))
 
             val observationDataModel =
-                observations.mapIndexed { index, observationItem ->
+                encounters.mapIndexed { index, encounterItem ->
 
-                    PatientDetailObservation(
-                        observationItem,
+                    PatientDetailEncounter(
+                        encounterItem,
                         firstInGroup = index == 0,
-                        lastInGroup = index == observations.size - 1
+                        lastInGroup = index == encounters.size - 1
                     )
 
                 }
 
             data.addAll(observationDataModel)
-
         }
+        /*      if (observations.isNotEmpty()) {
 
-        if (conditions.isNotEmpty()) {
-            data.add(PatientDetailHeader(getString(R.string.header_conditions)))
-            val conditionDataModel =
-                conditions.mapIndexed { index, conditionItem ->
-                    PatientDetailCondition(
-                        conditionItem,
-                        firstInGroup = index == 0,
-                        lastInGroup = index == conditions.size - 1
-                    )
-                }
-            data.addAll(conditionDataModel)
-        }
+                  data.add(PatientDetailHeader(getString(R.string.header_encounters)))
 
+
+                  val observationDataModel =
+                      observations.mapIndexed { index, observationItem ->
+
+                          PatientDetailObservation(
+                              observationItem,
+                              firstInGroup = index == 0,
+                              lastInGroup = index == observations.size - 1
+                          )
+
+                      }
+
+                  data.addAll(observationDataModel)
+
+              }
+
+              if (conditions.isNotEmpty()) {
+                  data.add(PatientDetailHeader(getString(R.string.header_conditions)))
+                  val conditionDataModel =
+                      conditions.mapIndexed { index, conditionItem ->
+                          PatientDetailCondition(
+                              conditionItem,
+                              firstInGroup = index == 0,
+                              lastInGroup = index == conditions.size - 1
+                          )
+                      }
+                  data.addAll(conditionDataModel)
+              }
+      */
         return data
     }
+
 
     private suspend fun getPatientDetailDataModel(
         show: Boolean,
@@ -424,6 +461,7 @@ class PatientDetailsViewModel(
         val patient = getPatient()
         patient.riskItem = getPatientRiskAssessment()
 
+        val encounters = getPatientEncounters()
         val relation = getPatientRelatedPersons()
         val observations = getPatientObservations(context, code)
         val conditions = getPatientConditions()
@@ -472,38 +510,54 @@ class PatientDetailsViewModel(
             )
 
         }
-
-        if (observations.isNotEmpty()) {
-
-            data.add(PatientDetailHeader(getString(R.string.header_observation)))
+        if (encounters.isNotEmpty()) {
+            data.add(PatientDetailHeader(getString(R.string.header_encounters)))
 
             val observationDataModel =
-                observations.mapIndexed { index, observationItem ->
+                encounters.mapIndexed { index, encounterItem ->
 
-                    PatientDetailObservation(
-                        observationItem,
+                    PatientDetailEncounter(
+                        encounterItem,
                         firstInGroup = index == 0,
-                        lastInGroup = index == observations.size - 1
+                        lastInGroup = index == encounters.size - 1
                     )
 
                 }
 
             data.addAll(observationDataModel)
-
         }
 
-        if (conditions.isNotEmpty()) {
-            data.add(PatientDetailHeader(getString(R.string.header_conditions)))
-            val conditionDataModel =
-                conditions.mapIndexed { index, conditionItem ->
-                    PatientDetailCondition(
-                        conditionItem,
-                        firstInGroup = index == 0,
-                        lastInGroup = index == conditions.size - 1
-                    )
-                }
-            data.addAll(conditionDataModel)
-        }
+        /*    if (observations.isNotEmpty()) {
+
+                data.add(PatientDetailHeader(getString(R.string.header_encounters)))
+
+                val observationDataModel =
+                    observations.mapIndexed { index, observationItem ->
+
+                        PatientDetailObservation(
+                            observationItem,
+                            firstInGroup = index == 0,
+                            lastInGroup = index == observations.size - 1
+                        )
+
+                    }
+
+                data.addAll(observationDataModel)
+
+            }*/
+
+        /*   if (conditions.isNotEmpty()) {
+               data.add(PatientDetailHeader(getString(R.string.header_conditions)))
+               val conditionDataModel =
+                   conditions.mapIndexed { index, conditionItem ->
+                       PatientDetailCondition(
+                           conditionItem,
+                           firstInGroup = index == 0,
+                           lastInGroup = index == conditions.size - 1
+                       )
+                   }
+               data.addAll(conditionDataModel)
+           }*/
 
         return data
     }
@@ -608,9 +662,6 @@ class PatientDetailsViewModel(
         return getString(R.string.none)
     }
 
-    fun clearLiveData() {
-        livePatientData.value = null
-    }
 
     companion object {
         /**
@@ -647,7 +698,7 @@ class PatientDetailsViewModel(
         /**
          * Creates ObservationItem objects with displayable values from the Fhir Observation objects.
          */
-        private fun createObservationItem(
+        fun createObservationItem(
             observation: Observation,
             resources: Resources
         ): ObservationItem {
@@ -694,8 +745,26 @@ class PatientDetailsViewModel(
                 )
         }
 
+        /**
+         * Creates ObservationItem objects with displayable values from the Fhir Observation objects.
+         */
+        private fun createEncounterItem(
+            encounter: Encounter,
+            resources: Resources
+        ): EncounterItem {
+
+            val encounterCode = encounter.reasonCodeFirstRep.text ?: ""
+            return EncounterItem(
+                encounter.logicalId,
+                encounterCode,
+                encounter.logicalId,
+                encounter.meta.lastUpdatedElement.asStringValue() ?: "",
+
+                )
+        }
+
         /** Creates ConditionItem objects with displayable values from the Fhir Condition objects. */
-        private fun createConditionItem(
+        fun createConditionItem(
             condition: Condition,
             resources: Resources
         ): ConditionItem {
@@ -767,6 +836,15 @@ data class PatientDetailRelation(
 
 data class PatientDetailObservation(
     val observation: ObservationItem,
+    override val firstInGroup: Boolean = false,
+    override val lastInGroup: Boolean = false
+) : PatientDetailData
+
+/**
+ * Encounter
+ */
+data class PatientDetailEncounter(
+    val encounter: EncounterItem,
     override val firstInGroup: Boolean = false,
     override val lastInGroup: Boolean = false
 ) : PatientDetailData

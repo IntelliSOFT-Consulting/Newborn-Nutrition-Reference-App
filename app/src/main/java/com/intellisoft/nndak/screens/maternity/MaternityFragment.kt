@@ -3,6 +3,7 @@ package com.intellisoft.nndak.screens.maternity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
+import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.utils.Constants.MATERNITY
@@ -79,6 +81,7 @@ class MaternityFragment : Fragment() {
                 this::onAddScreenerClick,
                 this::newBorn,
                 this::maternityClick,
+                this::encounterClick,
                 steps,
                 true
             )
@@ -91,6 +94,15 @@ class MaternityFragment : Fragment() {
         patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
 
+    }
+
+    private fun encounterClick(encounter: EncounterItem) {
+        findNavController().navigate(
+            MaternityFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
     }
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {

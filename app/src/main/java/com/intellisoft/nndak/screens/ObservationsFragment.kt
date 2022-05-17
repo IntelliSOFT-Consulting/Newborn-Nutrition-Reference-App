@@ -1,8 +1,8 @@
-package com.intellisoft.nndak.screens.assessments
+package com.intellisoft.nndak.screens
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -14,16 +14,19 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.MaternityDetails
-import com.intellisoft.nndak.adapters.PatientDetailsRecyclerViewAdapter
-import com.intellisoft.nndak.databinding.FragmentAssessmentBinding
+import com.intellisoft.nndak.adapters.ObservationsAdapter
+import com.intellisoft.nndak.databinding.FragmentMaternityBinding
+import com.intellisoft.nndak.databinding.FragmentObservationsBinding
 import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentArgs
 import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.viewmodels.EncounterDetailsViewModel
+import com.intellisoft.nndak.viewmodels.EncounterDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,15 +35,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AssessmentFragment.newInstance] factory method to
+ * Use the [ObservationsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AssessmentFragment : Fragment() {
+class ObservationsFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
-    private lateinit var patientDetailsViewModel: PatientDetailsViewModel
-    private val args: AssessmentFragmentArgs by navArgs()
+    private lateinit var encounterDetailsViewModel: EncounterDetailsViewModel
+    private val args: ObservationsFragmentArgs by navArgs()
     private lateinit var unit: String
-    private var _binding: FragmentAssessmentBinding? = null
+    private var _binding: FragmentObservationsBinding? = null
     private val binding
         get() = _binding!!
 
@@ -54,61 +57,38 @@ class AssessmentFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAssessmentBinding.inflate(inflater, container, false)
+        _binding = FragmentObservationsBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientDetailsViewModel =
+        encounterDetailsViewModel =
             ViewModelProvider(
                 this,
-                PatientDetailsViewModelFactory(
+                EncounterDetailsViewModelFactory(
                     requireActivity().application,
                     fhirEngine,
-                    args.patientId
+                    args.encounterId
                 )
             )
-                .get(PatientDetailsViewModel::class.java)
-        val steps = Steps(fistIn = "Assessment", lastIn = "Child Assessment", secondButton = true)
-        unit = "Assessment"
-        val adapter =
-            MaternityDetails(
-                this::onAddScreenerClick,
-                this::childAssessmentClick,
-                this::assessmentClick,
-                this::encounterClick,
-                steps,
-                false
-            )
+                .get(EncounterDetailsViewModel::class.java)
+
+        unit = "Observations"
+        val adapter = ObservationsAdapter()
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "Assessment"
+            title = unit
             setDisplayHomeAsUpEnabled(true)
         }
-        patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        patientDetailsViewModel.getMaternityDetailData(args.code)
+        encounterDetailsViewModel.liveEncounterData.observe(viewLifecycleOwner) { adapter.submitList(it) }
+        encounterDetailsViewModel.loadObservations(args.encounterId)
         (activity as MainActivity).setDrawerEnabled(false)
 
     }
-    private fun encounterClick(encounter: EncounterItem) {
-        Toast.makeText(activity, encounter.code, Toast.LENGTH_SHORT).show()
-    }
-    private fun onAddScreenerClick(related: RelatedPersonItem) {
-        findNavController().navigate(
-            AssessmentFragmentDirections.navigateToChild(related.id, args.code, unit)
-        )
-    }
 
-    private fun childAssessmentClick() {
-
-    }
-
-    private fun assessmentClick() {
-
-
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.hidden_menu, menu)
@@ -120,7 +100,6 @@ class AssessmentFragment : Fragment() {
                 NavHostFragment.findNavController(this).navigateUp()
                 true
             }
-
 
             else -> super.onOptionsItemSelected(item)
         }

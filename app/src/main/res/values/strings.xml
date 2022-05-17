@@ -168,6 +168,7 @@
     <string name="existing">Existing</string>
     <string name="action_assessment">Assess Child</string>
     <string name="action_discharge">Discharge Details</string>
+    <string name="header_encounters">Encounters</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

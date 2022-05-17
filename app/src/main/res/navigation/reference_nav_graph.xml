@@ -58,6 +58,10 @@
             android:name="code"
             app:argType="string" />
 
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
+
     </fragment>
 
     <fragment
@@ -122,6 +126,9 @@
         <action
             android:id="@+id/navigate_to_child"
             app:destination="@id/childFragment" />
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newBornFragment"
@@ -213,6 +220,10 @@
         <action
             android:id="@+id/navigate_to_edit_patient"
             app:destination="@id/editChildFragment" />
+
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editChildFragment"
@@ -220,6 +231,18 @@
         android:label="EditChildFragment">
         <argument
             android:name="patient_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/observationsFragment"
+        android:name="com.intellisoft.nndak.screens.ObservationsFragment"
+        android:label="fragment_observations"
+        tools:layout="@layout/fragment_observations">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="encounter_id"
             app:argType="string" />
     </fragment>
 

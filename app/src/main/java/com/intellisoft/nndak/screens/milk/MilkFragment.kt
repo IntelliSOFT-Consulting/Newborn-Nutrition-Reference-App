@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.milk
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +18,7 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.databinding.FragmentMilkBinding
+import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
 import com.intellisoft.nndak.screens.postnatal.PostNatalFragmentDirections
@@ -84,6 +86,7 @@ class MilkFragment : Fragment() {
                 this::onAddScreenerClick,
                 this::prescriptionClick,
                 this::consentFormClick,
+                this::encounterClick,
                 steps,
                 true
             )
@@ -112,7 +115,9 @@ class MilkFragment : Fragment() {
         })
         bottomSheetButtons()
     }
-
+    private fun encounterClick(encounter: EncounterItem) {
+        Toast.makeText(activity, encounter.code, Toast.LENGTH_SHORT).show()
+    }
 
     private fun bottomSheetButtons() {
         updateTitleIcons()

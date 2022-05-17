@@ -114,20 +114,49 @@ class ScreenerFragment : Fragment(R.layout.screener_encounter_fragment) {
             APGAR_SCORE -> {
                 viewModel.saveApgar(
                     questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
+                    args.patientId,"APGAR Score"
                 )
             }
             MATERNITY -> {
                 viewModel.saveMaternity(
                     questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
+                    args.patientId,"Pregnancy Details"
                 )
             }
-
+            ASSESS_CHILD -> {
+                viewModel.saveAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId,"Child Assessment"
+                )
+            }
+            NEWBORN_ADMISSION -> {
+                viewModel.saveAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId,"Newborn Admission"
+                )
+            }
+            MOTHER_ASSESSMENT -> {
+                viewModel.saveAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId,"Mother's Assessment"
+                )
+            }
+            CHILD_ASSESSMENT -> {
+                viewModel.saveAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId,"Child Assessment"
+                )
+            }
+            POST_LACTATION_ASSESSMENT -> {
+                viewModel.saveAssessment(
+                    questionnaireFragment.getQuestionnaireResponse(),
+                    args.patientId,"Lactation Support"
+                )
+            }
             else -> {
                 viewModel.saveAssessment(
                     questionnaireFragment.getQuestionnaireResponse(),
-                    args.patientId
+                    args.patientId,"Assessment"
                 )
             }
         }

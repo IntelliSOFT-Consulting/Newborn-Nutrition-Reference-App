@@ -3,13 +3,18 @@ package com.intellisoft.nndak.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.intellisoft.nndak.databinding.EncounterListItemViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsCardViewBinding
 import com.intellisoft.nndak.databinding.PatientDetailsHeaderBinding
 import com.intellisoft.nndak.databinding.PatientListItemViewBinding
+import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.*
 
-class ChildDetails(val show: (Boolean)) :
+class ChildDetails(
+    val show: (Boolean),
+    private val encounterClick: (EncounterItem) -> Unit
+) :
     ListAdapter<PatientDetailData, PatientDetailItemViewHolder>(PatientDetailDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientDetailItemViewHolder {
@@ -50,6 +55,14 @@ class ChildDetails(val show: (Boolean)) :
                         false
                     )
                 )
+            ViewTypes.ENCOUNTER ->
+                PatientDetailsEncounterItemViewHolder(
+                    EncounterListItemViewBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    ), encounterClick
+                )
             ViewTypes.CONDITION ->
                 PatientDetailsConditionItemViewHolder(
                     PatientListItemViewBinding.inflate(
@@ -65,6 +78,7 @@ class ChildDetails(val show: (Boolean)) :
         val model = getItem(position)
         holder.bind(model)
         if (holder is PatientDetailsHeaderItemViewHolder) return
+        if (holder is PatientDetailsEncounterItemViewHolder) return
 
         holder.itemView.background =
             if (model.firstInGroup && model.lastInGroup) {
@@ -85,6 +99,7 @@ class ChildDetails(val show: (Boolean)) :
             is PatientDetailOverview -> ViewTypes.PATIENT
             is PatientDetailProperty -> ViewTypes.PATIENT_PROPERTY
             is PatientDetailObservation -> ViewTypes.OBSERVATION
+            is PatientDetailEncounter -> ViewTypes.ENCOUNTER
             is PatientDetailCondition -> ViewTypes.CONDITION
             else -> {
                 throw IllegalArgumentException("Undefined Item type")

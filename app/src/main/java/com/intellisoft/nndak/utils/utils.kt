@@ -180,10 +180,27 @@ enum class ViewTypes {
     PATIENT,
     PATIENT_PROPERTY,
     OBSERVATION,
+    ENCOUNTER,
     CONDITION;
 
     companion object {
         fun from(ordinal: Int): ViewTypes {
+            return values()[ordinal]
+        }
+    }
+
+}
+
+/**
+ * Observations vs Conditions
+ */
+
+enum class ObservationViewTypes {
+    OBSERVATION,
+    CONDITION;
+
+    companion object {
+        fun from(ordinal: Int): ObservationViewTypes {
             return values()[ordinal]
         }
     }
@@ -200,6 +217,7 @@ enum class ViewType {
     PATIENT_PROPERTY,
     RELATION,
     OBSERVATION,
+    ENCOUNTER,
     CONDITION;
 
     companion object {
