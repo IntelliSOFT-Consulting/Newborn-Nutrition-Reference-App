@@ -134,6 +134,10 @@ class FhirApplication : Application() {
             )
         }
 
+        fun setPatient(context: Context, state: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Patient", state)
+                .commit()
+        }
         fun setCurrent(context: Context, state: String) {
             (context.applicationContext as FhirApplication).editor.putString("State", state)
                 .commit()
@@ -142,6 +146,11 @@ class FhirApplication : Application() {
         fun getCurrent(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 "State", ""
+            ).toString()
+        }
+        fun getPatient(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "Patient", ""
             ).toString()
         }
 

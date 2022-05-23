@@ -11,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager.widget.ViewPager
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.tabs.TabLayout
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.CustomAdapter
 import com.intellisoft.nndak.adapters.MaternityDetails
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.databinding.FragmentMaternityBinding
@@ -44,6 +47,11 @@ class MaternityFragment : Fragment() {
     private var _binding: FragmentMaternityBinding? = null
     private val binding
         get() = _binding!!
+
+
+    var tabLayout: TabLayout? = null
+    var viewPager: ViewPager? = null
+    private lateinit var adapter: CustomAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +101,20 @@ class MaternityFragment : Fragment() {
         patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) { adapter.submitList(it) }
         patientDetailsViewModel.getMaternityDetailData(args.code)
         (activity as MainActivity).setDrawerEnabled(false)
+
+        loadTabs()
+
+    }
+
+    private fun loadTabs() {
+        tabLayout = binding.tabLayout
+        viewPager = binding.viewPager
+        adapter = CustomAdapter(childFragmentManager)
+        adapter.addFragment(PregnancyFragment(), "Pregnancy Details")
+        adapter.addFragment(PregnancyFragment(), "Children")
+
+        viewPager!!.adapter = adapter
+        tabLayout!!.setupWithViewPager(viewPager)
 
     }
 

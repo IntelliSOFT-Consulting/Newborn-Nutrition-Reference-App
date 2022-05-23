@@ -116,7 +116,12 @@ class MilkFragment : Fragment() {
         bottomSheetButtons()
     }
     private fun encounterClick(encounter: EncounterItem) {
-        Toast.makeText(activity, encounter.code, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(
+            MilkFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
     }
 
     private fun bottomSheetButtons() {

@@ -21,7 +21,7 @@
     {
       "text": "Delivery Details",
       "type": "group",
-      "linkId": "5.0.0",
+      "linkId": "Delivery Details",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",

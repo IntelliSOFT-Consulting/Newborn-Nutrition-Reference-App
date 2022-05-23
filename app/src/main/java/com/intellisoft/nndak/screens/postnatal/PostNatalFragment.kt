@@ -20,6 +20,7 @@ import com.intellisoft.nndak.databinding.FragmentPostNatalBinding
 import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.screens.maternity.MaternityFragmentDirections
 import com.intellisoft.nndak.utils.Constants.POST_LACTATION_ASSESSMENT
 import com.intellisoft.nndak.utils.Constants.POST_MOTHER_ASSESSMENT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -100,7 +101,12 @@ class PostNatalFragment : Fragment() {
         bottomSheetButtons()
     }
     private fun encounterClick(encounter: EncounterItem) {
-        Toast.makeText(activity, encounter.code, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(
+            PostNatalFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
     }
     private fun bottomSheetButtons() {
         binding.post.imgExit.setOnClickListener {

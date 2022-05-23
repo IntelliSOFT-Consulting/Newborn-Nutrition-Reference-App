@@ -40,6 +40,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     val isResourcesSaved = MutableLiveData<Boolean>()
     val apgarScore = MutableLiveData<ApGar>()
     var isSafe = false
+    lateinit var title: String
 
     private val questionnaireResource: Questionnaire
         get() = FhirContext.forR4().newJsonParser().parseResource(questionnaire) as Questionnaire
@@ -92,7 +93,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             val mainLinkId = mainItem.linkId
             val subItemList = mainItem.item
-            if (mainLinkId == "2.0.0") {
+            if (mainLinkId == "Pregnancy Details") {
 
                 for (subItem in subItemList) {
 
@@ -215,6 +216,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
                 val itemsList1 = questionnaireResponse.item
                 val basicThree = getEDD(itemsList1)
+                Timber.e("Basic Three $basicThree")
 
                 if (basicThree.edd.isNotEmpty() && basicThree.lmp.isNotEmpty() && basicThree.gestation.isNotEmpty()) {
                     bundle.addEntry()
@@ -316,9 +318,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             try {
                 val json = JSONObject(questionnaire)
                 val common = json.getJSONArray("item")
+
+                title = common.getJSONObject(0).getString("linkId")
+
                 for (i in 0 until common.length()) {
 
                     val item = common.getJSONObject(i)
+
                     val parent = item.getJSONArray("item")
                     for (j in 0 until parent.length()) {
 
@@ -327,6 +333,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         for (k in 0 until child.length()) {
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
+
 
                             if (childChild == "Feeding-Frequency") {
 
@@ -1043,7 +1050,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
-                saveResources(bundle, subjectReference, encounterId, reason)
+                saveResources(bundle, subjectReference, encounterId, title)
                 generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                 isResourcesSaved.value = true
 
@@ -1288,6 +1295,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.subject = subjectReference
                     resource.id = encounterId
                     resource.reasonCodeFirstRep.text = reason
+//                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
                     saveResourceToDatabase(resource)
                 }
             }

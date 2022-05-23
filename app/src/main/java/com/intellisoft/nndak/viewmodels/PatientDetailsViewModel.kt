@@ -42,6 +42,7 @@ import okhttp3.internal.http.toHttpDateString
 import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
+import timber.log.Timber
 import java.text.SimpleDateFormat
 
 /**
@@ -65,6 +66,10 @@ class PatientDetailsViewModel(
 
     fun getMaternityDetailData(code: String) {
         viewModelScope.launch { livePatientData.value = getMaternityDetailDataModel(context, code) }
+    }
+
+    fun getEncountersData() {
+        viewModelScope.launch { livePatientData.value = getEncountersDataModel(context) }
     }
 
     /***
@@ -382,7 +387,6 @@ class PatientDetailsViewModel(
             )
 
         }
-
         if (relation.isNotEmpty()) {
 
             data.add(PatientDetailHeader(getString(R.string.header_relation)))
@@ -448,6 +452,33 @@ class PatientDetailsViewModel(
                   data.addAll(conditionDataModel)
               }
       */
+        return data
+    }
+
+    private suspend fun getEncountersDataModel(
+        context: Application,
+    ): List<PatientDetailData> {
+        val data = mutableListOf<PatientDetailData>()
+
+        val encounters = getPatientEncounters()
+
+        if (encounters.isNotEmpty()) {
+            data.add(PatientDetailHeader(getString(R.string.header_encounters)))
+
+            val observationDataModel =
+                encounters.mapIndexed { index, encounterItem ->
+
+                    PatientDetailEncounter(
+                        encounterItem,
+                        firstInGroup = index == 0,
+                        lastInGroup = index == encounters.size - 1
+                    )
+
+                }
+
+            data.addAll(observationDataModel)
+        }
+
         return data
     }
 
@@ -746,7 +777,7 @@ class PatientDetailsViewModel(
         }
 
         /**
-         * Creates ObservationItem objects with displayable values from the Fhir Observation objects.
+         * Creates EncounterItem objects with displayable values from the Fhir Observation objects.
          */
         private fun createEncounterItem(
             encounter: Encounter,
@@ -754,13 +785,19 @@ class PatientDetailsViewModel(
         ): EncounterItem {
 
             val encounterCode = encounter.reasonCodeFirstRep.text ?: ""
+            val value = if (encounter.meta.hasLastUpdated()) {
+                encounter.meta.lastUpdatedElement.value.toString()
+            } else {
+                ""
+            }
+            Timber.e("Last Update $value")
             return EncounterItem(
                 encounter.logicalId,
                 encounterCode,
                 encounter.logicalId,
-                encounter.meta.lastUpdatedElement.asStringValue() ?: "",
+                value
 
-                )
+            )
         }
 
         /** Creates ConditionItem objects with displayable values from the Fhir Condition objects. */

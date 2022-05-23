@@ -20,7 +20,7 @@
   "item": [
     {
       "text": "Vitals",
-      "linkId": "6.0.0",
+      "linkId": "Assessment Details",
       "type": "group",
       "extension": [
         {

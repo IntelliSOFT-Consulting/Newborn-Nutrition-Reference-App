@@ -292,9 +292,5 @@ class Logics {
             "DHM Available", "DHM Volume Ordered",
         )
 
-
-        val monitoring_unit_details = listOf(
-            "Hospital Receiving DHM",
-        )
     }
 }

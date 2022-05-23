@@ -79,9 +79,6 @@
             android:name="title"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/navigate_to_self"
-            app:destination="@id/screenerEncounterFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPatientFragment"
@@ -147,6 +144,10 @@
         <action
             android:id="@+id/navigate_to_child"
             app:destination="@id/childFragment" />
+
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/postNatalFragment"
@@ -159,6 +160,10 @@
         <action
             android:id="@+id/navigate_to_child"
             app:destination="@id/childFragment" />
+
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
         <argument
             android:name="patient_id"
             app:argType="string" />
@@ -180,6 +185,13 @@
         <argument
             android:name="code"
             app:argType="string" />
+
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
+        <action
+            android:id="@+id/navigate_to_child"
+            app:destination="@id/childFragment" />
     </fragment>
     <fragment
         android:id="@+id/assessmentFragment"
@@ -198,6 +210,10 @@
         <argument
             android:name="code"
             app:argType="string" />
+
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/childFragment"
@@ -244,6 +260,14 @@
         <argument
             android:name="encounter_id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/pregnancyFragment"
+        android:name="com.intellisoft.nndak.screens.maternity.PregnancyFragment"
+        android:label="PregnancyFragment">
+        <action
+            android:id="@+id/navigate_to_observations"
+            app:destination="@id/observationsFragment" />
     </fragment>
 
 </navigation>

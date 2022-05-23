@@ -210,8 +210,9 @@ class PatientDetailsEncounterItemViewHolder(
     PatientDetailItemViewHolder(binding.root) {
     override fun bind(data: PatientDetailData) {
         (data as PatientDetailEncounter).let {
-            binding.tvReference.text = it.encounter.id.substring(0,8)
+            binding.tvReference.text = it.encounter.id.substring(0, 8)
             binding.tvName.text = it.encounter.code
+           // binding.tvDate.text = it.encounter.value
 
             binding.root.setOnClickListener { encounterClick(data.encounter) }
         }

@@ -14,7 +14,7 @@ import timber.log.Timber
 class DownloadManagerImpl : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
     private val urls = LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE"))
-  //  private val urls = LinkedList(listOf("Patient"))
+    //  private val urls = LinkedList(listOf("Patient"))
 
     override suspend fun getNextRequestUrl(context: SyncDownloadContext): String? {
         var url = urls.poll() ?: return null
@@ -51,12 +51,15 @@ class DownloadManagerImpl : DownloadWorkManager {
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
-
-         /*   for (i in 0 until response.total) {
-                //if (response.entry[i].)
-                val u = "${response.entry[i].fullUrl}/\$everything"
-                urls.add(u)
-            }*/
+            for (i in 0 until response.total) {
+/*
+                Timber.e("Type::: ${response.entry[i].resource.resourceType}")
+                val type = response.entry[i].resource.resourceType
+                if (type.equals("Patient")) {*/
+                    val u = "${response.entry[i].fullUrl}/\$everything"
+                    urls.add(u)
+               /* }*/
+            }
             val nextUrl =
                 response.link.firstOrNull { component -> component.relation == "next" }?.url
             if (nextUrl != null) {

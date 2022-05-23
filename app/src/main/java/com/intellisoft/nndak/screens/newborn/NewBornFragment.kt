@@ -18,6 +18,7 @@ import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.models.EncounterItem
 import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.screens.assessments.AssessmentFragmentDirections
 import com.intellisoft.nndak.utils.Constants.MOTHER_ASSESSMENT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -81,7 +82,12 @@ class NewBornFragment : Fragment() {
 
     }
     private fun encounterClick(encounter: EncounterItem) {
-        Toast.makeText(activity, encounter.code, Toast.LENGTH_SHORT).show()
+        findNavController().navigate(
+            NewBornFragmentDirections.navigateToObservations(
+                args.patientId,
+                encounter.id
+            )
+        )
     }
 
     private fun onAddScreenerClick(related: RelatedPersonItem) {

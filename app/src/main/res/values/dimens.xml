@@ -37,4 +37,6 @@
     <dimen name="_100dp">100dp</dimen>
     <dimen name="smallmargin">10dp</dimen>
     <dimen name="mediumpadding">5dp</dimen>
+    <dimen name="padding_15">15dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
 </resources>

@@ -8,7 +8,7 @@
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/round_basic_button.xml" value="0.332" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/bottom_sheet_assessment.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/bottom_sheet_lactation.xml" value="0.37135416666666665" />
-        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/encounter_list_item_view.xml" value="0.3859375" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/encounter_list_item_view.xml" value="0.25" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_assessment.xml" value="0.3109375" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_child.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_dashboard.xml" value="0.2798913043478261" />
@@ -17,6 +17,8 @@
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_new_born.xml" value="0.2740036231884058" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_observations.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_post_natal.xml" value="0.37083333333333335" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_pregancy.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_pregnancy.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_detail.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_card_view.xml" value="0.37135416666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_header.xml" value="0.2296875" />

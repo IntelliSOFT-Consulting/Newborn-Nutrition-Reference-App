@@ -22,12 +22,14 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/_150dp"
             android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/encounter_list_item_view" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:padding="@dimen/_15dp">
 

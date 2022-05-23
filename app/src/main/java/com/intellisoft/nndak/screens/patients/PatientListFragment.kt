@@ -36,6 +36,7 @@ import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PatientItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
@@ -235,6 +236,11 @@ class PatientListFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (args.step.isNotEmpty()) {
             when (args.step) {
                 "0" -> {
+                    activity?.let {
+                        FhirApplication.setPatient(
+                            it,patientItem.resourceId
+                        )
+                    }
                     findNavController().navigate(
                         PatientListFragmentDirections.navigateToMaternity(
                             patientItem.resourceId, "0"
