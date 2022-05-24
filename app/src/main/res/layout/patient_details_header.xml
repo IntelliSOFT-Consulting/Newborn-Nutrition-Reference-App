@@ -30,6 +30,7 @@
                 android:id="@+id/status"
                 style="@style/AppTheme.PatientDetails.body2"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:text="Current status:" />
 
@@ -37,6 +38,7 @@
                 android:id="@+id/status_value"
                 style="@style/AppTheme.PatientDetails.body2"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="" />
@@ -68,7 +70,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="gone">
-
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/maternity"

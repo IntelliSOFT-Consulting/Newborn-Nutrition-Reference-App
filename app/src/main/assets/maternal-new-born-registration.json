@@ -695,40 +695,46 @@
           ],
           "item": [
             {
-              "linkId": "Baby-Status",
-              "type": "choice",
-              "text": "Baby’s health status in regards to the health assessment. Is the Baby well?",
-              "required": true,
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
-              "extension": [
+              "linkId": "Status-Well",
+              "type": "group",
+              "item": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                  "linkId": "Baby-Status",
+                  "type": "choice",
+                  "text": "Baby’s health status in regards to the health assessment. Is the Baby well?",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
                       }
-                    ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Baby is Well",
-                    "display": "Yes",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Baby is Well",
-                    "display": "No",
-                    "system": "http://snomed.info/sct"
-                  }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Baby is Well",
+                        "display": "Yes",
+                        "system": "http://snomed.info/sct"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Baby is Well",
+                        "display": "No",
+                        "system": "http://snomed.info/sct"
+                      }
+                    }
+                  ]
                 }
               ]
             }

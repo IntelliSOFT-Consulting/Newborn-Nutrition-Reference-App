@@ -25,18 +25,26 @@ import org.hl7.fhir.r4.model.RiskAssessment
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
  * data for UI.
  */
-class PatientListViewModel(application: Application, private val fhirEngine: FhirEngine) :
+class PatientListViewModel(
+    application: Application,
+    private val fhirEngine: FhirEngine,
+    private val location: String
+) :
     AndroidViewModel(application) {
 
     val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val patientCount = MutableLiveData<Long>()
 
     init {
-        updatePatientListAndPatientCount({ getSearchResults() }, { count() })
+        updatePatientListAndPatientCount(
+            { getSearchResults("", location) },
+            { count("", location) })
     }
 
     fun searchPatientsByName(nameQuery: String) {
-        updatePatientListAndPatientCount({ getSearchResults(nameQuery) }, { count(nameQuery) })
+        updatePatientListAndPatientCount(
+            { getSearchResults(nameQuery, location) },
+            { count(nameQuery, location) })
     }
 
     /**
@@ -58,7 +66,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
      * Returns count of all the [Patient] who match the filter criteria unlike [getSearchResults]
      * which only returns a fixed range.
      */
-    private suspend fun count(nameQuery: String = ""): Long {
+    private suspend fun count(nameQuery: String = "", location: String): Long {
         return fhirEngine.count<Patient> {
             if (nameQuery.isNotEmpty()) {
                 filter(
@@ -69,11 +77,14 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                     }
                 )
             }
-            filterCity(this)
+            filterCity(this, location)
         }
     }
 
-    private suspend fun getSearchResults(nameQuery: String = ""): List<PatientItem> {
+    private suspend fun getSearchResults(
+        nameQuery: String = "",
+        location: String
+    ): List<PatientItem> {
         val patients: MutableList<PatientItem> = mutableListOf()
         fhirEngine
             .search<Patient> {
@@ -87,7 +98,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                     )
 
                 }
-                filterCity(this)
+                filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
                 count = 100
                 from = 0
@@ -104,8 +115,18 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
         return patients
     }
 
-    private fun filterCity(search: Search) {
-        search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
+    private fun filterCity(search: Search, location: String) {
+        when (location) {
+            "2" -> {
+                search.filter(Patient.ADDRESS_POSTALCODE, { value = "NBU" })
+            }
+            "3" -> {
+                search.filter(Patient.ADDRESS_POSTALCODE, { value = "PNU" })
+            }
+            else -> {
+                search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
+            }
+        }
     }
 
 
@@ -124,12 +145,13 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
 
     class PatientListViewModelFactory(
         private val application: Application,
-        private val fhirEngine: FhirEngine
+        private val fhirEngine: FhirEngine,
+        private val location: String
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PatientListViewModel::class.java)) {
-                return PatientListViewModel(application, fhirEngine) as T
+                return PatientListViewModel(application, fhirEngine, location) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

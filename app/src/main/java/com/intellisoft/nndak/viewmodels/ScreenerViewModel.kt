@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import com.google.android.fhir.get
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.data.User
@@ -27,7 +28,6 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.math.BigDecimal
 import java.util.*
-import kotlin.math.min
 
 
 const val TAG = "ScreenerViewModel"
@@ -50,37 +50,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private val user = FhirApplication.getProfile(application.applicationContext)
     private val gson = Gson()
     private var frequency: Int = 0
+    private var risk: Int = 0
     private var volume: String = "0"
-
-
-    fun saveScreenerEncounter(questionnaireResponse: QuestionnaireResponse, patientId: String) {
-        viewModelScope.launch {
-            val bundle =
-                ResourceMapper.extract(
-                    getApplication(),
-                    questionnaireResource,
-                    questionnaireResponse
-                )
-            val context = FhirContext.forR4()
-
-            Timber.d(
-                "Questionnaire Response:::: " + context.newJsonParser()
-                    .encodeResourceToString(questionnaireResponse)
-            )
-
-
-            val subjectReference = Reference("Patient/$patientId")
-            val encounterId = generateUuid()
-            if (isRequiredFieldMissing(bundle)) {
-                isResourcesSaved.value = false
-                return@launch
-            }
-
-            saveResources(bundle, subjectReference, encounterId, "Pregnancy Details")
-            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-            isResourcesSaved.value = true
-        }
-    }
 
 
     private suspend fun getEDD(itemsList1: MutableList<QuestionnaireResponse.QuestionnaireResponseItemComponent>): BasicThree {
@@ -201,7 +172,23 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
 
                 val qh = QuestionnaireHelper()
-                val value = extractStatus(questionnaire)
+
+                /**
+                 * Establish if transferring to PNU
+                 */
+                val well = extractStatus(questionnaire, "Status-Well", true)
+                Timber.e("Well:::: $well")
+                if (well.isNotEmpty()) {
+                    risk = if (well == "Yes") {
+                        1
+                    } else {
+                        0
+                    }
+                    handlePatientTransfer(patientId, risk)
+                }
+
+
+                val value = extractStatus(questionnaire, "Mothers-Status", false)
 
                 if (value.isNotEmpty()) {
                     bundle.addEntry()
@@ -253,9 +240,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
                 saveResources(bundle, subjectReference, encounterId, reason)
-                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                generateAssessmentResource(bundle, subjectReference, encounterId, risk)
                 isResourcesSaved.value = true
-                // return@launch
 
 
             } catch (e: Exception) {
@@ -268,7 +254,23 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    private fun extractStatus(questionnaire: String): String {
+    private suspend fun handlePatientTransfer(patientId: String, risk: Int) {
+        /**
+         * Retrieve then update
+         */
+        val patient = fhirEngine.get<Patient>(patientId)
+        if (risk == 1) {
+            patient.addressFirstRep.postalCode = "PNU"
+
+        } else {
+            patient.addressFirstRep.postalCode = "NBU"
+
+        }
+        fhirEngine.update(patient)
+
+    }
+
+    private fun extractStatus(questionnaire: String, string: String, coding: Boolean): String {
         val json = JSONObject(questionnaire)
         val common = json.getJSONArray("item")
         var value = ""
@@ -284,9 +286,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val inner = child.getJSONObject(k)
                     val childChild = inner.getString("linkId")
 
-                    if (childChild == "Mothers-Status") {
+                    if (childChild == string) {
 
-                        value = extractValueString(inner, 0)
+                        value = if (coding) {
+                            extractCoding(inner, 0)
+                        } else {
+                            extractValueString(inner, 0)
+                        }
 
                     }
                 }
@@ -1103,6 +1109,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return ans.getJSONObject(index).getString("valueString")
     }
 
+    private fun extractCoding(inner: JSONObject, index: Int): String {
+
+        val childAnswer = inner.getJSONArray("item")
+        val ans = childAnswer.getJSONObject(index).getJSONArray("answer")
+
+        return ans.getJSONObject(index).getJSONObject("valueCoding").getString("display")
+    }
+
     private fun extractValueDecimal(inner: JSONObject): String {
 
         val childAnswer = inner.getJSONArray("item")
@@ -1343,13 +1357,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return UUID.randomUUID().toString()
     }
 
+    /**
+     * APGAR Score
+     */
     private suspend fun generateApgarAssessmentResource(
         bundle: Bundle,
         subjectReference: Reference,
         encounterId: String,
         total: Int
     ) {
-        Timber.e("Bundle $bundle")
         val riskProbability = getProbability(total)
         riskProbability?.let { rProbability ->
             val riskAssessment =
@@ -1378,6 +1394,45 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         if (total <= 3) return RiskProbability.HIGH else if (total in 4..6) return RiskProbability.MODERATE else if (total > 6) return RiskProbability.LOW
         return null
     }
+
+    /**
+     * Mother's Health
+     */
+    private suspend fun generateAssessmentResource(
+        bundle: Bundle,
+        subjectReference: Reference,
+        encounterId: String,
+        total: Int
+    ) {
+        val riskProbability = dangerScore(total)
+        riskProbability?.let { rProbability ->
+            val riskAssessment =
+                RiskAssessment().apply {
+                    id = generateUuid()
+                    subject = subjectReference
+                    encounter = Reference("Encounter/$encounterId")
+                    addPrediction().apply {
+                        qualitativeRisk =
+                            CodeableConcept().apply {
+                                addCoding().updateRiskProbability(
+                                    rProbability
+                                )
+                            }
+                    }
+                    occurrence = DateTimeType.now()
+                }
+            saveResourceToDatabase(riskAssessment)
+        }
+
+    }
+
+    private fun dangerScore(
+        total: Int
+    ): RiskProbability? {
+        if (total < 0) return RiskProbability.HIGH else if (total < 1) return RiskProbability.MODERATE else if (total > 0) return RiskProbability.LOW
+        return null
+    }
+
 
     private suspend fun generateRiskAssessmentResource(
         bundle: Bundle,
@@ -1492,13 +1547,4 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
 }
 
-private operator fun String.div(divisor: Int): Int {
-    return divisor
-
-}
-
-private operator fun String.rem(divisor: Int): Int {
-    return divisor
-
-}
 

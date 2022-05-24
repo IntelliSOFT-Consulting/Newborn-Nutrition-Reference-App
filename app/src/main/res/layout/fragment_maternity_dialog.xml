@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/app_selection"
+        android:textSize="20sp"
+        android:layout_marginBottom="@dimen/padding_16"
+        android:textStyle="bold" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="5dp"
+            tools:layout_editor_absoluteY="5dp">
+
+            <ImageView
+                android:id="@+id/img_complete"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/round_basic_button"
+                android:padding="10dp"
+                android:src="@drawable/accept"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/img_partial"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/img_partial"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/round_basic_button"
+                android:padding="10dp"
+                android:src="@drawable/partial"
+                app:layout_constraintEnd_toStartOf="@+id/img_complete"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="@dimen/smallmargin"
+                android:text="@string/app_partial"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@+id/img_partial"
+                app:layout_constraintStart_toStartOf="@+id/img_partial"
+                app:layout_constraintTop_toBottomOf="@+id/img_partial" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/smallmargin"
+                android:text="@string/app_complete"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@+id/img_complete"
+                app:layout_constraintStart_toStartOf="@+id/img_complete"
+                app:layout_constraintTop_toBottomOf="@+id/img_complete" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

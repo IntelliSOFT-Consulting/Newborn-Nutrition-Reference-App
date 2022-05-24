@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -36,7 +35,6 @@ import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PatientItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
-import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
@@ -68,8 +66,7 @@ class PatientListFragment : Fragment(), AdapterView.OnItemSelectedListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPatientListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +83,7 @@ class PatientListFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     this,
                     PatientListViewModel.PatientListViewModelFactory(
                         requireActivity().application,
-                        fhirEngine
+                        fhirEngine,args.step
                     )
                 )
                     .get(PatientListViewModel::class.java)
