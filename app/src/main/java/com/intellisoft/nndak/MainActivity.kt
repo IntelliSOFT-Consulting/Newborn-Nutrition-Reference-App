@@ -27,11 +27,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-const val MAX_RESOURCE_COUNT = 40
-const val SYNC_VALUE = "Pumwani Maternity Hospital"
-const val USER_ADDRESS = "NAIROBI"
-const val USER_COUNTRY = "KE"
-const val SYNC_PARAM = "address-state"
 
 class MainActivity : AppCompatActivity() {
 

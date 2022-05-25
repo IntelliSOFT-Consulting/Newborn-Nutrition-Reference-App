@@ -2,14 +2,12 @@ package com.intellisoft.nndak.helper_class
 
 import android.content.Context
 import android.os.Build
-import androidx.annotation.RequiresApi
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
 import timber.log.Timber
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,7 +37,7 @@ class FormatHelper {
             cal.add(Calendar.YEAR, 1)
         }
 
-        val sdf1 = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+        val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
         val newDate = cal.time
 
@@ -56,7 +54,18 @@ class FormatHelper {
         val month = tripleData.second.toString().toInt()
         val year = tripleData.third.toString().toInt()
 
-        return "$day-$month-$year"
+        val caddy = if (day < 10) {
+            "0$day"
+        } else {
+            day
+        }
+        val cool = if (month < 10) {
+            "0$month"
+        } else {
+            month
+        }
+
+        return "$caddy/$cool/$year"
     }
 
     fun calculateGestation(lmpDate: String): String {
@@ -65,14 +74,12 @@ class FormatHelper {
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             val today = getTodayDateNoTime()
             val formatted = getRefinedDate(lmpDate)
-            Timber.e("Current $today")
-            Timber.e("Previous $formatted")
             val date1 = sdf.parse(today)
             val date2 = sdf.parse(formatted)
 
             val diff: Long = date1.time - date2.time
 
-             val totalDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+            val totalDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
             val daysOfWeek = 7
             val weeks = totalDays / daysOfWeek
             val days = totalDays % daysOfWeek
@@ -114,6 +121,24 @@ class FormatHelper {
         return sdf1.parse(newDateStr)
     }
 
+    fun dateLessThanToday(valueDate: String): Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+        val today = getTodayDateNoTime()
+
+        Timber.e("Current $today")
+        Timber.e("Value $valueDate")
+
+        val date1 = sdf.parse(today)
+        val date2 = sdf.parse(valueDate)
+
+        if (date1 != null) {
+            if (date1.after(date2)) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun checkDate(birthDate: String, d2: String): Boolean {
 
         val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
@@ -141,7 +166,7 @@ class FormatHelper {
         return formatter.format(date)
     }
 
-    fun getTodayDateNoTime(): String {
+    private fun getTodayDateNoTime(): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         val date = Date()
         return formatter.format(date)

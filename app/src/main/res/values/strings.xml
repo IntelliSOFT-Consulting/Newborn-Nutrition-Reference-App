@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">Human Milk</string>
-
-    <string name="title_nndak">Human Milk</string>
+    <string name="app_name">Neonatal Nutrition</string>
+    <string name="title_nndak">Neonatal Nutrition</string>
     <string name="title_patient_list">Registered Patients</string>
     <string name="title_patient_detail">SamplePatient Detail</string>
 
@@ -30,9 +29,9 @@
     <string name="edit_patient">Edit Patient</string>
     <string name="submit">Submit</string>
     <string name="message_syncing">Syncing\u2026</string>
-    <string name="message_input_missing">Inputs are missing.</string>
+    <string name="message_input_missing">Please check input data.</string>
     <string name="message_patient_updated">Patient is updated.</string>
-    <string name="inputs_missing">Inputs are missing.</string>
+    <string name="inputs_missing">Please check input data.</string>
     <string name="resources_saved">Record added successfully.</string>
     <string name="response_received">questionnaire response is received.</string>
     <string name="html_text">Current status: <font color="#ddd">UNKNOWN</font></string>
@@ -168,7 +167,7 @@
     <string name="existing">Existing</string>
     <string name="action_assessment">Assess Child</string>
     <string name="action_discharge">Discharge Details</string>
-    <string name="header_encounters">Encounters</string>
+    <string name="header_encounters">Medical Visits</string>
     <string name="app_partial">Partial</string>
     <string name="app_complete">Complete</string>
     <string name="app_selection">Please select an option</string>

@@ -12,10 +12,9 @@ import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
-import com.intellisoft.nndak.SYNC_VALUE
-import com.intellisoft.nndak.USER_ADDRESS
 import com.intellisoft.nndak.models.PatientItem
 import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.RelatedPerson

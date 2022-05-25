@@ -260,6 +260,9 @@
         <argument
             android:name="encounter_id"
             app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/pregnancyFragment"

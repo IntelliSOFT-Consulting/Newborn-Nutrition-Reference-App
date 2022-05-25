@@ -3,8 +3,8 @@ package com.intellisoft.nndak.data
 import com.google.android.fhir.sync.DownloadWorkManager
 
 import com.google.android.fhir.SyncDownloadContext
-import com.intellisoft.nndak.SYNC_PARAM
-import com.intellisoft.nndak.SYNC_VALUE
+import com.intellisoft.nndak.utils.Constants.SYNC_PARAM
+import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import java.util.LinkedList
 import org.hl7.fhir.exceptions.FHIRException
 import org.hl7.fhir.r4.model.*

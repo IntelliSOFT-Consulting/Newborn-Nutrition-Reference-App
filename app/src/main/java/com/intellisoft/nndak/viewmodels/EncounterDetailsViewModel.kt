@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.search.search
-import com.intellisoft.nndak.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.*
+import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createConditionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
 import kotlinx.coroutines.launch

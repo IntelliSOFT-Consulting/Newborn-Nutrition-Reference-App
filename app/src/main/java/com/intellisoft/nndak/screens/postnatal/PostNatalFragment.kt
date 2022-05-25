@@ -104,7 +104,7 @@ class PostNatalFragment : Fragment() {
         findNavController().navigate(
             PostNatalFragmentDirections.navigateToObservations(
                 args.patientId,
-                encounter.id
+                encounter.id,encounter.code
             )
         )
     }

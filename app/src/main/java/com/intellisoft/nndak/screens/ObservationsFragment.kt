@@ -76,7 +76,7 @@ class ObservationsFragment : Fragment() {
             )
                 .get(EncounterDetailsViewModel::class.java)
 
-        unit = "Observations"
+        unit = args.title
         val adapter = ObservationsAdapter()
         binding.recycler.adapter = adapter
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {

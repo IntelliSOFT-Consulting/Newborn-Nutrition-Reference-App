@@ -92,6 +92,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
                 patient.telecom[0].value != null
             ) {
                 patient.id = patientId
+                patient.addressFirstRep.postalCode="001"
                 fhirEngine.update(patient)
                 isPatientSaved.value = true
                 return@launch

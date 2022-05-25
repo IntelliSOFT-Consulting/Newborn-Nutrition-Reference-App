@@ -96,6 +96,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
 
                     patient.active = true
                     patient.id = fhirId
+                    patient.addressFirstRep.postalCode="001"
                     fhirEngine.create(patient)
                     isPatientSaved.value = true
                     return@launch

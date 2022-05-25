@@ -97,7 +97,7 @@ class AssessmentFragment : Fragment() {
         findNavController().navigate(
             AssessmentFragmentDirections.navigateToObservations(
                 args.patientId,
-                encounter.id
+                encounter.id,encounter.code
             )
         )
     }

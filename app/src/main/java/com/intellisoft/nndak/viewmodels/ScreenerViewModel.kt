@@ -177,7 +177,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                  * Establish if transferring to PNU
                  */
                 val well = extractStatus(questionnaire, "Status-Well", true)
-                Timber.e("Well:::: $well")
+
                 if (well.isNotEmpty()) {
                     risk = if (well == "Yes") {
                         1
@@ -203,9 +203,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
                 val itemsList1 = questionnaireResponse.item
                 val basicThree = getEDD(itemsList1)
-                Timber.e("Basic Three $basicThree")
+
 
                 if (basicThree.edd.isNotEmpty() && basicThree.lmp.isNotEmpty() && basicThree.gestation.isNotEmpty()) {
+
+                    val isDateValid = FormatHelper().dateLessThanToday(basicThree.lmp)
+                    if (!isDateValid) {
+                        isResourcesSaved.value = false
+                        return@launch
+                    }
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
