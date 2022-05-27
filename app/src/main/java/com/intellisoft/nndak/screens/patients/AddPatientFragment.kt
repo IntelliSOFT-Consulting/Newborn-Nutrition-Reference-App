@@ -136,9 +136,6 @@ class AddPatientFragment : Fragment(R.layout.add_patient_fragment) {
             Toast.makeText(requireContext(), "You cannot proceed without the ID Number.", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
-//            activity?.finish()
-
-//            dialog.cancel()
 
         }
 

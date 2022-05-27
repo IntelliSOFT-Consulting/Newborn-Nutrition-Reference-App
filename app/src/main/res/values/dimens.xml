@@ -39,4 +39,13 @@
     <dimen name="mediumpadding">5dp</dimen>
     <dimen name="padding_15">15dp</dimen>
     <dimen name="padding_10">10dp</dimen>
+    <dimen name="_10dp">10dp</dimen>
+    <dimen name="spacing_large">15dp</dimen>
+    <dimen name="spacing_middle">10dp</dimen>
+    <dimen name="spacing_mlarge">20dp</dimen>
+    <dimen name="_8dp">8dp</dimen>
+    <dimen name="_25sp">25sp</dimen>
+    <dimen name="_45sp">45sp</dimen>
+    <dimen name="_18sp">18sp</dimen>
+    <dimen name="spacing_small">3dp</dimen>
 </resources>

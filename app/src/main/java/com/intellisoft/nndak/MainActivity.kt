@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,15 +12,25 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.fhir.sync.State
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.screens.dashboard.DashboardFragment
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
+import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.screens.profile.ProfileActivity
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
@@ -27,9 +38,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private val TAG = javaClass.name
@@ -46,24 +57,63 @@ class MainActivity : AppCompatActivity() {
         observeLastSyncTime()
         observeSyncState()
         viewModel.updateLastSyncTimestamp()
-        //cacheDir.deleteRecursively()
+        handleMenuClicks()
+
     }
 
+    private fun handleMenuClicks() {
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        binding.apply {
+            menu.lnHome.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.homeFragment)
+            }
+
+            menu.lnStatistics.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.statisticsFragment)
+            }
+
+            menu.lnRegister.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                openRegistration()
+            }
+            menu.lnBabyProfile.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.babiesFragment)
+            }
+            menu.lnDhmOrders.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.dhmOrdersFragment)
+            }
+            menu.lnDhmStock.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.dhmStockFragment)
+            }
+            menu.btnCloseFilter.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+            }
+        }
+
+    }
+
+
     override fun onBackPressed() {
+
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
             binding.drawer.closeDrawer(GravityCompat.START)
+
             return
         }
-   /*     if (exit) {*/
-            super.onBackPressed()
-       /*     return
-        }*/
+        super.onBackPressed()
 
-        /*this.exit = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            exit = false
-        }, 2000)*/
     }
 
     fun setDrawerEnabled(enabled: Boolean) {
@@ -71,6 +121,16 @@ class MainActivity : AppCompatActivity() {
             if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
         binding.drawer.setDrawerLockMode(lockMode)
         drawerToggle.isDrawerIndicatorEnabled = enabled
+    }
+    fun showBottom(b: Boolean) {
+       /* if (b) {
+
+            binding.navigation.visibility = View.VISIBLE
+        } else {
+
+            binding.navigation.visibility = View.GONE
+        }*/
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -84,12 +144,57 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
     private fun initNavigationDrawer() {
+        val drawerLayout: DrawerLayout = binding.drawer
+        val navView: BottomNavigationView = binding.navigation
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment, R.id.babiesFragment, R.id.registrationFragment,
+            ), drawerLayout
+        )
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        binding.navigation.visibility = View.VISIBLE
         binding.navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected)
-        drawerToggle = ActionBarDrawerToggle(this, binding.drawer, R.string.open, R.string.close)
+        drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         binding.drawer.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
         syncProfile()
+    }
+
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.homeFragment -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.homeFragment)
+                }
+                R.id.babiesFragment -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.babiesFragment)
+                }
+                R.id.registrationFragment -> {
+                 openRegistration()
+                }
+            }
+            false
+        }
+
+    private fun openRegistration() {
+        val bundle =
+            bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "client-registration.json")
+        findNavController(R.id.nav_host_fragment).navigate(
+            R.id.registrationFragment,
+            bundle
+        )
     }
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -152,7 +257,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-//        Timber.i(message)
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -180,11 +284,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeLastSyncTime() {
-        viewModel.lastSyncTimestampLiveData.observe(
-            this
-        ) {
-            binding.navigationView.getHeaderView(0)
-                .findViewById<TextView>(R.id.last_sync_tv).text = it
-        }
+        /*  viewModel.lastSyncTimestampLiveData.observe(
+              this
+          ) {
+              binding.navigationView.getHeaderView(0)
+                  .findViewById<TextView>(R.id.last_sync_tv).text = it
+          }*/
     }
+
+
 }

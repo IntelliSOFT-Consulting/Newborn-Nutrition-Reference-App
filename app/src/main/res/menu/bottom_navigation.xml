@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/heart"
+        android:title="@string/home_menu"/>
+
+    <item
+        android:id="@+id/babiesFragment"
+        android:icon="@drawable/heart"
+        android:title="@string/home_babies"/>
+
+    <item
+        android:id="@+id/registrationFragment"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/home_client"/>
+</menu>

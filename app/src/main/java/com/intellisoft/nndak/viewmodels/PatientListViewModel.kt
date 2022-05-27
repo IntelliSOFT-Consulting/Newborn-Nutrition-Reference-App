@@ -155,6 +155,7 @@ class PatientListViewModel(
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
+
 }
 
 internal fun Patient.toPatientItem(position: Int): PatientItem {

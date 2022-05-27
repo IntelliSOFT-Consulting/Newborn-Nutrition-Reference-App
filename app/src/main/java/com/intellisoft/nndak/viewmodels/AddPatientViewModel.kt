@@ -46,7 +46,7 @@ class AddPatientViewModel(application: Application, private val state: SavedStat
 
             val entry =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )

@@ -1,9 +1,15 @@
 package com.intellisoft.nndak.utils
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.util.Log
 import android.util.Patterns
 import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
@@ -18,6 +24,7 @@ import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
+import timber.log.Timber
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -27,6 +34,32 @@ import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
 
+fun isNetworkAvailable(context: Context?): Boolean {
+    if (context == null) return false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                    return true
+                }
+            }
+        }
+    } else {
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+            return true
+        }
+    }
+    return false
+}
 
 fun disableEditing(editText: TextInputEditText?) {
     editText?.isFocusable = false
@@ -161,9 +194,9 @@ fun showProgress(progressBar: ProgressBar) {
     progressBar.isVisible = true
 }
 
- fun getFormattedAge(
-     dob: String,
-     resources: Resources
+fun getFormattedAge(
+    dob: String,
+    resources: Resources
 ): String {
     if (dob.isEmpty()) return ""
 
@@ -175,6 +208,7 @@ fun showProgress(progressBar: ProgressBar) {
         }
     }
 }
+
 enum class ViewTypes {
     HEADER,
     PATIENT,

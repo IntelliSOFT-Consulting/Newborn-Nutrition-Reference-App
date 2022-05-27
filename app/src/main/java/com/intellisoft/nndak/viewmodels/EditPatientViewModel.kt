@@ -78,7 +78,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
     fun updatePatient(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
             val entry = ResourceMapper.extract(
-                getApplication(),
+//                getApplication(),
                 questionnaireResource,
                 questionnaireResponse
             ).entryFirstRep
@@ -105,7 +105,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
     fun updateChild(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
             val entry = ResourceMapper.extract(
-                getApplication(),
+//                getApplication(),
                 questionnaireResource,
                 questionnaireResponse
             ).entryFirstRep

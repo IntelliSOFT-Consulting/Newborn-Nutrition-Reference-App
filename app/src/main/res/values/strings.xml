@@ -66,7 +66,7 @@
     <string name="mother_child_menu">Mother and Child Assessment</string>
     <string name="post_natal_menu">Post Natal Unit</string>
     <string name="new_born_menu">"New Born Unit "</string>
-    <string name="feeding_assessment_menu">" Feeding Needs Assessment"</string>
+    <string name="feeding_assessment_menu">Feeding Needs Assessment</string>
     <string name="hmb_menu">HMB Ordering and Dispensing</string>
     <string name="monitoring_menu">NB Monitoring and Assessment</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -79,20 +79,20 @@
     <string name="home_menu">Home</string>
     <!--  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-->
 
-    //Headings
+    <!--    Headings-->
     <string name="heading_one">Assessment</string>
     <string name="heading_two">New Born Registration</string>
     <string name="heading_three">Post Natal</string>
     <string name="heading_fourth">Monitoring and Assessment</string>
 
-    //Description
+    <!--    Description-->
     <string name="desc_one">Maternity Unit, Assess the mother and baby | Record maternity details</string>
     <string name="desc_two">Register a new born! Capture units for weight and temperature </string>
     <string name="desc_three">Re-assess the baby, check if need for Lactation Support as ease.</string>
     <string name="desc_fourth">Monitor Mother\'s and Baby\'s progress, Discharge once they are both ready</string>
     <string name="action_username">Username *</string>
     <string name="action_password">Password</string>
-    <string name="unable_to_login">Forgot Password?</string>
+    <string name="unable_to_login">Forgot your Password? <font color="#32CD32">Click here to reset</font></string>
     <string name="login_offline">Offline</string>
     <string name="action_provider_management">Monitoring and Assessment</string>
     <string name="action_new_born">New Born</string>
@@ -102,7 +102,7 @@
 
 
     <string name="welcome_text_Wizard">Welcome Back</string>
-    <string name="signin_now">Signin</string>
+    <string name="signin_now">Sign In</string>
     <string name="log_in">SignIn</string>
     <string name="app_forgot">Recover</string>
     <string name="action_email_address">Email Address</string>
@@ -140,7 +140,7 @@
     <string name="menu_relation">Relation</string>
     <string name="header_relation">Child/Children</string>
     <string name="action_cancel">Cancel</string>
-    <string name="menu_apgar_score">"Apgar "</string>
+    <string name="menu_apgar_score">APGAR Score</string>
     <string name="menu_new">New Born</string>
     <string name="action_score">Apgar Score</string>
     <string name="action_assess">Assessment</string>
@@ -171,12 +171,123 @@
     <string name="app_partial">Partial</string>
     <string name="app_complete">Complete</string>
     <string name="app_selection">Please select an option</string>
+    <string name="home_babies">Baby\'s Profiles</string>
+    <string name="home_client">Client Registration</string>
+    <string name="home_menu_dashboard">Human Milk Bank Dashboard</string>
+    <string name="app_total_term">Total Term and Preterm DHM Available</string>
+    <string name="action_dummy">200</string>
+    <string name="action_numbers">No of Infants on DHM</string>
+    <string name="action_percent">5%</string>
+    <string name="query_ip_search">IP Number</string>
+    <string name="app_hint">Sort By</string>
+    <string name="action_enter_stock">Enter DHM Stock</string>
+    <string name="action_view_dhm">View DHM Stock</string>
+    <string name="action_register_baby">Register a Baby</string>
+    <string name="app_name_original">NNDAK</string>
+    <string name="app_pumwani">Pumwani Maternity Hospital</string>
+    <string name="app_statistics">Statistics</string>
+    <string name="app_registration">Registration</string>
+    <string name="app_profile">My Profile</string>
+    <string name="app_settings">Settings</string>
+    <string name="app_faqs">FAQs</string>
+    <string name="app_human_milk">Human Milk Bank</string>
+    <string name="app_dhm_orders">DHM Orders</string>
+    <string name="app_dhm_stock">DHM Stock</string>
+    <string name="query_search">Search</string>
+    <string name="app_feed_time">Time all Babies were given first feeds</string>
+    <string name="app_feed_percentage">Percentage feeds of what all infants are feeding on</string>
+    <string name="app_mortality">Mortality Rate</string>
+    <string name="app_expressing">Number of times all mothers are expressing</string>
+    <string name="app_baby_name">Baby\'s Name</string>
+    <string name="app_mother_name">Mother\'s Name</string>
+    <string name="app_ip_number">IP Number</string>
+    <string name="app_birth_weight">Birth Weight</string>
+    <string name="app_status">Status</string>
+    <string name="app_rate_gain">Rate of Weight Gain</string>
+    <string name="app_dashboard">Dashboard</string>
+    <string name="app_baby_dashboard">Baby Dashboard</string>
+    <string name="app_assess">Assess</string>
+    <string name="app_prescribe_feed">Prescribe Feeds</string>
+    <string name="app_feeding"><![CDATA[Feeding & Monitoring]]></string>
+    <string name="app_lactation_support">Lactation Support</string>
+    <string name="menu_notification">Notifications</string>
+    <string name="menu_guide">Guide</string>
+    <string name="app_baby_well">Baby is well</string>
+    <string name="app_gestation">Gestation</string>
+    <string name="app_asphyxia">Asphyxia</string>
+    <string name="app_birth_date">Date of Birth</string>
+    <string name="app_neonatal_sepsis">Neonatal Sepsis</string>
+    <string name="app_adm_date">Date of Adm</string>
+    <string name="app_jaundice">Jaundice</string>
+    <string name="app_life_day">Day of life</string>
+    <string name="app_mum_ip">Mother\'s IP No</string>
+    <string name="app_baby_curve">Baby\'s Growth Curve</string>
+    <string name="app_current_weight">Current Weight</string>
+    <string name="app_compared_weight">Compared to Initial weight</string>
+    <string name="app_mothers_milk">Mother\'s milk from prescribed diet</string>
+    <string name="app_feed_distribution">Feed Distribution within 24hrs</string>
+    <string name="app_daily_feeds">Total daaily feeds given</string>
+    <string name="app_compared_prescribed">Compared to the prescribed</string>
+    <string name="app_expressions">Number of Expressions</string>
+    <string name="app_delivery_method">Delivery Method</string>
+    <string name="app_delivery_date">Delivery Date</string>
+    <string name="app_mother_status">Mother\'s Status</string>
+    <string name="app_parity">Parity</string>
+    <string name="app_pmctc_status">PMCTC Status</string>
+    <string name="menu_multiple">Multiple Pregnancy</string>
+    <string name="app_mum_location">Location of Mother</string>
+    <string name="action_new_prescription">New Prescription</string>
+    <string name="action_update_prescription">Adjust Prescription</string>
+    <string name="app_current_prescription">Current Prescription</string>
+    <string name="app_date">Date</string>
+    <string name="app_time">Time</string>
+    <string name="app_total_feed_volume">Total Feed Volume</string>
+    <string name="app_route">Route</string>
+    <string name="app_frequency">Frequency</string>
+    <string name="app_iv_fluids">IV Fluids</string>
+    <string name="app_breast_milk">Breast Milk</string>
+    <string name="menu_dhm">DHM</string>
+    <string name="app_consent">Consent</string>
+    <string name="app_consent_date">Date of Consent</string>
+    <string name="app_dhm_reason">Reasons for DHM</string>
+    <string name="app_additional">Additional Feeds</string>
+    <string name="app_feeding_supplements">Feeding Supplements</string>
+    <string name="app_add_dhm_recipient">Add DHM Recipient</string>
+    <string name="action_add_recipient">Add Recipient</string>
+    <string name="app_title">Neonatal Nutrition</string>
+    <string name="app_title_ext">Digital Adaptation Kit</string>
+    <string name="app_slogan_name">Driving Digital Excellence to Optimize Newborn Feeding in Kenya and Beyond</string>
+    <string name="log">Login</string>
+    <string name="app_login">Enter your username and password to log in</string>
+    <string name="action_preterm">Preterm Babies</string>
+    <string name="action_term">Term Babies</string>
+    <string name="action_average_days">Average days to fully receiving mothers milk</string>
+    <string name="action_total_dhm">Total of volume DHM available</string>
+    <string name="action_average_dhm">Avg. volume of DHM use per day</string>
+    <string name="action_infants">Infants fully receiving DHM</string>
+    <string name="action_dhm_length">Average lenght of DHM use</string>
+    <string name="action_confirmation">Confirmation!</string>
+    <string name="app_confirm">Confirm</string>
+    <string name="app_okay_message">Please click confirm to Save Data</string>
+    <string name="app_confirm_message">Please click confirm to Register\n Client and move to Baby\'s Panel</string>
+    <string name="app_success">Success</string>
+    <string name="app_client_registered">Client has been registered.\nClick okay to start the Baby\'s Assessment</string>
+    <string name="app_ok">OK</string>
+    <string name="app_active">An active Internet Connection is required.</string>
+    <string name="action_provide_support">Provide Lactation Support</string>
+    <string name="app_lactation_status">Lactation Support</string>
+    <string name="app_first_session">1st Assessment Session</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
         <item>National Id</item>
         <item>Phone Number</item>
         <item>Mother DoB</item>
+    </string-array>
+    <string-array name="sort">
+        <item>Sort By:</item>
+        <item>Name</item>
+        <item>Id</item>
     </string-array>
 
 </resources>

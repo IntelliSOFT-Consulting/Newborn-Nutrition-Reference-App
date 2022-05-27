@@ -113,12 +113,39 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return basicThree
     }
 
+    fun clientRegistration(questionnaireResponse: QuestionnaireResponse,patientId:String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+//                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
+
+
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
+                isResourcesSaved.value = true
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                isResourcesSaved.value = false
+                return@launch
+
+            }
+        }
+    }
 
     fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 ).entryFirstRep
@@ -156,7 +183,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -264,15 +291,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         /**
          * Retrieve then update
          */
-        val patient = fhirEngine.get<Patient>(patientId)
-        if (risk == 1) {
-            patient.addressFirstRep.postalCode = "PNU"
+        /*  val patient = fhirEngine.get<Patient>(patientId)
+          if (risk == 1) {
+              patient.addressFirstRep.postalCode = "PNU"
 
-        } else {
-            patient.addressFirstRep.postalCode = "NBU"
+          } else {
+              patient.addressFirstRep.postalCode = "NBU"
 
-        }
-        fhirEngine.update(patient)
+          }
+          fhirEngine.update(patient)*/
 
     }
 
@@ -317,7 +344,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1153,7 +1180,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1264,7 +1291,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-                    getApplication(),
+//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 ).entryFirstRep
@@ -1545,6 +1572,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private fun isComorbidityPresent(comorbidity: String): Boolean {
         return Logics.comorbidities.contains(comorbidity)
     }
+
 
     /***
      * apgar score
