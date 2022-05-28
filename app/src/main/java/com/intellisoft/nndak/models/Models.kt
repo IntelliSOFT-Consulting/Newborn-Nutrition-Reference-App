@@ -50,6 +50,7 @@ data class ObservationItem(
 ) {
     override fun toString(): String = code
 }
+
 data class ConditionItem(
     val id: String,
     val code: String,
@@ -58,6 +59,7 @@ data class ConditionItem(
 ) {
     override fun toString(): String = code
 }
+
 data class EncounterItem(
     val id: String,
     val code: String,
@@ -84,3 +86,64 @@ data class Steps(
     val lastIn: String?,
     val secondButton: Boolean?
 )
+
+
+/**
+ * Mother-Baby
+ */
+
+data class MotherBabyItem(
+    val babyName: String,
+    val motherName: String,
+    val motherIp: String,
+    val babyIp: String,
+    val birthWeight: String? = "",
+    val status: String? = "",
+    val gainRate: String? = ""
+
+) {
+    override fun toString(): String = babyName
+}
+
+data class BabyDashboard(
+    val babyWell: String,
+    val dateOfBirth: String,
+    val dateOfAdm: String,
+    val dayOfLife: String? = "",
+    val gestation: String? = "",
+    val gainRate: String? = "",
+    val apgarScore: String,
+    val asphyxia: String,
+    val neonatalSepsis: String,
+    val jaundice: String,
+    val shared: MotherBabyItem
+
+) {
+    override fun toString(): String = shared.babyName
+}
+
+data class MotherDashboard(
+    val parity: String,
+    val deliveryMethod: String,
+    val deliveryDate: String,
+    val motherStatus: String? = "",
+    val pmtctStatus: String? = "",
+    val multiPregnancy: String? = "",
+    val motherLocation: String,
+    val asphyxia: String,
+    val neonatalSepsis: String,
+    val jaundice: String,
+    val shared: MotherBabyItem
+
+) {
+    override fun toString(): String = shared.babyName
+}
+
+data class DashboardItem(
+    val count: Int,
+    val positive: Boolean,
+    val percent: String,
+    val progress: Int
+) {
+    override fun toString(): String = percent
+}

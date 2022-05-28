@@ -76,7 +76,7 @@ class PatientListViewModel(
                     }
                 )
             }
-            filterCity(this, location)
+           // filterCity(this, location)
         }
     }
 
@@ -97,7 +97,7 @@ class PatientListViewModel(
                     )
 
                 }
-                filterCity(this, location)
+             //   filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
                 count = 100
                 from = 0
@@ -123,7 +123,7 @@ class PatientListViewModel(
                 search.filter(Patient.ADDRESS_POSTALCODE, { value = "PNU" })
             }
             else -> {
-                search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
+                search.filter(Patient.ADDRESS_POSTALCODE, { value = SYNC_VALUE })
             }
         }
     }

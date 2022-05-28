@@ -17,6 +17,7 @@ import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.BasicThree
 import com.intellisoft.nndak.screens.ScreenerFragment
+import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -113,11 +114,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return basicThree
     }
 
-    fun clientRegistration(questionnaireResponse: QuestionnaireResponse,patientId:String) {
+    fun clientRegistration(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -131,6 +131,27 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     isResourcesSaved.value = false
                     return@launch
                 }
+
+                /**
+                 * Extract Observations, Patient Data
+                 */
+
+                val baby = Patient()
+                baby.active = true
+                baby.birthDate = Date()
+                baby.id = patientId
+                baby.gender = Enumerations.AdministrativeGender.FEMALE
+
+//                val mother = Patient()
+//                mother.id = generateUuid()
+//                val subjectReference = Reference("Patient/$patientId")
+//                mother.active = true
+//                mother.linkFirstRep.other = subjectReference
+//                mother.name[0].family = "Mother First Name"
+//                mother.name[0].given[0].value = "Mother Last Name"
+                fhirEngine.create(baby)
+                //   fhirEngine.create(mother)
+
                 isResourcesSaved.value = true
             } catch (e: Exception) {
                 Timber.d("Exception:::: ${e.printStackTrace()}")

@@ -17,7 +17,7 @@
   "publisher": "Japheth Kiprotich",
   "description": "Sample horizonatl orientation",
   "purpose": "Mother-Baby registration",
-  "approvalDate": "2022-05-24",
+  "approvalDate": "2022-05-23",
   "resourceType": "Questionnaire",
   "item": [
     {
@@ -548,7 +548,7 @@
           ],
           "required": false,
           "linkId": "/11885-1",
-          "text": "GA Est from LMP"
+          "text": "Gestation"
         },
         {
           "type": "decimal",
@@ -652,8 +652,117 @@
           "required": false,
           "linkId": "/33172-8",
           "text": "Head Circumference"
+        },
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Modified_52508-9",
+              "display": "Interventions",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/52508-9",
+          "text": "Interventions",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Resusitation"
+              }
+            }
+          ]
         }
       ]
+    },
+    {
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
+          }
+        }
+      ],
+      "required": false,
+      "item": [
+        {
+          "type": "quantity",
+          "code": [
+            {
+              "code": "29463-7",
+              "display": "Admissio Weight",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/29463-7",
+          "text": "Admissio Weight"
+        },
+        {
+          "type": "dateTime",
+          "code": [
+            {
+              "code": "Modified_52455-3",
+              "display": "Admission date",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "required": true,
+          "linkId": "/52455-3",
+          "text": "Admission date"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "code": [
+        {
+          "code": "60733-3",
+          "display": "Doctors Notes",
+          "system": "http://loinc.org/modified"
+        }
+      ],
+      "required": false,
+      "linkId": "/60733-3",
+      "text": "Doctors Notes"
     }
   ]
 }

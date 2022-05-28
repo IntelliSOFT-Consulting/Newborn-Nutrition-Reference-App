@@ -95,6 +95,7 @@ class RegistrationFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
+        patientId = generateUuid()
         viewModel.clientRegistration(
             questionnaireFragment.getQuestionnaireResponse(),patientId
         )
