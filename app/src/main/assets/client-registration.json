@@ -15,7 +15,7 @@
   ],
   "status": "active",
   "publisher": "Japheth Kiprotich",
-  "description": "Sample horizonatl orientation",
+  "description": " horizontal orientation",
   "purpose": "Mother-Baby registration",
   "approvalDate": "2022-05-23",
   "resourceType": "Questionnaire",
@@ -265,24 +265,40 @@
             {
               "valueCoding": {
                 "code": "LA18963-1",
-                "display": "Spontaneous vaginal"
+                "display": "SVD"
               }
             },
             {
               "valueCoding": {
                 "code": "LA18964-9",
-                "display": "Vacuum extraction"
+                "display": "Vacuum"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "LA18967-6",
+                "display": "Breech"
               }
             },
             {
               "valueCoding": {
                 "code": "LA18965-6",
-                "display": "Caesarean section"
+                "display": "CS"
               }
             }
           ]
         },
         {
+          "enableWhen": [
+            {
+              "question": "/72149-8",
+              "operator": "=",
+              "answerCoding": {
+                "code": "LA18965-6",
+                "display": "CS"
+              }
+            }
+          ],
           "type": "choice",
           "code": [
             {
@@ -411,33 +427,33 @@
           "type": "date",
           "code": [
             {
-              "code": "45392-8",
-              "display": "Mother's Name",
+              "code": "/45394-8",
+              "display": "Date of Birth",
               "system": "http://loinc.org/modified"
             }
           ],
           "required": true,
-          "linkId": "/45392-8",
+          "linkId": "/45394-8",
           "text": "Date of Birth"
         },
         {
           "type": "integer",
           "code": [
             {
-              "code": "45394-4",
-              "display": "Parity",
+              "code": "45094-4",
+              "display": "Day of Life",
               "system": "http://loinc.org/modified"
             }
           ],
           "required": true,
-          "linkId": "/45394-4",
+          "linkId": "/45094-4",
           "text": "Day of Life"
         },
         {
           "type": "choice",
           "code": [
             {
-              "code": "Modified_74698-2",
+              "code": "74698-2",
               "display": "Sex",
               "system": "http://loinc.org/modified"
             }
@@ -500,7 +516,7 @@
           "type": "quantity",
           "code": [
             {
-              "code": "Modified_8339-4",
+              "code": "8339-4",
               "display": "Birth weight",
               "system": "http://loinc.org/modified"
             }
@@ -533,8 +549,8 @@
           "type": "decimal",
           "code": [
             {
-              "code": "Modified_11885-1",
-              "display": "GA Est from LMP",
+              "code": "11885-1",
+              "display": "Gestation",
               "system": "http://loinc.org/modified"
             }
           ],
@@ -714,7 +730,7 @@
           "code": [
             {
               "code": "29463-7",
-              "display": "Admissio Weight",
+              "display": "Admission Weight",
               "system": "http://loinc.org/modified"
             }
           ],
@@ -734,35 +750,56 @@
           ],
           "required": false,
           "linkId": "/29463-7",
-          "text": "Admissio Weight"
+          "text": "Admission Weight"
         },
         {
           "type": "dateTime",
           "code": [
             {
               "code": "Modified_52455-3",
-              "display": "Admission date",
+              "display": "Admission Date",
               "system": "http://loinc.org/modified"
             }
           ],
           "required": true,
           "linkId": "/52455-3",
-          "text": "Admission date"
+          "text": "Admission Date"
         }
       ]
     },
     {
-      "type": "text",
-      "code": [
+      "type": "group",
+      "extension": [
         {
-          "code": "60733-3",
-          "display": "Doctors Notes",
-          "system": "http://loinc.org/modified"
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
+          }
         }
       ],
       "required": false,
-      "linkId": "/60733-3",
-      "text": "Doctors Notes"
+      "item": [
+        {
+          "type": "text",
+          "code": [
+            {
+              "code": "60733-3",
+              "display": "Doctors Notes",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "required": false,
+          "linkId": "/60733-3",
+          "text": "Doctor's Notes"
+        }
+      ]
     }
   ]
 }

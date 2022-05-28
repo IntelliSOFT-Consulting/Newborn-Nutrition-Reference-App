@@ -100,6 +100,10 @@ class MainActivity : AppCompatActivity() {
             menu.btnCloseFilter.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
+            menu.lnSettings.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                viewModel.poll()
+            }
         }
 
     }

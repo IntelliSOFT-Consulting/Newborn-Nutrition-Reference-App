@@ -265,10 +265,11 @@
     <string name="action_total_dhm">Total of volume DHM available</string>
     <string name="action_average_dhm">Avg. volume of DHM use per day</string>
     <string name="action_infants">Infants fully receiving DHM</string>
-    <string name="action_dhm_length">Average lenght of DHM use</string>
+    <string name="action_dhm_length">Average length of DHM use</string>
     <string name="action_confirmation">Confirmation!</string>
     <string name="app_confirm">Confirm</string>
     <string name="app_okay_message">Please click confirm to Save Data</string>
+    <string name="app_okay_saved">Your data has been saved</string>
     <string name="app_confirm_message">Please click confirm to Register\n Client and move to Baby\'s Panel</string>
     <string name="app_success">Success</string>
     <string name="app_client_registered">Client has been registered.\nClick okay to start the Baby\'s Assessment</string>

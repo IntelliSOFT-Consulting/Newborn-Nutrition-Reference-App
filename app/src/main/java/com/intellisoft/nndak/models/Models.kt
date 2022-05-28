@@ -93,33 +93,34 @@ data class Steps(
  */
 
 data class MotherBabyItem(
+    val id: String,
+    val resourceId: String,
     val babyName: String,
     val motherName: String,
     val motherIp: String,
     val babyIp: String,
     val birthWeight: String? = "",
     val status: String? = "",
-    val gainRate: String? = ""
+    val gainRate: String? = "",
+    var dashboard: BabyDashboard?
 
 ) {
     override fun toString(): String = babyName
 }
 
 data class BabyDashboard(
-    val babyWell: String,
-    val dateOfBirth: String,
-    val dateOfAdm: String,
+    val babyWell: String?="",
+    val dateOfBirth: String?="",
+    val dateOfAdm: String?="",
     val dayOfLife: String? = "",
     val gestation: String? = "",
-    val gainRate: String? = "",
-    val apgarScore: String,
-    val asphyxia: String,
-    val neonatalSepsis: String,
-    val jaundice: String,
-    val shared: MotherBabyItem
+    val apgarScore: String?="",
+    val asphyxia: String?="",
+    val neonatalSepsis: String?="",
+    val jaundice: String?="",
 
-) {
-    override fun toString(): String = shared.babyName
+    ) {
+    override fun toString(): String = babyWell.toString()
 }
 
 data class MotherDashboard(

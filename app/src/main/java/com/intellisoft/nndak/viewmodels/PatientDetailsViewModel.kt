@@ -5,11 +5,7 @@ import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
@@ -34,16 +30,15 @@ import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getFormattedAge
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import kotlinx.coroutines.launch
-import okhttp3.internal.http.toHttpDateString
 import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -55,6 +50,7 @@ class PatientDetailsViewModel(
     private val patientId: String
 ) : AndroidViewModel(application) {
     val livePatientData = MutableLiveData<List<PatientDetailData>>()
+    val liveMumChild = MutableLiveData<MotherBabyItem>()
     val context: Application = application
 
     /** Emits list of [PatientDetailData]. */
@@ -62,6 +58,11 @@ class PatientDetailsViewModel(
         viewModelScope.launch {
             livePatientData.value = getPatientDetailDataModel(show, context, code)
         }
+    }
+
+    fun getMumChild() {
+
+        viewModelScope.launch { liveMumChild.value = getMumChildDataModel(context) }
     }
 
     fun getMaternityDetailData(code: String) {
@@ -131,6 +132,16 @@ class PatientDetailsViewModel(
         return relations
     }
 
+
+    private suspend fun getObservations(): List<ObservationItem> {
+        val observations: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> { filter(Observation.SUBJECT, { value = "Patient/$patientId" }) }
+            .take(MAX_RESOURCE_COUNT)
+            .map { createObservationItem(it, getApplication<Application>().resources) }
+            .let { observations.addAll(it) }
+        return observations
+    }
 
     private suspend fun getPatientObservations(
         context: Application,
@@ -333,6 +344,99 @@ class PatientDetailsViewModel(
         }
 
         return data
+    }
+
+    private suspend fun getMumChildDataModel(
+        context: Application,
+    ): MotherBabyItem {
+
+        val patient = getPatient()
+        val mum = getMother(patientId)
+        val mumName = mum.first.toString()
+        val mumIp = mum.second.toString()
+
+        var birthWeight = ""
+        var status = ""
+        var gestation = ""
+        var apgar = ""
+        var babyWell = ""
+        var asphyxia = ""
+        var jaundice = ""
+        var Sepsis = ""
+        val gainRate = "Normal"
+        val obs = getObservations()
+        if (obs.isNotEmpty()) {
+            for (element in obs) {
+                if (element.code == "8339-4") {
+                    birthWeight = element.value
+                }
+                if (element.code == "71195-2") {
+                    babyWell = element.value
+                }
+                if (element.code == "45755-8") {
+                    Sepsis = element.value
+                }
+                if (element.code == "45735-8") {
+                    asphyxia = element.value
+                }
+                if (element.code == "45736-6") {
+                    jaundice = element.value
+                }
+                if (element.code == "9273-4") {
+                    apgar = element.value
+                }
+                if (element.code == "11885-1") {
+                    val code = element.value.split("\\.".toRegex()).toTypedArray()
+                    status = if (code[0].toInt() < 37) {
+                        "Preterm"
+                    } else {
+                        "Term"
+                    }
+                    gestation = element.value
+                }
+            }
+        }
+        var name = ""
+        patient.let {
+            name = it.name
+
+        }
+        return MotherBabyItem(
+            patientId,
+            patientId,
+            name,
+            mumName,
+            mumIp,
+            patientId,
+            birthWeight,
+            status,
+            gainRate,
+            dashboard = BabyDashboard(gestation = gestation, apgarScore = apgar, babyWell = babyWell, neonatalSepsis = Sepsis, asphyxia = asphyxia, jaundice = jaundice)
+        )
+    }
+
+    private suspend fun getMother(patientId: String): Triple<String?, String?, String?> {
+        val mother: MutableList<PatientItem> = mutableListOf()
+        fhirEngine
+            .search<Patient> {
+                filter(
+                    Patient.LINK, { value = "Patient/${patientId}" }
+
+                )
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .mapIndexed { index, fhirPatient ->
+                fhirPatient.toPatientItem(
+                    index + 1
+                )
+
+            }
+            .let { mother.addAll(it) }
+        if (mother.isNotEmpty()) {
+            return Triple(mother[0].name, mother[0].resourceId, mother[0].id)
+
+        }
+        return Triple(null, null, null)
     }
 
     private suspend fun getMaternityDetailDataModel(

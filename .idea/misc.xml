@@ -74,7 +74,25 @@
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/maternity.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/options_menu.xml" value="0.37135416666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/post_menu.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/drawable/btn_rounded_green.xml" value="0.1545" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2608695652173913" />
+        <entry key="app/src/main/res/layout/baby_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/baby_list_item_view.xml" value="0.17325227963525835" />
+        <entry key="app/src/main/res/layout/confirmation_dialog.xml" value="0.14479166666666668" />
+        <entry key="app/src/main/res/layout/fragment_babies.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_baby_assessment.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_baby_dashboard.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_feeds.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_lactation.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_monitoring.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/fragment_patient_list.xml" value="0.27717391304347827" />
+        <entry key="app/src/main/res/layout/patient_list_view.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/screen_questionnaire.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/side_menu.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
+        <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.35625" />
       </map>
     </option>
   </component>

@@ -6,6 +6,9 @@
     android:orientation="vertical"
     tools:context=".screens.dashboard.child.BabyMonitoringFragment">
 
-    <include layout="@layout/baby_item" />
+    <include
+
+        android:id="@+id/inc_details"
+        layout="@layout/baby_item" />
 
 </LinearLayout>

@@ -218,11 +218,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ln_dhm_orders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:id="@+id/ln_dhm_orders"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -254,11 +254,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ln_dhm_stock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:id="@+id/ln_dhm_stock"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -325,11 +325,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ln_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15dp"
             android:background="?attr/selectableItemBackground"
-
             android:clickable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">

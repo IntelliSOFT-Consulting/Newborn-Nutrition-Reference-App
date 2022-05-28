@@ -34,9 +34,13 @@
                 android:text="@string/app_first_session"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/black" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
 
             <include
-                android:id="@+id/screen_questionnaire"
+                android:id="@+id/screen"
                 layout="@layout/screen_questionnaire" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

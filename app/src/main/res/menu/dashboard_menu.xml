@@ -4,13 +4,13 @@
     android:theme="@android:style/Theme.NoTitleBar">
     <item
         android:id="@+id/menu_new_born"
-        android:icon="@drawable/message"
+        android:icon="@drawable/ic_baseline_chat_bubble_24"
         android:iconTint="@color/white"
         android:title="@string/app_faqs"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_assessment"
-        android:icon="@drawable/bell"
+        android:icon="@drawable/ic_baseline_notifications_24"
         android:iconTint="@color/white"
         android:title="@string/menu_notification"
         app:showAsAction="ifRoom" />

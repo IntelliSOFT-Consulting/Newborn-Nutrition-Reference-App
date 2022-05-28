@@ -11,11 +11,7 @@ object Constants {
 
     const val MAX_RESOURCE_COUNT = 40
     const val SYNC_VALUE = "PMH"
-//    const val SYNC_VALUE = "Path"
-    const val USER_ADDRESS = "NAIROBI"
-    const val USER_COUNTRY = "KE"
     const val SYNC_PARAM = "address-postalcode"
-
     const val WELCOME = "welcome"
     const val LOGIN = "login"
     const val SERVER_URL_DEMO = "server_url_demo"

@@ -9,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.fhir.FhirEngine
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +34,9 @@ private const val ARG_PARAM2 = "param2"
  */
 class BabyLactationFragment : Fragment() {
     private var _binding: FragmentBabyLactationBinding? = null
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientDetailsViewModel: PatientDetailsViewModel
+    private val args: BabyAssessmentFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
@@ -50,6 +60,40 @@ class BabyLactationFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
+
+
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientDetailsViewModel =
+            ViewModelProvider(
+                this,
+                PatientDetailsViewModelFactory(
+                    requireActivity().application,
+                    fhirEngine,
+                    args.patientId
+                )
+            )
+                .get(PatientDetailsViewModel::class.java)
+        patientDetailsViewModel.getMumChild()
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
+            Timber.e("Mother Baby ${it.gainRate}")
+            if (it != null) {
+                binding.apply {
+                    val gest = it.dashboard?.gestation ?: ""
+                    val status = it.status
+                    incDetails.tvBabyName.text = it.babyName
+                    incDetails.tvMumName.text = it.motherName
+                    incDetails.appBirthWeight.text = it.birthWeight
+                    incDetails.appGestation.text = "$gest-$status"
+                    incDetails.appApgarScore.text = it.dashboard?.apgarScore ?: ""
+                    incDetails.appMumIp.text = it.motherIp
+                    incDetails.appBabyWell.text = it.dashboard?.babyWell ?: ""
+                    incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
+                    incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
+
+                }
+            }
+        }
 
         binding.apply {
 

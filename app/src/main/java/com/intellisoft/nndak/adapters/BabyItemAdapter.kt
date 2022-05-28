@@ -6,23 +6,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.intellisoft.nndak.databinding.BabyListItemViewBinding
 import com.intellisoft.nndak.holders.BabyItemViewHolder
-import com.intellisoft.nndak.models.PatientItem
+import com.intellisoft.nndak.models.MotherBabyItem
 
 class BabyItemAdapter(
-    private val onItemClicked: (PatientItem) -> Unit
+    private val onItemClicked: (MotherBabyItem) -> Unit
 ) :
-    ListAdapter<PatientItem, BabyItemViewHolder>(PatientItemDiffCallback()) {
+    ListAdapter<MotherBabyItem, BabyItemViewHolder>(MotherBabyItemDiffCallback()) {
 
-    class PatientItemDiffCallback : DiffUtil.ItemCallback<PatientItem>() {
+    class MotherBabyItemDiffCallback : DiffUtil.ItemCallback<MotherBabyItem>() {
         override fun areItemsTheSame(
-            oldItem: PatientItem,
-            newItem: PatientItem
+            oldItem: MotherBabyItem,
+            newItem: MotherBabyItem
         ): Boolean = oldItem.resourceId == newItem.resourceId
 
         override fun areContentsTheSame(
-            oldItem: PatientItem,
-            newItem: PatientItem
-        ): Boolean = oldItem.id == newItem.id && oldItem.risk == newItem.risk
+            oldItem: MotherBabyItem,
+            newItem: MotherBabyItem
+        ): Boolean = oldItem.id == newItem.id
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BabyItemViewHolder {

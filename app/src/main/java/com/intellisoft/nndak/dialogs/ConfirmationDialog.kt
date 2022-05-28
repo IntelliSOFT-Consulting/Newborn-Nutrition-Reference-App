@@ -20,7 +20,6 @@ class ConfirmationDialog(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //   dialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner)
         _binding = ConfirmationDialogBinding.inflate(inflater, container, false)
         return binding.root
     }

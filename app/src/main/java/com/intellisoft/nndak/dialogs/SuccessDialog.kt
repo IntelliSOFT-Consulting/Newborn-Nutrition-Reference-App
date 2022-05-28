@@ -8,7 +8,8 @@ import androidx.fragment.app.DialogFragment
 import com.intellisoft.nndak.databinding.SuccessDialogBinding
 
 class SuccessDialog(
-    private val proceed: () -> Unit
+    private val proceed: () -> Unit,
+    private val message: String
 ) : DialogFragment() {
     private var _binding: SuccessDialogBinding? = null
     private val binding
@@ -33,6 +34,7 @@ class SuccessDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            binding.title.text = message
             btnSubmit.setOnClickListener { proceed() }
         }
 

@@ -51,6 +51,7 @@
                         android:padding="@dimen/spacing_large">
 
                         <ImageView
+                            android:id="@+id/img_dashboard"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_marginTop="@dimen/spacing_mlarge"
@@ -160,6 +161,7 @@
                         android:padding="@dimen/spacing_large">
 
                         <ImageView
+                            android:id="@+id/img_feeds"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_marginTop="@dimen/spacing_mlarge"
@@ -211,6 +213,7 @@
                         android:padding="@dimen/spacing_large">
 
                         <ImageView
+                            android:id="@+id/img_monitor"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_marginTop="@dimen/spacing_mlarge"
@@ -269,6 +272,7 @@
                         android:padding="@dimen/spacing_large">
 
                         <ImageView
+                            android:id="@+id/img_lactation"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_marginTop="@dimen/spacing_mlarge"

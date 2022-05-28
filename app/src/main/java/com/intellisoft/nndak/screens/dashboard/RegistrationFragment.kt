@@ -72,13 +72,16 @@ class RegistrationFragment : Fragment() {
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
+            btnCancel.setOnClickListener {
+                findNavController().navigateUp()
+            }
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick
+            this::proceedClick,resources.getString(R.string.app_client_registered)
         )
         patientId = generateUuid()
 
@@ -105,7 +108,7 @@ class RegistrationFragment : Fragment() {
         successDialog.dismiss()
         findNavController().navigate(
             RegistrationFragmentDirections.navigateToBabyDashboard(
-                patientId
+                patientId,false
             )
         )
     }

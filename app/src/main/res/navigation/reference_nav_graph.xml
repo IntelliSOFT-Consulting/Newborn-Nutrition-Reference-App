@@ -323,6 +323,9 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="active"
+            app:argType="boolean" />
         <action
             android:id="@+id/navigate_to_baby_dashboard"
             app:destination="@id/babyDashboardFragment" />
@@ -343,17 +346,28 @@
         android:id="@+id/babyDashboardFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyDashboardFragment"
         android:label="@string/app_dashboard"
-        tools:layout="@layout/fragment_baby_dashboard" />
+        tools:layout="@layout/fragment_baby_dashboard">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/babyAssessmentFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyAssessmentFragment"
         android:label="@string/app_assess"
-        tools:layout="@layout/fragment_baby_assessment" />
+        tools:layout="@layout/fragment_baby_assessment">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/babyFeedsFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyFeedsFragment"
         android:label="@string/app_feeding"
         tools:layout="@layout/fragment_baby_feeds">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
         <action
             android:id="@+id/navigate_to_add_prescription"
             app:destination="@id/addPrescriptionFragment" />
@@ -365,12 +379,20 @@
         android:id="@+id/babyMonitoringFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyMonitoringFragment"
         android:label="fragment_baby_monitoring"
-        tools:layout="@layout/fragment_baby_monitoring" />
+        tools:layout="@layout/fragment_baby_monitoring">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/babyLactationFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyLactationFragment"
         android:label="@string/app_lactation"
-        tools:layout="@layout/fragment_baby_lactation" />
+        tools:layout="@layout/fragment_baby_lactation">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/addPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.AddPrescriptionFragment"

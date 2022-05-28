@@ -47,7 +47,7 @@
         <ImageView
             android:id="@+id/icon"
             android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_height="61dp"
             app:srcCompat="@drawable/like"
             app:tint="@color/dim_green" />
 

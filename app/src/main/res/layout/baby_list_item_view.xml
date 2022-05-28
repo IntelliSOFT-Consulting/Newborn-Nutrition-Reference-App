@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:paddingTop="@dimen/_15dp"
+    android:layout_marginTop="1dp"
+    android:paddingTop="@dimen/_5dp"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
@@ -35,6 +35,7 @@
                 android:textStyle="bold" />
 
             <TextView
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_ip_number"
@@ -49,22 +50,19 @@
             android:padding="2dp">
 
             <TextView
+                android:id="@+id/app_baby_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               android:id="@+id/app_baby_name"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/app_mother_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-             android:id="@+id/app_mother_name"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/app_ip_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-          android:id="@+id/app_ip_number"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <View
@@ -108,20 +106,19 @@
             <TextView
                 android:id="@+id/app_birth_weight"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/app_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold" />
+                android:textColor="@color/dim_red" />
 
             <TextView
                 android:id="@+id/app_rate_gain"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold" />
+                android:textColor="@color/dim_green"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

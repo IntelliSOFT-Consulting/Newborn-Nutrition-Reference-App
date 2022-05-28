@@ -37,10 +37,7 @@ import com.intellisoft.nndak.databinding.FragmentNewBornBinding
 import com.intellisoft.nndak.databinding.FragmentPatientListBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.models.EncounterItem
-import com.intellisoft.nndak.models.PatientItem
-import com.intellisoft.nndak.models.RelatedPersonItem
-import com.intellisoft.nndak.models.Steps
+import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
 import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
@@ -114,7 +111,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             val adapter = BabyItemAdapter(this::onPatientItemClicked)
             recyclerView.adapter = adapter
 
-            patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
+            patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
                 binding.pbLoading.visibility=View.GONE
                 adapter.submitList(it)
@@ -248,8 +245,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onPatientItemClicked(patientItem: PatientItem) {
-        findNavController().navigate(BabiesFragmentDirections.navigateToChildDashboard(patientItem.id))
+    private fun onPatientItemClicked(patientItem: MotherBabyItem) {
+        findNavController().navigate(BabiesFragmentDirections.navigateToChildDashboard(patientItem.resourceId,true))
     }
 
 

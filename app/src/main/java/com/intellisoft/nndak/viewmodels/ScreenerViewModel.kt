@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
-import com.google.android.fhir.get
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.data.User
@@ -17,7 +16,6 @@ import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.BasicThree
 import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -114,7 +112,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return basicThree
     }
 
-    fun clientRegistration(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun completeAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -122,8 +120,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val context = FhirContext.forR4()
-
-
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
             try {
@@ -136,23 +132,64 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                  * Extract Observations, Patient Data
                  */
 
-                val baby = Patient()
-                baby.active = true
-                baby.birthDate = Date()
-                baby.id = patientId
-                baby.gender = Enumerations.AdministrativeGender.FEMALE
+                val assessment = extractResponse(questionnaire, "/50786-3", "valueDateTime")
+                val well = extractResponse(questionnaire, "/71195-2", "valueCoding")
+                val asphyxia = extractResponse(questionnaire, "/45735-8", "valueCoding")
+                val sepsis = extractResponse(questionnaire, "/45755-8", "valueCoding")
+                val jaundice = extractResponse(questionnaire, "/45736-6", "valueCoding")
 
-//                val mother = Patient()
-//                mother.id = generateUuid()
-//                val subjectReference = Reference("Patient/$patientId")
-//                mother.active = true
-//                mother.linkFirstRep.other = subjectReference
-//                mother.name[0].family = "Mother First Name"
-//                mother.name[0].given[0].value = "Mother Last Name"
-                fhirEngine.create(baby)
-                //   fhirEngine.create(mother)
 
+                val encounterId = generateUuid()
+
+                val qh = QuestionnaireHelper()
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "45755-8",
+                        "Neonatal Sepsis",
+                        sepsis
+                    )
+                )
+                    .request.url = "Observation"
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "45736-6",
+                        "Jaundice",
+                        jaundice
+                    )
+                )
+                    .request.url = "Observation"
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "45735-8",
+                        "Asphyxia",
+                        asphyxia
+                    )
+                )
+                    .request.url = "Observation"
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "50786-3",
+                        "Assessment Date",
+                        assessment
+                    )
+                )
+                    .request.url = "Observation"
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "71195-2",
+                        "Baby Well",
+                        well
+                    )
+                )
+                    .request.url = "Observation"
+
+
+                title = "Baby's Assessment"
+                val subjectReference = Reference("Patient/$patientId")
+                saveResources(bundle, subjectReference, encounterId, title)
+                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                 isResourcesSaved.value = true
+
             } catch (e: Exception) {
                 Timber.d("Exception:::: ${e.printStackTrace()}")
                 isResourcesSaved.value = false
@@ -160,6 +197,148 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             }
         }
+    }
+
+    fun clientRegistration(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
+
+                /**
+                 * Extract Observations, Patient Data
+                 */
+
+                val mumsName = extractResponse(questionnaire, "/45392-8", "valueString")
+                val mumsIp = extractResponse(questionnaire, "/18688-2", "valueString")
+                val parity = extractResponse(questionnaire, "/45394-4", "valueInteger")
+                val birthWeight = extractResponse(questionnaire, "/8339-4", "valueQuantity")
+                val gestation = extractResponse(questionnaire, "/11885-1", "valueDecimal")
+                val apgar = extractResponse(questionnaire, "/9273-4", "valueDecimal")
+
+                val words = mumsName.split("\\s".toRegex()).toTypedArray()
+                val baby = Patient()
+                baby.active = true
+                baby.birthDate = Date()
+                baby.id = patientId
+                // baby.nameFirstRep.family = "Baby"
+                // baby.nameFirstRep.addGiven("Jane")
+                baby.addressFirstRep.postalCode = "PMH"
+                baby.gender = Enumerations.AdministrativeGender.FEMALE
+
+                val mother = Patient()
+                mother.id = mumsIp
+                val subjectReference = Reference("Patient/$patientId")
+                mother.active = true
+                mother.linkFirstRep.other = subjectReference
+                mother.nameFirstRep.family = words[0]
+                mother.nameFirstRep.addGiven(words[1])
+                fhirEngine.create(baby)
+                fhirEngine.create(mother)
+                title = "Mother Baby Registration"
+                val encounterId = generateUuid()
+
+                val qh = QuestionnaireHelper()
+                bundle.addEntry().setResource(
+                    qh.codingQuestionnaire(
+                        "45394-4",
+                        "Parity",
+                        parity
+                    )
+                )
+                    .request.url = "Observation"
+
+                bundle.addEntry().setResource(
+                    qh.quantityQuestionnaire(
+                        "8339-4",
+                        "Birth Weight",
+                        "Birth Weight",
+                        birthWeight,
+                        "g"
+
+                    )
+                )
+                    .request.url = "Observation"
+                bundle.addEntry().setResource(
+                    qh.quantityQuestionnaire(
+                        "11885-1",
+                        "Gestation",
+                        "Gestation",
+                        gestation,
+                        "wk"
+
+                    )
+                )
+                    .request.url = "Observation"
+
+                bundle.addEntry().setResource(
+                    qh.quantityQuestionnaire(
+                        "9273-4",
+                        "APGAR Score",
+                        "APGAR Score",
+                        apgar,
+                        "score"
+
+                    )
+                )
+                    .request.url = "Observation"
+
+                saveResources(bundle, subjectReference, encounterId, title)
+                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                isResourcesSaved.value = true
+
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                isResourcesSaved.value = false
+                return@launch
+
+            }
+        }
+    }
+
+    private fun extractResponse(questionnaire: String, child: String, type: String): String {
+        var value = ""
+        val json = JSONObject(questionnaire)
+        val common = json.getJSONArray("item")
+        for (i in 0 until common.length()) {
+
+            val item = common.getJSONObject(i)
+            val parent = item.getJSONArray("item")
+            for (j in 0 until parent.length()) {
+                val inner = parent.getJSONObject(j)
+                val childChild = inner.getString("linkId")
+                if (childChild == child) {
+                    value = when (type) {
+                        "valueQuantity" -> {
+                            inner.getJSONArray("answer").getJSONObject(0).getJSONObject(type)
+                                .getString("value")
+
+                        }
+                        "valueCoding" -> {
+                            inner.getJSONArray("answer").getJSONObject(0).getJSONObject(type)
+                                .getString("display")
+
+                        }
+                        else -> {
+                            inner.getJSONArray("answer").getJSONObject(0).getString(type)
+                        }
+                    }
+
+                }
+            }
+
+        }
+        return value
     }
 
     fun saveRelatedPerson(questionnaireResponse: QuestionnaireResponse, patientId: String) {
