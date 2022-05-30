@@ -422,5 +422,10 @@
         android:name="com.intellisoft.nndak.screens.dashboard.dhm.DhmStockFragment"
         android:label="@string/app_dhm_stock"
         tools:layout="@layout/fragment_dhm_stock" />
+    <fragment
+        android:id="@+id/breastFeedingFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.BreastFeedingFragment"
+        android:label="fragment_breast_feeding"
+        tools:layout="@layout/fragment_breast_feeding" />
 
 </navigation>

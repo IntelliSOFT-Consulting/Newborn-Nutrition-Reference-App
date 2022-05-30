@@ -102,42 +102,43 @@ data class MotherBabyItem(
     val birthWeight: String? = "",
     val status: String? = "",
     val gainRate: String? = "",
-    var dashboard: BabyDashboard?
+    var dashboard: BabyDashboard?,
+    var mother: MotherDashboard
 
 ) {
     override fun toString(): String = babyName
 }
 
 data class BabyDashboard(
-    val babyWell: String?="",
-    val dateOfBirth: String?="",
-    val dateOfAdm: String?="",
+    val babyWell: String? = "",
+    val dateOfBirth: String? = "",
+    val dateOfAdm: String? = "",
     val dayOfLife: String? = "",
     val gestation: String? = "",
-    val apgarScore: String?="",
-    val asphyxia: String?="",
-    val neonatalSepsis: String?="",
-    val jaundice: String?="",
+    val apgarScore: String? = "",
+    val asphyxia: String? = "",
+    val neonatalSepsis: String? = "",
+    val jaundice: String? = "",
+    val cWeight: String? = "",
 
     ) {
     override fun toString(): String = babyWell.toString()
 }
 
 data class MotherDashboard(
-    val parity: String,
-    val deliveryMethod: String,
-    val deliveryDate: String,
+    val parity: String? = "",
+    val deliveryMethod: String? = "",
+    val deliveryDate: String? = "",
     val motherStatus: String? = "",
     val pmtctStatus: String? = "",
     val multiPregnancy: String? = "",
-    val motherLocation: String,
-    val asphyxia: String,
-    val neonatalSepsis: String,
-    val jaundice: String,
-    val shared: MotherBabyItem
+    val motherLocation: String? = "",
+    val asphyxia: String? = "",
+    val neonatalSepsis: String? = "",
+    val jaundice: String? = "",
 
 ) {
-    override fun toString(): String = shared.babyName
+    override fun toString(): String = parity.toString()
 }
 
 data class DashboardItem(

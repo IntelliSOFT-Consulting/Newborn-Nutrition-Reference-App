@@ -171,7 +171,12 @@ class FormatHelper {
         val date = Date()
         return formatter.format(date)
     }
+    fun dateOfBirth(date: String): Date? {
+      //  val cool =getRefinedDate(date)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        return  destFormat.parse(date)
 
+    }
     private fun getRefinedDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)

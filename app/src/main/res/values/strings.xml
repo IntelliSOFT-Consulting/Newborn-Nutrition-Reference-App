@@ -276,7 +276,7 @@
     <string name="app_ok">OK</string>
     <string name="app_active">An active Internet Connection is required.</string>
     <string name="action_provide_support">Provide Lactation Support</string>
-    <string name="app_lactation_status">Lactation Support</string>
+    <string name="app_lactation_status">Lactation Status</string>
     <string name="app_first_session">1st Assessment Session</string>
     <string-array name="birds">
         <item>Filter By:</item>

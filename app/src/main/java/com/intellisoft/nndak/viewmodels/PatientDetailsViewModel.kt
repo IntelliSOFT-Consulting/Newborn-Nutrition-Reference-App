@@ -37,6 +37,7 @@ import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -128,7 +129,6 @@ class PatientDetailsViewModel(
             .map { createEncounterItem(it, getApplication<Application>().resources) }
             .let { relations.addAll(it) }
 
-
         return relations
     }
 
@@ -136,8 +136,10 @@ class PatientDetailsViewModel(
     private suspend fun getObservations(): List<ObservationItem> {
         val observations: MutableList<ObservationItem> = mutableListOf()
         fhirEngine
-            .search<Observation> { filter(Observation.SUBJECT, { value = "Patient/$patientId" }) }
-            .take(MAX_RESOURCE_COUNT)
+            .search<Observation> {
+                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                sort(Observation.DATE, Order.DESCENDING)
+            }
             .map { createObservationItem(it, getApplication<Application>().resources) }
             .let { observations.addAll(it) }
         return observations
@@ -364,11 +366,39 @@ class PatientDetailsViewModel(
         var jaundice = ""
         var Sepsis = ""
         val gainRate = "Normal"
+        var admDate = ""
+        var cWeight = ""
+        var dMethod = ""
+        var parity = ""
+        var pmtct = ""
+        var mPreg = ""
+        var dDate = ""
         val obs = getObservations()
         if (obs.isNotEmpty()) {
             for (element in obs) {
+                if (element.code == "93857-1") {
+                    dDate = element.value.substring(0, 10)
+                }
+                if (element.code == "55277-8") {
+                    pmtct = element.value
+                }
+                if (element.code == "64708-1") {
+                    mPreg = element.value
+                }
+                if (element.code == "72149-8") {
+                    dMethod = element.value
+                }
+                if (element.code == "45394-4") {
+                    parity = "P${element.value}"
+                }
                 if (element.code == "8339-4") {
                     birthWeight = element.value
+                }
+                if (element.code == "52455-3") {
+                    admDate = element.value.substring(0, 10)
+                }
+                if (element.code == "3141-9") {
+                    cWeight = element.value
                 }
                 if (element.code == "71195-2") {
                     babyWell = element.value
@@ -397,8 +427,12 @@ class PatientDetailsViewModel(
             }
         }
         var name = ""
+        var dateOfBirth = ""
+        var dayOfLife = ""
         patient.let {
             name = it.name
+            dateOfBirth = it.dob
+            dayOfLife = getFormattedAge(it.dob)
 
         }
         return MotherBabyItem(
@@ -411,8 +445,38 @@ class PatientDetailsViewModel(
             birthWeight,
             status,
             gainRate,
-            dashboard = BabyDashboard(gestation = gestation, apgarScore = apgar, babyWell = babyWell, neonatalSepsis = Sepsis, asphyxia = asphyxia, jaundice = jaundice)
+            dashboard = BabyDashboard(
+                gestation = gestation,
+                apgarScore = apgar,
+                babyWell = babyWell,
+                neonatalSepsis = Sepsis,
+                asphyxia = asphyxia,
+                jaundice = jaundice,
+                dateOfBirth = dateOfBirth,
+                dayOfLife = dayOfLife,
+                dateOfAdm = admDate,
+                cWeight = cWeight
+            ), mother = MotherDashboard(
+                parity = parity,
+                deliveryMethod = dMethod,
+                pmtctStatus = pmtct,
+                multiPregnancy = mPreg,
+                deliveryDate = dDate
+            )
         )
+    }
+
+    private fun getFormattedAge(
+        dob: String
+    ): String {
+        if (dob.isEmpty()) return ""
+        return Period.between(LocalDate.parse(dob), LocalDate.now()).let {
+            when {
+                it.years > 0 -> it.years.toString()
+                it.months > 0 -> it.months.toString()
+                else -> it.days.toString()
+            }
+        }
     }
 
     private suspend fun getMother(patientId: String): Triple<String?, String?, String?> {

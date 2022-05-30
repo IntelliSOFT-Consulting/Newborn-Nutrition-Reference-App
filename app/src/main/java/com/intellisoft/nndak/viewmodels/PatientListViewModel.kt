@@ -12,10 +12,7 @@ import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
-import com.intellisoft.nndak.models.MotherBabyItem
-import com.intellisoft.nndak.models.ObservationItem
-import com.intellisoft.nndak.models.PatientItem
-import com.intellisoft.nndak.models.RelatedPersonItem
+import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.launch
@@ -151,8 +148,9 @@ class PatientListViewModel(
                     Patient.LINK, { value = "Patient/${baby.resourceId}" }
 
                 )
+
             }
-            .take(Constants.MAX_RESOURCE_COUNT)
+            //.take(Constants.MAX_RESOURCE_COUNT)
             .mapIndexed { index, fhirPatient ->
                 fhirPatient.toPatientItem(
                     index + 1
@@ -196,7 +194,8 @@ class PatientListViewModel(
             birthWeight = birthWeight,
             status = status,
             gainRate = "Normal",
-            dashboard = null
+            dashboard = BabyDashboard(),
+            mother = MotherDashboard()
         )
 
     }
@@ -204,8 +203,10 @@ class PatientListViewModel(
     private suspend fun getObservations(resourceId: String): List<ObservationItem> {
         val observations: MutableList<ObservationItem> = mutableListOf()
         fhirEngine
-            .search<Observation> { filter(Observation.SUBJECT, { value = "Patient/$resourceId" }) }
-            .take(Constants.MAX_RESOURCE_COUNT)
+            .search<Observation> {
+                filter(Observation.SUBJECT, { value = "Patient/$resourceId" })
+                sort(Observation.DATE, Order.DESCENDING)
+            }
             .map {
                 PatientDetailsViewModel.createObservationItem(
                     it,
@@ -234,7 +235,7 @@ class PatientListViewModel(
                     )
 
                 }
-                  filterCity(this, location)
+                filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
                 count = 100
                 from = 0

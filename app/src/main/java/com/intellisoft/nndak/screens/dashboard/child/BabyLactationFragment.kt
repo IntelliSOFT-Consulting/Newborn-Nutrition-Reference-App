@@ -75,7 +75,7 @@ class BabyLactationFragment : Fragment() {
                 .get(PatientDetailsViewModel::class.java)
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-            Timber.e("Mother Baby ${it.gainRate}")
+
             if (it != null) {
                 binding.apply {
                     val gest = it.dashboard?.gestation ?: ""
@@ -90,6 +90,20 @@ class BabyLactationFragment : Fragment() {
                     incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
                     incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
                     incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
+                    incDetails.appBirthDate.text = it.dashboard?.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = it.dashboard?.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = it.dashboard?.dateOfAdm ?: ""
+
+                    /**
+                     * Mum Details
+                     */
+                    incMum.tvMumName.text=it.motherName
+                    incMum.appIpNumber.text=it.motherIp
+                    incMum.appDeliveryMethod.text=it.mother.deliveryMethod
+                    incMum.appParity.text= it.mother.parity
+                    incMum.appPmctcStatus.text= it.mother.pmtctStatus
+                    incMum.appDeliveryDate.text= it.mother.deliveryDate
+                    incMum.appMultiplePregnancy.text= it.mother.multiPregnancy
 
                 }
             }

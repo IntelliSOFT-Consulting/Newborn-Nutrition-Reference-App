@@ -92,6 +92,9 @@ class BabyFeedsFragment : Fragment() {
                     incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
                     incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
                     incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
+                    incDetails.appBirthDate.text = it.dashboard?.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = it.dashboard?.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = it.dashboard?.dateOfAdm ?: ""
 
                 }
             }

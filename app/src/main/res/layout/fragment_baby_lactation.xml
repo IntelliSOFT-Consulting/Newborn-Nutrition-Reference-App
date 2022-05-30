@@ -7,7 +7,9 @@
     android:orientation="vertical"
     tools:context=".screens.dashboard.child.BabyLactationFragment">
 
-    <include layout="@layout/mother_item" />
+    <include
+        android:id="@+id/inc_mum"
+        layout="@layout/mother_item" />
 
     <include
 

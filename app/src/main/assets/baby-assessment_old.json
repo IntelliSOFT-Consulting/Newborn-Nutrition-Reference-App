@@ -1,48 +1,55 @@
 {
-  "title": "Screener",
-  "status": "active",
-  "version": "0.0.1",
-  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "status": "draft",
   "resourceType": "Questionnaire",
-  "subjectType": [
-    "Encounter"
-  ],
-  "extension": [
-    {
-      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-      "valueExpression": {
-        "language": "application/x-fhir-query",
-        "expression": "Encounter",
-        "name": "encounter"
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire|2.7"
+    ],
+    "tag": [
+      {
+        "code": "lformsVersion: 29.2.1"
       }
-    }
-  ],
+    ]
+  },
   "item": [
     {
-      "linkId": "Baby-Assessment",
       "type": "group",
-      "text": "",
+      "code": [
+        {
+          "code": "75794-8",
+          "display": "Assessment Details",
+          "system": "http://loinc.org/modified"
+        }
+      ],
       "extension": [
         {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "mha"
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
           }
         }
       ],
+      "required": false,
+      "linkId": "/75794-8",
       "item": [
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -60,7 +67,7 @@
                       "system": "http://loinc.org/modified"
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/50786-3",
                   "text": "Assessment Date Time"
                 }
@@ -69,15 +76,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -109,7 +117,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/3141-9",
                   "text": "Current Weight"
                 }
@@ -118,15 +126,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -159,7 +168,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/71195-2",
                   "text": "Baby is Well",
                   "answerOption": [
@@ -200,17 +209,47 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "code": [
         {
-          "linkId": "3.0.0",
+          "code": "46040-2",
+          "display": "Danger Signs",
+          "system": "http://loinc.org/modified"
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
+          }
+        }
+      ],
+      "required": false,
+      "linkId": "/46040-2",
+      "item": [
+        {
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -243,7 +282,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/45735-8",
                   "text": "Asphyxia",
                   "answerOption": [
@@ -278,15 +317,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -319,7 +359,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/45736-6",
                   "text": "Jaundice",
                   "answerOption": [
@@ -354,15 +394,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -395,7 +436,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/45755-8",
                   "text": "Neonatal Sepsis",
                   "answerOption": [
@@ -428,17 +469,41 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "extension": [
         {
-          "linkId": "3.0.0",
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
+          }
+        }
+      ],
+      "required": false,
+      "linkId": "/46040-2",
+      "text": "",
+      "item": [
+        {
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -456,7 +521,7 @@
                       "system": "http://loinc.org/modified"
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/457736-6",
                   "text": "Other Conditions"
                 }
@@ -465,15 +530,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -506,7 +572,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/46556-7",
                   "text": "Has baby been fed within 1 Hour after Birth?",
                   "answerOption": [
@@ -541,15 +607,16 @@
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "1.0.0",
           "type": "group",
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
               "valueExpression": {
                 "language": "application/x-fhir-query",
                 "expression": "Observation",
-                "name": "doneStatus"
+                "name": "consentGiven"
               }
             }
           ],
@@ -582,7 +649,7 @@
                       }
                     }
                   ],
-                  "required": true,
+                  "required": false,
                   "linkId": "/46557-5",
                   "text": "Type of feed",
                   "enableWhen": [
