@@ -175,7 +175,7 @@
     <string name="home_client">Client Registration</string>
     <string name="home_menu_dashboard">Human Milk Bank Dashboard</string>
     <string name="app_total_term">Total Term and Preterm DHM Available</string>
-    <string name="action_dummy">200</string>
+    <string name="action_dummy">20</string>
     <string name="action_numbers">No of Infants on DHM</string>
     <string name="action_percent">5%</string>
     <string name="query_ip_search">IP Number</string>
@@ -226,7 +226,7 @@
     <string name="app_compared_weight">Compared to Initial weight</string>
     <string name="app_mothers_milk">Mother\'s milk from prescribed diet</string>
     <string name="app_feed_distribution">Feed Distribution within 24hrs</string>
-    <string name="app_daily_feeds">Total daaily feeds given</string>
+    <string name="app_daily_feeds">Total daily feeds given</string>
     <string name="app_compared_prescribed">Compared to the prescribed</string>
     <string name="app_expressions">Number of Expressions</string>
     <string name="app_delivery_method">Delivery Method</string>
@@ -278,6 +278,20 @@
     <string name="action_provide_support">Provide Lactation Support</string>
     <string name="app_lactation_status">Lactation Status</string>
     <string name="app_first_session">1st Assessment Session</string>
+    <string name="app_baby_age">Baby\'s Age (Days)</string>
+    <string name="app_dhm_type">Type of DHM</string>
+    <string name="app_action">Action</string>
+    <string name="app_breastfeeding">Breast Feeding</string>
+    <string name="action_click_assess">Click to Assess</string>
+    <string name="app_provide_lactation">Provide Lactation Support</string>
+    <string name="action_feeding">Feeding Cues</string>
+    <string name="click_to_save">Click to save and go back</string>
+    <string name="action_feeding_explanation">Below are the Usual Cues to assess if baby is effectively breastfeeding. Indicate appropriately.</string>
+    <string name="app_today_total">Total Today\'s Feeds Volume</string>
+    <string name="app_three_hourly">3 Hourly Feed Volume</string>
+    <string name="app_three_hourly_break">3 Hourly Feed Breakdown</string>
+    <string name="app_second_session">Second Session</string>
+    <string name="action_click_tips">Click for feeding tips</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

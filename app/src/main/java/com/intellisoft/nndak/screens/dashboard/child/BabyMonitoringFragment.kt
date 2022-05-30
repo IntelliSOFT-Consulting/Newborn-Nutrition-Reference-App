@@ -12,12 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyMonitoringBinding
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
+import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.dialogs.FeedingCuesDialog
+import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -37,6 +43,9 @@ class BabyMonitoringFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyAssessmentFragmentArgs by navArgs()
+    private lateinit var feedingCues: FeedingCuesDialog
+    private lateinit var confirmationDialog: ConfirmationDialog
+    private lateinit var successDialog: SuccessDialog
     private val binding
         get() = _binding!!
 
@@ -98,16 +107,60 @@ class BabyMonitoringFragment : Fragment() {
             }
         }
         binding.apply {
-          /*  lnBabyDashboard.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyDashboard())
-            }*/
+            actionClickTips.setOnClickListener {
+                handleShowCues()
+            }
         }
 
+        confirmationDialog = ConfirmationDialog(
+            this::okClick,
+            resources.getString(R.string.app_confirm_message)
+        )
+        successDialog = SuccessDialog(
+            this::proceedClick, resources.getString(R.string.app_client_registered)
+        )
+
+    }
+
+    private fun handleShowCues() {
+        feedingCues = FeedingCuesDialog(this::feedingCuesClick)
+        feedingCues.newInstance("breast-feeding.json")
+        feedingCues.show(childFragmentManager, "bundle")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun feedingCuesClick() {
+        feedingCues.dismiss()
+    }
+
+    private fun okClick() {
+        confirmationDialog.dismiss()
+        val questionnaireFragment =
+            childFragmentManager.findFragmentByTag(BreastFeedingFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+        val context = FhirContext.forR4()
+
+        val questionnaire =
+            context.newJsonParser()
+                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        Timber.e("Questionnaire  $questionnaire")
+
+        /*  viewModel.clientRegistration(
+              questionnaireFragment.getQuestionnaireResponse(), patientId
+          )*/
+    }
+
+    private fun proceedClick() {
+        successDialog.dismiss()
+        findNavController().navigate(
+            RegistrationFragmentDirections.navigateToBabyDashboard(
+                args.patientId, false
+            )
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

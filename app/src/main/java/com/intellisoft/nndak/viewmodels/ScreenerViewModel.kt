@@ -16,6 +16,7 @@ import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.BasicThree
 import com.intellisoft.nndak.screens.ScreenerFragment
+import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -318,7 +319,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val baby = Patient()
                 baby.active = true
                 baby.id = patientId
-                baby.addressFirstRep.postalCode = "PMH"
+                baby.addressFirstRep.postalCode = SYNC_VALUE
                 val mother = Patient()
                 val subjectReference = Reference("Patient/$patientId")
                 mother.active = true
@@ -341,9 +342,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             Timber.e("Child $child")
                             if (childChild == "Mother-Name") {
                                 val mumsName = extractResponse(inner, "valueString")
-                                val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                mother.nameFirstRep.family = words[0]
-                                mother.nameFirstRep.addGiven(words[1])
+                                if (mumsName.isNotEmpty()) {
+                                    val words = mumsName.split("\\s".toRegex()).toTypedArray()
+                                    mother.nameFirstRep.family = words[0]
+                                    mother.nameFirstRep.addGiven(words[1])
+                                }
                             }
                             if (childChild == "Parity") {
                                 val parity = extractResponse(inner, "valueInteger")
@@ -677,7 +680,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val bundle =
                 ResourceMapper.extract(
                     getApplication(),
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -699,14 +701,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                  */
                 val well = extractStatus(questionnaire, "Status-Well", true)
 
-                if (well.isNotEmpty()) {
-                    risk = if (well == "Yes") {
-                        1
-                    } else {
-                        0
-                    }
-                    handlePatientTransfer(patientId, risk)
-                }
 
 
                 val value = extractStatus(questionnaire, "Mothers-Status", false)
@@ -781,21 +775,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    private suspend fun handlePatientTransfer(patientId: String, risk: Int) {
-        /**
-         * Retrieve then update
-         */
-        /*  val patient = fhirEngine.get<Patient>(patientId)
-          if (risk == 1) {
-              patient.addressFirstRep.postalCode = "PNU"
-
-          } else {
-              patient.addressFirstRep.postalCode = "NBU"
-
-          }
-          fhirEngine.update(patient)*/
-
-    }
 
     private fun extractStatus(questionnaire: String, string: String, coding: Boolean): String {
         val json = JSONObject(questionnaire)

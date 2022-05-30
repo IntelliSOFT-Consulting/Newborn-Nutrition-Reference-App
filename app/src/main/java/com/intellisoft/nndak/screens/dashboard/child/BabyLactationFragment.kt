@@ -97,20 +97,22 @@ class BabyLactationFragment : Fragment() {
                     /**
                      * Mum Details
                      */
-                    incMum.tvMumName.text=it.motherName
-                    incMum.appIpNumber.text=it.motherIp
-                    incMum.appDeliveryMethod.text=it.mother.deliveryMethod
-                    incMum.appParity.text= it.mother.parity
-                    incMum.appPmctcStatus.text= it.mother.pmtctStatus
-                    incMum.appDeliveryDate.text= it.mother.deliveryDate
-                    incMum.appMultiplePregnancy.text= it.mother.multiPregnancy
+                    incMum.tvMumName.text = it.motherName
+                    incMum.appIpNumber.text = it.motherIp
+                    incMum.appDeliveryMethod.text = it.mother.deliveryMethod
+                    incMum.appParity.text = it.mother.parity
+                    incMum.appPmctcStatus.text = it.mother.pmtctStatus
+                    incMum.appDeliveryDate.text = it.mother.deliveryDate
+                    incMum.appMultiplePregnancy.text = it.mother.multiPregnancy
 
                 }
             }
         }
 
         binding.apply {
-
+            actionProvideSupport.setOnClickListener {
+                findNavController().navigate(BabyLactationFragmentDirections.navigateToEditPrescription(args.patientId))
+            }
         }
 
     }

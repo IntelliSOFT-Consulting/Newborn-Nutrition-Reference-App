@@ -47,7 +47,6 @@
           }
         }
       ],
-      "required": false,
       "text": "Enter Mother's Details",
       "item": [
         {
@@ -177,7 +176,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -396,7 +395,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -477,7 +476,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/72149-8",
                   "text": "Delivery method",
                   "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -565,7 +564,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/73762-7",
                   "text": "IF CS, Reason",
                   "answerOption": [
@@ -606,7 +605,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -651,7 +650,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/14904-7",
                   "text": "VDRL",
                   "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
@@ -691,7 +690,6 @@
           }
         }
       ],
-      "required": false,
       "text": "Enter Baby's Details",
       "item": [
         {
@@ -809,7 +807,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/74698-2",
                   "text": "Sex",
                   "answerOption": [
@@ -850,7 +848,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -900,7 +898,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/8339-4",
                   "text": "Birth Weight"
                 }
@@ -944,7 +942,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/11885-1",
                   "text": "Gestation"
                 }
@@ -988,7 +986,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/9273-4",
                   "text": "Apgar Score"
                 }
@@ -1015,7 +1013,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -1060,7 +1058,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/16491-3",
                   "text": "BBA",
                   "answerOption": [
@@ -1116,7 +1114,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/33172-8",
                   "text": "Head Circumference"
                 }
@@ -1201,7 +1199,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -1245,7 +1243,7 @@
                       }
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/29463-7",
                   "text": "Admission Weight"
                 }
@@ -1308,7 +1306,7 @@
           }
         }
       ],
-      "required": false,
+      "required": true,
       "item": [
         {
           "linkId": "1.0.0",
@@ -1338,7 +1336,7 @@
                       "system": "http://loinc.org/modified"
                     }
                   ],
-                  "required": false,
+                  "required": true,
                   "linkId": "/60733-3",
                   "text": "Doctor's Notes"
                 }

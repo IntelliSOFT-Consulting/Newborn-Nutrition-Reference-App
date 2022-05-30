@@ -1,0 +1,149 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Baby-Assessment",
+      "type": "group",
+      "text": "",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "mha"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "3.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Baby-Breastfeeding",
+                  "type": "choice",
+                  "text": "Baby Breastfeeding?",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "readyForDischarge"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Breastfeeding",
+                        "display": "Yes",
+                        "system": "custom"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Breastfeeding",
+                        "display": "No",
+                        "system": "custom"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "3.1.0",
+              "type": "group",
+              "item": [
+                {
+                  "linkId": "Breastfeeding-Sufficient",
+                  "type": "choice",
+                  "text": "Is Breastfeeding Sufficient?",
+                  "required": true,
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "application/x-fhir-query",
+                        "expression": "Observation",
+                        "name": "readyForDischarge"
+                      }
+                    }
+                  ],
+                  "answerOption": [
+                    {
+                      "valueCoding": {
+                        "code": "Breastfeeding Sufficient",
+                        "display": "No",
+                        "system": "custom"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "code": "Breastfeeding Sufficient",
+                        "display": "Yes",
+                        "system": "custom"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

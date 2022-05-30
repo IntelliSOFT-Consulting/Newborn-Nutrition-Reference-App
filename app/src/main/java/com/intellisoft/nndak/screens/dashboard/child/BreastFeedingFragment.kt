@@ -14,6 +14,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
@@ -21,8 +22,10 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.screens.ScreenerFragment
+import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -39,11 +42,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class BreastFeedingFragment : Fragment() {
+    private lateinit var feedingCues: FeedingCuesDialog
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
-    private lateinit var patientId: String
     private var _binding: FragmentBreastFeedingBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
+    private val args: BreastFeedingFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
@@ -66,7 +70,8 @@ class BreastFeedingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.home_client)
+            title = resources.getString(R.string.action_provide_support)
+            setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
         updateArguments()
@@ -79,22 +84,36 @@ class BreastFeedingFragment : Fragment() {
         (activity as MainActivity).showBottom(false)
         binding.apply {
 
+            actionAssess.setOnClickListener {
+                handleShowCues()
+            }
+
         }
+
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick,resources.getString(R.string.app_client_registered)
+            this::proceedClick, resources.getString(R.string.app_client_registered)
         )
-        patientId = generateUuid()
 
+    }
+
+    private fun handleShowCues() {
+        feedingCues = FeedingCuesDialog(this::feedingCuesClick)
+        feedingCues.newInstance("breast-feeding.json")
+        feedingCues.show(childFragmentManager, "bundle")
+    }
+
+    private fun feedingCuesClick() {
+        feedingCues.dismiss()
     }
 
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 
@@ -102,17 +121,17 @@ class BreastFeedingFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
-        patientId = generateUuid()
-        viewModel.clientRegistration(
-            questionnaireFragment.getQuestionnaireResponse(),patientId
-        )
+
+        /*  viewModel.clientRegistration(
+              questionnaireFragment.getQuestionnaireResponse(), patientId
+          )*/
     }
 
     private fun proceedClick() {
         successDialog.dismiss()
         findNavController().navigate(
             RegistrationFragmentDirections.navigateToBabyDashboard(
-                patientId,false
+                args.patientId, false
             )
         )
     }
@@ -131,24 +150,23 @@ class BreastFeedingFragment : Fragment() {
             successDialog.show(childFragmentManager, "Success Details")
         }
 
-
     }
 
     private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "mother-baby-well.json")
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "breast-feeding.json")
     }
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = QuestionnaireFragment()
+      /*      val fragment = QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
                 add(
-                    R.id.add_patient_container, fragment,
+                    R.id.breast_feeding_container, fragment,
                     QUESTIONNAIRE_FRAGMENT_TAG
                 )
-            }
+            }*/
         } catch (e: Exception) {
             Timber.e("Exception ${e.localizedMessage}")
         }

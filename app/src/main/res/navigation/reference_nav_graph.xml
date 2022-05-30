@@ -392,6 +392,9 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_edit_prescription"
+            app:destination="@id/breastFeedingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPrescriptionFragment"
@@ -425,7 +428,11 @@
     <fragment
         android:id="@+id/breastFeedingFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BreastFeedingFragment"
-        android:label="fragment_breast_feeding"
-        tools:layout="@layout/fragment_breast_feeding" />
+        android:label="@string/app_provide_lactation"
+        tools:layout="@layout/fragment_breast_feeding">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

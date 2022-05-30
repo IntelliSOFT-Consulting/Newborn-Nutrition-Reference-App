@@ -59,7 +59,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -112,6 +112,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textAlignment="center"
                             android:text="@string/app_compared_weight"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
                     </LinearLayout>
@@ -119,7 +120,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -196,7 +197,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -247,8 +248,9 @@
                         </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textAlignment="center"
                             android:text="@string/app_compared_prescribed"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
                     </LinearLayout>
@@ -277,7 +279,7 @@
                             android:textSize="@dimen/_25sp" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/app_expressions"
                             android:textAlignment="center"

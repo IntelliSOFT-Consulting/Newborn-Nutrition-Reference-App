@@ -9,6 +9,7 @@ import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
+import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.logic.Logics.Companion.assessment_unit_details
@@ -28,6 +29,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_supplements
 import com.intellisoft.nndak.logic.Logics.Companion.post_natal_milk_expression
 import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.*
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getFormattedAge
 import kotlinx.coroutines.launch
@@ -373,11 +375,15 @@ class PatientDetailsViewModel(
         var pmtct = ""
         var mPreg = ""
         var dDate = ""
+
         val obs = getObservations()
         if (obs.isNotEmpty()) {
             for (element in obs) {
                 if (element.code == "93857-1") {
                     dDate = element.value.substring(0, 10)
+                }
+                if (element.code == "3141-9") {
+                    cWeight = element.value
                 }
                 if (element.code == "55277-8") {
                     pmtct = element.value
@@ -397,9 +403,7 @@ class PatientDetailsViewModel(
                 if (element.code == "52455-3") {
                     admDate = element.value.substring(0, 10)
                 }
-                if (element.code == "3141-9") {
-                    cWeight = element.value
-                }
+
                 if (element.code == "71195-2") {
                     babyWell = element.value
                 }
@@ -465,6 +469,7 @@ class PatientDetailsViewModel(
             )
         )
     }
+
 
     private fun getFormattedAge(
         dob: String

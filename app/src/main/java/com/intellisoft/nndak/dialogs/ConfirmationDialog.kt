@@ -1,5 +1,7 @@
 package com.intellisoft.nndak.dialogs
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,9 +28,11 @@ class ConfirmationDialog(
 
     override fun onStart() {
         super.onStart()
-          val width = (resources.displayMetrics.widthPixels * 0.8).toInt()
-          val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-          dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
+        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog!!.setCancelable(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

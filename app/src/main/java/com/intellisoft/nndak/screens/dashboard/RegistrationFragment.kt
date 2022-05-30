@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -40,8 +41,12 @@ class RegistrationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val b = arguments
 
+
+    }
+
+    private fun toggleProgress(visible: Boolean) {
+        binding.progressBar.isVisible = visible
     }
 
     override fun onCreateView(
@@ -81,7 +86,7 @@ class RegistrationFragment : Fragment() {
             resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick,resources.getString(R.string.app_client_registered)
+            this::proceedClick, resources.getString(R.string.app_client_registered)
         )
         patientId = generateUuid()
 
@@ -89,6 +94,7 @@ class RegistrationFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
+        toggleProgress(true)
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
@@ -100,7 +106,7 @@ class RegistrationFragment : Fragment() {
         Timber.e("Questionnaire  $questionnaire")
         patientId = generateUuid()
         viewModel.clientRegistration(
-            questionnaireFragment.getQuestionnaireResponse(),patientId
+            questionnaireFragment.getQuestionnaireResponse(), patientId
         )
     }
 
@@ -108,7 +114,7 @@ class RegistrationFragment : Fragment() {
         successDialog.dismiss()
         findNavController().navigate(
             RegistrationFragmentDirections.navigateToBabyDashboard(
-                patientId,false
+                patientId, false
             )
         )
     }
@@ -122,8 +128,10 @@ class RegistrationFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                toggleProgress(false)
                 return@observe
             }
+            toggleProgress(false)
             successDialog.show(childFragmentManager, "Success Details")
         }
 
