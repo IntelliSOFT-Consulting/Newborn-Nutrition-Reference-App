@@ -149,3 +149,17 @@ data class DashboardItem(
 ) {
     override fun toString(): String = percent
 }
+
+data class FeedingCues(
+    val readiness: String,
+    val latch: String,
+    val steady: String,
+    val audible: String,
+    val chocking: String,
+    val softening: String,
+    val tenSide: String,
+    val threeHours: String,
+    val sixDiapers: String,
+){
+    override fun toString(): String = readiness
+}

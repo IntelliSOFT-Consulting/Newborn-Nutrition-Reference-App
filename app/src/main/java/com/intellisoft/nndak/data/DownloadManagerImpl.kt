@@ -48,6 +48,7 @@ class DownloadManagerImpl : DownloadWorkManager {
         }
 
 
+
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {

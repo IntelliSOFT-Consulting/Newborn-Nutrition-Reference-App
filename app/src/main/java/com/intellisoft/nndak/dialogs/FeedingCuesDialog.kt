@@ -13,14 +13,14 @@ import androidx.fragment.app.viewModels
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FeedingCuesDialogBinding
+import com.intellisoft.nndak.models.FeedingCues
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
 class FeedingCuesDialog(
-    private val proceed: () -> Unit,
+    private val proceed: (FeedingCues) -> Unit,
 ) : DialogFragment() {
     private var _binding: FeedingCuesDialogBinding? = null
-    private val viewModel: ScreenerViewModel by viewModels()
     private val binding
         get() = _binding!!
 
@@ -44,43 +44,71 @@ class FeedingCuesDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeResourcesSaveAction()
-      //  if (savedInstanceState == null) {
-            //addQuestionnaireFragment()
-        //}
+
         binding.apply {
-            btnSubmit.setOnClickListener { proceed() }
-        }
+            btnSubmit.setOnClickListener {
+                val readiness = if (rbYesReadiness.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val latch = if (rbYesLatch.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val steady = if (rbYesSteady.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val audible = if (rbYesAudible.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val chocking = if (rbYesChocking.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val softening = if (rbYesSoftening.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val tenSide = if (rbYesSideFeed.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val threeHours = if (rbYesThreeHours.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                val sixDiapers = if (rbYesDiapers.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
 
-    }
-    fun newInstance(questionnaire: String) = FeedingCuesDialog.apply {
-        arguments = Bundle().apply {
-            putString(QUESTIONNAIRE_FILE_PATH_KEY, questionnaire)
-        }
-    }
-
-    private fun addQuestionnaireFragment() {
-        try {
-            val fragment = QuestionnaireFragment()
-            fragment.arguments =
-                bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
-            childFragmentManager.commit {
-                add(
-                    R.id.breast_feeding_container, fragment,
-                    QUESTIONNAIRE_FRAGMENT_TAG
+                val feeding = FeedingCues(
+                    readiness = readiness,
+                    latch = latch,
+                    steady = steady,
+                    audible = audible,
+                    chocking = chocking,
+                    softening = softening,
+                    tenSide = tenSide,
+                    threeHours = threeHours,
+                    sixDiapers = sixDiapers
                 )
+                proceed(feeding)
+
             }
-        } catch (e: Exception) {
-            Timber.e("Exception ${e.localizedMessage}")
         }
-    }
-
-    private fun observeResourcesSaveAction() {
 
     }
 
-    companion object {
-        const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
-        const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
-    }
 }

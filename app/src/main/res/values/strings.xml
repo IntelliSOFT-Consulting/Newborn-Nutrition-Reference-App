@@ -292,6 +292,19 @@
     <string name="app_three_hourly_break">3 Hourly Feed Breakdown</string>
     <string name="app_second_session">Second Session</string>
     <string name="action_click_tips">Click for feeding tips</string>
+    <string name="app_baby_breastfeeding">Baby Breastfeeding?</string>
+    <string name="app_efficient_breastfeeding">Is breastfeeding efficient?</string>
+    <string name="app_mother_effective">Is mother effectively expressing milk?</string>
+    <string name="app_volume_effective">Volume Expressed sufficient?</string>
+    <string name="readiness">Does baby wake up and show feeding readiness cues?</string>
+    <string name="latch">Does baby latch to breast?</string>
+    <string name="steady">Does baby suck steadily without pauses?</string>
+    <string name="audible">Does baby swallow audibly?</string>
+    <string name="chocking">Does baby feed without chocking, turning blue or pale?</string>
+    <string name="softening">Has mother reported breast softening?</string>
+    <string name="side_feed">Does baby feed for atlear 10 minutes per side?</string>
+    <string name="three_hours">Does baby sleep comfortably between feedings every 2-3 hours?</string>
+    <string name="diapers">Does baby have 6-8 wet diapers a day?</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

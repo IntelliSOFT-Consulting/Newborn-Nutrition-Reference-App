@@ -95,7 +95,13 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmStock.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.dhmStockFragment)
+                val bundle =
+                    bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
+                findNavController(R.id.nav_host_fragment).navigate(
+                    R.id.dhmStockFragment,
+                    bundle
+                )
+
             }
             menu.btnCloseFilter.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)

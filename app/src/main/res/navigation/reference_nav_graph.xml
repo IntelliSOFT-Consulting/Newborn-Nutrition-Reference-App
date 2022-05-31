@@ -393,7 +393,7 @@
             android:name="patient_id"
             app:argType="string" />
         <action
-            android:id="@+id/navigate_to_edit_prescription"
+            android:id="@+id/navigate_to_feding"
             app:destination="@id/breastFeedingFragment" />
     </fragment>
     <fragment
@@ -434,5 +434,10 @@
             android:name="patient_id"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/cuesFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.feeding.CuesFragment"
+        android:label="fragment_cues"
+        tools:layout="@layout/fragment_cues" />
 
 </navigation>

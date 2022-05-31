@@ -15,6 +15,7 @@ import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.BasicThree
+import com.intellisoft.nndak.models.FeedingCues
 import com.intellisoft.nndak.screens.ScreenerFragment
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
@@ -160,6 +161,43 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         .request.url = "Observation"
                                 }
                             }
+
+                            /**
+                             * Start of Test Data
+                             */
+                            if (childChild == "Milk-Expressed") {
+                                val volume = extractResponseQuantity(inner, "valueQuantity")
+                                if (volume.isNotEmpty()) {
+                                    Timber.e("Time: $volume")
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Milk-Expressed",
+                                            "Milk Expressed",
+                                            volume
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+                            if (childChild == "Time-Expressed") {
+                                val volume = extractResponse(inner, "valueDateTime")
+                                Timber.e("Time: $volume")
+                                if (volume.isNotEmpty()) {
+
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time-Expressed",
+                                            "Time Expressed",
+                                            volume
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+
+                            /**
+                             * End of Test Data
+                             */
                             if (childChild == "Current-Weight") {
                                 val code = extractResponseQuantity(inner, "valueQuantity")
                                 if (code.isNotEmpty()) {
@@ -340,225 +378,144 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val inner = child.getJSONObject(k)
                             val childChild = inner.getString("linkId")
                             Timber.e("Child $child")
-                            if (childChild == "Mother-Name") {
-                                val mumsName = extractResponse(inner, "valueString")
-                                if (mumsName.isNotEmpty()) {
-                                    val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                    mother.nameFirstRep.family = words[0]
-                                    mother.nameFirstRep.addGiven(words[1])
+                            when (childChild) {
+                                "Mother-Name" -> {
+                                    val mumsName = extractResponse(inner, "valueString")
+                                    if (mumsName.isNotEmpty()) {
+                                        val words = mumsName.split("\\s".toRegex()).toTypedArray()
+                                        mother.nameFirstRep.family = words[0]
+                                        mother.nameFirstRep.addGiven(words[1])
+                                    }
                                 }
-                            }
-                            if (childChild == "Parity") {
-                                val parity = extractResponse(inner, "valueInteger")
-                                if (parity.isNotEmpty()) {
+                                "Parity" -> {
+                                    val parity = extractResponse(inner, "valueInteger")
+                                    if (parity.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "45394-4",
-                                            "Parity",
-                                            parity
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "45394-4",
+                                                "Parity",
+                                                parity
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Ip-Number") {
-                                val ipNo = extractResponse(inner, "valueString")
-                                mother.id = ipNo
-                            }
-                            if (childChild == "PMTCT") {
-                                val pmtct = extractResponseCode(inner, "valueCoding")
-                                if (pmtct.isNotEmpty()) {
+                                "Ip-Number" -> {
+                                    val ipNo = extractResponse(inner, "valueString")
+                                    mother.id = ipNo
+                                }
+                                "PMTCT" -> {
+                                    val pmtct = extractResponseCode(inner, "valueCoding")
+                                    if (pmtct.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "55277-8",
+                                                "PMTCT",
+                                                pmtct
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Multiple-Pregnancy" -> {
+                                    val mPreg = extractResponseCode(inner, "valueCoding")
+                                    if (mPreg.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "64708-1",
+                                                "Multiple Pregnancy",
+                                                mPreg
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Multiple-Birth-Type" -> {
+                                    val bType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
                                             "55277-8",
-                                            "PMTCT",
-                                            pmtct
+                                            "Multiple Birth Type",
+                                            bType
                                         )
                                     )
                                         .request.url = "Observation"
                                 }
-                            }
-                            if (childChild == "Multiple-Pregnancy") {
-                                val mPreg = extractResponseCode(inner, "valueCoding")
-                                if (mPreg.isNotEmpty()) {
+                                "Time-Of-Delivery" -> {
+                                    val bType = extractResponse(inner, "valueDateTime")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "64708-1",
-                                            "Multiple Pregnancy",
-                                            mPreg
+                                            "93857-1",
+                                            "Time of Delivery",
+                                            bType
                                         )
                                     )
                                         .request.url = "Observation"
                                 }
-                            }
-                            if (childChild == "Multiple-Birth-Type") {
-                                val bType = extractResponseCode(inner, "valueCoding")
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "55277-8",
-                                        "Multiple Birth Type",
-                                        bType
-                                    )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Time-Of-Delivery") {
-                                val bType = extractResponse(inner, "valueDateTime")
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "93857-1",
-                                        "Time of Delivery",
-                                        bType
-                                    )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Delivery-Method") {
-                                dType = extractResponseCode(inner, "valueCoding")
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "72149-8",
-                                        "Delivery Method",
-                                        dType
-                                    )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "CS-Reason") {
-                                if (dType == "CS") {
+                                "Delivery-Method" -> {
                                     dType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "73762-7",
-                                            "CS Reason",
+                                            "72149-8",
+                                            "Delivery Method",
                                             dType
                                         )
                                     )
                                         .request.url = "Observation"
                                 }
-                            }
-                            if (childChild == "VDRL") {
-                                val bType = extractResponseCode(inner, "valueCoding")
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "14904-7",
-                                        "VDRL",
-                                        bType
-                                    )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Date-Of-Birth") {
-                                val dob = extractResponse(inner, "valueDate")
-                                baby.birthDate = FormatHelper().dateOfBirth(dob)
-                            }
-                            if (childChild == "Baby-Name") {
-                                val mumsName = extractResponse(inner, "valueString")
-                                val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                baby.nameFirstRep.family = words[0]
-                                baby.nameFirstRep.addGiven(words[1])
-                            }
-                            if (childChild == "Baby-Sex") {
-                                when (extractResponseCode(inner, "valueCoding")) {
-                                    "Female" -> {
-                                        baby.gender = Enumerations.AdministrativeGender.FEMALE
-                                    }
-                                    else -> {
-                                        baby.gender = Enumerations.AdministrativeGender.FEMALE
+                                "CS-Reason" -> {
+                                    if (dType == "CS") {
+                                        dType = extractResponseCode(inner, "valueCoding")
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "73762-7",
+                                                "CS Reason",
+                                                dType
+                                            )
+                                        )
+                                            .request.url = "Observation"
                                     }
                                 }
-                            }
-                            if (childChild == "Birth-Weight") {
-                                val bType = extractResponseQuantity(inner, "valueQuantity")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            "8339-4",
-                                            "Birth Weight",
-                                            "Birth Weight",
-                                            bType,
-                                            "g"
-
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
-                            if (childChild == "Gestation") {
-                                val bType = extractResponse(inner, "valueDecimal")
-                                if (bType.isNotEmpty()) {
+                                "VDRL" -> {
+                                    val bType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "11885-1",
-                                            "Gestation",
+                                            "14904-7",
+                                            "VDRL",
                                             bType
                                         )
                                     )
                                         .request.url = "Observation"
                                 }
-                            }
-                            if (childChild == "Apgar-Score") {
-                                val bType = extractResponse(inner, "valueDecimal")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "9273-4",
-                                            "Apgar Score",
-                                            bType
-                                        )
-                                    )
-                                        .request.url = "Observation"
+                                "Date-Of-Birth" -> {
+                                    val dob = extractResponse(inner, "valueDate")
+                                    baby.birthDate = FormatHelper().dateOfBirth(dob)
                                 }
-                            }
-                            if (childChild == "BBA") {
-                                val bType = extractResponseCode(inner, "valueCoding")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "16491-3",
-                                            "BBA",
-                                            bType
-                                        )
-                                    )
-                                        .request.url = "Observation"
+                                "Baby-Name" -> {
+                                    val mumsName = extractResponse(inner, "valueString")
+                                    val words = mumsName.split("\\s".toRegex()).toTypedArray()
+                                    baby.nameFirstRep.family = words[0]
+                                    baby.nameFirstRep.addGiven(words[1])
                                 }
-                            }
-                            if (childChild == "Head-Circumference") {
-                                val bType = extractResponse(inner, "valueDecimal")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "33172-8",
-                                            "Head Circumference",
-                                            bType
-                                        )
-                                    )
-                                        .request.url = "Observation"
+                                "Baby-Sex" -> {
+                                    when (extractResponseCode(inner, "valueCoding")) {
+                                        "Female" -> {
+                                            baby.gender = Enumerations.AdministrativeGender.FEMALE
+                                        }
+                                        else -> {
+                                            baby.gender = Enumerations.AdministrativeGender.FEMALE
+                                        }
+                                    }
                                 }
-                            }
-                            if (childChild == "Interventions") {
-                                val bType = extractResponseCode(inner, "valueCoding")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "52508-9",
-                                            "Interventions",
-                                            bType
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
-                            if (childChild == "Admission-Weight") {
-                                val bType = extractResponseQuantity(inner, "valueQuantity")
-                                if (bType.isNotEmpty()) {
+                                "Birth-Weight" -> {
+                                    val bType = extractResponseQuantity(inner, "valueQuantity")
                                     if (bType.isNotEmpty()) {
                                         bundle.addEntry().setResource(
                                             qh.quantityQuestionnaire(
-                                                "29463-7",
-                                                "Admission Weight",
-                                                "Admission Weight",
+                                                "8339-4",
+                                                "Birth Weight",
+                                                "Birth Weight",
                                                 bType,
                                                 "g"
 
@@ -567,31 +524,117 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             .request.url = "Observation"
                                     }
                                 }
-                            }
-                            if (childChild == "Admission-Date") {
-                                val bType = extractResponse(inner, "valueDateTime")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "52455-3",
-                                            "Admission Date",
-                                            bType
+                                "Gestation" -> {
+                                    val bType = extractResponse(inner, "valueDecimal")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "11885-1",
+                                                "Gestation",
+                                                bType
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Doctor-Notes") {
-                                val bType = extractResponse(inner, "valueString")
-                                if (bType.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "60733-3",
-                                            "Doctor's Notes",
-                                            bType
+                                "Apgar-Score" -> {
+                                    val bType = extractResponse(inner, "valueDecimal")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "9273-4",
+                                                "Apgar Score",
+                                                bType
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "BBA" -> {
+                                    val bType = extractResponseCode(inner, "valueCoding")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "16491-3",
+                                                "BBA",
+                                                bType
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Head-Circumference" -> {
+                                    val bType = extractResponse(inner, "valueDecimal")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "33172-8",
+                                                "Head Circumference",
+                                                bType
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Interventions" -> {
+                                    val bType = extractResponseCode(inner, "valueCoding")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "52508-9",
+                                                "Interventions",
+                                                bType
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Admission-Weight" -> {
+                                    val bType = extractResponseQuantity(inner, "valueQuantity")
+                                    if (bType.isNotEmpty()) {
+                                        if (bType.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "29463-7",
+                                                    "Admission Weight",
+                                                    "Admission Weight",
+                                                    bType,
+                                                    "g"
+
+                                                )
+                                            )
+                                                .request.url = "Observation"
+                                        }
+                                    }
+                                }
+                                "Admission-Date" -> {
+                                    val bType = extractResponse(inner, "valueDateTime")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "52455-3",
+                                                "Admission Date",
+                                                bType
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Doctor-Notes" -> {
+                                    val bType = extractResponse(inner, "valueString")
+                                    if (bType.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "60733-3",
+                                                "Doctor's Notes",
+                                                bType
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                else -> {
+                                    println("Items skipped...")
                                 }
                             }
                         }
@@ -700,7 +743,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                  * Establish if transferring to PNU
                  */
                 val well = extractStatus(questionnaire, "Status-Well", true)
-
 
 
                 val value = extractStatus(questionnaire, "Mothers-Status", false)
@@ -844,697 +886,698 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val child = itemChild.getJSONArray("item")
                         for (k in 0 until child.length()) {
                             val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
 
+                            when (inner.getString("linkId")) {
+                                "Feeding-Frequency" -> {
 
-                            if (childChild == "Feeding-Frequency") {
+                                    val value = extractValueOption(inner)
+                                    frequency = Integer.parseInt(value.substring(0, 1))
+                                }
+                                "Volume-Required" -> {
+                                    volume = extractValueDecimal(inner)
 
-                                val value = extractValueOption(inner)
-                                frequency = Integer.parseInt(value.substring(0, 1))
-                            }
-                            if (childChild == "Volume-Required") {
-                                volume = extractValueDecimal(inner)
+                                }
+                                "Time-Seen" -> {
 
-                            }
-                            if (childChild == "Time-Seen") {
+                                    val value = extractValueDateTime(inner)
 
-                                val value = extractValueDateTime(inner)
-
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time Baby Seen",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time Baby Seen",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
+                                        .request.url = "Observation"
 
-                            }
-                            if (childChild == "Shift-Time") {
+                                }
+                                "Shift-Time" -> {
 
-                                val value = extractValueDateTime(inner)
+                                    val value = extractValueDateTime(inner)
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Shift Time",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Shift Time",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
+                                        .request.url = "Observation"
 
-                            }
-                            if (childChild == "Born-Where") {
+                                }
+                                "Born-Where" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value =
+                                        childAnswer.getJSONObject(0).getString("valueString")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Born Where",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Born Where",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Admission-Reason") {
+                                        .request.url = "Observation"
+                                }
+                                "Admission-Reason" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value =
+                                        childAnswer.getJSONObject(0).getString("valueString")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Admission Reason",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Admission Reason",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Completed-By") {
+                                        .request.url = "Observation"
+                                }
+                                "Completed-By" -> {
 
-                                /**
-                                 * Retrieve Logged User
-                                 */
-                                val value = retrieveUser(false)
+                                    /**
+                                     * Retrieve Logged User
+                                     */
+                                    /**
+                                     * Retrieve Logged User
+                                     */
+                                    /**
+                                     * Retrieve Logged User
+                                     */
+                                    val value = retrieveUser(false)
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Completed By",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Completed By",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Assessment-Date") {
+                                        .request.url = "Observation"
+                                }
+                                "Assessment-Date" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value = childAnswer.getJSONObject(0).getString("valueDate")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Date of Assessment",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Date of Assessment",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Today-Date") {
+                                        .request.url = "Observation"
+                                }
+                                "Today-Date" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value = childAnswer.getJSONObject(0).getString("valueDate")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Today's Date",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Today's Date",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Date-Of-Discharge") {
+                                        .request.url = "Observation"
+                                }
+                                "Date-Of-Discharge" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueDate")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value = childAnswer.getJSONObject(0).getString("valueDate")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Date Of Discharge",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Date Of Discharge",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Diagnosis-At-Discharge") {
+                                        .request.url = "Observation"
+                                }
+                                "Diagnosis-At-Discharge" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value =
+                                        childAnswer.getJSONObject(0).getString("valueString")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Diagnosis At Discharge",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Diagnosis At Discharge",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Assessment") {
+                                        .request.url = "Observation"
+                                }
+                                "Assessment" -> {
 
-                                val childAnswer = inner.getJSONArray("answer")
-                                val value = childAnswer.getJSONObject(0).getString("valueString")
+                                    val childAnswer = inner.getJSONArray("answer")
+                                    val value =
+                                        childAnswer.getJSONObject(0).getString("valueString")
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Mother's Medical Condition",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Mother's Medical Condition",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Feeding-Status") {
+                                        .request.url = "Observation"
+                                }
+                                "Feeding-Status" -> {
 
-                                val value = extractValueString(inner, 0)
+                                    val value = extractValueString(inner, 0)
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Feeding Status on Discharge",
-                                            value,
-                                            value
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Feeding Status on Discharge",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Outcome-Status") {
+                                        .request.url = "Observation"
+                                }
+                                "Outcome-Status" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Outcome Status on Discharge",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Outcome Status on Discharge",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Diagnosis-Status") {
+                                        .request.url = "Observation"
+                                }
+                                "Diagnosis-Status" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Diagnosis",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Diagnosis",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Intervention-Status") {
+                                        .request.url = "Observation"
+                                }
+                                "Intervention-Status" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Intervention",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Intervention",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Recipient-Location") {
+                                        .request.url = "Observation"
+                                }
+                                "Recipient-Location" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Recipient Location",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Recipient Location",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Done-Status") {
+                                        .request.url = "Observation"
+                                }
+                                "Done-Status" -> {
 
-                                val value = retrieveUser(false)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Completed By",
-                                            value,
-                                            value
+                                    val value = retrieveUser(false)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Completed By",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Name-Of-Prescriber") {
+                                        .request.url = "Observation"
+                                }
+                                "Name-Of-Prescriber" -> {
 
-                                val value = retrieveUser(false)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Name of Prescriber",
-                                            value,
-                                            value
+                                    val value = retrieveUser(false)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Name of Prescriber",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Nursing-Staff-Name") {
+                                        .request.url = "Observation"
+                                }
+                                "Nursing-Staff-Name" -> {
 
-                                val value = retrieveUser(false)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Nursing Staff Name",
-                                            value,
-                                            value
+                                    val value = retrieveUser(false)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Nursing Staff Name",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Clinician-Name") {
+                                        .request.url = "Observation"
+                                }
+                                "Clinician-Name" -> {
 
-                                val value = retrieveUser(false)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Clinician Name",
-                                            value,
-                                            value
+                                    val value = retrieveUser(false)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Clinician Name",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Clinician-Designation") {
+                                        .request.url = "Observation"
+                                }
+                                "Clinician-Designation" -> {
 
-                                val value = retrieveUser(true)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Clinician Designation",
-                                            value,
-                                            value
+                                    val value = retrieveUser(true)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Clinician Designation",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Treatment-Duration") {
+                                        .request.url = "Observation"
+                                }
+                                "Treatment-Duration" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Treatment Duration",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Treatment Duration",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Prescribing-Instructions") {
+                                        .request.url = "Observation"
+                                }
+                                "Prescribing-Instructions" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Prescribing Instructions",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Prescribing Instructions",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Reason-For-Receiving") {
+                                        .request.url = "Observation"
+                                }
+                                "Reason-For-Receiving" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Reason for Receiving DHM",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Reason for Receiving DHM",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Any-Remarks") {
+                                        .request.url = "Observation"
+                                }
+                                "Any-Remarks" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Any Feeding Remarks",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Any Feeding Remarks",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Nursing-Plan") {
+                                        .request.url = "Observation"
+                                }
+                                "Nursing-Plan" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Nursing Plan",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Nursing Plan",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Prescription-Time") {
+                                        .request.url = "Observation"
+                                }
+                                "Prescription-Time" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Prescription Time",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Prescription Time",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Time-Of-Feeding") {
+                                        .request.url = "Observation"
+                                }
+                                "Time-Of-Feeding" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time of Feeding",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time of Feeding",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "DHM-Time") {
+                                        .request.url = "Observation"
+                                }
+                                "DHM-Time" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time of DHM Order",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time of DHM Order",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Time-Lactation-Support") {
+                                        .request.url = "Observation"
+                                }
+                                "Time-Lactation-Support" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time of Lactation Support",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time of Lactation Support",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Time-of-Storage") {
+                                        .request.url = "Observation"
+                                }
+                                "Time-of-Storage" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time of Storage",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time of Storage",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Time-of-Expression") {
+                                        .request.url = "Observation"
+                                }
+                                "Time-of-Expression" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time of Expression",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time of Expression",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Assessment-Date-Time") {
+                                        .request.url = "Observation"
+                                }
+                                "Assessment-Date-Time" -> {
 
-                                val value = extractValueDateTime(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Date of Assessment",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
-                                            "${value.substring(0, 10)} - ${
-                                                value.substring(
-                                                    11,
-                                                    16
-                                                )
-                                            }",
+                                    val value = extractValueDateTime(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Date of Assessment",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                                "${value.substring(0, 10)} - ${
+                                                    value.substring(
+                                                        11,
+                                                        16
+                                                    )
+                                                }",
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Nursing-Plan") {
+                                        .request.url = "Observation"
+                                }
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Nursing Plan",
-                                            value,
-                                            value
+                                "Batch-Number" -> {
+
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Batch Number",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Batch-Number") {
+                                        .request.url = "Observation"
+                                }
+                                "Donor-ID" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Batch Number",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Donor ID",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Donor-ID") {
+                                        .request.url = "Observation"
+                                }
+                                "Shift-Notes" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Donor ID",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Shift Notes",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Shift-Notes") {
+                                        .request.url = "Observation"
+                                }
+                                "Additional-Comments" -> {
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Shift Notes",
-                                            value,
-                                            value
+
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Additional Comments",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Additional-Comments") {
+                                        .request.url = "Observation"
+                                }
+                                "Feeding-Considered" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Additional Comments",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Feeding Considered",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Feeding-Considered") {
+                                        .request.url = "Observation"
+                                }
+                                "Legal-Guardian-Signature" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Feeding Considered",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Legal Guardian Signature",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Legal-Guardian-Signature") {
+                                        .request.url = "Observation"
+                                }
+                                "Dispensing-Staff-Name" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Legal Guardian Signature",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Dispensing Staff Name",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Dispensing-Staff-Name") {
+                                        .request.url = "Observation"
+                                }
+                                "Receiving-Staff-Name" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Dispensing Staff Name",
-                                            value,
-                                            value
+                                    val value = extractValueString(inner, 0)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Dispensing Staff Name",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Receiving-Staff-Name") {
+                                        .request.url = "Observation"
+                                }
+                                "Consent-Date" -> {
 
 
-                                val value = extractValueString(inner, 0)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Dispensing Staff Name",
-                                            value,
-                                            value
+                                    val value = extractValueDate(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Consent Date",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Consent-Date") {
+                                        .request.url = "Observation"
+                                }
+                                "Expiry-Date" -> {
 
 
-                                val value = extractValueDate(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Consent Date",
-                                            value,
-                                            value
+                                    val value = extractValueDate(inner)
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Expiry Date",
+                                                value,
+                                                value
+                                            )
                                         )
-                                    )
-                                    .request.url = "Observation"
-                            }
-                            if (childChild == "Expiry-Date") {
-
-
-                                val value = extractValueDate(inner)
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Expiry Date",
-                                            value,
-                                            value
-                                        )
-                                    )
-                                    .request.url = "Observation"
+                                        .request.url = "Observation"
+                                }
+                                else -> {
+                                    println("Skip Items...")
+                                }
                             }
                         }
                     }
@@ -1793,6 +1836,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         encounterId: String,
         reason: String
     ) {
+
         val encounterReference = Reference("Encounter/$encounterId")
         bundle.entry.forEach {
             when (val resource = it.resource) {
@@ -2047,11 +2091,311 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return Logics.comorbidities.contains(comorbidity)
     }
 
+    fun breastFeeding(
+        questionnaireResponse: QuestionnaireResponse, breastFeeding: String,
+        efficientFeeding: String, patientId: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val qh = QuestionnaireHelper()
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                val json = JSONObject(questionnaire)
+                val common = json.getJSONArray("item")
+                for (i in 0 until common.length()) {
+                    val item = common.getJSONObject(i)
+                    val parent = item.getJSONArray("item")
+                    for (j in 0 until parent.length()) {
+                        val itemChild = parent.getJSONObject(j)
+                        val child = itemChild.getJSONArray("item")
+                        for (k in 0 until child.length()) {
+                            val inner = child.getJSONObject(k)
+                            val childChild = inner.getString("linkId")
+                            Timber.e("Child $inner")
+                            if (childChild == "Breast-Feeding") {
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Baby-BreastFeeding",
+                                            breastFeeding,
+                                            breastFeeding
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                            if (childChild == "Efficient-Feeding") {
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "BreastFeeding-Efficient",
+                                            efficientFeeding,
+                                            efficientFeeding
+                                        )
+                                    )
+                                    .request.url = "Observation"
+                            }
+                        }
 
-    /***
-     * apgar score
-     * ***/
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
+            val subjectReference = Reference("Patient/$patientId")
+
+            val encounterId = generateUuid()
+            title = "Breast Feeding"
+            saveResources(bundle, subjectReference, encounterId, title)
+            isResourcesSaved.value = true
+        }
+    }
+
+    fun feedingCues(
+        questionnaireResponse: QuestionnaireResponse,
+        cues: FeedingCues,
+        patientId: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val qh = QuestionnaireHelper()
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                val json = JSONObject(questionnaire)
+                val common = json.getJSONArray("item")
+                for (i in 0 until common.length()) {
+                    val item = common.getJSONObject(i)
+                    val parent = item.getJSONArray("item")
+                    for (j in 0 until parent.length()) {
+                        val itemChild = parent.getJSONObject(j)
+                        val child = itemChild.getJSONArray("item")
+                        for (k in 0 until child.length()) {
+                            val inner = child.getJSONObject(k)
+                            val childChild = inner.getString("linkId")
+                            Timber.e("Child $inner")
+                            if (childChild == "Time-Expressed") {
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Feeding-Readiness",
+                                            cues.readiness, cues.readiness,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Latch",
+                                            cues.latch, cues.latch,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Steady Suck",
+                                            cues.steady, cues.steady,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Audible-Swallow",
+                                            cues.audible, cues.audible,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Chocking",
+                                            cues.chocking, cues.chocking,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "Breast-Softening",
+                                            cues.softening, cues.softening,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "10-Minutes-Side",
+                                            cues.tenSide, cues.tenSide,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "2-3-Hours",
+                                            cues.threeHours, cues.threeHours,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+                                bundle.addEntry()
+                                    .setResource(
+                                        qh.codingQuestionnaire(
+                                            "6-8-Wet-Diapers",
+                                            cues.sixDiapers, cues.sixDiapers,
+
+                                            )
+                                    )
+                                    .request.url = "Observation"
+
+                            }
+
+                        }
+
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            val subjectReference = Reference("Patient/$patientId")
+
+            val encounterId = generateUuid()
+            title = "Feeding Cues"
+            saveResources(bundle, subjectReference, encounterId, title)
+            isResourcesSaved.value = true
+        }
+    }
+
+    fun milkExpressionAssessment(
+        questionnaireResponse: QuestionnaireResponse, effectiveExpression: String,
+        expressedSufficient: String, patientId: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            try {
+                if (isRequiredFieldMissing(bundle)) {
+                    isResourcesSaved.value = false
+                    return@launch
+                }
+
+                /**
+                 * Extract Observations, Patient Data
+                 */
+                val qh = QuestionnaireHelper()
+                var feed = ""
+                val json = JSONObject(questionnaire)
+                val common = json.getJSONArray("item")
+                for (i in 0 until common.length()) {
+                    val item = common.getJSONObject(i)
+                    val parent = item.getJSONArray("item")
+                    for (j in 0 until parent.length()) {
+                        val itemChild = parent.getJSONObject(j)
+                        val child = itemChild.getJSONArray("item")
+                        for (k in 0 until child.length()) {
+                            val inner = child.getJSONObject(k)
+                            val childChild = inner.getString("linkId")
+                            Timber.e("Child $child")
+                            if (childChild == "Milk-Expressed") {
+                                val volume = extractResponseQuantity(inner, "valueQuantity")
+                                if (volume.isNotEmpty()) {
+                                    Timber.e("Time: $volume")
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Milk-Expressed",
+                                            "Milk Expressed",
+                                            volume
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Effective-Expression",
+                                            "Effective Expression",
+                                            effectiveExpression
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Sufficient-Expression",
+                                            "Sufficient Expression",
+                                            expressedSufficient
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+                            if (childChild == "Time-Expressed") {
+                                val volume = extractResponse(inner, "valueDateTime")
+                                Timber.e("Time: $volume")
+                                if (volume.isNotEmpty()) {
+
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Time-Expressed",
+                                            "Time Expressed",
+                                            volume
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = "Milk Expression"
+                saveResources(bundle, subjectReference, encounterId, title)
+                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                isResourcesSaved.value = true
+
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                isResourcesSaved.value = false
+                return@launch
+
+            }
+        }
+
+    }
 
 }
 

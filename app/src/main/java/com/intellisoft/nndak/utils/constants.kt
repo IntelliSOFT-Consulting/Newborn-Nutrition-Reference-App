@@ -6,8 +6,8 @@ import androidx.annotation.ColorInt
 object Constants {
 
     const val DEMO_API_SERVER="https://devnndak.intellisoftkenya.com/api/"
-//    const val DEMO_SERVER="https://devnndak.intellisoftkenya.com/fhir/"
-    const val DEMO_SERVER="https://hapi.fhir.org/baseR4/"
+    const val DEMO_SERVER="https://devnndak.intellisoftkenya.com/fhir/"
+//    const val DEMO_SERVER="https://hapi.fhir.org/baseR4/"
 
     const val MAX_RESOURCE_COUNT = 40
     const val SYNC_VALUE = "PMH"

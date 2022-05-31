@@ -23,6 +23,7 @@ import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.models.FeedingCues
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -124,7 +125,6 @@ class BabyMonitoringFragment : Fragment() {
 
     private fun handleShowCues() {
         feedingCues = FeedingCuesDialog(this::feedingCuesClick)
-        feedingCues.newInstance("breast-feeding.json")
         feedingCues.show(childFragmentManager, "bundle")
     }
 
@@ -133,7 +133,7 @@ class BabyMonitoringFragment : Fragment() {
         _binding = null
     }
 
-    private fun feedingCuesClick() {
+    private fun feedingCuesClick(cues: FeedingCues) {
         feedingCues.dismiss()
     }
 

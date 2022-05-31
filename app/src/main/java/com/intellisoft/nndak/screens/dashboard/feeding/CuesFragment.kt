@@ -1,10 +1,10 @@
-package com.intellisoft.nndak.screens.dashboard.dhm
+package com.intellisoft.nndak.screens.dashboard.feeding
 
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -18,14 +18,9 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
-import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
-import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
+import com.intellisoft.nndak.databinding.FragmentCuesBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
-import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -36,13 +31,13 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [DhmStockFragment.newInstance] factory method to
+ * Use the [CuesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DhmStockFragment : Fragment() {
+class CuesFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
-    private var _binding: FragmentDhmStockBinding? = null
+    private var _binding: FragmentCuesBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private val binding
         get() = _binding!!
@@ -53,7 +48,7 @@ class DhmStockFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDhmStockBinding.inflate(inflater, container, false)
+        _binding = FragmentCuesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -61,7 +56,7 @@ class DhmStockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.app_dhm_stock)
+            title = resources.getString(R.string.app_add_dhm_recipient)
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
@@ -83,10 +78,10 @@ class DhmStockFragment : Fragment() {
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
-            resources.getString(R.string.app_okay_message)
+            resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved)
+            this::proceedClick, resources.getString(R.string.app_client_registered)
         )
 
     }
@@ -94,7 +89,7 @@ class DhmStockFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 
@@ -102,12 +97,12 @@ class DhmStockFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
-        successDialog.show(childFragmentManager, "Success Details")
+
     }
 
     private fun proceedClick() {
         successDialog.dismiss()
-        findNavController().navigateUp()
+
     }
 
     private fun observeResourcesSaveAction() {
@@ -124,10 +119,11 @@ class DhmStockFragment : Fragment() {
             successDialog.show(childFragmentManager, "Success Details")
         }
 
+
     }
 
     private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "feeding-cues.json")
     }
 
     private fun addQuestionnaireFragment() {
@@ -159,7 +155,7 @@ class DhmStockFragment : Fragment() {
                 builder.apply {
                     setMessage(getString(R.string.cancel_questionnaire_message))
                     setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@DhmStockFragment).navigateUp()
+                        NavHostFragment.findNavController(this@CuesFragment).navigateUp()
                     }
                     setNegativeButton(getString(android.R.string.no)) { _, _ -> }
                 }

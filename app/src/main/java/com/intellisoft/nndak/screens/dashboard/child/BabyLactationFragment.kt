@@ -111,7 +111,7 @@ class BabyLactationFragment : Fragment() {
 
         binding.apply {
             actionProvideSupport.setOnClickListener {
-                findNavController().navigate(BabyLactationFragmentDirections.navigateToEditPrescription(args.patientId))
+                findNavController().navigate(BabyLactationFragmentDirections.navigateToFeding(args.patientId))
             }
         }
 
