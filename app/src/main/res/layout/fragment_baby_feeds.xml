@@ -25,9 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginEnd="@dimen/_5dp"
-            android:visibility="invisible"
             android:backgroundTint="@color/dim_black"
             android:text="@string/action_update_prescription"
+            android:visibility="invisible"
             app:cornerRadius="@dimen/_25sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -46,14 +46,27 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/prescription_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:scrollbars="vertical"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".PatientListActivity"
-        tools:listitem="@layout/prescription_list_item" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/prescription_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".PatientListActivity"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/_100dp"
+            tools:listitem="@layout/prescription_list_item" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </LinearLayout>

@@ -76,26 +76,29 @@ class BabyDashboardFragment : Fragment() {
                 .get(PatientDetailsViewModel::class.java)
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-            Timber.e("Mother Baby ${it.gainRate}")
+
             if (it != null) {
                 binding.apply {
-                    val gest = it.dashboard?.gestation ?: ""
+                    val gest = it.dashboard.gestation ?: ""
                     val status = it.status
                     incDetails.tvBabyName.text = it.babyName
                     incDetails.tvMumName.text = it.motherName
                     incDetails.appBirthWeight.text = it.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = it.dashboard?.apgarScore ?: ""
+                    incDetails.appApgarScore.text = it.dashboard.apgarScore ?: ""
                     incDetails.appMumIp.text = it.motherIp
-                    incDetails.appBabyWell.text = it.dashboard?.babyWell ?: ""
-                    incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
-                    incDetails.appBirthDate.text = it.dashboard?.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = it.dashboard?.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = it.dashboard?.dateOfAdm ?: ""
+                    incDetails.appBabyWell.text = it.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = it.dashboard.asphyxia ?: ""
+                    incDetails.appNeonatalSepsis.text = it.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = it.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = it.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = it.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = it.dashboard.dateOfAdm ?: ""
 
-                    tvCurrentWeight.text = it.dashboard?.cWeight ?: ""
+                    tvCurrentWeight.text = it.dashboard.cWeight ?: ""
+                    tvMotherMilk.text = it.dashboard.motherMilk ?: ""
+                    tvTotalVolume.text = it.dashboard.prescription.totalVolume ?: ""
+                    tvExpressionNumber.text = it.dashboard.prescription.expressions ?: ""
 
                 }
             }

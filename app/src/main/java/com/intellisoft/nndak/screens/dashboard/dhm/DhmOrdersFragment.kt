@@ -25,11 +25,13 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
+import com.intellisoft.nndak.adapters.OrdersAdapter
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.MotherBabyItem
+import com.intellisoft.nndak.models.OrdersItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.dashboard.BabiesFragmentDirections
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
@@ -87,10 +89,10 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 )
                     .get(PatientListViewModel::class.java)
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = BabyItemAdapter(this::onPatientItemClicked)
+            val adapter = OrdersAdapter(this::onPatientItemClicked)
             recyclerView.adapter = adapter
 
-            patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
+            patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
 
                 binding.pbLoading.visibility = View.GONE
                 adapter.submitList(it)
@@ -228,7 +230,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onPatientItemClicked(patientItem: MotherBabyItem) {
+    private fun onPatientItemClicked(patientItem: OrdersItem) {
 
     }
 

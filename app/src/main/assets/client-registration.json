@@ -1142,39 +1142,17 @@
               "type": "group",
               "item": [
                 {
-                  "type": "choice",
+                  "type": "string",
                   "code": [
                     {
-                      "code": "52508-9",
+                      "code": "Interventions",
                       "display": "Interventions",
                       "system": "http://loinc.org/modified"
                     }
                   ],
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "drop-down",
-                            "display": "Drop down"
-                          }
-                        ],
-                        "text": "Drop down"
-                      }
-                    }
-                  ],
                   "required": true,
-                  "linkId": "/52508-9",
-                  "text": "Interventions",
-                  "answerOption": [
-                    {
-                      "valueCoding": {
-                        "display": "Resusitation"
-                      }
-                    }
-                  ]
+                  "linkId": "/60733-3",
+                  "text": "Interventions"
                 }
               ]
             }

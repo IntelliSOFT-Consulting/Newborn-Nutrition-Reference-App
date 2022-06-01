@@ -82,7 +82,7 @@ class ChildDashboardFragment : Fragment() {
 
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-            Timber.e("Mother Baby ${it.gainRate}")
+
             if (it != null) {
                 binding.apply {
                     incDetails.appBabyName.text = it.babyName

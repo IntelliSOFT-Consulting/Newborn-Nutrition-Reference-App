@@ -47,6 +47,7 @@ class AddPrescriptionFragment : Fragment() {
     private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentAddPrescriptionBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
+    private val args: AddPrescriptionFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
@@ -86,10 +87,10 @@ class AddPrescriptionFragment : Fragment() {
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
-            resources.getString(R.string.app_confirm_message)
+            resources.getString(R.string.app_okay_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered)
+            this::proceedClick, resources.getString(R.string.app_okay_saved)
         )
 
     }
@@ -105,13 +106,15 @@ class AddPrescriptionFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
-
-        successDialog.show(childFragmentManager, "Success Details")
+        viewModel.feedPrescription(
+            questionnaireFragment.getQuestionnaireResponse(), args.patientId
+        )
 
     }
 
     private fun proceedClick() {
         successDialog.dismiss()
+        findNavController().navigateUp()
 
     }
 

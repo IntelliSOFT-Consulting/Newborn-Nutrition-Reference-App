@@ -18,14 +18,10 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
-import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
 import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
-import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -46,7 +42,6 @@ class DhmRecipientFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private val binding
         get() = _binding!!
-
 
 
     override fun onCreateView(
@@ -84,10 +79,10 @@ class DhmRecipientFragment : Fragment() {
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
-            resources.getString(R.string.app_confirm_message)
+            resources.getString(R.string.app_okay_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered)
+            this::proceedClick, resources.getString(R.string.app_okay_saved)
         )
 
     }
@@ -103,12 +98,13 @@ class DhmRecipientFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
-        findNavController().navigateUp()
+      viewModel.addDhmRecipient(questionnaireFragment.getQuestionnaireResponse())
 
     }
 
     private fun proceedClick() {
         successDialog.dismiss()
+        findNavController().navigateUp()
 
     }
 

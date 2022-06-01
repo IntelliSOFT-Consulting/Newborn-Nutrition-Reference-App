@@ -48,4 +48,5 @@
     <dimen name="_45sp">45sp</dimen>
     <dimen name="_18sp">18sp</dimen>
     <dimen name="spacing_small">3dp</dimen>
+    <dimen name="_25dp">25dp</dimen>
 </resources>

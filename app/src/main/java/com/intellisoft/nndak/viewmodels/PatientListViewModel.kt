@@ -1,25 +1,28 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.models.*
-import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
 import kotlinx.coroutines.launch
-import org.hl7.fhir.r4.model.Observation
-import org.hl7.fhir.r4.model.Patient
-import org.hl7.fhir.r4.model.RelatedPerson
-import org.hl7.fhir.r4.model.RiskAssessment
+import org.hl7.fhir.r4.model.*
+import timber.log.Timber
+import java.time.LocalDate
+import java.time.Period
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -34,6 +37,7 @@ class PatientListViewModel(
 
     val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
+    val liveOrders = MutableLiveData<List<OrdersItem>>()
     val patientCount = MutableLiveData<Long>()
 
     init {
@@ -44,6 +48,9 @@ class PatientListViewModel(
         updateMumAndBabyCount(
             { getMumSearchResults("", location) },
             { count("", location) })
+        updateOrdersCount(
+            { getOrdersSearchResults("", location) },
+            { count("", location) })
     }
 
     fun searchPatientsByName(nameQuery: String) {
@@ -53,6 +60,10 @@ class PatientListViewModel(
 
         updateMumAndBabyCount(
             { getMumSearchResults(nameQuery, location) },
+            { count("", location) })
+
+        updateOrdersCount(
+            { getOrdersSearchResults(nameQuery, location) },
             { count("", location) })
     }
 
@@ -81,6 +92,17 @@ class PatientListViewModel(
         }
     }
 
+
+    private fun updateOrdersCount(
+        search: suspend () -> List<OrdersItem>,
+        count: suspend () -> Long
+    ) {
+        viewModelScope.launch {
+            liveOrders.value = search()
+            patientCount.value = count()
+        }
+    }
+
     /**
      * Returns count of all the [Patient] who match the filter criteria unlike [getSearchResults]
      * which only returns a fixed range.
@@ -99,6 +121,141 @@ class PatientListViewModel(
             filterCity(this, location)
         }
     }
+
+    private suspend fun getOrdersSearchResults(
+        nameQuery: String = "",
+        location: String
+    ): List<OrdersItem> {
+        val orders: MutableList<OrdersItem> = mutableListOf()
+        fhirEngine
+            .search<NutritionOrder> {
+                sort(NutritionOrder.DATETIME, Order.ASCENDING)
+                from = 0
+            }
+            .map {
+                createOrdersItem(
+                    it
+                )
+            }
+            .let {
+
+                orders.addAll(it)
+            }
+
+        return orders
+    }
+
+    private suspend fun getPatient(patientId: String): PatientItem {
+        val patient = fhirEngine.load(Patient::class.java, patientId)
+        return patient.toPatientItem(0)
+    }
+
+    private suspend fun createOrdersItem(it: NutritionOrder): OrdersItem {
+        val patientId = it.patient.reference.drop(8)
+        val encounterId = it.encounter.reference
+
+        /**
+         * Return Baby's Details
+         */
+        val baby = getPatient(patientId)
+
+        val mother = getMothersDetails(it.patient.reference)
+        val motherName = mother.first.toString()
+        val motherIp = mother.second.toString()
+
+        /**
+         * Collect Observations from Encounter
+         */
+        var consent = ""
+        var dhm = ""
+        val observations = getObservationsPerEncounter(encounterId)
+
+        Timber.e("Encounter Id ******** $encounterId")
+        if (observations.isNotEmpty()) {
+            for (element in observations) {
+                if (element.code == "Consent-Given") {
+                    consent = element.value
+                }
+                if (element.code == "DHM-Type") {
+                    dhm = element.value
+                }
+            }
+        }
+
+        return OrdersItem(
+            id = it.id,
+            resourceId = it.logicalId,
+            ipNumber = motherIp,
+            motherName = motherName,
+            babyName = baby.name,
+            babyAge = getFormattedAge(baby.dob),
+            consentGiven = consent,
+            dhmType = dhm
+        )
+    }
+
+    private fun getFormattedAge(
+        dob: String
+    ): String {
+        if (dob.isEmpty()) return ""
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Period.between(LocalDate.parse(dob), LocalDate.now()).let {
+                when {
+                    it.years > 0 -> it.years.toString()
+                    it.months > 0 -> it.months.toString()
+                    else -> it.days.toString()
+                }
+            }
+        } else {
+            ""
+        }
+    }
+
+    private suspend fun getMothersDetails(patientId: String): Triple<String?, String?, String?> {
+        val mother: MutableList<PatientItem> = mutableListOf()
+        fhirEngine
+            .search<Patient> {
+                filter(
+                    Patient.LINK, { value = patientId }
+
+                )
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .mapIndexed { index, fhirPatient ->
+                fhirPatient.toPatientItem(
+                    index + 1
+                )
+
+            }
+            .let { mother.addAll(it) }
+        if (mother.isNotEmpty()) {
+            return Triple(mother[0].name, mother[0].resourceId, mother[0].id)
+
+        }
+        return Triple(null, null, null)
+    }
+
+    private suspend fun getObservationsPerEncounter(
+        encounterId: String
+    ): List<ObservationItem> {
+        val conditions: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.ENCOUNTER,
+                    { value = encounterId })
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { conditions.addAll(it) }
+        return conditions
+    }
+
 
     private suspend fun getMumSearchResults(
         nameQuery: String = "",
@@ -120,7 +277,7 @@ class PatientListViewModel(
                 }
                 filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
-                count = 100
+                //   count = 100
                 from = 0
             }
 
@@ -150,7 +307,6 @@ class PatientListViewModel(
                 )
 
             }
-            //.take(Constants.MAX_RESOURCE_COUNT)
             .mapIndexed { index, fhirPatient ->
                 fhirPatient.toPatientItem(
                     index + 1
@@ -194,7 +350,9 @@ class PatientListViewModel(
             birthWeight = birthWeight,
             status = status,
             gainRate = "Normal",
-            dashboard = BabyDashboard(),
+            dashboard = BabyDashboard(
+                prescription = PrescriptionItem()
+            ),
             mother = MotherDashboard()
         )
 
@@ -237,7 +395,7 @@ class PatientListViewModel(
                 }
                 filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
-                count = 100
+//                count = 100
                 from = 0
             }
             .mapIndexed { index, fhirPatient -> fhirPatient.toPatientItem(index + 1) }
@@ -294,6 +452,7 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
     val region = if (hasAddress()) address[0].text else ""
     val isActive = active
     val html: String = if (hasText()) text.div.valueAsString else ""
+    val reference: String = if (hasLink()) link[0].other.reference else ""
 
 
     return PatientItem(
@@ -309,7 +468,8 @@ internal fun Patient.toPatientItem(position: Int): PatientItem {
         html = html,
         state = state ?: "",
         district = district ?: "",
-        region = region ?: ""
+        region = region ?: "",
+        reference = reference ?: ""
     )
 }
 

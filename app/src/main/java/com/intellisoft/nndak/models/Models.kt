@@ -18,7 +18,8 @@ data class PatientItem(
     var riskItem: RiskAssessmentItem? = null,
     var state: String,
     var district: String,
-    var region: String
+    var region: String,
+    var reference: String? = ""
 ) {
     override fun toString(): String = name
 
@@ -87,6 +88,16 @@ data class Steps(
     val secondButton: Boolean?
 )
 
+data class OrdersItem(
+    val id: String,
+    val resourceId: String,
+    val ipNumber: String? = "",
+    val motherName: String? = "",
+    val babyName: String? = "",
+    val babyAge: String? = "",
+    val dhmType: String? = "",
+    val consentGiven: String? = "",
+)
 
 /**
  * Mother-Baby
@@ -102,10 +113,10 @@ data class MotherBabyItem(
     val birthWeight: String? = "",
     val status: String? = "",
     val gainRate: String? = "",
-    var dashboard: BabyDashboard?,
-    var mother: MotherDashboard
+    var dashboard: BabyDashboard,
+    var mother: MotherDashboard,
 
-) {
+    ) {
     override fun toString(): String = babyName
 }
 
@@ -120,8 +131,10 @@ data class BabyDashboard(
     val neonatalSepsis: String? = "",
     val jaundice: String? = "",
     val cWeight: String? = "",
+    val motherMilk: String? = "",
+    val prescription: PrescriptionItem
 
-    ) {
+) {
     override fun toString(): String = babyWell.toString()
 }
 
@@ -137,7 +150,7 @@ data class MotherDashboard(
     val neonatalSepsis: String? = "",
     val jaundice: String? = "",
 
-) {
+    ) {
     override fun toString(): String = parity.toString()
 }
 
@@ -150,16 +163,37 @@ data class DashboardItem(
     override fun toString(): String = percent
 }
 
-data class FeedingCues(
+data class FeedingCuesTips(
     val readiness: String,
     val latch: String,
     val steady: String,
     val audible: String,
     val chocking: String,
-    val softening: String,
-    val tenSide: String,
-    val threeHours: String,
-    val sixDiapers: String,
-){
+    val softening: String? = "",
+    val tenSide: String? = "",
+    val threeHours: String? = "",
+    val sixDiapers: String? = "",
+) {
     override fun toString(): String = readiness
+}
+
+data class PrescriptionItem(
+    val id: String? = "",
+    val resourceId: String? = "",
+    val date: String? = "",
+    val time: String? = "",
+    val totalVolume: String? = "",
+    val route: String? = "",
+    val frequency: String? = "",
+    val ivFluids: String? = "",
+    val breastMilk: String? = "",
+    val donorMilk: String? = "",
+    val consent: String? = "",
+    val consentDate: String? = "",
+    val dhmReason: String? = "",
+    val additionalFeeds: String? = "",
+    val supplements: String? = "",
+    val expressions: String? = ""
+) {
+    override fun toString(): String = resourceId.toString()
 }

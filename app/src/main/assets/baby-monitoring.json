@@ -1,0 +1,452 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Baby-Assessment",
+      "type": "group",
+      "text": "",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "mha"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Assessment-Date",
+              "type": "group",
+              "item": [
+                {
+                  "type": "dateTime",
+                  "code": [
+                    {
+                      "code": "50786-3",
+                      "display": "Assessment Date Time",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/50786-3",
+                  "text": "Assessment Date Time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "text": "Feeding",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Feeding-IV",
+              "type": "group",
+              "item": [
+                {
+                  "type": "quantity",
+                  "code": [
+                    {
+                      "code": "50786-3",
+                      "display": "IV",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/IV",
+                  "text": "IV"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "text": "Feeding",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "DHM-Volume",
+              "type": "group",
+              "item": [
+                {
+                  "type": "quantity",
+                  "code": [
+                    {
+                      "code": "50786-3",
+                      "display": "DHM-Volume",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/DHM",
+                  "text": "DHM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "text": "Feeding",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "EBM-Volume",
+              "type": "group",
+              "item": [
+                {
+                  "type": "quantity",
+                  "code": [
+                    {
+                      "code": "50786-3",
+                      "display": "EBM-Volume",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/EBM",
+                  "text": "EBM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "text": "Monitoring",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+
+            {
+              "linkId": "Vomit",
+              "type": "group",
+              "item": [
+                {
+                  "type": "choice",
+                  "code": [
+                    {
+                      "code": "Vomit",
+                      "display": "Vomit",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/Vomit",
+                  "text": "Vomit",
+                  "answerOption": [
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "0"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA32-8",
+                        "display": "No"
+                      }
+                    },
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "1"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA33-6",
+                        "display": "Yes"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+
+            {
+              "linkId": "Stool",
+              "type": "group",
+              "item": [
+                {
+                  "type": "choice",
+                  "code": [
+                    {
+                      "code": "Stool",
+                      "display": "Stool",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/Stool",
+                  "text": "Stool",
+                  "answerOption": [
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "0"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA32-8",
+                        "display": "No"
+                      }
+                    },
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "1"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA33-6",
+                        "display": "Yes"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+          "text": "",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "Diaper-Changed",
+              "type": "group",
+              "item": [
+                {
+                  "type": "quantity",
+                  "code": [
+                    {
+                      "code": "50786-3",
+                      "display": "Diaper-Changed",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/Diaper-Changed",
+                  "text": "Diaper Changed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "3.0.0",
+          "type": "group",
+
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+
+            {
+              "linkId": "Adjust-Prescription",
+              "type": "group",
+              "item": [
+                {
+                  "type": "choice",
+                  "code": [
+                    {
+                      "code": "Adjust-Prescription",
+                      "display": "Adjust Prescription",
+                      "system": "http://loinc.org/modified"
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "drop-down",
+                            "display": "Drop down"
+                          }
+                        ],
+                        "text": "Drop down"
+                      }
+                    }
+                  ],
+                  "required": true,
+                  "linkId": "/Adjust-Prescription",
+                  "text": "Adjust Prescription",
+                  "answerOption": [
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "0"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA32-8",
+                        "display": "No"
+                      }
+                    },
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                          "valueString": "1"
+                        }
+                      ],
+                      "valueCoding": {
+                        "code": "LA33-6",
+                        "display": "Yes"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

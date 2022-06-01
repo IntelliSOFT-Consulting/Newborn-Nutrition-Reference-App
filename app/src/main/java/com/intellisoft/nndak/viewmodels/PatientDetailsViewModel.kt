@@ -54,6 +54,7 @@ class PatientDetailsViewModel(
 ) : AndroidViewModel(application) {
     val livePatientData = MutableLiveData<List<PatientDetailData>>()
     val liveMumChild = MutableLiveData<MotherBabyItem>()
+    val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
     val context: Application = application
 
     /** Emits list of [PatientDetailData]. */
@@ -99,7 +100,6 @@ class PatientDetailsViewModel(
 
     private suspend fun getPatientRelatedPersons(): List<RelatedPersonItem> {
         val relations: MutableList<RelatedPersonItem> = mutableListOf()
-
         fhirEngine
             .search<Patient> {
                 filter(
@@ -116,7 +116,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun getPatientEncounters(): List<EncounterItem> {
-        val relations: MutableList<EncounterItem> = mutableListOf()
+        val encounters: MutableList<EncounterItem> = mutableListOf()
 
         fhirEngine
             .search<Encounter> {
@@ -127,11 +127,10 @@ class PatientDetailsViewModel(
 
                 sort(Encounter.DATE, Order.DESCENDING)
             }
-            .take(MAX_RESOURCE_COUNT)
             .map { createEncounterItem(it, getApplication<Application>().resources) }
-            .let { relations.addAll(it) }
+            .let { encounters.addAll(it) }
 
-        return relations
+        return encounters
     }
 
 
@@ -142,7 +141,10 @@ class PatientDetailsViewModel(
                 filter(Observation.SUBJECT, { value = "Patient/$patientId" })
                 sort(Observation.DATE, Order.DESCENDING)
             }
+            .filter { it.hasCode() }
+            .sortedByDescending { it.meta.lastUpdated }
             .map { createObservationItem(it, getApplication<Application>().resources) }
+
             .let { observations.addAll(it) }
         return observations
     }
@@ -375,6 +377,19 @@ class PatientDetailsViewModel(
         var pmtct = ""
         var mPreg = ""
         var dDate = ""
+        var motherMilk = ""
+        var totalFeeds = ""
+        var expressions = ""
+        val exp = getPatientEncounters()
+        var i: Int = 0
+        if (exp.isNotEmpty()) {
+            for (element in exp) {
+                if (element.code == "Milk Expression") {
+                    i++
+                }
+            }
+        }
+        expressions = i.toString()
 
         val obs = getObservations()
         if (obs.isNotEmpty()) {
@@ -382,7 +397,7 @@ class PatientDetailsViewModel(
                 if (element.code == "93857-1") {
                     dDate = element.value.substring(0, 10)
                 }
-                if (element.code == "3141-9") {
+                if (element.code == "Current-Weight" || element.code == "29463-7") {
                     cWeight = element.value
                 }
                 if (element.code == "55277-8") {
@@ -418,6 +433,12 @@ class PatientDetailsViewModel(
                 }
                 if (element.code == "9273-4") {
                     apgar = element.value
+                }
+                if (element.code == "Breast-Milk") {
+                    motherMilk = element.value
+                }
+                if (element.code == "Total-Feeds") {
+                    totalFeeds = element.value
                 }
                 if (element.code == "11885-1") {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
@@ -459,14 +480,17 @@ class PatientDetailsViewModel(
                 dateOfBirth = dateOfBirth,
                 dayOfLife = dayOfLife,
                 dateOfAdm = admDate,
-                cWeight = cWeight
-            ), mother = MotherDashboard(
+                cWeight = cWeight, motherMilk = motherMilk,
+                prescription = PrescriptionItem(totalVolume = totalFeeds, expressions = expressions)
+
+            ),
+            mother = MotherDashboard(
                 parity = parity,
                 deliveryMethod = dMethod,
                 pmtctStatus = pmtct,
                 multiPregnancy = mPreg,
-                deliveryDate = dDate
-            )
+                deliveryDate = dDate,
+            ),
         )
     }
 
@@ -475,12 +499,16 @@ class PatientDetailsViewModel(
         dob: String
     ): String {
         if (dob.isEmpty()) return ""
-        return Period.between(LocalDate.parse(dob), LocalDate.now()).let {
-            when {
-                it.years > 0 -> it.years.toString()
-                it.months > 0 -> it.months.toString()
-                else -> it.days.toString()
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Period.between(LocalDate.parse(dob), LocalDate.now()).let {
+                when {
+                    it.years > 0 -> it.years.toString()
+                    it.months > 0 -> it.months.toString()
+                    else -> it.days.toString()
+                }
             }
+        } else {
+            ""
         }
     }
 
@@ -592,39 +620,7 @@ class PatientDetailsViewModel(
 
             data.addAll(observationDataModel)
         }
-        /*      if (observations.isNotEmpty()) {
 
-                  data.add(PatientDetailHeader(getString(R.string.header_encounters)))
-
-
-                  val observationDataModel =
-                      observations.mapIndexed { index, observationItem ->
-
-                          PatientDetailObservation(
-                              observationItem,
-                              firstInGroup = index == 0,
-                              lastInGroup = index == observations.size - 1
-                          )
-
-                      }
-
-                  data.addAll(observationDataModel)
-
-              }
-
-              if (conditions.isNotEmpty()) {
-                  data.add(PatientDetailHeader(getString(R.string.header_conditions)))
-                  val conditionDataModel =
-                      conditions.mapIndexed { index, conditionItem ->
-                          PatientDetailCondition(
-                              conditionItem,
-                              firstInGroup = index == 0,
-                              lastInGroup = index == conditions.size - 1
-                          )
-                      }
-                  data.addAll(conditionDataModel)
-              }
-      */
         return data
     }
 
@@ -731,38 +727,6 @@ class PatientDetailsViewModel(
             data.addAll(observationDataModel)
         }
 
-        /*    if (observations.isNotEmpty()) {
-
-                data.add(PatientDetailHeader(getString(R.string.header_encounters)))
-
-                val observationDataModel =
-                    observations.mapIndexed { index, observationItem ->
-
-                        PatientDetailObservation(
-                            observationItem,
-                            firstInGroup = index == 0,
-                            lastInGroup = index == observations.size - 1
-                        )
-
-                    }
-
-                data.addAll(observationDataModel)
-
-            }*/
-
-        /*   if (conditions.isNotEmpty()) {
-               data.add(PatientDetailHeader(getString(R.string.header_conditions)))
-               val conditionDataModel =
-                   conditions.mapIndexed { index, conditionItem ->
-                       PatientDetailCondition(
-                           conditionItem,
-                           firstInGroup = index == 0,
-                           lastInGroup = index == conditions.size - 1
-                       )
-                   }
-               data.addAll(conditionDataModel)
-           }*/
-
         return data
     }
 
@@ -866,6 +830,122 @@ class PatientDetailsViewModel(
         return getString(R.string.none)
     }
 
+    fun getCurrentPrescriptions() {
+        viewModelScope.launch {
+            livePrescriptionsData.value = getCurrentPrescriptionsDataModel(context)
+        }
+    }
+
+    private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem>? {
+        val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
+        val patient = getPatient()
+        val encounters = getPatientEncounters()
+        if (encounters.isNotEmpty()) {
+            for (element in encounters) {
+                if (element.code == "Feeds Prescription") {
+                    prescriptions.add(prescription(element))
+                }
+            }
+        }
+        return prescriptions
+
+
+    }
+
+    private suspend fun prescription(encounterItem: EncounterItem): PrescriptionItem {
+        val observations = getObservationsPerEncounter(encounterItem.id)
+        var date = ""
+        var time = ""
+        var total = ""
+        var frequency = ""
+        var route = ""
+        var iv = ""
+        var bm = ""
+        var dhm = ""
+        var consent = ""
+        var reason = ""
+        var supplements = ""
+        var additional = ""
+        var consentDate = ""
+        if (observations.isNotEmpty()) {
+            for (element in observations) {
+                if (element.code == "Prescription-Date") {
+                    date = element.value.substring(0, 10)
+                    time = element.value.substring(12, 19)
+                }
+                if (element.code == "Total-Feeds") {
+                    total = element.value
+                }
+                if (element.code == "Feeding-Frequency") {
+                    frequency = element.value
+                }
+                if (element.code == "Feeding-Route") {
+                    route = element.value
+                }
+                if (element.code == "IV-Fluids") {
+                    iv = element.value
+                }
+                if (element.code == "Breast-Milk") {
+                    bm = element.value
+                }
+                if (element.code == "Donated-Breast-Milk") {
+                    dhm = element.value
+                }
+                if (element.code == "Consent-Given") {
+                    consent = element.value
+                }
+                if (element.code == "DHM-Reasons") {
+                    reason = element.value
+                }
+                if (element.code == "Supplements-Feeding") {
+                    supplements = element.value
+                }
+                if (element.code == "Additional-Feeds") {
+                    additional = element.value
+                }
+                if (element.code == "Consent-Date") {
+                    consentDate = element.value
+                }
+            }
+        }
+        return PrescriptionItem(
+            id = encounterItem.id,
+            resourceId = encounterItem.code,
+            date = date,
+            time = time,
+            totalVolume = total,
+            frequency = frequency,
+            route = route,
+            ivFluids = iv,
+            breastMilk = bm,
+            donorMilk = dhm,
+            consent = consent,
+            dhmReason = reason,
+            supplements = supplements, additionalFeeds = additional, consentDate = consentDate
+        )
+    }
+
+    private suspend fun getObservationsPerEncounter(
+        code: String
+    ): List<ObservationItem> {
+        val conditions: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.ENCOUNTER,
+                    { value = "Encounter/$code" })
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { conditions.addAll(it) }
+        return conditions
+    }
+
 
     companion object {
         /**
@@ -963,7 +1043,6 @@ class PatientDetailsViewModel(
             } else {
                 ""
             }
-            Timber.e("Last Update $value")
             return EncounterItem(
                 encounter.logicalId,
                 encounterCode,
@@ -978,7 +1057,8 @@ class PatientDetailsViewModel(
             condition: Condition,
             resources: Resources
         ): ConditionItem {
-            val observationCode = condition.code.text ?: condition.code.codingFirstRep.display ?: ""
+            val observationCode =
+                condition.code.text ?: condition.code.codingFirstRep.display ?: ""
 
             // Show nothing if no values available for datetime and value quantity.
             val dateTimeString =

@@ -6,19 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
-import com.google.android.fhir.datacapture.QuestionnaireFragment
-import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FeedingCuesDialogBinding
-import com.intellisoft.nndak.models.FeedingCues
-import com.intellisoft.nndak.viewmodels.ScreenerViewModel
-import timber.log.Timber
-
+import com.intellisoft.nndak.models.FeedingCuesTips
 class FeedingCuesDialog(
-    private val proceed: (FeedingCues) -> Unit,
+    private val proceed: (FeedingCuesTips) -> Unit,
+
 ) : DialogFragment() {
     private var _binding: FeedingCuesDialogBinding? = null
     private val binding
@@ -93,7 +86,7 @@ class FeedingCuesDialog(
                     "No"
                 }
 
-                val feeding = FeedingCues(
+                val feeding = FeedingCuesTips(
                     readiness = readiness,
                     latch = latch,
                     steady = steady,

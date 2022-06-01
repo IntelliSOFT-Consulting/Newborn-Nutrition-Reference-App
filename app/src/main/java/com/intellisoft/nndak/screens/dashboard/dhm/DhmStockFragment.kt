@@ -102,7 +102,7 @@ class DhmStockFragment : Fragment() {
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
         Timber.e("Questionnaire  $questionnaire")
-        successDialog.show(childFragmentManager, "Success Details")
+        viewModel.addDhmStock(questionnaireFragment.getQuestionnaireResponse())
     }
 
     private fun proceedClick() {

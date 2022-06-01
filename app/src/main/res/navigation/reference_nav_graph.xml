@@ -400,7 +400,11 @@
         android:id="@+id/addPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.AddPrescriptionFragment"
         android:label="@string/app_prescribe_feed"
-        tools:layout="@layout/fragment_add_prescription" />
+        tools:layout="@layout/fragment_add_prescription">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.EditPrescriptionFragment"

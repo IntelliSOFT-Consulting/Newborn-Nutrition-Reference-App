@@ -23,7 +23,7 @@ import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.models.FeedingCues
+import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -171,7 +171,7 @@ class BreastFeedingFragment : Fragment() {
         feedingCues.show(childFragmentManager, "Feeding Cues")
     }
 
-    private fun feedingCuesClick(cues: FeedingCues) {
+    private fun feedingCuesClick(cues: FeedingCuesTips) {
         feedingCues.dismiss()
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
@@ -199,11 +199,7 @@ class BreastFeedingFragment : Fragment() {
         val questionnaire =
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
 
-        /*  viewModel.clientRegistration(
-              questionnaireFragment.getQuestionnaireResponse(), patientId
-          )*/
     }
 
     private fun proceedClick() {

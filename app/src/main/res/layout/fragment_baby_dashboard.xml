@@ -112,8 +112,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAlignment="center"
                             android:text="@string/app_compared_weight"
+                            android:textAlignment="center"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -133,9 +133,9 @@
                         android:padding="@dimen/_5dp">
 
                         <TextView
+                            android:id="@+id/tv_mother_milk"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/action_dummy"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_25sp" />
@@ -210,9 +210,9 @@
                         android:padding="@dimen/_5dp">
 
                         <TextView
+                            android:id="@+id/tv_total_volume"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/action_dummy"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_25sp" />
@@ -250,8 +250,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAlignment="center"
                             android:text="@string/app_compared_prescribed"
+                            android:textAlignment="center"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -273,7 +273,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/action_dummy"
+                         android:id="@+id/tv_expression_number"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_25sp" />

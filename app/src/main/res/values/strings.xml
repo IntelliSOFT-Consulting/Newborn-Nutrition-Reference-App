@@ -305,6 +305,14 @@
     <string name="side_feed">Does baby feed for atlear 10 minutes per side?</string>
     <string name="three_hours">Does baby sleep comfortably between feedings every 2-3 hours?</string>
     <string name="diapers">Does baby have 6-8 wet diapers a day?</string>
+    <string name="stimulate">Stimulated Nipples Prior to Feeding.</string>
+    <string name="proper"><![CDATA[Proper Positioning of the Baby & Supports Head]]></string>
+    <string name="early_latch">Practice Early Latching at Breast.</string>
+    <string name="manual">Express Manually Drops of Breast Milk</string>
+    <string name="awakens">Does Baby Awakens when Changing to Opposite Breast?</string>
+    <string name="action_feeding_tips">Feeding Tips</string>
+    <string name="action_feeding_tips_explanation">Below are the Usual Tips for the Mother during Feeding. Indicate if followed</string>
+    <string name="process">Process Order</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

@@ -176,7 +176,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/menu_dhm"
+                    android:id="@+id/app_dhm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

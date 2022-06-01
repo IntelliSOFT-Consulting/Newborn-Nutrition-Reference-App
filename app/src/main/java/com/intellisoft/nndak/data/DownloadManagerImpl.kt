@@ -48,18 +48,18 @@ class DownloadManagerImpl : DownloadWorkManager {
         }
 
 
-
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
             for (i in 0 until response.total) {
-/*
                 Timber.e("Type::: ${response.entry[i].resource.resourceType}")
-                val type = response.entry[i].resource.resourceType
-                if (type.equals("Patient")) {*/
+                val type = response.entry[i].resource.resourceType.toString()
+                if (type.contains("Patient")) {
+
                     val u = "${response.entry[i].fullUrl}/\$everything"
                     urls.add(u)
-               /* }*/
+
+                }
             }
             val nextUrl =
                 response.link.firstOrNull { component -> component.relation == "next" }?.url

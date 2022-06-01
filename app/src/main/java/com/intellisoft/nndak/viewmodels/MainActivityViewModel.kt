@@ -16,6 +16,7 @@ import com.google.android.fhir.sync.RepeatInterval
 import com.google.android.fhir.sync.State
 import com.google.android.fhir.sync.Sync
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,7 @@ class MainActivityViewModel(application: Application, private val state: SavedSt
   }
 
   /** Requests periodic sync. */
+  @OptIn(ExperimentalCoroutinesApi::class)
   fun poll() {
     viewModelScope.launch {
       job.poll(

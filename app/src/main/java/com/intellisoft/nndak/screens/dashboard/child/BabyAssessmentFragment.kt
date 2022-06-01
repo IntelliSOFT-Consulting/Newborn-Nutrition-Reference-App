@@ -106,7 +106,7 @@ class BabyAssessmentFragment : Fragment() {
         )
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-            Timber.e("Mother Baby ${it.gainRate}")
+
             if (it != null) {
                 binding.apply {
                     val gest = it.dashboard?.gestation ?: ""
@@ -168,7 +168,7 @@ class BabyAssessmentFragment : Fragment() {
             childFragmentManager.commit {
                 add(
                     R.id.add_patient_container, fragment,
-                    RegistrationFragment.QUESTIONNAIRE_FRAGMENT_TAG
+                    QUESTIONNAIRE_FRAGMENT_TAG
                 )
             }
         } catch (e: Exception) {
@@ -223,7 +223,7 @@ class BabyAssessmentFragment : Fragment() {
 
     private fun updateArguments() {
         requireArguments().putString(
-            RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY,
+            QUESTIONNAIRE_FILE_PATH_KEY,
             "baby-assessment.json"
         )
     }
@@ -242,5 +242,9 @@ class BabyAssessmentFragment : Fragment() {
             }
             else -> false
         }
+    }
+    companion object {
+        const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
+        const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
     }
 }

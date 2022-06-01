@@ -12,12 +12,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.BabyItemAdapter
+import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
+import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -76,8 +80,9 @@ class BabyFeedsFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
         patientDetailsViewModel.getMumChild()
+        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-            Timber.e("Mother Baby ${it.gainRate}")
+
             if (it != null) {
                 binding.apply {
                     val gest = it.dashboard?.gestation ?: ""
@@ -100,14 +105,38 @@ class BabyFeedsFragment : Fragment() {
             }
         }
 
+        /**
+         * List of Prescriptions
+         */
+        val recyclerView: RecyclerView = binding.prescriptionList
+        val adapter = PrescriptionAdapter(this::onPrescriptionItemClick)
+        recyclerView.adapter = adapter
+
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
+            Timber.d("Prescriptions has " + it.count() + " records")
+            if (it.isNotEmpty()) {
+                binding.actionUpdatePrescription.visibility = View.VISIBLE
+            }
+            binding.pbLoading.visibility = View.GONE
+            adapter.submitList(it)
+        }
+
         binding.apply {
             actionNewPrescription.setOnClickListener {
-                findNavController().navigate(BabyFeedsFragmentDirections.navigateToAddPrescription())
+                findNavController().navigate(
+                    BabyFeedsFragmentDirections.navigateToAddPrescription(
+                        args.patientId
+                    )
+                )
             }
             actionUpdatePrescription.setOnClickListener {
                 findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
             }
         }
+
+    }
+
+    private fun onPrescriptionItemClick(prescriptionItem: PrescriptionItem) {
 
     }
 
@@ -127,3 +156,4 @@ class BabyFeedsFragment : Fragment() {
         }
     }
 }
+

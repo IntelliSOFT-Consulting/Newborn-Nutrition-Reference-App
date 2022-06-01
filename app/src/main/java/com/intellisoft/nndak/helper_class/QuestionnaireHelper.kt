@@ -1,10 +1,16 @@
 package com.intellisoft.nndak.helper_class
 
+import org.hl7.fhir.r4.model.NutritionOrder
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Quantity
 import org.hl7.fhir.r4.model.Questionnaire
 
 class QuestionnaireHelper {
+
+    fun nutritionResource(code:String){
+        val nutrition= NutritionOrder()
+        nutrition.text
+    }
 
     fun codingQuestionnaire(code: String,
                             display: String,
