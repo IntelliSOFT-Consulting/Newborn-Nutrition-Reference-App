@@ -70,7 +70,6 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/action_view_dhm"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_weight="1.3"
                 android:backgroundTint="@color/design_default_color_error"
@@ -137,9 +136,9 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_dhm_infants"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_dummy"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/colorPrimary"
@@ -237,9 +236,9 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_volume_available"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_dummy"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/colorPrimary"
@@ -338,9 +337,9 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_average_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_dummy"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/colorPrimary"
@@ -432,9 +431,9 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_fully_infants"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_dummy"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/colorPrimary"
@@ -532,9 +531,9 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_average_length"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_dummy"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/colorPrimary"
@@ -585,11 +584,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
             android:paddingTop="@dimen/_15dp"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 

@@ -18,14 +18,9 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
-import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
-import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -72,7 +67,7 @@ class DhmStockFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
-        (activity as MainActivity).showBottom(false)
+
         binding.apply {
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -94,7 +89,7 @@ class DhmStockFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 

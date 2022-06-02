@@ -28,8 +28,6 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -105,34 +103,34 @@ class BabyAssessmentFragment : Fragment() {
             resources.getString(R.string.app_okay_saved)
         )
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
 
-            if (it != null) {
+            if (motherBabyItem != null) {
                 binding.apply {
-                    val gest = it.dashboard?.gestation ?: ""
-                    val status = it.status
-                    incDetails.tvBabyName.text = it.babyName
-                    incDetails.tvMumName.text = it.motherName
-                    incDetails.appBirthWeight.text = it.birthWeight
+                    val gest = motherBabyItem.dashboard.gestation ?: ""
+                    val status = motherBabyItem.status
+                    incDetails.tvBabyName.text = motherBabyItem.babyName
+                    incDetails.tvMumName.text = motherBabyItem.motherName
+                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = it.dashboard?.apgarScore ?: ""
-                    incDetails.appMumIp.text = it.motherIp
-                    incDetails.appBabyWell.text = it.dashboard?.babyWell ?: ""
-                    incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
-                    incDetails.appBirthDate.text = it.dashboard?.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = it.dashboard?.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = it.dashboard?.dateOfAdm ?: ""
+                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = motherBabyItem.motherIp
+                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
+                    incDetails.appNeonatalSepsis.text = motherBabyItem.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
 
                 }
             }
         }
         binding.apply {
-            screen.btnCancel.setOnClickListener {
+            actions.btnCancel.setOnClickListener {
                 findNavController().navigateUp()
             }
-            screen.btnSubmit.setOnClickListener {
+            actions.btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
         }
@@ -142,7 +140,7 @@ class BabyAssessmentFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 

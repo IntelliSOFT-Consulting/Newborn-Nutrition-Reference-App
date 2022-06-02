@@ -181,7 +181,7 @@
     <string name="query_ip_search">IP Number</string>
     <string name="app_hint">Sort By</string>
     <string name="action_enter_stock">Enter DHM Stock</string>
-    <string name="action_view_dhm">View DHM Stock</string>
+    <string name="action_view_dhm">View DHM Orders</string>
     <string name="action_register_baby">Register a Baby</string>
     <string name="app_name_original">NNDAK</string>
     <string name="app_pumwani">Pumwani Maternity Hospital</string>
@@ -249,7 +249,7 @@
     <string name="menu_dhm">DHM</string>
     <string name="app_consent">Consent</string>
     <string name="app_consent_date">Date of Consent</string>
-    <string name="app_dhm_reason">Reasons for DHM</string>
+    <string name="app_dhm_reason">Reasons for Receiving DHM</string>
     <string name="app_additional">Additional Feeds</string>
     <string name="app_feeding_supplements">Feeding Supplements</string>
     <string name="app_add_dhm_recipient">Add DHM Recipient</string>
@@ -313,6 +313,7 @@
     <string name="action_feeding_tips">Feeding Tips</string>
     <string name="action_feeding_tips_explanation">Below are the Usual Tips for the Mother during Feeding. Indicate if followed</string>
     <string name="process">Process Order</string>
+    <string name="app_dispensing">Enter Dispencing Details</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

@@ -27,9 +27,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
-import com.intellisoft.nndak.screens.dashboard.DashboardFragment
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
+import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.screens.profile.ProfileActivity
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -40,6 +40,7 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
+    private val progressDialog = CustomProgressDialog()
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             }
             menu.lnSettings.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
+                progressDialog.show(this@MainActivity,"Please wait...")
                 viewModel.poll()
             }
         }
@@ -129,19 +131,14 @@ class MainActivity : AppCompatActivity() {
     fun setDrawerEnabled(enabled: Boolean) {
         val lockMode =
             if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-        binding.drawer.setDrawerLockMode(lockMode)
-        drawerToggle.isDrawerIndicatorEnabled = enabled
+        try {
+            binding.drawer.setDrawerLockMode(lockMode)
+            drawerToggle.isDrawerIndicatorEnabled = enabled
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
-    fun showBottom(b: Boolean) {
-       /* if (b) {
 
-            binding.navigation.visibility = View.VISIBLE
-        } else {
-
-            binding.navigation.visibility = View.GONE
-        }*/
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun openNavigationDrawer() {
@@ -192,7 +189,7 @@ class MainActivity : AppCompatActivity() {
                     findNavController(R.id.nav_host_fragment).navigate(R.id.babiesFragment)
                 }
                 R.id.registrationFragment -> {
-                 openRegistration()
+                    openRegistration()
                 }
             }
             false
@@ -260,11 +257,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: DashboardFragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment, fragment)
-        transaction.commit()
-    }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

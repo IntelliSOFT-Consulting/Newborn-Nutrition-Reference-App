@@ -76,7 +76,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
-        (activity as MainActivity).showBottom(true)
         try {
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientListViewModel =
@@ -89,7 +88,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 )
                     .get(PatientListViewModel::class.java)
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = OrdersAdapter(this::onPatientItemClicked)
+            val adapter = OrdersAdapter(this::onOrderClick)
             recyclerView.adapter = adapter
 
             patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
@@ -230,14 +229,12 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onPatientItemClicked(patientItem: OrdersItem) {
-
+    private fun onOrderClick(ordersItem: OrdersItem) {
+        findNavController().navigate(
+            DhmOrdersFragmentDirections.navigateToProcessing(ordersItem.patientId, ordersItem.resourceId),
+        )
     }
 
-
-    private fun onAddPatientClick() {
-
-    }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()

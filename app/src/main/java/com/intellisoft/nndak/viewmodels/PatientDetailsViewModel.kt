@@ -9,7 +9,6 @@ import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
-import com.google.android.fhir.search.Search
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.logic.Logics.Companion.assessment_unit_details
@@ -29,7 +28,6 @@ import com.intellisoft.nndak.logic.Logics.Companion.post_natal_child_supplements
 import com.intellisoft.nndak.logic.Logics.Companion.post_natal_milk_expression
 import com.intellisoft.nndak.logic.Logics.Companion.postnatal_unit_details
 import com.intellisoft.nndak.models.*
-import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getFormattedAge
 import kotlinx.coroutines.launch
@@ -52,8 +50,9 @@ class PatientDetailsViewModel(
     private val fhirEngine: FhirEngine,
     private val patientId: String
 ) : AndroidViewModel(application) {
-    val livePatientData = MutableLiveData<List<PatientDetailData>>()
+    private val livePatientData = MutableLiveData<List<PatientDetailData>>()
     val liveMumChild = MutableLiveData<MotherBabyItem>()
+    val liveOrder = MutableLiveData<OrdersItem>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
     val context: Application = application
 
@@ -946,12 +945,82 @@ class PatientDetailsViewModel(
         return conditions
     }
 
+    fun getOrder(orderId: String) {
+
+        viewModelScope.launch { liveOrder.value = getOrderDataModel(context, orderId) }
+    }
+    private suspend fun getMothersDetails(patientId: String): Triple<String?, String?, String?> {
+        val mother: MutableList<PatientItem> = mutableListOf()
+        fhirEngine
+            .search<Patient> {
+                filter(
+                    Patient.LINK, { value = "Patient/$patientId" }
+
+                )
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .mapIndexed { index, fhirPatient ->
+                fhirPatient.toPatientItem(
+                    index + 1
+                )
+
+            }
+            .let { mother.addAll(it) }
+        if (mother.isNotEmpty()) {
+            return Triple(mother[0].name, mother[0].resourceId, mother[0].id)
+
+        }
+        return Triple(null, null, null)
+    }
+
+    private suspend fun getOrderDataModel(context: Application, orderId: String): OrdersItem {
+        val nutrition = fhirEngine.load(NutritionOrder::class.java, orderId)
+        Timber.e("Nutrition Order ${nutrition.encounter.reference}")
+        val baby = getPatient()
+        val mother = getMothersDetails(patientId)
+        val motherName = mother.first.toString()
+        val motherIp = mother.second.toString()
+
+        /**
+         * Collect Observations from Encounter
+         */
+        var consent = ""
+        var dhm = ""
+        var reason = ""
+        val observations = getObservationsPerEncounter(nutrition.encounter.reference.drop(10))
+
+        if (observations.isNotEmpty()) {
+            for (element in observations) {
+                if (element.code == "Consent-Given") {
+                    consent = element.value
+                }
+                if (element.code == "DHM-Type") {
+                    dhm = element.value
+                }
+                if (element.code == "DHM-Reason") {
+                    reason = element.value
+                }
+            }
+        }
+
+        return OrdersItem(
+            id = orderId,
+            resourceId = orderId,
+            patientId = patientId,
+            ipNumber = motherIp,
+            motherName = motherName,
+            babyName = baby.name,
+            babyAge = getFormattedAge(baby.dob),
+            consentGiven = consent,
+            dhmType = dhm, dhmReason = reason
+        )
+    }
 
     companion object {
         /**
          * Creates RelatedPersonItem objects with displayable values from the Fhir RelatedPerson objects.
          */
-        private fun createRelatedPersonItem(
+        fun createRelatedPersonItem(
             relation: Patient,
             resources: Resources
         ): RelatedPersonItem {

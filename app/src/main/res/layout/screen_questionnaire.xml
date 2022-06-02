@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="3"
-    tools:context=".screens.dashboard.RegistrationFragment">
+    android:weightSum="3">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/add_patient_container"

@@ -38,6 +38,7 @@ class PatientListViewModel(
     val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
     val liveOrders = MutableLiveData<List<OrdersItem>>()
+    val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
     val patientCount = MutableLiveData<Long>()
 
     init {
@@ -50,6 +51,9 @@ class PatientListViewModel(
             { count("", location) })
         updateOrdersCount(
             { getOrdersSearchResults("", location) },
+            { count("", location) })
+        updateDhmDashboardCount(
+            { getDhmDashboardSearchResults("", location) },
             { count("", location) })
     }
 
@@ -64,6 +68,10 @@ class PatientListViewModel(
 
         updateOrdersCount(
             { getOrdersSearchResults(nameQuery, location) },
+            { count("", location) })
+
+        updateDhmDashboardCount(
+            { getDhmDashboardSearchResults(nameQuery, location) },
             { count("", location) })
     }
 
@@ -104,6 +112,21 @@ class PatientListViewModel(
     }
 
     /**
+     * DHM Dashboard Data
+     */
+
+
+    private fun updateDhmDashboardCount(
+        search: suspend () -> DHMDashboardItem,
+        count: suspend () -> Long
+    ) {
+        viewModelScope.launch {
+            liveDHMDashboard.value = search()
+            patientCount.value = count()
+        }
+    }
+
+    /**
      * Returns count of all the [Patient] who match the filter criteria unlike [getSearchResults]
      * which only returns a fixed range.
      */
@@ -122,6 +145,30 @@ class PatientListViewModel(
         }
     }
 
+    private suspend fun getDhmDashboardSearchResults(
+        nameQuery: String = "",
+        location: String
+    ): DHMDashboardItem {
+        /* val orders: MutableList<OrdersItem> = mutableListOf()
+         fhirEngine
+             .search<NutritionOrder> {
+                 sort(NutritionOrder.DATETIME, Order.ASCENDING)
+                 filterOrders(this)
+                 from = 0
+             }
+             .map {
+                 createOrdersItem(
+                     it
+                 )
+             }
+             .let {
+
+                 orders.addAll(it)
+             }*/
+
+        return DHMDashboardItem()
+    }
+
     private suspend fun getOrdersSearchResults(
         nameQuery: String = "",
         location: String
@@ -130,6 +177,7 @@ class PatientListViewModel(
         fhirEngine
             .search<NutritionOrder> {
                 sort(NutritionOrder.DATETIME, Order.ASCENDING)
+                filterOrders(this)
                 from = 0
             }
             .map {
@@ -143,6 +191,11 @@ class PatientListViewModel(
             }
 
         return orders
+    }
+
+
+    private fun filterOrders(search: Search) {
+        //search.filter(NutritionOrder.STATUS, { value =  })
     }
 
     private suspend fun getPatient(patientId: String): PatientItem {
@@ -171,6 +224,8 @@ class PatientListViewModel(
         val observations = getObservationsPerEncounter(encounterId)
 
         Timber.e("Encounter Id ******** $encounterId")
+        Timber.e("Nutrition Id ******** ${it.id}")
+        Timber.e("Nutrition Logical Id ******** ${it.logicalId}")
         if (observations.isNotEmpty()) {
             for (element in observations) {
                 if (element.code == "Consent-Given") {
@@ -185,6 +240,7 @@ class PatientListViewModel(
         return OrdersItem(
             id = it.id,
             resourceId = it.logicalId,
+            patientId = patientId,
             ipNumber = motherIp,
             motherName = motherName,
             babyName = baby.name,
@@ -420,6 +476,8 @@ class PatientListViewModel(
                     .firstOrNull()
             }
     }
+
+
 
 
     class PatientListViewModelFactory(

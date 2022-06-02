@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.screens.dashboard.child
+package com.intellisoft.nndak.screens.dashboard.feeding
 
 import android.os.Build
 import android.os.Bundle
@@ -19,9 +19,11 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
+import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -32,25 +34,35 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AddPrescriptionFragment.newInstance] factory method to
+ * Use the [BreastFeedingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AddPrescriptionFragment : Fragment() {
+class BreastFeedingFragment : Fragment() {
+    private lateinit var feedingCues: FeedingCuesDialog
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
-    private var _binding: FragmentAddPrescriptionBinding? = null
+    private lateinit var breastFeeding: String
+    private lateinit var efficientFeeding: String
+    private lateinit var effectiveExpression: String
+    private lateinit var expressedSufficient: String
+    private var _binding: FragmentBreastFeedingBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
-    private val args: AddPrescriptionFragmentArgs by navArgs()
+    private val args: BreastFeedingFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val b = arguments
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddPrescriptionBinding.inflate(inflater, container, false)
+        _binding = FragmentBreastFeedingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -58,7 +70,7 @@ class AddPrescriptionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.action_new_prescription)
+            title = resources.getString(R.string.action_provide_support)
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
@@ -69,14 +81,44 @@ class AddPrescriptionFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
+
         binding.apply {
-            btnSubmit.setOnClickListener {
-                onSubmitAction()
+
+            actionMilkExpression.setOnClickListener {
+                effectiveExpression = if (rbMotherYes.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+
+                expressedSufficient = if (rbVolumeYes.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                completeMilkExpression(effectiveExpression, expressedSufficient)
             }
-            btnCancel.setOnClickListener {
-                findNavController().navigateUp()
+            actionAssess.setOnClickListener {
+                handleShowCues()
             }
+            actionBreastFeeding.setOnClickListener {
+
+                breastFeeding = if (rbYes.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                efficientFeeding = if (rbEfiYes.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
+                completeBreastfeedingAssessment(breastFeeding, efficientFeeding)
+
+            }
+
         }
+
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_okay_message)
@@ -85,6 +127,66 @@ class AddPrescriptionFragment : Fragment() {
             this::proceedClick, resources.getString(R.string.app_okay_saved)
         )
 
+    }
+
+    private fun completeMilkExpression(effectiveExpression: String, expressedSufficient: String) {
+        val questionnaireFragment =
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+        val context = FhirContext.forR4()
+
+        val questionnaire =
+            context.newJsonParser()
+                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        Timber.e("Questionnaire  $questionnaire")
+        viewModel.milkExpressionAssessment(
+            questionnaireFragment.getQuestionnaireResponse(),
+            effectiveExpression,
+            expressedSufficient,
+            args.patientId
+        )
+
+    }
+
+    private fun completeBreastfeedingAssessment(breastFeeding: String, efficientFeeding: String) {
+        val questionnaireFragment =
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+        val context = FhirContext.forR4()
+
+        val questionnaire =
+            context.newJsonParser()
+                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        Timber.e("Questionnaire  $questionnaire")
+        viewModel.breastFeeding(
+            questionnaireFragment.getQuestionnaireResponse(),
+            breastFeeding,
+            efficientFeeding,
+            args.patientId
+        )
+    }
+
+    private fun handleShowCues() {
+        feedingCues = FeedingCuesDialog(this::feedingCuesClick)
+        feedingCues.show(childFragmentManager, "Feeding Cues")
+    }
+
+    private fun feedingCuesClick(cues: FeedingCuesTips) {
+        feedingCues.dismiss()
+        val questionnaireFragment =
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+        val context = FhirContext.forR4()
+
+        val questionnaire =
+            context.newJsonParser()
+                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        Timber.e("Questionnaire  $questionnaire")
+        viewModel.feedingCues(
+            questionnaireFragment.getQuestionnaireResponse(),
+            cues,
+            args.patientId
+        )
     }
 
     private fun okClick() {
@@ -97,17 +199,12 @@ class AddPrescriptionFragment : Fragment() {
         val questionnaire =
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.feedPrescription(
-            questionnaireFragment.getQuestionnaireResponse(), args.patientId
-        )
 
     }
 
     private fun proceedClick() {
         successDialog.dismiss()
         findNavController().navigateUp()
-
     }
 
     private fun observeResourcesSaveAction() {
@@ -124,11 +221,10 @@ class AddPrescriptionFragment : Fragment() {
             successDialog.show(childFragmentManager, "Success Details")
         }
 
-
     }
 
     private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "feed-prescription.json")
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "breast-feeding.json")
     }
 
     private fun addQuestionnaireFragment() {
@@ -138,7 +234,7 @@ class AddPrescriptionFragment : Fragment() {
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
                 add(
-                    R.id.add_patient_container, fragment,
+                    R.id.breast_feeding_container, fragment,
                     QUESTIONNAIRE_FRAGMENT_TAG
                 )
             }
@@ -159,10 +255,10 @@ class AddPrescriptionFragment : Fragment() {
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@AddPrescriptionFragment).navigateUp()
+                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
+                        NavHostFragment.findNavController(this@BreastFeedingFragment).navigateUp()
                     }
-                    setNegativeButton(getString(R.string.no)) { _, _ -> }
+                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
                 }
                 builder.create()
             }

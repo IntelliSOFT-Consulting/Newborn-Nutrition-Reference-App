@@ -67,7 +67,7 @@ class CuesFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
-        (activity as MainActivity).showBottom(false)
+
         binding.apply {
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -154,10 +154,10 @@ class CuesFragment : Fragment() {
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
+                    setPositiveButton(getString(R.string.yes)) { _, _ ->
                         NavHostFragment.findNavController(this@CuesFragment).navigateUp()
                     }
-                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
+                    setNegativeButton(getString(R.string.no)) { _, _ -> }
                 }
                 builder.create()
             }

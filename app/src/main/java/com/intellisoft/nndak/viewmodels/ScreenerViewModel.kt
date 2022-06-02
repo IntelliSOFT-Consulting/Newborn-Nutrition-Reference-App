@@ -1,10 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
@@ -17,7 +14,7 @@ import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.BasicThree
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.models.PatientItem
-import com.intellisoft.nndak.screens.ScreenerFragment
+import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,11 +27,6 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.math.BigDecimal
 import java.util.*
-
-import com.google.android.fhir.search.Order
-import com.google.android.fhir.search.Search
-import com.google.android.fhir.search.search
-import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 
 const val TAG = "ScreenerViewModel"
 
@@ -321,8 +313,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
                         isResourcesSaved.postValue(false)
@@ -660,8 +652,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
                         isResourcesSaved.value = false
@@ -944,7 +936,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     return@launch
 
                 }
-            }.join()
+            }
         }
     }
 
@@ -1988,7 +1980,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val bundle =
                 ResourceMapper.extract(
                     getApplication(),
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -2184,7 +2175,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             return it
         }
         questionnaireJson =
-            readFileFromAssets(state[ScreenerFragment.QUESTIONNAIRE_FILE_PATH_KEY]!!)
+            readFileFromAssets(state[QUESTIONNAIRE_FILE_PATH_KEY]!!)
         return questionnaireJson!!
     }
 
@@ -2464,123 +2455,129 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            try {
-                val json = JSONObject(questionnaire)
-                val common = json.getJSONArray("item")
-                for (i in 0 until common.length()) {
-                    val item = common.getJSONObject(i)
-                    val parent = item.getJSONArray("item")
-                    for (j in 0 until parent.length()) {
-                        val itemChild = parent.getJSONObject(j)
-                        val child = itemChild.getJSONArray("item")
-                        for (k in 0 until child.length()) {
-                            val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $inner")
-                            if (childChild == "Time-Expressed") {
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Feeding-Readiness",
-                                            cues.readiness, cues.readiness,
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 0 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $inner")
+                                if (childChild == "Time-Expressed") {
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Feeding-Readiness",
+                                                cues.readiness, cues.readiness,
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Latch",
-                                            cues.latch, cues.latch,
+                                                )
+                                        )
+                                        .request.url = "Observation"
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Steady Suck",
-                                            cues.steady, cues.steady,
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Latch",
+                                                cues.latch, cues.latch,
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Audible-Swallow",
-                                            cues.audible, cues.audible,
+                                                )
+                                        )
+                                        .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Steady Suck",
+                                                cues.steady, cues.steady,
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+                                                )
+                                        )
+                                        .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Audible-Swallow",
+                                                cues.audible, cues.audible,
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Chocking",
-                                            cues.chocking, cues.chocking,
+                                                )
+                                        )
+                                        .request.url = "Observation"
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Chocking",
+                                                cues.chocking, cues.chocking,
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "Breast-Softening",
-                                            cues.softening.toString(), cues.softening.toString(),
+                                                )
+                                        )
+                                        .request.url = "Observation"
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "Breast-Softening",
+                                                cues.softening.toString(),
+                                                cues.softening.toString(),
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "10-Minutes-Side",
-                                            cues.tenSide.toString(), cues.tenSide.toString(),
+                                                )
+                                        )
+                                        .request.url = "Observation"
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "10-Minutes-Side",
+                                                cues.tenSide.toString(), cues.tenSide.toString(),
 
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "2-3-Hours",
-                                            cues.threeHours.toString(), cues.threeHours.toString(),
+                                                )
+                                        )
+                                        .request.url = "Observation"
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
-                                bundle.addEntry()
-                                    .setResource(
-                                        qh.codingQuestionnaire(
-                                            "6-8-Wet-Diapers",
-                                            cues.sixDiapers.toString(), cues.sixDiapers.toString(),
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "2-3-Hours",
+                                                cues.threeHours.toString(),
+                                                cues.threeHours.toString(),
 
-                                            )
-                                    )
-                                    .request.url = "Observation"
+                                                )
+                                        )
+                                        .request.url = "Observation"
+                                    bundle.addEntry()
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "6-8-Wet-Diapers",
+                                                cues.sixDiapers.toString(),
+                                                cues.sixDiapers.toString(),
+
+                                                )
+                                        )
+                                        .request.url = "Observation"
+
+                                }
 
                             }
 
                         }
-
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+                val subjectReference = Reference("Patient/$patientId")
+
+                val encounterId = generateUuid()
+                title = "Feeding Cues"
+                saveResources(bundle, subjectReference, encounterId, title)
+                isResourcesSaved.postValue(true)
             }
-
-            val subjectReference = Reference("Patient/$patientId")
-
-            val encounterId = generateUuid()
-            title = "Feeding Cues"
-            saveResources(bundle, subjectReference, encounterId, title)
-            isResourcesSaved.value = true
         }
     }
 
@@ -2598,90 +2595,92 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            try {
-                if (isRequiredFieldMissing(bundle)) {
-                    isResourcesSaved.value = false
-                    return@launch
-                }
 
-                /**
-                 * Extract Observations, Patient Data
-                 */
-                val qh = QuestionnaireHelper()
-                var feed = ""
-                val json = JSONObject(questionnaire)
-                val common = json.getJSONArray("item")
-                for (i in 0 until common.length()) {
-                    val item = common.getJSONObject(i)
-                    val parent = item.getJSONArray("item")
-                    for (j in 0 until parent.length()) {
-                        val itemChild = parent.getJSONObject(j)
-                        val child = itemChild.getJSONArray("item")
-                        for (k in 0 until child.length()) {
-                            val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $child")
-                            if (childChild == "Milk-Expressed") {
-                                val volume = extractResponseQuantity(inner, "valueQuantity")
-                                if (volume.isNotEmpty()) {
-                                    Timber.e("Time: $volume")
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Milk-Expressed",
-                                            "Milk Expressed",
-                                            volume
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    if (isRequiredFieldMissing(bundle)) {
+                        isResourcesSaved.postValue(false)
+                        return@launch
+                    }
+
+                    /**
+                     * Extract Observations, Patient Data
+                     */
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 0 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $child")
+                                if (childChild == "Milk-Expressed") {
+                                    val volume = extractResponseQuantity(inner, "valueQuantity")
+                                    if (volume.isNotEmpty()) {
+                                        Timber.e("Time: $volume")
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Milk-Expressed",
+                                                "Milk Expressed",
+                                                volume
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Effective-Expression",
-                                            "Effective Expression",
-                                            effectiveExpression
+                                            .request.url = "Observation"
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Effective-Expression",
+                                                "Effective Expression",
+                                                effectiveExpression
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Sufficient-Expression",
-                                            "Sufficient Expression",
-                                            expressedSufficient
+                                            .request.url = "Observation"
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Sufficient-Expression",
+                                                "Sufficient Expression",
+                                                expressedSufficient
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Time-Expressed") {
-                                val volume = extractResponse(inner, "valueDateTime")
-                                Timber.e("Time: $volume")
-                                if (volume.isNotEmpty()) {
+                                if (childChild == "Time-Expressed") {
+                                    val volume = extractResponse(inner, "valueDateTime")
+                                    Timber.e("Time: $volume")
+                                    if (volume.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Time-Expressed",
-                                            "Time Expressed",
-                                            volume
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Time-Expressed",
+                                                "Time Expressed",
+                                                volume
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
                             }
                         }
                     }
+
+                    val encounterId = generateUuid()
+                    val subjectReference = Reference("Patient/$patientId")
+                    title = "Milk Expression"
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    isResourcesSaved.postValue(false)
+                    return@launch
                 }
-
-                val encounterId = generateUuid()
-                val subjectReference = Reference("Patient/$patientId")
-                title = "Milk Expression"
-                saveResources(bundle, subjectReference, encounterId, title)
-                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                isResourcesSaved.value = true
-
-            } catch (e: Exception) {
-                Timber.d("Exception:::: ${e.printStackTrace()}")
-                isResourcesSaved.value = false
-                return@launch
-
             }
         }
 
@@ -2702,88 +2701,87 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            try {
-                if (isRequiredFieldMissing(bundle)) {
-                    isResourcesSaved.value = false
-                    return@launch
-                }
 
-                /**
-                 * Extract Observations, Patient Data
-                 */
-                val qh = QuestionnaireHelper()
-                var feed = ""
-                val json = JSONObject(questionnaire)
-                val common = json.getJSONArray("item")
-                for (i in 0 until common.length()) {
-                    val item = common.getJSONObject(i)
-                    val parent = item.getJSONArray("item")
-                    for (j in 0 until parent.length()) {
-                        val itemChild = parent.getJSONObject(j)
-                        val child = itemChild.getJSONArray("item")
-                        for (k in 0 until child.length()) {
-                            val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $child")
-                            if (childChild == "Assessment-Date") {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "Proper-Positioning",
-                                        "Proper Positioning",
-                                        cues.latch
-                                    )
-                                )
-                                    .request.url = "Observation"
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "Stimulated-Nipples",
-                                        "Stimulated Nipples",
-                                        cues.readiness
-                                    )
-                                )
-                                    .request.url = "Observation"
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "Early-Latching",
-                                        "Early Latching",
-                                        cues.steady
-                                    )
-                                )
-                                    .request.url = "Observation"
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "Manual-Drops",
-                                        "Manual Drops",
-                                        cues.audible
-                                    )
-                                )
-                                    .request.url = "Observation"
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        "Baby-Awakens",
-                                        "Baby Awakens",
-                                        cues.chocking
-                                    )
-                                )
-                                    .request.url = "Observation"
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
 
+
+                    /**
+                     * Extract Observations, Patient Data
+                     */
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 0 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $child")
+                                if (childChild == "Assessment-Date") {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Proper-Positioning",
+                                            "Proper Positioning",
+                                            cues.latch
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Stimulated-Nipples",
+                                            "Stimulated Nipples",
+                                            cues.readiness
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Early-Latching",
+                                            "Early Latching",
+                                            cues.steady
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Manual-Drops",
+                                            "Manual Drops",
+                                            cues.audible
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Baby-Awakens",
+                                            "Baby Awakens",
+                                            cues.chocking
+                                        )
+                                    )
+                                        .request.url = "Observation"
+
+                                }
                             }
                         }
                     }
+
+                    val encounterId = generateUuid()
+                    val subjectReference = Reference("Patient/$patientId")
+                    title = "Baby Assessment"
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    isResourcesSaved.postValue(false)
+                    return@launch
                 }
-
-                val encounterId = generateUuid()
-                val subjectReference = Reference("Patient/$patientId")
-                title = "Baby Assessment"
-                saveResources(bundle, subjectReference, encounterId, title)
-                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                isResourcesSaved.value = true
-
-            } catch (e: Exception) {
-                Timber.d("Exception:::: ${e.printStackTrace()}")
-                isResourcesSaved.value = false
-                return@launch
-
             }
         }
     }
@@ -2802,167 +2800,166 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            try {
-                if (isRequiredFieldMissing(bundle)) {
-                    isResourcesSaved.value = false
-                    return@launch
-                }
 
-                /**
-                 * Extract Observations, Patient Data
-                 */
-                val qh = QuestionnaireHelper()
-                var feed = ""
-                val json = JSONObject(questionnaire)
-                val common = json.getJSONArray("item")
-                for (i in 0 until common.length()) {
-                    val item = common.getJSONObject(i)
-                    val parent = item.getJSONArray("item")
-                    for (j in 0 until parent.length()) {
-                        val itemChild = parent.getJSONObject(j)
-                        val child = itemChild.getJSONArray("item")
-                        for (k in 0 until child.length()) {
-                            val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $child")
-                            when (childChild) {
-                                "Assessment-Date" -> {
-                                    val value = extractResponse(inner, "valueDateTime")
-                                    if (value.isNotEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
 
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "50786-3",
-                                                "Assessment Date",
-                                                value
+
+                    /**
+                     * Extract Observations, Patient Data
+                     */
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 0 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $child")
+                                when (childChild) {
+                                    "Assessment-Date" -> {
+                                        val value = extractResponse(inner, "valueDateTime")
+                                        if (value.isNotEmpty()) {
+
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "50786-3",
+                                                    "Assessment Date",
+                                                    value
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Feeding-IV" -> {
-                                    val value = extractResponseQuantity(inner, "valueQuantity")
-                                    if (value.isNotEmpty()) {
+                                    "Feeding-IV" -> {
+                                        val value = extractResponseQuantity(inner, "valueQuantity")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "IV-Volume",
-                                                "IV Volume",
-                                                "IV Volume",
-                                                value,
-                                                "ml"
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "IV-Volume",
+                                                    "IV Volume",
+                                                    "IV Volume",
+                                                    value,
+                                                    "ml"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "DHM-Volume" -> {
-                                    val value = extractResponseQuantity(inner, "valueQuantity")
-                                    if (value.isNotEmpty()) {
+                                    "DHM-Volume" -> {
+                                        val value = extractResponseQuantity(inner, "valueQuantity")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "DHM-Volume",
-                                                "DHM Volume",
-                                                "DHM Volume",
-                                                value, "ml"
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "DHM-Volume",
+                                                    "DHM Volume",
+                                                    "DHM Volume",
+                                                    value, "ml"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "EBM-Volume" -> {
-                                    val value = extractResponseQuantity(inner, "valueQuantity")
-                                    if (value.isNotEmpty()) {
+                                    "EBM-Volume" -> {
+                                        val value = extractResponseQuantity(inner, "valueQuantity")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "EBM-Volume",
-                                                "EBM Volume",
-                                                "EBM Volume",
-                                                value, "ml"
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "EBM-Volume",
+                                                    "EBM Volume",
+                                                    "EBM Volume",
+                                                    value, "ml"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Vomit" -> {
-                                    val value = extractResponseCode(inner, "valueCoding")
-                                    if (value.isNotEmpty()) {
+                                    "Vomit" -> {
+                                        val value = extractResponseCode(inner, "valueCoding")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Vomit",
-                                                "Vomit",
-                                                value
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "Vomit",
+                                                    "Vomit",
+                                                    value
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Stool" -> {
-                                    val value = extractResponseCode(inner, "valueCoding")
-                                    if (value.isNotEmpty()) {
+                                    "Stool" -> {
+                                        val value = extractResponseCode(inner, "valueCoding")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Stool",
-                                                "Stool",
-                                                value
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "Stool",
+                                                    "Stool",
+                                                    value
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Diaper-Changed" -> {
-                                    val value = extractResponseQuantity(inner, "valueQuantity")
-                                    if (value.isNotEmpty()) {
+                                    "Diaper-Changed" -> {
+                                        val value = extractResponseQuantity(inner, "valueQuantity")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "Diaper-Changed",
-                                                "Diaper Changed",
-                                                "Diaper Changed",
-                                                value, "pcs"
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "Diaper-Changed",
+                                                    "Diaper Changed",
+                                                    "Diaper Changed",
+                                                    value, "pcs"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Adjust-Prescription" -> {
-                                    val value = extractResponseCode(inner, "valueCoding")
-                                    if (value.isNotEmpty()) {
+                                    "Adjust-Prescription" -> {
+                                        val value = extractResponseCode(inner, "valueCoding")
+                                        if (value.isNotEmpty()) {
 
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Adjust-Prescription",
-                                                "Adjust-Prescription",
-                                                value
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "Adjust-Prescription",
+                                                    "Adjust-Prescription",
+                                                    value
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                else -> {
-                                    println("Skip...")
+                                    else -> {
+                                        println("Skip...")
+                                    }
                                 }
                             }
                         }
                     }
+
+                    val encounterId = generateUuid()
+                    val subjectReference = Reference("Patient/$patientId")
+                    title = "Baby Assessment"
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    isResourcesSaved.postValue(false)
+                    return@launch
                 }
-
-                val encounterId = generateUuid()
-                val subjectReference = Reference("Patient/$patientId")
-                title = "Baby Assessment"
-                saveResources(bundle, subjectReference, encounterId, title)
-                generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                isResourcesSaved.value = true
-
-            } catch (e: Exception) {
-                Timber.d("Exception:::: ${e.printStackTrace()}")
-                isResourcesSaved.value = false
-                return@launch
-
             }
         }
     }
@@ -2978,8 +2975,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-            val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
                         isResourcesSaved.postValue(false)
@@ -2994,7 +2991,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val qh = QuestionnaireHelper()
 
-                    var date = FormatHelper().getTodayDate()
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
@@ -3108,21 +3104,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         }
                                     }
 
-                                    "DHM-Reasons" -> {
-                                        if (dhm == "Yes") {
+                                    "DHM-Reason" -> {
 
-                                            val value = extractResponse(inner, "valueString")
-                                            if (value.isNotEmpty()) {
-                                                bundle.addEntry().setResource(
-                                                    qh.codingQuestionnaire(
-                                                        "DHM-Reasons",
-                                                        "DHM-Reasons",
-                                                        value,
-                                                    )
+                                        val value = extractResponse(inner, "valueString")
+                                        if (value.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "DHM-Reason",
+                                                    "DHM Reason",
+                                                    value,
                                                 )
-                                                    .request.url = "Observation"
-                                            }
+                                            )
+                                                .request.url = "Observation"
                                         }
+
                                     }
 
                                     else -> {
@@ -3146,7 +3141,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     return@launch
 
                 }
-            }.join()
+            }
         }
     }
 
@@ -3164,12 +3159,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         title = "DHM Recipient"
 
         val subjectReference = Reference("Patient/$babyIp")
+        subjectReference.display = baby.name
+
         val encounterReference = Reference("Encounter/$encounterId")
+        encounterReference.display = title
+
+
         val nutritionOrder = NutritionOrder()
         nutritionOrder.id = generateUuid()
         nutritionOrder.patient = subjectReference
         nutritionOrder.encounter = encounterReference
+        nutritionOrder.status = NutritionOrder.NutritionOrderStatus.ACTIVE
         nutritionOrder.dateTime = Date()
+        nutritionOrder.intent = NutritionOrder.NutritiionOrderIntent.ORDER
 
         fhirEngine.create(nutritionOrder)
 
@@ -3194,89 +3196,193 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
-            try {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
 
-                val qh = QuestionnaireHelper()
+                    val qh = QuestionnaireHelper()
 
-                val json = JSONObject(questionnaire)
-                val common = json.getJSONArray("item")
-                for (i in 0 until common.length()) {
-                    val item = common.getJSONObject(i)
-                    val parent = item.getJSONArray("item")
-                    for (j in 1 until parent.length()) {
-                        val itemChild = parent.getJSONObject(j)
-                        val child = itemChild.getJSONArray("item")
-                        for (k in 0 until child.length()) {
-                            val inner = child.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $child")
-                            when (childChild) {
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 1 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $child")
+                                when (childChild) {
 
-                                "Unpasteurized" -> {
-                                    unpasteurized = extractResponse(inner, "valueInteger")
-                                    if (unpasteurized.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "Unpasteurized",
-                                                "Unpasteurized",
-                                                "Unpasteurized",
-                                                unpasteurized, "mls"
+                                    "Unpasteurized" -> {
+                                        unpasteurized = extractResponse(inner, "valueInteger")
+                                        if (unpasteurized.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "Unpasteurized",
+                                                    "Unpasteurized",
+                                                    "Unpasteurized",
+                                                    unpasteurized, "mls"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
-                                "Pasteurized" -> {
-                                    pasteurized = extractResponse(inner, "valueInteger")
-                                    if (pasteurized.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "Pasteurized",
-                                                "Pasteurized",
-                                                "Pasteurized",
-                                                pasteurized, "mls"
+                                    "Pasteurized" -> {
+                                        pasteurized = extractResponse(inner, "valueInteger")
+                                        if (pasteurized.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "Pasteurized",
+                                                    "Pasteurized",
+                                                    "Pasteurized",
+                                                    pasteurized, "mls"
+                                                )
                                             )
-                                        )
-                                            .request.url = "Observation"
+                                                .request.url = "Observation"
+                                        }
                                     }
-                                }
 
 
-                                else -> {
-                                    println("Items skipped...")
+                                    else -> {
+                                        println("Items skipped...")
+                                    }
                                 }
                             }
                         }
                     }
+
+                    val total = Integer.parseInt(unpasteurized) + Integer.parseInt(pasteurized)
+                    bundle.addEntry().setResource(
+                        qh.quantityQuestionnaire(
+                            "Total-Stock",
+                            "Total Stock",
+                            "Total Stock",
+                            total.toString(), "mls"
+                        )
+                    )
+                        .request.url = "Observation"
+
+                    val subjectReference = Reference("Patient/${generateUuid()}")
+                    title = "DHM Stock"
+                    val encounterId = generateUuid()
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    isResourcesSaved.postValue(false)
+                    return@launch
+
                 }
 
-                val total = Integer.parseInt(unpasteurized) + Integer.parseInt(pasteurized)
-                bundle.addEntry().setResource(
-                    qh.quantityQuestionnaire(
-                        "Total-Stock",
-                        "Total Stock",
-                        "Total Stock",
-                        total.toString(), "mls"
-                    )
-                )
-                    .request.url = "Observation"
-
-                val subjectReference = Reference("Patient/${generateUuid()}")
-                title = "DHM Stock"
-                val encounterId = generateUuid()
-                saveResources(bundle, subjectReference, encounterId, title)
-                isResourcesSaved.postValue(true)
-
-            } catch (e: Exception) {
-                Timber.d("Exception:::: ${e.printStackTrace()}")
-                isResourcesSaved.postValue(false)
-                return@launch
-
             }
-
         }
     }
 
+    fun dispensingDetails(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    getApplication(),
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val item = common.getJSONObject(i)
+                        val parent = item.getJSONArray("item")
+                        for (j in 1 until parent.length()) {
+                            val itemChild = parent.getJSONObject(j)
+                            val child = itemChild.getJSONArray("item")
+                            for (k in 0 until child.length()) {
+                                val inner = child.getJSONObject(k)
+                                val childChild = inner.getString("linkId")
+                                Timber.e("Child $child")
+                                when (childChild) {
+
+                                    "Volume" -> {
+                                        val volume = extractResponseQuantity(inner, "valueQuantity")
+                                        if (volume.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.quantityQuestionnaire(
+                                                    "Volume-Dispensed",
+                                                    "Volume Dispensed",
+                                                    "Volume Dispensed",
+                                                    volume, "mls"
+                                                )
+                                            )
+                                                .request.url = "Observation"
+                                        }
+                                    }
+                                    "DHM-Type" -> {
+                                        val type = extractResponseCode(inner, "valueCoding")
+                                        if (type.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "DHM-Type",
+                                                    "DHM Type",
+                                                    type
+                                                )
+                                            )
+                                                .request.url = "Observation"
+                                        }
+                                    }
+                                    "Additional-Notes" -> {
+                                        val type = extractResponse(inner, "valueString")
+                                        if (type.isNotEmpty()) {
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "Additional-Notes",
+                                                    "Additional Notes and Remarks",
+                                                    type,
+                                                )
+                                            )
+                                                .request.url = "Observation"
+                                        }
+                                    }
+
+
+                                    else -> {
+                                        println("Items skipped...")
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    val subjectReference = Reference("Patient/$patientId}")
+                    title = "DHM Dispensing"
+                    val encounterId = generateUuid()
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    isResourcesSaved.postValue(false)
+                    return@launch
+
+                }
+
+            }
+        }
+    }
+
+
 }
+
+
+
 
 

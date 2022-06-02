@@ -49,11 +49,8 @@ class StatisticsFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-        (activity as MainActivity).showBottom(false)
         binding.apply {
-//            lnBabyDashboard.setOnClickListener {
-//                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyDashboard())
-//            }
+
         }
 
     }

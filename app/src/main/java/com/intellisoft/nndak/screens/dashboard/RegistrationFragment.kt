@@ -15,24 +15,23 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.helper_class.QuestionnaireHelper
-import com.intellisoft.nndak.screens.ScreenerFragment
-import com.intellisoft.nndak.screens.ScreenerFragmentArgs
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import com.intellisoft.nndak.widgets.CustomQuestionnaireFragment
 import timber.log.Timber
 
 class RegistrationFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
+    private val progressDialog = CustomProgressDialog()
     private lateinit var patientId: String
     private var _binding: FragmentRegistrationBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
@@ -45,9 +44,6 @@ class RegistrationFragment : Fragment() {
 
     }
 
-    private fun toggleProgress(visible: Boolean) {
-        binding.progressBar.isVisible = visible
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +68,6 @@ class RegistrationFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
-        (activity as MainActivity).showBottom(false)
         binding.apply {
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -94,9 +89,10 @@ class RegistrationFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        toggleProgress(true)
+      //  progressDialog.show(requireActivity(), "Please Wait...")
+
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 
@@ -121,6 +117,8 @@ class RegistrationFragment : Fragment() {
 
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
+
+
             if (!it) {
                 Toast.makeText(
                     requireContext(),
@@ -128,10 +126,10 @@ class RegistrationFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
-                toggleProgress(false)
+                progressDialog.dialog.dismiss()
                 return@observe
             }
-            toggleProgress(false)
+            progressDialog.dialog.dismiss()
             successDialog.show(childFragmentManager, "Success Details")
         }
 
@@ -144,7 +142,7 @@ class RegistrationFragment : Fragment() {
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = QuestionnaireFragment()
+            val fragment = CustomQuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
@@ -170,10 +168,10 @@ class RegistrationFragment : Fragment() {
                 val builder = AlertDialog.Builder(it)
                 builder.apply {
                     setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
+                    setPositiveButton(getString(R.string.yes)) { _, _ ->
                         NavHostFragment.findNavController(this@RegistrationFragment).navigateUp()
                     }
-                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
+                    setNegativeButton(getString(R.string.no)) { _, _ -> }
                 }
                 builder.create()
             }

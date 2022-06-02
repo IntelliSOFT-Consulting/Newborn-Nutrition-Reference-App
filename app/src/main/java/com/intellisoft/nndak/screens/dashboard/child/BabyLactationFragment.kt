@@ -74,36 +74,37 @@ class BabyLactationFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
 
-            if (it != null) {
+            if (motherBabyItem != null) {
                 binding.apply {
-                    val gest = it.dashboard?.gestation ?: ""
-                    val status = it.status
-                    incDetails.tvBabyName.text = it.babyName
-                    incDetails.tvMumName.text = it.motherName
-                    incDetails.appBirthWeight.text = it.birthWeight
+                    val gest = motherBabyItem.dashboard.gestation ?: ""
+                    val status = motherBabyItem.status
+                    incDetails.tvBabyName.text = motherBabyItem.babyName
+                    incDetails.tvMumName.text = motherBabyItem.motherName
+                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = it.dashboard?.apgarScore ?: ""
-                    incDetails.appMumIp.text = it.motherIp
-                    incDetails.appBabyWell.text = it.dashboard?.babyWell ?: ""
-                    incDetails.appAsphyxia.text = it.dashboard?.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = it.dashboard?.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = it.dashboard?.jaundice ?: ""
-                    incDetails.appBirthDate.text = it.dashboard?.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = it.dashboard?.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = it.dashboard?.dateOfAdm ?: ""
+                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = motherBabyItem.motherIp
+                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
+                    incDetails.appNeonatalSepsis.text =
+                        motherBabyItem.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
 
                     /**
                      * Mum Details
                      */
-                    incMum.tvMumName.text = it.motherName
-                    incMum.appIpNumber.text = it.motherIp
-                    incMum.appDeliveryMethod.text = it.mother.deliveryMethod
-                    incMum.appParity.text = it.mother.parity
-                    incMum.appPmctcStatus.text = it.mother.pmtctStatus
-                    incMum.appDeliveryDate.text = it.mother.deliveryDate
-                    incMum.appMultiplePregnancy.text = it.mother.multiPregnancy
+                    incMum.tvMumName.text = motherBabyItem.motherName
+                    incMum.appIpNumber.text = motherBabyItem.motherIp
+                    incMum.appDeliveryMethod.text = motherBabyItem.mother.deliveryMethod
+                    incMum.appParity.text = motherBabyItem.mother.parity
+                    incMum.appPmctcStatus.text = motherBabyItem.mother.pmtctStatus
+                    incMum.appDeliveryDate.text = motherBabyItem.mother.deliveryDate
+                    incMum.appMultiplePregnancy.text = motherBabyItem.mother.multiPregnancy
 
                 }
             }
@@ -111,7 +112,7 @@ class BabyLactationFragment : Fragment() {
 
         binding.apply {
             actionProvideSupport.setOnClickListener {
-                findNavController().navigate(BabyLactationFragmentDirections.navigateToFeding(args.patientId))
+                findNavController().navigate(BabyLactationFragmentDirections.navigateToFeeding(args.patientId))
             }
         }
 

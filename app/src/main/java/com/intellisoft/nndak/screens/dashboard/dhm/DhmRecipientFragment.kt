@@ -21,7 +21,6 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.ScreenerFragment
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -68,14 +67,8 @@ class DhmRecipientFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
-        (activity as MainActivity).showBottom(false)
         binding.apply {
-            btnSubmit.setOnClickListener {
-                onSubmitAction()
-            }
-            btnCancel.setOnClickListener {
-                findNavController().navigateUp()
-            }
+
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
@@ -90,7 +83,7 @@ class DhmRecipientFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(ScreenerFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 

@@ -91,12 +91,14 @@ data class Steps(
 data class OrdersItem(
     val id: String,
     val resourceId: String,
+    val patientId: String,
     val ipNumber: String? = "",
     val motherName: String? = "",
     val babyName: String? = "",
     val babyAge: String? = "",
     val dhmType: String? = "",
     val consentGiven: String? = "",
+    val dhmReason: String? = "",
 )
 
 /**
@@ -194,6 +196,18 @@ data class PrescriptionItem(
     val additionalFeeds: String? = "",
     val supplements: String? = "",
     val expressions: String? = ""
+) {
+    override fun toString(): String = resourceId.toString()
+}
+
+data class DHMDashboardItem(
+    val id: String? = "",
+    val resourceId: String? = "",
+    val dhmInfants: String? = "",
+    val dhmVolume: String? = "",
+    val dhmAverageVolume: String? = "",
+    val dhmFullyInfants: String? = "",
+    val dhmAverageLength: String? = "",
 ) {
     override fun toString(): String = resourceId.toString()
 }

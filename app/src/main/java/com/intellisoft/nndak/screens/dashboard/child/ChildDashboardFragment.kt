@@ -20,13 +20,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
-import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentBabiesBinding
-import com.intellisoft.nndak.databinding.FragmentChildBinding
+import com.intellisoft.nndak.R 
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
-import com.intellisoft.nndak.models.MotherBabyItem
-import com.intellisoft.nndak.screens.children.ChildFragmentDirections
-import com.intellisoft.nndak.screens.patients.PatientDetailsFragmentArgs
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber

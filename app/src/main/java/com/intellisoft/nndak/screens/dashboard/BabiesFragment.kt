@@ -1,8 +1,6 @@
 package com.intellisoft.nndak.screens.dashboard
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -10,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -19,10 +16,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
@@ -30,23 +24,12 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
-import com.intellisoft.nndak.adapters.MaternityDetails
-import com.intellisoft.nndak.adapters.PatientItemRecyclerViewAdapter
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
-import com.intellisoft.nndak.databinding.FragmentNewBornBinding
-import com.intellisoft.nndak.databinding.FragmentPatientListBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.roomdb.HealthViewModel
-import com.intellisoft.nndak.screens.newborn.NewBornFragmentArgs
-import com.intellisoft.nndak.screens.newborn.NewBornFragmentDirections
-import com.intellisoft.nndak.screens.patients.PatientListFragmentArgs
-import com.intellisoft.nndak.screens.patients.PatientListFragmentDirections
-import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -95,7 +78,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             title = resources.getString(R.string.home_babies)
             setDisplayHomeAsUpEnabled(true)
         }
-        (activity as MainActivity).showBottom(true)
         try {
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientListViewModel =

@@ -54,7 +54,7 @@ class DownloadManagerImpl : DownloadWorkManager {
             for (i in 0 until response.total) {
                 Timber.e("Type::: ${response.entry[i].resource.resourceType}")
                 val type = response.entry[i].resource.resourceType.toString()
-                if (type.contains("Patient")) {
+                if (type.contains("Patient")||type.contains("Encounter")) {
 
                     val u = "${response.entry[i].fullUrl}/\$everything"
                     urls.add(u)

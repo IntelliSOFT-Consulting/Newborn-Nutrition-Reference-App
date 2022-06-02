@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -36,7 +37,7 @@ android {
     }
     packagingOptions {
         resources {
-            pickFirsts += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt','META-INF/sun-jaxb.episode']
+            pickFirsts += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt', 'META-INF/sun-jaxb.episode']
         }
     }
 

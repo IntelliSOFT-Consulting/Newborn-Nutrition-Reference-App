@@ -225,7 +225,7 @@ class BabyMonitoringFragment : Fragment() {
     private fun feedingCuesClick(cues: FeedingCuesTips) {
         feedingCues.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(BreastFeedingFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 
@@ -241,7 +241,7 @@ class BabyMonitoringFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(BreastFeedingFragment.QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
         val context = FhirContext.forR4()
 
