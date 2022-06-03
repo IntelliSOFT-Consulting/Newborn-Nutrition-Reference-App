@@ -71,7 +71,6 @@
         {
           "linkId": "3.0.0",
           "type": "group",
-          "text": "Feeding",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -107,7 +106,6 @@
         {
           "linkId": "3.0.0",
           "type": "group",
-          "text": "Feeding",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -143,7 +141,6 @@
         {
           "linkId": "3.0.0",
           "type": "group",
-          "text": "Feeding",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -191,7 +188,6 @@
             }
           ],
           "item": [
-
             {
               "linkId": "Vomit",
               "type": "group",
@@ -257,7 +253,6 @@
         {
           "linkId": "3.0.0",
           "type": "group",
-
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -269,7 +264,6 @@
             }
           ],
           "item": [
-
             {
               "linkId": "Stool",
               "type": "group",
@@ -371,7 +365,6 @@
         {
           "linkId": "3.0.0",
           "type": "group",
-
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -383,7 +376,6 @@
             }
           ],
           "item": [
-
             {
               "linkId": "Adjust-Prescription",
               "type": "group",

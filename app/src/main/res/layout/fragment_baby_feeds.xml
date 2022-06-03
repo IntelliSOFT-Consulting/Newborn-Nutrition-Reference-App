@@ -54,11 +54,8 @@
             android:id="@+id/prescription_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:scrollbars="vertical"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".PatientListActivity"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/_100dp"
             tools:listitem="@layout/prescription_list_item" />

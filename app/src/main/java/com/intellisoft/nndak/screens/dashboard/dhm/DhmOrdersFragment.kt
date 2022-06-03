@@ -1,6 +1,8 @@
 package com.intellisoft.nndak.screens.dashboard.dhm
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -18,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
@@ -35,6 +38,7 @@ import com.intellisoft.nndak.models.OrdersItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.dashboard.BabiesFragmentDirections
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
+import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
@@ -85,12 +89,17 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         requireActivity().application,
                         fhirEngine, "0"
                     )
-                )
-                    .get(PatientListViewModel::class.java)
+                ).get(PatientListViewModel::class.java)
+
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
             val adapter = OrdersAdapter(this::onOrderClick)
             recyclerView.adapter = adapter
+            recyclerView.addItemDecoration(
 
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                    setDrawable(ColorDrawable(Color.LTGRAY))
+                }
+            )
             patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
 
                 binding.pbLoading.visibility = View.GONE
@@ -115,9 +124,9 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mySpinner.onItemSelectedListener = this
 
 
-        patientListViewModel.patientCount.observe(
-            viewLifecycleOwner
-        ) { binding.patientListContainer.patientCount.text = "$it Patient(s)" }
+        patientListViewModel.patientCount.observe(viewLifecycleOwner) {
+            binding.patientListContainer.patientCount.text = "$it Patient(s)"
+        }
         searchView = binding.search
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -183,6 +192,13 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
 
         binding.apply {
+            boldText(binding.incTitle.appMotherName)
+            boldText(binding.incTitle.appIpNumber)
+            boldText(binding.incTitle.appBabyName)
+            boldText(binding.incTitle.appBabyAge)
+            boldText(binding.incTitle.appDhmType)
+            boldText(binding.incTitle.appConsent)
+            boldText(binding.incTitle.appAction)
             actionAddRecipient.setOnClickListener {
                 val bundle =
                     bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "client-registration.json")
@@ -231,7 +247,10 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun onOrderClick(ordersItem: OrdersItem) {
         findNavController().navigate(
-            DhmOrdersFragmentDirections.navigateToProcessing(ordersItem.patientId, ordersItem.resourceId),
+            DhmOrdersFragmentDirections.navigateToProcessing(
+                ordersItem.patientId,
+                ordersItem.resourceId
+            ),
         )
     }
 

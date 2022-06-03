@@ -34,6 +34,9 @@ import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -164,8 +167,10 @@ class BabyMonitoringFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                (activity as MainActivity).hideDialog()
                 return@observe
             }
+            (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
 
@@ -224,35 +229,44 @@ class BabyMonitoringFragment : Fragment() {
 
     private fun feedingCuesClick(cues: FeedingCuesTips) {
         feedingCues.dismiss()
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val context = FhirContext.forR4()
+        (activity as MainActivity).displayDialog()
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.babyMonitoringCues(
-            questionnaireFragment.getQuestionnaireResponse(), cues, args.patientId
-        )
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.babyMonitoringCues(
+                questionnaireFragment.getQuestionnaireResponse(), cues, args.patientId
+            )
+        }
     }
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
+            val context = FhirContext.forR4()
 
-        viewModel.babyMonitoring(
-            questionnaireFragment.getQuestionnaireResponse(), args.patientId
-        )
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+
+            viewModel.babyMonitoring(
+                questionnaireFragment.getQuestionnaireResponse(), args.patientId
+            )
+        }
     }
 
     private fun proceedClick() {

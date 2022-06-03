@@ -355,8 +355,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             val words =
                                                 mumsName.split("\\s".toRegex()).toTypedArray()
                                             try {
-                                                mother.nameFirstRep.family = words[0]
-                                                mother.nameFirstRep.addGiven(words[1])
+                                                mother.nameFirstRep.family = words[1]
+                                                mother.nameFirstRep.addGiven(words[0])
                                             } catch (e: Exception) {
                                                 isResourcesSaved.postValue(false)
                                                 return@launch
@@ -476,8 +476,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     "Baby-Name" -> {
                                         val mumsName = extractResponse(inner, "valueString")
                                         val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                        baby.nameFirstRep.family = words[0]
-                                        baby.nameFirstRep.addGiven(words[1])
+                                        baby.nameFirstRep.family = words[1]
+                                        baby.nameFirstRep.addGiven(words[0])
                                     }
                                     "Baby-Sex" -> {
                                         when (extractResponseCode(inner, "valueCoding")) {
@@ -2144,6 +2144,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.reasonCodeFirstRep.text = reason
                     saveResourceToDatabase(resource)
                 }
+             
             }
         }
     }
@@ -3264,10 +3265,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                         .request.url = "Observation"
 
-                    val subjectReference = Reference("Patient/${generateUuid()}")
                     title = "DHM Stock"
                     val encounterId = generateUuid()
-                    saveResources(bundle, subjectReference, encounterId, title)
+
+
                     isResourcesSaved.postValue(true)
 
                 } catch (e: Exception) {

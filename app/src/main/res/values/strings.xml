@@ -262,7 +262,7 @@
     <string name="action_preterm">Preterm Babies</string>
     <string name="action_term">Term Babies</string>
     <string name="action_average_days">Average days to fully receiving mothers milk</string>
-    <string name="action_total_dhm">Total of volume DHM available</string>
+    <string name="action_total_dhm">Total Volume of DHM available</string>
     <string name="action_average_dhm">Avg. volume of DHM use per day</string>
     <string name="action_infants">Infants fully receiving DHM</string>
     <string name="action_dhm_length">Average length of DHM use</string>
@@ -314,6 +314,7 @@
     <string name="action_feeding_tips_explanation">Below are the Usual Tips for the Mother during Feeding. Indicate if followed</string>
     <string name="process">Process Order</string>
     <string name="app_dispensing">Enter Dispencing Details</string>
+    <string name="app_review_pres">Review Prescription Details</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

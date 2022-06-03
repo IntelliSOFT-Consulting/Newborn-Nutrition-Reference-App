@@ -192,5 +192,10 @@
             android:name="order"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.intellisoft.nndak.screens.profile.ProfileFragment"
+        android:label="@string/action_profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

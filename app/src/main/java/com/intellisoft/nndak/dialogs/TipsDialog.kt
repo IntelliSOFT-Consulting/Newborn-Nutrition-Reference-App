@@ -40,6 +40,9 @@ class TipsDialog(
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+            lnCancel.setOnClickListener {
+                dialog?.dismiss()
+            }
             btnSubmit.setOnClickListener {
                 val readiness = if (rbYesReadiness.isChecked) {
                     "Yes"

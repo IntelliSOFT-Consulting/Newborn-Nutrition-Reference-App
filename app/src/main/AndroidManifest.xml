@@ -20,11 +20,6 @@
             android:exported="false"
             android:label=""
             android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".screens.profile.ProfileActivity"
-            android:exported="false"
-            android:label=""
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".auth.SplashActivity"

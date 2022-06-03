@@ -53,7 +53,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:orientation="vertical">
 
@@ -77,7 +77,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_25sp" />
+                            android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_25sp" />
+                            android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:orientation="vertical">
 
@@ -215,7 +215,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_25sp" />
+                            android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -258,7 +258,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -271,12 +271,12 @@
                         android:padding="@dimen/_5dp">
 
                         <TextView
+                            android:id="@+id/tv_expression_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                         android:id="@+id/tv_expression_number"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_25sp" />
+                            android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="match_parent"

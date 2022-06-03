@@ -26,12 +26,14 @@ import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import com.intellisoft.nndak.widgets.CustomQuestionnaireFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RegistrationFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
-    private val progressDialog = CustomProgressDialog()
     private lateinit var patientId: String
     private var _binding: FragmentRegistrationBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
@@ -89,21 +91,23 @@ class RegistrationFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
-      //  progressDialog.show(requireActivity(), "Please Wait...")
+        (activity as MainActivity).displayDialog()
 
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val context = FhirContext.forR4()
+            val context = FhirContext.forR4()
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        patientId = generateUuid()
-        viewModel.clientRegistration(
-            questionnaireFragment.getQuestionnaireResponse(), patientId
-        )
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            patientId = generateUuid()
+            viewModel.clientRegistration(
+                questionnaireFragment.getQuestionnaireResponse(), patientId
+            )
+        }
     }
 
     private fun proceedClick() {
@@ -118,7 +122,6 @@ class RegistrationFragment : Fragment() {
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
 
-
             if (!it) {
                 Toast.makeText(
                     requireContext(),
@@ -126,10 +129,12 @@ class RegistrationFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
-                progressDialog.dialog.dismiss()
+
+                (activity as MainActivity).hideDialog()
                 return@observe
             }
-            progressDialog.dialog.dismiss()
+
+            (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
 

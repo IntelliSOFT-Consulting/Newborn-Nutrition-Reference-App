@@ -22,6 +22,9 @@ import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -68,7 +71,12 @@ class DhmRecipientFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         binding.apply {
-
+            btnSubmit.setOnClickListener {
+                onSubmitAction()
+            }
+            btnCancel.setOnClickListener {
+                findNavController().navigateUp()
+            }
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
@@ -82,16 +90,20 @@ class DhmRecipientFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-      viewModel.addDhmRecipient(questionnaireFragment.getQuestionnaireResponse())
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.addDhmRecipient(questionnaireFragment.getQuestionnaireResponse())
+        }
 
     }
 
@@ -110,8 +122,10 @@ class DhmRecipientFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                (activity as MainActivity).hideDialog()
                 return@observe
             }
+            (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
 

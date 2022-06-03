@@ -149,6 +149,9 @@ class PatientListViewModel(
         nameQuery: String = "",
         location: String
     ): DHMDashboardItem {
+        val orders = getOrdersSearchResults(nameQuery, location)
+       // val volume = get(nameQuery, location)
+
         /* val orders: MutableList<OrdersItem> = mutableListOf()
          fhirEngine
              .search<NutritionOrder> {
@@ -166,7 +169,7 @@ class PatientListViewModel(
                  orders.addAll(it)
              }*/
 
-        return DHMDashboardItem()
+        return DHMDashboardItem(dhmInfants = orders.size.toString(), dhmFullyInfants = orders.size.toString(), dhmVolume = orders.size.toString(), dhmAverageVolume = orders.size.toString(), dhmAverageLength = orders.size.toString())
     }
 
     private suspend fun getOrdersSearchResults(
@@ -177,7 +180,6 @@ class PatientListViewModel(
         fhirEngine
             .search<NutritionOrder> {
                 sort(NutritionOrder.DATETIME, Order.ASCENDING)
-                filterOrders(this)
                 from = 0
             }
             .map {
@@ -223,9 +225,6 @@ class PatientListViewModel(
         var dhm = ""
         val observations = getObservationsPerEncounter(encounterId)
 
-        Timber.e("Encounter Id ******** $encounterId")
-        Timber.e("Nutrition Id ******** ${it.id}")
-        Timber.e("Nutrition Logical Id ******** ${it.logicalId}")
         if (observations.isNotEmpty()) {
             for (element in observations) {
                 if (element.code == "Consent-Given") {
@@ -476,8 +475,6 @@ class PatientListViewModel(
                     .firstOrNull()
             }
     }
-
-
 
 
     class PatientListViewModelFactory(

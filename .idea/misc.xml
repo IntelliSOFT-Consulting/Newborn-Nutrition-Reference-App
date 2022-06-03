@@ -121,6 +121,7 @@
         <entry key="app/src/main/res/layout/fragment_patient_list.xml" value="0.27717391304347827" />
         <entry key="app/src/main/res/layout/fragment_pregnancy.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_process_order.xml" value="0.16316006600660066" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.13" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/horizontal_item.xml" value="0.1" />

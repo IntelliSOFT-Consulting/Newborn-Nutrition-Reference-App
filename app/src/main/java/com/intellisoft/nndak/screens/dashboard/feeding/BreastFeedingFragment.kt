@@ -25,6 +25,9 @@ import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -130,40 +133,47 @@ class BreastFeedingFragment : Fragment() {
     }
 
     private fun completeMilkExpression(effectiveExpression: String, expressedSufficient: String) {
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.milkExpressionAssessment(
-            questionnaireFragment.getQuestionnaireResponse(),
-            effectiveExpression,
-            expressedSufficient,
-            args.patientId
-        )
+            val context = FhirContext.forR4()
 
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.milkExpressionAssessment(
+                questionnaireFragment.getQuestionnaireResponse(),
+                effectiveExpression,
+                expressedSufficient,
+                args.patientId
+            )
+        }
     }
 
     private fun completeBreastfeedingAssessment(breastFeeding: String, efficientFeeding: String) {
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.breastFeeding(
-            questionnaireFragment.getQuestionnaireResponse(),
-            breastFeeding,
-            efficientFeeding,
-            args.patientId
-        )
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.breastFeeding(
+                questionnaireFragment.getQuestionnaireResponse(),
+                breastFeeding,
+                efficientFeeding,
+                args.patientId
+            )
+        }
     }
 
     private fun handleShowCues() {
@@ -173,20 +183,24 @@ class BreastFeedingFragment : Fragment() {
 
     private fun feedingCuesClick(cues: FeedingCuesTips) {
         feedingCues.dismiss()
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.feedingCues(
-            questionnaireFragment.getQuestionnaireResponse(),
-            cues,
-            args.patientId
-        )
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.feedingCues(
+                questionnaireFragment.getQuestionnaireResponse(),
+                cues,
+                args.patientId
+            )
+        }
     }
 
     private fun okClick() {
@@ -216,8 +230,10 @@ class BreastFeedingFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                (activity as MainActivity).hideDialog()
                 return@observe
             }
+            (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
 

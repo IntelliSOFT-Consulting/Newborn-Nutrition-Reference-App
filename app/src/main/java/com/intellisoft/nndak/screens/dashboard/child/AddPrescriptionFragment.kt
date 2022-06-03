@@ -23,6 +23,9 @@ import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -89,18 +92,22 @@ class AddPrescriptionFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        (activity as MainActivity).displayDialog()
 
-        val context = FhirContext.forR4()
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $questionnaire")
-        viewModel.feedPrescription(
-            questionnaireFragment.getQuestionnaireResponse(), args.patientId
-        )
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+            Timber.e("Questionnaire  $questionnaire")
+            viewModel.feedPrescription(
+                questionnaireFragment.getQuestionnaireResponse(), args.patientId
+            )
+        }
 
     }
 
@@ -119,8 +126,10 @@ class AddPrescriptionFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 )
                     .show()
+                (activity as MainActivity).hideDialog()
                 return@observe
             }
+            (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
 

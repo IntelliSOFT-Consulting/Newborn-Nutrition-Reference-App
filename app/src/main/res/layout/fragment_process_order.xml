@@ -6,20 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".screens.dashboard.dhm.ProcessOrderFragment">
 
-    <include
-        android:id="@+id/inc_title"
-        layout="@layout/order_list_view"
+    <LinearLayout
+        android:id="@+id/ln_include"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_10"
-        android:layout_marginEnd="@dimen/_10dp" />
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_10"
+            android:text="@string/app_review_pres"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimary" />
+
+        <include
+            android:id="@+id/inc_title"
+            layout="@layout/order_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginEnd="@dimen/_10dp" />
+    </LinearLayout>
+
 
     <include
         android:id="@+id/inc_details"
         layout="@layout/order_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/inc_title"
+        android:layout_below="@id/ln_include"
         android:layout_marginStart="@dimen/padding_10"
         android:layout_marginEnd="@dimen/_10dp" />
 

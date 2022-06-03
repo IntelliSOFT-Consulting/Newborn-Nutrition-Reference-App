@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -95,7 +96,8 @@ class BabyFeedsFragment : Fragment() {
                     incDetails.appMumIp.text = motherBabyItem.motherIp
                     incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
                     incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = motherBabyItem.dashboard.neonatalSepsis ?: ""
+                    incDetails.appNeonatalSepsis.text =
+                        motherBabyItem.dashboard.neonatalSepsis ?: ""
                     incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
                     incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
                     incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
@@ -130,7 +132,9 @@ class BabyFeedsFragment : Fragment() {
                 )
             }
             actionUpdatePrescription.setOnClickListener {
-                findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
+
+                Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
+              //  findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
             }
         }
 

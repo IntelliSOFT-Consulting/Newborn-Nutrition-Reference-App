@@ -8,19 +8,20 @@
     <TextView
         android:id="@+id/patient_count"
         android:layout_width="wrap_content"
-        android:visibility="invisible"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="0 Patients" />
+        android:text="0 Patients"
+        android:visibility="invisible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/patient_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/patient_count"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_100dp"
         android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".PatientListActivity"
         tools:listitem="@layout/baby_list_item_view" />
 
 </RelativeLayout>

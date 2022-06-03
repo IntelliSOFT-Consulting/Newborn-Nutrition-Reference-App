@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -16,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -24,14 +22,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
-import com.intellisoft.nndak.screens.profile.ProfileActivity
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -107,15 +103,27 @@ class MainActivity : AppCompatActivity() {
             menu.btnCloseFilter.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
             }
+            menu.lnProfile.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.profileFragment)
+            }
             menu.lnSettings.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                progressDialog.show(this@MainActivity,"Please wait...")
                 viewModel.poll()
             }
         }
 
     }
 
+    fun displayDialog() {
+
+        progressDialog.show(this@MainActivity, "Please wait...")
+    }
+
+    fun hideDialog() {
+        progressDialog.dialog.dismiss()
+    }
 
     override fun onBackPressed() {
 
@@ -210,11 +218,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.poll()
                 true
             }
-            R.id.menu_profile -> {
-                val i = Intent(this@MainActivity, ProfileActivity::class.java)
-                startActivity(i)
-                true
-            }
+
             R.id.menu_exit -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Logout")

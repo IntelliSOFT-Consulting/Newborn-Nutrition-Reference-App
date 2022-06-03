@@ -258,7 +258,7 @@
                       ],
                       "valueCoding": {
                         "code": "LA353-6",
-                        "display": "NGT"
+                        "display": "OGT"
                       }
                     }
                   ]
@@ -332,7 +332,7 @@
                   ],
                   "required": true,
                   "linkId": "/Breast-Milk",
-                  "text": "Breast-Milk"
+                  "text": "Breast Milk"
                 }
               ]
             }

@@ -4,12 +4,14 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import android.util.Patterns
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -35,7 +37,9 @@ import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
 
-
+fun boldText(textView: TextView){
+    textView.setTypeface(null, Typeface.BOLD)
+}
 
 fun isNetworkAvailable(context: Context?): Boolean {
     if (context == null) return false

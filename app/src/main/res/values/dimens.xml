@@ -49,4 +49,5 @@
     <dimen name="_18sp">18sp</dimen>
     <dimen name="spacing_small">3dp</dimen>
     <dimen name="_25dp">25dp</dimen>
+    <dimen name="_20sp">20sp</dimen>
 </resources>
