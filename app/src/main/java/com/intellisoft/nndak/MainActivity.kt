@@ -113,6 +113,11 @@ class MainActivity : AppCompatActivity() {
                 navController.navigateUp()
                 navController.navigate(R.id.settingsFragment)
             }
+            menu.lnDhmDashboard.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.homeFragment)
+            }
             menu.lnSync.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 viewModel.poll()

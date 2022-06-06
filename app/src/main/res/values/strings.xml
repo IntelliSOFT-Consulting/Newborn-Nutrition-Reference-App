@@ -322,6 +322,9 @@
     <string name="middle_lorem_ipsum">Online Sync</string>
     <string name="settings">Settings</string>
     <string name="app_sync">Sync</string>
+    <string name="action_weight">Weight (gm)</string>
+    <string name="app_enter_feeds">Enter Feeds Prescription</string>
+    <string name="app_enter_type_feeds">Enter Type of Feeds</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

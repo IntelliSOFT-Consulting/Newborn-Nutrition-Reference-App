@@ -96,8 +96,8 @@ class ChildDashboardFragment : Fragment() {
 
 
         binding.apply {
-
-            if (!args.active) {
+            val isActive = FhirApplication.getDashboardActive(requireContext())
+            if (!isActive) {
                 lnBabyDashboard.isEnabled = false
                 lnBabyFeeding.isEnabled = false
                 lnBabyMonitoring.isEnabled = false

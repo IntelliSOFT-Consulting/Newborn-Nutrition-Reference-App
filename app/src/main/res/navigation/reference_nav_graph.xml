@@ -57,9 +57,7 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
-        <argument
-            android:name="active"
-            app:argType="boolean" />
+
         <action
             android:id="@+id/navigate_to_baby_dashboard"
             app:destination="@id/babyDashboardFragment" />

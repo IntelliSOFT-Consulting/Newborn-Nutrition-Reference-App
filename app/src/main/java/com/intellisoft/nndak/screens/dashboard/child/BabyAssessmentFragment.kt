@@ -120,7 +120,8 @@ class BabyAssessmentFragment : Fragment() {
                     incDetails.appMumIp.text = motherBabyItem.motherIp
                     incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
                     incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = motherBabyItem.dashboard.neonatalSepsis ?: ""
+                    incDetails.appNeonatalSepsis.text =
+                        motherBabyItem.dashboard.neonatalSepsis ?: ""
                     incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
                     incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
                     incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
@@ -130,10 +131,10 @@ class BabyAssessmentFragment : Fragment() {
             }
         }
         binding.apply {
-            actions.btnCancel.setOnClickListener {
+            btnCancel.setOnClickListener {
                 findNavController().navigateUp()
             }
-            actions.btnSubmit.setOnClickListener {
+            btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
         }
@@ -162,6 +163,7 @@ class BabyAssessmentFragment : Fragment() {
 
     private fun proceedClick() {
         successDialog.dismiss()
+        FhirApplication.setDashboardActive(requireContext(), true)
         findNavController().navigateUp()
     }
 
@@ -250,6 +252,7 @@ class BabyAssessmentFragment : Fragment() {
             else -> false
         }
     }
+
     companion object {
         const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
         const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"

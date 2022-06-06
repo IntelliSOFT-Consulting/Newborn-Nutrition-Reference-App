@@ -101,6 +101,7 @@
         <entry key="app/src/main/res/layout/connection_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/feed_item_view.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/feeding_cues_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_add_prescription.xml" value="0.16744791666666667" />
         <entry key="app/src/main/res/layout/fragment_assessment.xml" value="0.1" />
@@ -146,11 +147,12 @@
         <entry key="app/src/main/res/layout/patient_list_item_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/patient_list_view.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/prescribe_item.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/prescription.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/prescription_list_item.xml" value="0.1375" />
         <entry key="app/src/main/res/layout/progress.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/screen_questionnaire.xml" value="0.1747112211221122" />
         <entry key="app/src/main/res/layout/screener_encounter_fragment.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/side_menu.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/side_menu.xml" value="0.22" />
         <entry key="app/src/main/res/layout/slider_layout.xml" value="0.16316006600660066" />
         <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />

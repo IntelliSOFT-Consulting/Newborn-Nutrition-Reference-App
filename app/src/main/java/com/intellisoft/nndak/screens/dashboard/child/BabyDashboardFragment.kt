@@ -12,6 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
@@ -78,6 +84,9 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
 
             if (it != null) {
+
+                Timber.e("Weight Data ${it.assessment.weights}")
+
                 binding.apply {
                     val gest = it.dashboard.gestation ?: ""
                     val status = it.status
@@ -100,9 +109,45 @@ class BabyDashboardFragment : Fragment() {
                     tvTotalVolume.text = it.dashboard.prescription.totalVolume ?: ""
                     tvExpressionNumber.text = it.dashboard.prescription.expressions ?: ""
 
+                    populateWeightGraph(it.assessment.weights)
+
                 }
             }
         }
+
+    }
+
+    private fun populateWeightGraph(values: MutableList<Int>?) {
+        if (values != null) {
+            if (values.isNotEmpty()) {
+                val ourLineChartEntries: ArrayList<Entry> = ArrayList()
+
+                for ((i, entry) in values.withIndex()) {
+                    val value = values[i].toFloat()
+                    ourLineChartEntries.add(Entry(i.toFloat(), value))
+                }
+                val lineDataSet = LineDataSet(ourLineChartEntries, "")
+                lineDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
+                val data = LineData(lineDataSet)
+                binding.growthChart.axisLeft.setDrawGridLines(false)
+                val xAxis: XAxis = binding.growthChart.xAxis
+                xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(false)
+
+                binding.growthChart.legend.isEnabled = false
+
+                //remove description label
+                binding.growthChart.description.isEnabled = false
+                binding.growthChart.isDragEnabled = true
+                binding.growthChart.setScaleEnabled(true)
+                //add animation
+                binding.growthChart.animateX(1000, Easing.EaseInSine)
+                binding.growthChart.data = data
+                //refresh
+                binding.growthChart.invalidate()
+            }
+        }
+
 
     }
 

@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
@@ -102,9 +103,10 @@ class RegistrationFragment : Fragment() {
 
     private fun proceedClick() {
         successDialog.dismiss()
+        FhirApplication.setDashboardActive(requireContext(), false)
         findNavController().navigate(
             RegistrationFragmentDirections.navigateToBabyDashboard(
-                patientId, false
+                patientId
             )
         )
     }

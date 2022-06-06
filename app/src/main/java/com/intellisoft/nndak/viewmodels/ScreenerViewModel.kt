@@ -635,7 +635,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -649,6 +648,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         isResourcesSaved.value = false
                         return@launch
                     }
+
 
                     /**
                      * Extract Observations, Patient Data
@@ -676,7 +676,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     if (value.isNotEmpty()) {
                                         bundle.addEntry().setResource(
                                             qh.quantityQuestionnaire(
-                                                "Current-Weight",
+                                                "3141-9",
                                                 "Current Weight",
                                                 "Current Weight",
                                                 value, "gm"
@@ -980,33 +980,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         return name
     }
 
-
-    private fun extractValueString(inner: JSONObject, index: Int): String {
-
-        val childAnswer = inner.getJSONArray("item")
-        val ans = childAnswer.getJSONObject(index).getJSONArray("answer")
-
-        return ans.getJSONObject(index).getString("valueString")
-    }
-
-    private fun extractCoding(inner: JSONObject, index: Int): String {
-
-        val childAnswer = inner.getJSONArray("item")
-        val ans = childAnswer.getJSONObject(index).getJSONArray("answer")
-
-        return ans.getJSONObject(index).getJSONObject("valueCoding").getString("display")
-    }
-
-
-    private fun extractValueCoding(childItem: JSONArray, j: Int): String {
-
-        val answer = childItem.getJSONObject(j)
-        val childAnswer = answer.getJSONArray("answer")
-        val valueCoding = childAnswer.getJSONObject(0).getString("valueCoding")
-        val finalAnswer = JSONObject(valueCoding)
-        return finalAnswer.getString("display")
-    }
-
     private suspend fun saveResources(
         bundle: Bundle,
         subjectReference: Reference,
@@ -1305,6 +1278,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                     )
                     .request.url = "Observation"
+
+                val value = retrieveUser(false)
+
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Completed By",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -1326,7 +1312,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1442,6 +1427,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         }
                     }
 
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+
                     val subjectReference = Reference("Patient/$patientId")
 
                     val encounterId = generateUuid()
@@ -1465,7 +1462,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1542,6 +1538,17 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         }
 
                     }
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
@@ -1568,7 +1575,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1641,6 +1647,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     }
 
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
                     title = "Baby Assessment"
@@ -1664,7 +1682,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -1819,6 +1836,17 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                         }
                     }
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
@@ -2001,6 +2029,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      * Search Mother using the provided Ip Number
                      * If mother's records found, proceed to get the child
                      */
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+
                     collectRelatedData(patientIp, bundle)
                     isResourcesSaved.postValue(true)
 
@@ -2033,16 +2073,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         val encounterReference = Reference("Encounter/$encounterId")
         encounterReference.display = title
 
+        /*  val no = NutritionOrder()
+          no.id = generateUuid()
+          no.patient = subjectReference
+          no.encounter = encounterReference
+          no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
+          no.dateTime = Date()
+          no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
 
-        val no = NutritionOrder()
-        no.id = generateUuid()
-        no.patient = subjectReference
-        no.encounter = encounterReference
-        no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
-        no.dateTime = Date()
-        no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
-
-        fhirEngine.create(no)
+          fhirEngine.create(no)*/
 
         saveResources(bundle, subjectReference, encounterId, title)
 
@@ -2127,6 +2166,17 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                     )
                         .request.url = "Observation"
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
 
                     title = "DHM Stock"
                     val encounterId = generateUuid()
@@ -2149,7 +2199,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
-//                    getApplication(),
                     questionnaireResource,
                     questionnaireResponse
                 )
@@ -2223,8 +2272,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                         }
                     }
+                    val value = retrieveUser(false)
 
-                    val subjectReference = Reference("Patient/$patientId}")
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+                    val subjectReference = Reference("Patient/$patientId")
                     title = "DHM Dispensing"
                     val encounterId = generateUuid()
                     saveResources(bundle, subjectReference, encounterId, title)

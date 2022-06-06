@@ -31,6 +31,7 @@ import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
+import com.intellisoft.nndak.utils.isTablet
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -88,6 +89,16 @@ class BabyMonitoringFragment : Fragment() {
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
+    /*    val tab = isTablet(requireContext())
+        binding.apply {
+            if (!tab) {
+                screen.lnParent.visibility = View.GONE
+                btnSubmit.visibility = View.VISIBLE
+            } else {
+                btnSubmit.visibility = View.GONE
+            }
+        }*/
+     //   Toast.makeText(requireContext(), tab.toString(), Toast.LENGTH_SHORT).show()
 
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
@@ -116,7 +127,8 @@ class BabyMonitoringFragment : Fragment() {
                     incDetails.appMumIp.text = motherBabyItem.motherIp
                     incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
                     incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text = motherBabyItem.dashboard.neonatalSepsis ?: ""
+                    incDetails.appNeonatalSepsis.text =
+                        motherBabyItem.dashboard.neonatalSepsis ?: ""
                     incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
                     incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
                     incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
@@ -125,17 +137,18 @@ class BabyMonitoringFragment : Fragment() {
                     /**
                      * Prescriptions
                      */
-                    incPrescribe.appTodayTotal.text = motherBabyItem.dashboard.prescription.totalVolume ?: ""
+                    incPrescribe.appTodayTotal.text =
+                        motherBabyItem.dashboard.prescription.totalVolume ?: ""
                     incPrescribe.appRoute.text = motherBabyItem.dashboard.prescription.route ?: ""
 
                 }
             }
         }
         binding.apply {
-            screen.btnSubmit.setOnClickListener {
+            btnSubmit.setOnClickListener {
                 confirmationDialog.show(childFragmentManager, "Confirm Action")
             }
-            screen.btnCancel.setOnClickListener {
+            btnCancel.setOnClickListener {
                 findNavController().navigateUp()
             }
             actionClickTips.setOnClickListener {

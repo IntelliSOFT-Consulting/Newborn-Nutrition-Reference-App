@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.intellisoft.nndak.databinding.OrderListViewBinding
 import com.intellisoft.nndak.models.OrdersItem
+import timber.log.Timber
 
 class OrdersItemViewHolder(binding: OrderListViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -27,7 +28,17 @@ class OrdersItemViewHolder(binding: OrderListViewBinding) :
         this.appIpNumber.text = ordersItem.ipNumber
         this.appBabyAge.text = ordersItem.babyAge
         this.appDhmType.text = ordersItem.dhmType
-        this.appConsent.text = ordersItem.consentGiven
+        Timber.e("Consent Data ${ordersItem.consentGiven}")
+        val consent = when (ordersItem.consentGiven) {
+            "Yes" -> {
+                "Signed"
+            }
+            else -> {
+                "Not Signed"
+            }
+        }
+
+        this.appConsent.text = consent
 
         /**
          * Hide Action Textview and Show Linear

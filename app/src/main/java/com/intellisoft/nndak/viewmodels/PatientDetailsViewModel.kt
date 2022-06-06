@@ -138,10 +138,10 @@ class PatientDetailsViewModel(
         fhirEngine
             .search<Observation> {
                 filter(Observation.SUBJECT, { value = "Patient/$patientId" })
-                sort(Observation.DATE, Order.DESCENDING)
+                sort(Observation.DATE, Order.ASCENDING)
             }
-            .filter { it.hasCode() }
-            .sortedByDescending { it.meta.lastUpdated }
+          /*  .filter { it.hasCode() }
+            .sortedByDescending { it.c }*/
             .map { createObservationItem(it, getApplication<Application>().resources) }
 
             .let { observations.addAll(it) }
@@ -258,7 +258,13 @@ class PatientDetailsViewModel(
             human_milk_details.forEach {
                 if (data[i].code == it) {
                     val one =
-                        ObservationItem(data[i].id, data[i].code, data[i].effective, data[i].value)
+                        ObservationItem(
+                            data[i].id,
+                            data[i].code,
+                            data[i].effective,
+                            data[i].value,
+
+                            )
                     minor.add(one)
                 }
             }
@@ -355,6 +361,7 @@ class PatientDetailsViewModel(
         context: Application,
     ): MotherBabyItem {
 
+        val pres = getCurrentPrescriptionsDataModel(context)
         val patient = getPatient()
         val mum = getMother(patientId)
         val mumName = mum.first.toString()
@@ -391,7 +398,16 @@ class PatientDetailsViewModel(
         }
         expressions = i.toString()
 
+        var route = ""
+
+        if (pres.isNotEmpty()) {
+            for (element in pres) {
+                Timber.e("Current Prescriptions ${element.route}")
+                route = element.route.toString()
+            }
+        }
         val obs = getObservations()
+        val weights: MutableList<Int> = mutableListOf()
         if (obs.isNotEmpty()) {
 
             for (element in obs) {
@@ -399,8 +415,10 @@ class PatientDetailsViewModel(
                 if (element.code == "93857-1") {
                     dDate = element.value.substring(0, 10)
                 }
-                if (element.code == "Current-Weight" || element.code == "29463-7") {
+                if (element.code == "Current-Weight" || element.code == "29463-7"||element.code=="3141-9") {
                     cWeight = element.value
+                    val code = element.value.split("\\.".toRegex()).toTypedArray()
+                    weights.add(code[0].toInt())
                 }
                 if (element.code == "55277-8") {
                     pmtct = element.value
@@ -416,6 +434,13 @@ class PatientDetailsViewModel(
                 }
                 if (element.code == "8339-4") {
                     birthWeight = element.value
+                    Timber.e("Birth Weight $birthWeight")
+                    val code = element.value.split("\\.".toRegex()).toTypedArray()
+                    birthWeight = if (code[0].toInt() < 2500) {
+                        "$birthWeight (gm)- Low "
+                    } else {
+                        "$birthWeight (gm)- Normal "
+                    }
                 }
                 if (element.code == "52455-3") {
                     admDate = element.value.substring(0, 10)
@@ -459,6 +484,8 @@ class PatientDetailsViewModel(
         var name = ""
         var dateOfBirth = ""
         var dayOfLife = ""
+
+
         patient.let {
             name = it.name
             dateOfBirth = it.dob
@@ -486,7 +513,11 @@ class PatientDetailsViewModel(
                 dayOfLife = dayOfLife,
                 dateOfAdm = admDate,
                 cWeight = cWeight, motherMilk = motherMilk,
-                prescription = PrescriptionItem(totalVolume = totalFeeds, expressions = expressions)
+                prescription = PrescriptionItem(
+                    totalVolume = totalFeeds,
+                    expressions = expressions,
+                    route = route
+                )
 
             ),
             mother = MotherDashboard(
@@ -496,7 +527,7 @@ class PatientDetailsViewModel(
                 multiPregnancy = mPreg,
                 deliveryDate = dDate,
             ),
-            assessment = AssessmentItem(breastfeedingBaby = breastfeeding)
+            assessment = AssessmentItem(breastfeedingBaby = breastfeeding, weights = weights)
         )
     }
 
@@ -532,7 +563,6 @@ class PatientDetailsViewModel(
                 fhirPatient.toPatientItem(
                     index + 1
                 )
-
             }
             .let { mother.addAll(it) }
         if (mother.isNotEmpty()) {
@@ -842,7 +872,7 @@ class PatientDetailsViewModel(
         }
     }
 
-    private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem>? {
+    private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem> {
         val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
         val patient = getPatient()
         val encounters = getPatientEncounters()
@@ -956,6 +986,7 @@ class PatientDetailsViewModel(
 
         viewModelScope.launch { liveOrder.value = getOrderDataModel(context, orderId) }
     }
+
     private suspend fun getMothersDetails(patientId: String): Triple<String?, String?, String?> {
         val mother: MutableList<PatientItem> = mutableListOf()
         fhirEngine
@@ -981,8 +1012,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun getOrderDataModel(context: Application, orderId: String): OrdersItem {
-        val nutrition = fhirEngine.load(NutritionOrder::class.java, orderId)
-        Timber.e("Nutrition Order ${nutrition.encounter.reference}")
+
         val baby = getPatient()
         val mother = getMothersDetails(patientId)
         val motherName = mother.first.toString()
@@ -994,12 +1024,16 @@ class PatientDetailsViewModel(
         var consent = ""
         var dhm = ""
         var reason = ""
-        val observations = getObservationsPerEncounter(nutrition.encounter.reference.drop(10))
+        val observations = getObservationsPerEncounter(orderId)
 
         if (observations.isNotEmpty()) {
             for (element in observations) {
                 if (element.code == "Consent-Given") {
-                    consent = element.value
+                    consent = if (element.value == "Yes") {
+                        "Signed"
+                    } else {
+                        "Not Signed"
+                    }
                 }
                 if (element.code == "DHM-Type") {
                     dhm = element.value
@@ -1019,8 +1053,12 @@ class PatientDetailsViewModel(
             babyName = baby.name,
             babyAge = getFormattedAge(baby.dob),
             consentGiven = consent,
-            dhmType = dhm, dhmReason = reason
+            dhmType = dhm, dhmReason = reason, description = orderId
         )
+    }
+
+    fun pullWeightData() {
+        TODO("Not yet implemented")
     }
 
     companion object {
@@ -1108,7 +1146,7 @@ class PatientDetailsViewModel(
         /**
          * Creates EncounterItem objects with displayable values from the Fhir Observation objects.
          */
-        private fun createEncounterItem(
+        fun createEncounterItem(
             encounter: Encounter,
             resources: Resources
         ): EncounterItem {

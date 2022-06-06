@@ -17,6 +17,7 @@ import com.google.android.fhir.search.search
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
@@ -188,15 +189,15 @@ class PatientListViewModel(
     ): List<OrdersItem> {
         val orders: MutableList<OrdersItem> = mutableListOf()
         fhirEngine
-            .search<NutritionOrder> {
-                sort(NutritionOrder.DATETIME, Order.ASCENDING)
+            .search<Encounter> {
+                sort(Encounter.DATE, Order.ASCENDING)
                 from = 0
             }
             .map {
-                createOrdersItem(
-                    it
-                )
+                loadOrders(it, createEncounterItem(it, getApplication<Application>().resources))
+
             }
+            .filter { it.description == "DHM Recipient" }
             .let {
 
                 orders.addAll(it)
@@ -205,10 +206,48 @@ class PatientListViewModel(
         return orders
     }
 
+    private suspend fun loadOrders(it: Encounter, item: EncounterItem): OrdersItem {
+        val patientId = it.subject.reference.drop(8)
+        val baby = getPatient(patientId)
 
-    private fun filterOrders(search: Search) {
-        //search.filter(NutritionOrder.STATUS, { value =  })
+        val mother = getMothersDetails(it.subject.reference)
+        val motherName = mother.first.toString()
+        val motherIp = mother.second.toString()
+
+        var dhmType = ""
+        var consentGiven = ""
+        var dhmReason = ""
+
+        val observations = getObservationsPerEncounter("Encounter/${it.logicalId}")
+        if (observations.isNotEmpty()) {
+            for (element in observations) {
+                if (element.code == "Consent-Given") {
+                    consentGiven = element.value
+                }
+                if (element.code == "DHM-Type") {
+                    dhmType = element.value
+                }
+                if (element.code == "DHM-Reason") {
+                    dhmReason = element.value
+                }
+            }
+        }
+
+        return OrdersItem(
+            id = it.logicalId,
+            resourceId = it.logicalId,
+            patientId = it.subject.reference.drop(8),
+            motherName = motherName,
+            babyAge = getFormattedAge(baby.dob),
+            dhmType = dhmType,
+            babyName = baby.name,
+            ipNumber = motherIp,
+            consentGiven = consentGiven,
+            dhmReason = dhmReason,
+            description = it.reasonCodeFirstRep.text
+        )
     }
+
 
     private suspend fun getPatient(patientId: String): PatientItem {
         val patient = fhirEngine.load(Patient::class.java, patientId)
@@ -255,7 +294,8 @@ class PatientListViewModel(
             babyName = baby.name,
             babyAge = getFormattedAge(baby.dob),
             consentGiven = consent,
-            dhmType = dhm
+            dhmType = dhm,
+            description = "Data"
         )
     }
 

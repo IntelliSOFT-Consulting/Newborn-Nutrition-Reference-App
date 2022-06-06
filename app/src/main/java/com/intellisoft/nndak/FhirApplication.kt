@@ -8,6 +8,7 @@ import com.google.android.fhir.sync.Sync
 import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
+import com.intellisoft.nndak.utils.Constants.ACTIVE
 import com.intellisoft.nndak.utils.Constants.DEMO_API_SERVER
 import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
 import com.intellisoft.nndak.utils.Constants.LOGIN
@@ -110,6 +111,17 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
 
+        fun setDashboardActive(context: Context, b: Boolean) {
+            (context.applicationContext as FhirApplication).editor.putBoolean(ACTIVE, b).commit()
+        }
+
+        fun getDashboardActive(context: Context): Boolean {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+                ACTIVE,
+                false
+            )
+        }
+
         fun updateDetails(context: Context, it: AuthResponse) {
             (context.applicationContext as FhirApplication).editor.putString(ACCESS_TOKEN, it.token)
                 .commit()
@@ -138,6 +150,7 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putString("Patient", state)
                 .commit()
         }
+
         fun setCurrent(context: Context, state: String) {
             (context.applicationContext as FhirApplication).editor.putString("State", state)
                 .commit()
@@ -148,6 +161,7 @@ class FhirApplication : Application() {
                 "State", ""
             ).toString()
         }
+
         fun getPatient(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 "Patient", ""

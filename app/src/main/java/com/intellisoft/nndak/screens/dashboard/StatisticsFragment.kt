@@ -60,10 +60,10 @@ class StatisticsFragment : Fragment() {
         (activity as MainActivity).setDrawerEnabled(true)
 
         binding.apply {
-//            firstFeedsChart()
-//            percentageFeedsChart()
-//            mortalityRateChart()
-//            expressingTimesChart()
+            firstFeedsChart()
+            percentageFeedsChart()
+            mortalityRateChart()
+            expressingTimesChart()
         }
 
     }
@@ -204,7 +204,7 @@ class StatisticsFragment : Fragment() {
 
     private fun mortalityRateChart() {
 
-        val values = arrayListOf<Int>(4, 7, 12, 2, 4, 2, 5, 3, 6, 4, 3)
+        val values = arrayListOf<Int>(4, 7, 9, 2, 4, 2, 5, 3, 6, 4, 3)
         val ourLineChartEntries: ArrayList<Entry> = ArrayList()
 
         for ((i, entry) in values.withIndex()) {
@@ -218,6 +218,7 @@ class StatisticsFragment : Fragment() {
         val xAxis: XAxis = binding.mortalityChart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
+
         binding.mortalityChart.legend.isEnabled = false
 
         //remove description label

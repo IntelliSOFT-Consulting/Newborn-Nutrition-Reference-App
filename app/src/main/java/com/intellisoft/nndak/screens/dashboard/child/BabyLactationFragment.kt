@@ -125,7 +125,7 @@ class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
             chart!!.setOnChartValueSelectedListener(this@BabyLactationFragment)
 
 
-            populateBarChart()
+         //   populateBarChart()
 
             actionProvideSupport.setOnClickListener {
                 findNavController().navigate(BabyLactationFragmentDirections.navigateToFeeding(args.patientId))

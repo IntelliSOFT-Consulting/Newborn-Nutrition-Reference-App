@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/_100dp"
     tools:context=".screens.dashboard.child.BabyDashboardFragment">
 
     <LinearLayout
@@ -23,7 +24,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
@@ -44,10 +45,10 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black" />
 
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/growth_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="300dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -161,7 +162,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
@@ -185,7 +186,7 @@
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/feeds_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="300dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

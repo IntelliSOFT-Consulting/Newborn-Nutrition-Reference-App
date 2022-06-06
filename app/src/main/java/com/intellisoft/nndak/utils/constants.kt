@@ -10,8 +10,9 @@ object Constants {
 //    const val DEMO_SERVER="https://hapi.fhir.org/baseR4/"
 
     const val MAX_RESOURCE_COUNT = 40
-    const val SYNC_VALUE = "Run"
+    const val SYNC_VALUE = "Pumwani"
     const val SYNC_PARAM = "address-postalcode"
+    const val ACTIVE = "active"
     const val WELCOME = "welcome"
     const val LOGIN = "login"
     const val SERVER_URL_DEMO = "server_url_demo"

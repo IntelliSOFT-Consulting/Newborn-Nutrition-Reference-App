@@ -3,6 +3,7 @@ package com.intellisoft.nndak.utils
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.net.ConnectivityManager
@@ -38,6 +39,10 @@ import java.util.regex.Pattern
 
 fun boldText(textView: TextView) {
     textView.setTypeface(null, Typeface.BOLD)
+}
+
+fun isTablet(ctx: Context): Boolean {
+    return ctx.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
 fun setSystemBarColor(act: Activity, @ColorRes color: Int) {

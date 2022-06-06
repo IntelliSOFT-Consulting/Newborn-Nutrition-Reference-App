@@ -1,49 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginBottom="@dimen/_100dp"
     tools:context=".screens.dashboard.child.BabyAssessmentFragment">
 
-    <include
-        android:id="@+id/inc_details"
-        layout="@layout/baby_item" />
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/inc_details"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:paddingTop="@dimen/_15dp"
-        app:cardCornerRadius="@dimen/_10dp"
-        app:cardElevation="5dp"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            android:id="@+id/inc_details"
+            layout="@layout/baby_item" />
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingTop="@dimen/_15dp"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_10"
-                android:text="@string/app_first_session"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_10"
+                    android:text="@string/app_first_session"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/black" />
 
-            <include
-                android:id="@+id/actions"
-                layout="@layout/screen_questionnaire" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
 
-</RelativeLayout>
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/add_patient_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_15dp"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5dp"
+                        android:backgroundTint="@color/dim_red"
+                        android:text="@string/action_submit" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_cancel"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5dp"
+                        android:text="@string/action_cancel"
+                        app:strokeColor="@color/dim_red" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

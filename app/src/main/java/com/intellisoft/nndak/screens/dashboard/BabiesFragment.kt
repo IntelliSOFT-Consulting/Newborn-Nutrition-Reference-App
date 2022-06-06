@@ -234,10 +234,10 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
+        FhirApplication.setDashboardActive(requireContext(), true)
         findNavController().navigate(
             BabiesFragmentDirections.navigateToChildDashboard(
-                patientItem.resourceId,
-                true
+                patientItem.resourceId
             )
         )
     }

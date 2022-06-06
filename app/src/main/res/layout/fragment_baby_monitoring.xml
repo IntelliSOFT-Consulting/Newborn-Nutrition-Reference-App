@@ -1,88 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/_100dp"
     android:orientation="vertical"
     tools:context=".screens.dashboard.child.BabyMonitoringFragment">
 
-    <include
-        android:id="@+id/inc_details"
-        layout="@layout/baby_item" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/inc_details"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <include
+            android:id="@+id/inc_details"
+            layout="@layout/baby_item" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/_15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/app_current_prescription"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/dim_red" />
-
-
-            <include
-                android:id="@+id/inc_prescribe"
-                layout="@layout/prescribe_item" />
-
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp"
-            app:cardUseCompatPadding="true">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_15dp">
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_current_prescription"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/dim_red" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:padding="@dimen/padding_10"
-                        android:text="@string/app_second_session"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/action_click_tips"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:backgroundTint="@color/dim_red"
-                        android:gravity="end"
-                        android:text="@string/action_click_tips"
-                        app:cornerRadius="@dimen/_25sp" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/black" />
 
                 <include
-                    android:id="@+id/screen"
-                    layout="@layout/screen_questionnaire" />
+                    android:id="@+id/inc_prescribe"
+                    layout="@layout/prescribe_item" />
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:padding="@dimen/padding_10"
+                            android:text="@string/app_second_session"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColor="@color/black" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/action_click_tips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignParentEnd="true"
+                            android:backgroundTint="@color/dim_red"
+                            android:gravity="end"
+                            android:text="@string/action_click_tips"
+                            app:cornerRadius="@dimen/_25sp" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/add_patient_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_15dp"
+                        android:weightSum="2">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5dp"
+                            android:backgroundTint="@color/dim_red"
+                            android:text="@string/action_submit" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_cancel"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5dp"
+                            android:text="@string/action_cancel"
+                            app:strokeColor="@color/dim_red" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>

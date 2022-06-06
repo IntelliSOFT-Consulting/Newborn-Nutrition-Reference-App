@@ -92,6 +92,7 @@ data class OrdersItem(
     val id: String,
     val resourceId: String,
     val patientId: String,
+    val description: String,
     val ipNumber: String? = "",
     val motherName: String? = "",
     val babyName: String? = "",
@@ -126,7 +127,8 @@ data class MotherBabyItem(
 data class AssessmentItem(
     val breastfeedingBaby: String? = "",
     val breastProblems: String? = "",
-    val contraindicated: String? = ""
+    val contraindicated: String? = "",
+    val weights: MutableList<Int>? = null
 ) {
     override fun toString(): String = breastfeedingBaby.toString()
 }
@@ -226,4 +228,15 @@ data class MessageItem(
     val message: String
 ) {
     override fun toString(): String = message
+}
+
+data class FeedItem(
+    val id: String,
+    val resourceId: String,
+    val type: String,
+    val route: String,
+    val volume: String,
+    val frequency: String
+) {
+    override fun toString(): String = type
 }

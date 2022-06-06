@@ -3,20 +3,23 @@ package com.intellisoft.nndak.screens.dashboard
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -75,6 +78,8 @@ class HomeFragment : Fragment() {
                     tvFullyInfants.text = it.dhmFullyInfants
                     tvAverageLength.text = it.dhmAverageLength
 
+                    populateGraphData()
+
                 }
             }
         }
@@ -88,6 +93,63 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
+
+
+    private fun populateGraphData() {
+
+        val values = arrayListOf<Int>(2, 4, 6, 8, 6, 4)
+        val ourLineChartEntries: ArrayList<Entry> = ArrayList()
+
+        for ((i, entry) in values.withIndex()) {
+            val value = values[i].toFloat()
+            ourLineChartEntries.add(Entry(i.toFloat(), value))
+        }
+        val values2 = arrayListOf<Int>(1, 3, 5, 7, 5, 3)
+        val ourLineChartEntries2: ArrayList<Entry> = ArrayList()
+
+        for ((i, entry) in values2.withIndex()) {
+            val value = values2[i].toFloat()
+            ourLineChartEntries2.add(Entry(i.toFloat(), value))
+        }
+        val values3 = arrayListOf<Int>(0, 2, 4, 6, 4, 2, 0)
+        val ourLineChartEntries3: ArrayList<Entry> = ArrayList()
+
+        for ((i, entry) in values3.withIndex()) {
+            val value = values3[i].toFloat()
+            ourLineChartEntries3.add(Entry(i.toFloat(), value))
+        }
+
+        /**First Line Chart Data*/
+        val lineDataSet = LineDataSet(ourLineChartEntries, "")
+        lineDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
+
+        val lineDataSet2 = LineDataSet(ourLineChartEntries2, "")
+        lineDataSet2.setColors(*ColorTemplate.PASTEL_COLORS)
+
+        val lineDataSet3 = LineDataSet(ourLineChartEntries3, "")
+        lineDataSet3.setColors(*ColorTemplate.PASTEL_COLORS)
+
+
+        val data = LineData(lineDataSet, lineDataSet2, lineDataSet3)
+
+
+        binding.totalTermChart.axisLeft.setDrawGridLines(false)
+        val xAxis: XAxis = binding.totalTermChart.xAxis
+        xAxis.setDrawGridLines(false)
+        xAxis.setDrawAxisLine(false)
+
+        binding.totalTermChart.legend.isEnabled = false
+
+        //remove description label
+        binding.totalTermChart.description.isEnabled = false
+        binding.totalTermChart.isDragEnabled = true
+        binding.totalTermChart.setScaleEnabled(true)
+        //add animation
+        binding.totalTermChart.animateX(1000, Easing.EaseInSine)
+        binding.totalTermChart.data = data
+        //refresh
+        binding.totalTermChart.invalidate()
     }
 
     override fun onDestroyView() {

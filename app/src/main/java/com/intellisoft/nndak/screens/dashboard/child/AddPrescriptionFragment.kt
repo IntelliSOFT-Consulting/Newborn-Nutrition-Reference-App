@@ -15,13 +15,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.FeedAdapter
+import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,13 +76,19 @@ class AddPrescriptionFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
+
+        /**Custom Prescription*/
+        /*   val recyclerView: RecyclerView = binding.custom.list
+           val adapter = FeedAdapter(this::handleClick)
+           recyclerView.adapter = adapter*/
+
         binding.apply {
-            btnSubmit.setOnClickListener {
-                onSubmitAction()
-            }
-            btnCancel.setOnClickListener {
-               showCancelScreenerQuestionnaireAlertDialog()
-            }
+              btnSubmit.setOnClickListener {
+                  onSubmitAction()
+              }
+              btnCancel.setOnClickListener {
+                 showCancelScreenerQuestionnaireAlertDialog()
+              }
         }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
@@ -156,6 +166,10 @@ class AddPrescriptionFragment : Fragment() {
         }
     }
 
+    private fun handleClick(item: FeedItem) {
+
+    }
+
     private fun onSubmitAction() {
 
         confirmationDialog.show(childFragmentManager, "Confirm Details")
@@ -209,3 +223,5 @@ class AddPrescriptionFragment : Fragment() {
         const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
     }
 }
+
+
