@@ -379,6 +379,7 @@ class PatientDetailsViewModel(
         var motherMilk = ""
         var totalFeeds = ""
         var expressions = ""
+        var breastfeeding = ""
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
@@ -392,7 +393,9 @@ class PatientDetailsViewModel(
 
         val obs = getObservations()
         if (obs.isNotEmpty()) {
+
             for (element in obs) {
+                Timber.e("Observations ${element.code}")
                 if (element.code == "93857-1") {
                     dDate = element.value.substring(0, 10)
                 }
@@ -438,6 +441,9 @@ class PatientDetailsViewModel(
                 }
                 if (element.code == "Total-Feeds") {
                     totalFeeds = element.value
+                }
+                if (element.code == "Baby-BreastFeeding") {
+                    breastfeeding = element.value
                 }
                 if (element.code == "11885-1") {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
@@ -490,6 +496,7 @@ class PatientDetailsViewModel(
                 multiPregnancy = mPreg,
                 deliveryDate = dDate,
             ),
+            assessment = AssessmentItem(breastfeedingBaby = breastfeeding)
         )
     }
 

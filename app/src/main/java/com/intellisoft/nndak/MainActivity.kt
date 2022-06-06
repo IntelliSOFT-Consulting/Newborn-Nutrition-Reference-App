@@ -110,10 +110,14 @@ class MainActivity : AppCompatActivity() {
             }
             menu.lnSettings.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
+                navController.navigateUp()
+                navController.navigate(R.id.settingsFragment)
+            }
+            menu.lnSync.setOnClickListener {
+                binding.drawer.closeDrawer(GravityCompat.START)
                 viewModel.poll()
             }
         }
-
     }
 
     fun displayDialog() {
@@ -298,5 +302,7 @@ class MainActivity : AppCompatActivity() {
           }*/
     }
 
-
+    fun navigate(resource: Int) {
+        findNavController(R.id.nav_host_fragment).navigate(resource)
+    }
 }

@@ -1,6 +1,6 @@
 package com.intellisoft.nndak.utils
 
-import android.app.ProgressDialog
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -8,26 +8,24 @@ import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import android.util.Patterns
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.RequiresApi
+import androidx.annotation.ColorRes
 import androidx.core.view.isVisible
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.models.PatientItem
-import com.intellisoft.nndak.models.RelatedPersonItem
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
-import timber.log.Timber
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -37,8 +35,16 @@ import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
 
-fun boldText(textView: TextView){
+
+fun boldText(textView: TextView) {
     textView.setTypeface(null, Typeface.BOLD)
+}
+
+fun setSystemBarColor(act: Activity, @ColorRes color: Int) {
+    val window: Window = act.window
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    window.statusBarColor = act.resources.getColor(color)
 }
 
 fun isNetworkAvailable(context: Context?): Boolean {
@@ -216,57 +222,4 @@ fun getFormattedAge(
             else -> resources.getQuantityString(R.plurals.ageDay, it.days, it.days)
         }
     }
-}
-
-enum class ViewTypes {
-    HEADER,
-    PATIENT,
-    PATIENT_PROPERTY,
-    OBSERVATION,
-    ENCOUNTER,
-    CONDITION;
-
-    companion object {
-        fun from(ordinal: Int): ViewTypes {
-            return values()[ordinal]
-        }
-    }
-
-}
-
-/**
- * Observations vs Conditions
- */
-
-enum class ObservationViewTypes {
-    OBSERVATION,
-    CONDITION;
-
-    companion object {
-        fun from(ordinal: Int): ObservationViewTypes {
-            return values()[ordinal]
-        }
-    }
-
-}
-
-
-/***
- *Only display patient header*/
-enum class ViewType {
-    HEADER,
-    PATIENT,
-    CHILD,
-    PATIENT_PROPERTY,
-    RELATION,
-    OBSERVATION,
-    ENCOUNTER,
-    CONDITION;
-
-    companion object {
-        fun from(ordinal: Int): ViewType {
-            return values()[ordinal]
-        }
-    }
-
 }

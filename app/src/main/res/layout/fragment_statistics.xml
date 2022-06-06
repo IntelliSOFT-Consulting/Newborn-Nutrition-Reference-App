@@ -538,10 +538,10 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black" />
 
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/total_term_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -568,10 +568,10 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black" />
 
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/percentage_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -598,10 +598,10 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black" />
 
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/mortality_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -628,10 +628,10 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black" />
 
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/expressing_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

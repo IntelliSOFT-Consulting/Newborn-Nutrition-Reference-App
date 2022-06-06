@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 

@@ -117,9 +117,18 @@ data class MotherBabyItem(
     val gainRate: String? = "",
     var dashboard: BabyDashboard,
     var mother: MotherDashboard,
+    var assessment: AssessmentItem,
 
     ) {
     override fun toString(): String = babyName
+}
+
+data class AssessmentItem(
+    val breastfeedingBaby: String? = "",
+    val breastProblems: String? = "",
+    val contraindicated: String? = ""
+) {
+    override fun toString(): String = breastfeedingBaby.toString()
 }
 
 data class BabyDashboard(
@@ -210,4 +219,11 @@ data class DHMDashboardItem(
     val dhmAverageLength: String? = "",
 ) {
     override fun toString(): String = resourceId.toString()
+}
+
+data class MessageItem(
+    val success: Boolean,
+    val message: String
+) {
+    override fun toString(): String = message
 }

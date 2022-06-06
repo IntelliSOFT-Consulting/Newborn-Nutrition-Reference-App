@@ -5,17 +5,17 @@
     android:layout_marginVertical="@dimen/item_margin_vertical"
     android:orientation="vertical"
     android:weightSum="4">
-<!--
+
     <com.google.android.fhir.datacapture.views.QuestionnaireItemHeaderView
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />-->
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="3">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout"
@@ -32,10 +32,9 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="0.5" />
+        <Space
+            android:layout_width="@dimen/item_margin_horizontal"
+            android:layout_height="match_parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_two"
@@ -52,10 +51,9 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="0.5" />
+        <Space
+            android:layout_width="@dimen/item_margin_horizontal"
+            android:layout_height="match_parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_three"

@@ -87,15 +87,19 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         requireActivity().application,
                         fhirEngine, "0"
                     )
-                )
-                    .get(PatientListViewModel::class.java)
+                ).get(PatientListViewModel::class.java)
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
             val adapter = BabyItemAdapter(this::onPatientItemClicked)
             recyclerView.adapter = adapter
 
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
-                binding.pbLoading.visibility=View.GONE
+                if (it.isEmpty()) {
+                    binding.apply {
+                        imgEmpty.visibility = View.VISIBLE
+                    }
+                }
+                binding.pbLoading.visibility = View.GONE
                 adapter.submitList(it)
             }
 
@@ -211,9 +215,11 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -228,7 +234,12 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
-        findNavController().navigate(BabiesFragmentDirections.navigateToChildDashboard(patientItem.resourceId,true))
+        findNavController().navigate(
+            BabiesFragmentDirections.navigateToChildDashboard(
+                patientItem.resourceId,
+                true
+            )
+        )
     }
 
 

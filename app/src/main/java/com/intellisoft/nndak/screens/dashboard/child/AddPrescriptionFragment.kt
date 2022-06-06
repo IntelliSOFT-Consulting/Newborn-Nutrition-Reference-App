@@ -77,7 +77,7 @@ class AddPrescriptionFragment : Fragment() {
                 onSubmitAction()
             }
             btnCancel.setOnClickListener {
-                findNavController().navigateUp()
+               showCancelScreenerQuestionnaireAlertDialog()
             }
         }
         confirmationDialog = ConfirmationDialog(

@@ -43,6 +43,17 @@
     <color name="light_green_A400">#76FF03</color>
     <color name="light_green_A700">#64DD17</color>
 
+    <color name="grey_3">#f7f7f7</color>
+    <color name="grey_5">#f2f2f2</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+    <color name="grey_95">#1a1a1a</color>
+    <color name="grey_100_">#0d0d0d</color>
+
 
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>

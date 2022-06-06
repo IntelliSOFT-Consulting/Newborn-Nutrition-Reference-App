@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:paddingTop="@dimen/_15dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="@dimen/_10dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
 

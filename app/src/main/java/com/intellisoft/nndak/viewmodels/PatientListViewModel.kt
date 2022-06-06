@@ -35,7 +35,7 @@ class PatientListViewModel(
 ) :
     AndroidViewModel(application) {
 
-    val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
+    private val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
     val liveOrders = MutableLiveData<List<OrdersItem>>()
     val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
@@ -150,7 +150,11 @@ class PatientListViewModel(
         location: String
     ): DHMDashboardItem {
         val orders = getOrdersSearchResults(nameQuery, location)
-       // val volume = get(nameQuery, location)
+        val total = 0
+        /**
+         * Retrieve Stock Encounters & Observations
+         */
+        // val volume = get(nameQuery, location)
 
         /* val orders: MutableList<OrdersItem> = mutableListOf()
          fhirEngine
@@ -169,7 +173,13 @@ class PatientListViewModel(
                  orders.addAll(it)
              }*/
 
-        return DHMDashboardItem(dhmInfants = orders.size.toString(), dhmFullyInfants = orders.size.toString(), dhmVolume = orders.size.toString(), dhmAverageVolume = orders.size.toString(), dhmAverageLength = orders.size.toString())
+        return DHMDashboardItem(
+            dhmInfants = orders.size.toString(),
+            dhmFullyInfants = orders.size.toString(),
+            dhmVolume = total.toString(),
+            dhmAverageVolume = orders.size.toString(),
+            dhmAverageLength = orders.size.toString()
+        )
     }
 
     private suspend fun getOrdersSearchResults(
@@ -369,11 +379,13 @@ class PatientListViewModel(
 
             }
             .let { mother.addAll(it) }
+        Timber.e("Baby Id ${baby.resourceId}")
         val obs = getObservations(baby.resourceId)
         var birthWeight = ""
         var status = ""
         if (obs.isNotEmpty()) {
             for (element in obs) {
+                Timber.e("Baby Observations Found ${obs.size}")
                 if (element.code == "8339-4") {
                     birthWeight = element.value
                 }
@@ -408,7 +420,8 @@ class PatientListViewModel(
             dashboard = BabyDashboard(
                 prescription = PrescriptionItem()
             ),
-            mother = MotherDashboard()
+            mother = MotherDashboard(),
+            assessment = AssessmentItem()
         )
 
     }
@@ -421,12 +434,13 @@ class PatientListViewModel(
                 sort(Observation.DATE, Order.DESCENDING)
             }
             .map {
-                PatientDetailsViewModel.createObservationItem(
+                createObservationItem(
                     it,
                     getApplication<Application>().resources
                 )
             }
             .let { observations.addAll(it) }
+        Timber.e("Baby Found Obs ${observations.size}")
         return observations
     }
 

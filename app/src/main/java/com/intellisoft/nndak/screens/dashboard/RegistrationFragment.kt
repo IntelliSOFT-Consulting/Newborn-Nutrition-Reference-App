@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -21,11 +20,9 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
-import com.intellisoft.nndak.widgets.CustomQuestionnaireFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,13 +36,6 @@ class RegistrationFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private val binding
         get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +65,7 @@ class RegistrationFragment : Fragment() {
                 onSubmitAction()
             }
             btnCancel.setOnClickListener {
-                findNavController().navigateUp()
+                showCancelScreenerQuestionnaireAlertDialog()
             }
         }
         confirmationDialog = ConfirmationDialog(
@@ -120,25 +110,22 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
 
-            if (!it) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+            if (it != null) {
+                if (it.success) {
+                    (activity as MainActivity).hideDialog()
+                    successDialog.show(childFragmentManager, "Success Details")
+                } else {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
 
-                (activity as MainActivity).hideDialog()
-                return@observe
+                    (activity as MainActivity).hideDialog()
+                    return@observe
+                }
             }
-
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+
         }
-
-
     }
 
     private fun updateArguments() {
@@ -147,7 +134,7 @@ class RegistrationFragment : Fragment() {
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = CustomQuestionnaireFragment()
+            val fragment = QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

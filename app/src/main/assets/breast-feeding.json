@@ -34,7 +34,7 @@
       ],
       "item": [
         {
-          "linkId": "3.0.0",
+          "linkId": "Milk-Expressed",
           "type": "group",
           "extension": [
             {
@@ -48,36 +48,30 @@
           ],
           "item": [
             {
-              "linkId": "Milk-Expressed",
-              "type": "group",
-              "item": [
+              "type": "quantity",
+              "code": [
                 {
-                  "type": "quantity",
-                  "code": [
-                    {
-                      "code": "Milk-Expressed",
-                      "display": "Milk Expressed",
-                      "system": "http://loinc.org/modified"
-                    }
-                  ],
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-                      "valueCoding": {
-                        "display": "ml"
-                      }
-                    }
-                  ],
-                  "required": true,
-                  "linkId": "/Milk-9",
-                  "text": "Milk Expressed (ml)"
+                  "code": "Milk-Expressed",
+                  "display": "Milk Expressed",
+                  "system": "http://loinc.org/modified"
                 }
-              ]
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "ml"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Milk-9",
+              "text": "Milk Expressed (ml)"
             }
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "Time-Expressed",
           "type": "group",
           "extension": [
             {
@@ -91,23 +85,17 @@
           ],
           "item": [
             {
-              "linkId": "Time-Expressed",
-              "type": "group",
-              "item": [
+              "type": "dateTime",
+              "code": [
                 {
-                  "type": "dateTime",
-                  "code": [
-                    {
-                      "code": "Time-Expressed",
-                      "display": "Time Expressed",
-                      "system": "http://loinc.org/modified"
-                    }
-                  ],
-                  "required": true,
-                  "linkId": "/Time-Expressed",
-                  "text": "Time Expressed"
+                  "code": "Time-Expressed",
+                  "display": "Time Expressed",
+                  "system": "http://loinc.org/modified"
                 }
-              ]
+              ],
+              "required": true,
+              "linkId": "/Time-Expressed",
+              "text": "Time Expressed"
             }
           ]
         }

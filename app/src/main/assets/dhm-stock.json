@@ -33,14 +33,11 @@
         }
       ],
       "item": [
+
         {
-          "linkId": "3.0.0",
-          "type": "display",
-          "text": "Fill this form daily at Midnight during operation days"
-        },
-        {
-          "linkId": "3.0.0",
+          "linkId": "Unpasteurized",
           "type": "group",
+          "text": "Fill this form daily at Midnight during operation days",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -53,28 +50,22 @@
           ],
           "item": [
             {
-              "linkId": "Unpasteurized",
-              "type": "group",
-              "item": [
+              "type": "integer",
+              "code": [
                 {
-                  "type": "integer",
-                  "code": [
-                    {
-                      "code": "Unpasteurized",
-                      "display": "Unpasteurized",
-                      "system": "http://loinc.org/modified"
-                    }
-                  ],
-                  "required": true,
-                  "linkId": "/Unpasteurized",
-                  "text": "Unpasteurized"
+                  "code": "Unpasteurized",
+                  "display": "Unpasteurized",
+                  "system": "http://loinc.org/modified"
                 }
-              ]
+              ],
+              "required": true,
+              "linkId": "/Unpasteurized",
+              "text": "Unpasteurized"
             }
           ]
         },
         {
-          "linkId": "3.0.0",
+          "linkId": "Pasteurized",
           "type": "group",
           "extension": [
             {
@@ -88,23 +79,17 @@
           ],
           "item": [
             {
-              "linkId": "Pasteurized",
-              "type": "group",
-              "item": [
+              "type": "integer",
+              "code": [
                 {
-                  "type": "integer",
-                  "code": [
-                    {
-                      "code": "Pasteurized",
-                      "display": "Pasteurized",
-                      "system": "http://loinc.org/modified"
-                    }
-                  ],
-                  "required": true,
-                  "linkId": "/Pasteurized",
-                  "text": "Pasteurized"
+                  "code": "Pasteurized",
+                  "display": "Pasteurized",
+                  "system": "http://loinc.org/modified"
                 }
-              ]
+              ],
+              "required": true,
+              "linkId": "/Pasteurized",
+              "text": "Pasteurized"
             }
           ]
         }

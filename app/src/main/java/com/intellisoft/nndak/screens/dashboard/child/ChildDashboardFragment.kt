@@ -20,7 +20,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
-import com.intellisoft.nndak.R 
+import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -108,19 +108,47 @@ class ChildDashboardFragment : Fragment() {
                 dimOption(imgLactation)
             }
             lnBabyDashboard.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyDashboard(args.patientId))
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToBabyDashboard(
+                        args.patientId
+                    )
+                )
+
+
             }
             lnBabyAssessment.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyAssessment(args.patientId))
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToBabyAssessment(
+                        args.patientId
+                    )
+                )
+
+
             }
             lnBabyFeeding.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyFeeding(args.patientId))
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToBabyFeeding(
+                        args.patientId
+                    )
+                )
+
+
             }
             lnBabyMonitoring.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyMonitoring(args.patientId))
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToBabyMonitoring(
+                        args.patientId
+                    )
+                )
+
             }
             lnBabyLactation.setOnClickListener {
-                findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabyLactation(args.patientId))
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToBabyLactation(
+                        args.patientId
+                    )
+                )
+
             }
         }
 

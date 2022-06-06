@@ -197,5 +197,10 @@
         android:name="com.intellisoft.nndak.screens.profile.ProfileFragment"
         android:label="@string/action_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.intellisoft.nndak.screens.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>

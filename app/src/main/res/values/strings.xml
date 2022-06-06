@@ -315,6 +315,13 @@
     <string name="process">Process Order</string>
     <string name="app_dispensing">Enter Dispencing Details</string>
     <string name="app_review_pres">Review Prescription Details</string>
+    <string name="mother_breastfeeding_baby">Mother Breastfeeding Baby?</string>
+    <string name="breast_problems">Breast Problems</string>
+    <string name="mother_contraindicated">Is mother contraindicated for Infant?</string>
+    <string name="app_total_expressed">Total Milk Expressed</string>
+    <string name="middle_lorem_ipsum">Online Sync</string>
+    <string name="settings">Settings</string>
+    <string name="app_sync">Sync</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
