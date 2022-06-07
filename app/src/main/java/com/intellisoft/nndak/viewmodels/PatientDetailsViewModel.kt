@@ -140,8 +140,8 @@ class PatientDetailsViewModel(
                 filter(Observation.SUBJECT, { value = "Patient/$patientId" })
                 sort(Observation.DATE, Order.ASCENDING)
             }
-          /*  .filter { it.hasCode() }
-            .sortedByDescending { it.c }*/
+            /*  .filter { it.hasCode() }
+              .sortedByDescending { it.c }*/
             .map { createObservationItem(it, getApplication<Application>().resources) }
 
             .let { observations.addAll(it) }
@@ -415,7 +415,7 @@ class PatientDetailsViewModel(
                 if (element.code == "93857-1") {
                     dDate = element.value.substring(0, 10)
                 }
-                if (element.code == "Current-Weight" || element.code == "29463-7"||element.code=="3141-9") {
+                if (element.code == "Current-Weight" || element.code == "29463-7" || element.code == "3141-9") {
                     cWeight = element.value
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
                     weights.add(code[0].toInt())
@@ -912,10 +912,10 @@ class PatientDetailsViewModel(
                 if (element.code == "Total-Feeds") {
                     total = element.value
                 }
-                if (element.code == "Feeding-Frequency") {
+                if (element.code == "Breast-Feed-Frequency" || element.code == "Formula-Frequency") {
                     frequency = element.value
                 }
-                if (element.code == "Feeding-Route") {
+                if (element.code == "EBM-Feeding-Route" || element.code == "Formula-Route") {
                     route = element.value
                 }
                 if (element.code == "IV-Fluids") {

@@ -73,6 +73,9 @@
         <action
             android:id="@+id/navigate_to_baby_feeding"
             app:destination="@id/babyFeedsFragment" />
+        <action
+            android:id="@+id/navigate_to_babies_panel"
+            app:destination="@id/babiesFragment" />
     </fragment>
     <fragment
         android:id="@+id/babyDashboardFragment"

@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.ImageViewCompat
@@ -60,6 +61,7 @@ class ChildDashboardFragment : Fragment() {
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
+        onBackPressed()
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
@@ -152,6 +154,12 @@ class ChildDashboardFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun onBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabiesPanel())
+        }
     }
 
     private fun dimOption(imageView: ImageView) {
