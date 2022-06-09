@@ -1,20 +1,20 @@
 package com.intellisoft.nndak.helper_class
 
-import org.hl7.fhir.r4.model.NutritionOrder
-import org.hl7.fhir.r4.model.Observation
-import org.hl7.fhir.r4.model.Quantity
-import org.hl7.fhir.r4.model.Questionnaire
+import org.hl7.fhir.r4.model.*
+import java.util.*
 
 class QuestionnaireHelper {
 
-    fun nutritionResource(code:String){
-        val nutrition= NutritionOrder()
+    fun nutritionResource(code: String) {
+        val nutrition = NutritionOrder()
         nutrition.text
     }
 
-    fun codingQuestionnaire(code: String,
-                            display: String,
-                            text: String):
+    fun codingQuestionnaire(
+        code: String,
+        display: String,
+        text: String
+    ):
             Observation {
         val observation = Observation()
         observation
@@ -24,6 +24,22 @@ class QuestionnaireHelper {
             .setCode(code).display = display
         observation.code.text = text
         return observation
+    }
+
+    fun order(
+        generateUuid: String,
+        encounterReference: Reference,
+        subjectReference: Reference
+    ): NutritionOrder {
+        val no = NutritionOrder()
+        no.id = generateUuid
+        no.patient = subjectReference
+        no.encounter = encounterReference
+        no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
+        no.dateTime = Date()
+        no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
+
+        return no
     }
 
     fun quantityQuestionnaire(
@@ -46,4 +62,6 @@ class QuestionnaireHelper {
             .setSystem("http://unitsofmeasure.org")
         return observation
     }
+
+
 }

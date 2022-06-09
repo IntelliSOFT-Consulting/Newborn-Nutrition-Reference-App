@@ -46,6 +46,7 @@ class BreastFeedingFragment : Fragment() {
     private lateinit var successDialog: SuccessDialog
     private lateinit var breastFeeding: String
     private lateinit var efficientFeeding: String
+    private var exit: Boolean = true
     private lateinit var effectiveExpression: String
     private lateinit var expressedSufficient: String
     private var _binding: FragmentBreastFeedingBinding? = null
@@ -88,6 +89,7 @@ class BreastFeedingFragment : Fragment() {
         binding.apply {
 
             actionMilkExpression.setOnClickListener {
+                exit = true
                 effectiveExpression = if (rbMotherYes.isChecked) {
                     "Yes"
                 } else {
@@ -102,10 +104,11 @@ class BreastFeedingFragment : Fragment() {
                 completeMilkExpression(effectiveExpression, expressedSufficient)
             }
             actionAssess.setOnClickListener {
+                exit = false
                 handleShowCues()
             }
             actionBreastFeeding.setOnClickListener {
-
+                exit = true
                 breastFeeding = if (rbYes.isChecked) {
                     "Yes"
                 } else {
@@ -218,7 +221,9 @@ class BreastFeedingFragment : Fragment() {
 
     private fun proceedClick() {
         successDialog.dismiss()
-        findNavController().navigateUp()
+        if (exit) {
+            findNavController().navigateUp()
+        }
     }
 
     private fun observeResourcesSaveAction() {

@@ -11,6 +11,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
 import com.intellisoft.nndak.models.ApGar
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.models.MessageItem
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.time.DateUtils.isSameDay
 import org.hl7.fhir.r4.model.*
+import org.hl7.fhir.r4.model.codesystems.EncounterStatus
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import org.json.JSONArray
 import org.json.JSONObject
@@ -564,8 +566,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     if (bType.isNotEmpty()) {
                                         bundle.addEntry().setResource(
                                             qh.codingQuestionnaire(
-                                                "60733-3",
-                                                "Doctor's Notes",
+                                                "Additional-Notes",
+                                                "Additional Notes",
                                                 bType
                                             )
                                         )
@@ -668,23 +670,23 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         for (k in 0 until parent.length()) {
                             val inner = parent.getJSONObject(k)
                             val childChild = inner.getString("linkId")
-                            Timber.e("Child $parent")
+                            Timber.e("Child $inner")
                             when (childChild) {
-                                "Day-Of-Life" -> {
-                                    val value =
-                                        extractResponse(inner, "valueInteger")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Day-Of-Life",
-                                                "Day Of Life",
-                                                value,
-                                            )
-                                        )
-                                            .request.url = "Observation"
+                                /*  "Day-Of-Life" -> {
+                                      val value =
+                                          extractResponse(inner, "valueInteger")
+                                      if (value.isNotEmpty()) {
+                                          bundle.addEntry().setResource(
+                                              qh.codingQuestionnaire(
+                                                  "Day-Of-Life",
+                                                  "Day Of Life",
+                                                  value,
+                                              )
+                                          )
+                                              .request.url = "Observation"
 
-                                    }
-                                }
+                                      }
+                                  }*/
                                 "Current-Weight" -> {
                                     val value =
                                         extractResponseQuantity(inner, "valueQuantity")
@@ -995,10 +997,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                                 extractResponseCode(inner, "valueCoding")
 
                                             if (value.isNotEmpty()) {
+                                                val consent = if (value == "Yes") {
+                                                    "Signed"
+                                                } else {
+                                                    "Not Signed"
+                                                }
                                                 bundle.addEntry().setResource(
                                                     qh.codingQuestionnaire(
                                                         "Consent-Given",
-                                                        "Consent Given", value,
+                                                        "Consent Given", consent,
                                                     )
                                                 )
                                                     .request.url = "Observation"
@@ -1033,7 +1040,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             if (value.isNotEmpty()) {
                                                 bundle.addEntry().setResource(
                                                     qh.codingQuestionnaire(
-                                                        "DHM-Reasons",
+                                                        "DHM-Reason",
                                                         "DHM Reasons", value,
                                                     )
                                                 )
@@ -1134,6 +1141,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         }
                                     }
                                 }
+                                "Additional-Notes" -> {
+                                    val value =
+                                        extractResponse(inner, "valueString")
+
+                                    if (value.isNotEmpty()) {
+
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Additional-Notes",
+                                                "Additional Notes and Remarks", value
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+
+                                }
 
                                 else -> {
                                     println("Items skipped...")
@@ -1155,7 +1178,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                         .request.url = "Observation"
                     val encounterId = generateUuid()
-                    title = "Feeds Prescription"
+                    title = PRESCRIPTION
+
+                    val encounterReference = Reference("Encounter/$encounterId")
+                    if (feeds.isNotEmpty()) {
+                        if (feeds.contains("DHM")) {
+                            val no = NutritionOrder()
+                            no.id = generateUuid()
+                            no.patient = subjectReference
+                            no.encounter = encounterReference
+                            no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
+                            no.dateTime = Date()
+                            no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
+                            fhirEngine.create(no)
+                        }
+                    }
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
 
@@ -1257,6 +1294,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.subject = subjectReference
                     resource.id = encounterId
                     resource.reasonCodeFirstRep.text = reason
+                  //  resource.reasonReferenceFirstRep.reference = reason
                     saveResourceToDatabase(resource)
                 }
 
@@ -2413,6 +2451,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                     )
                         .request.url = "Observation"
+
+
                     val value = retrieveUser(false)
 
                     bundle.addEntry()
@@ -2427,7 +2467,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     title = "DHM Stock"
                     val encounterId = generateUuid()
-
+                    val encounterReference = Reference("Encounter/$encounterId")
 
                     isResourcesSaved.postValue(true)
 
@@ -2442,7 +2482,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun dispensingDetails(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun dispensingDetails(
+        questionnaireResponse: QuestionnaireResponse,
+        patientId: String,
+        orderId: String,
+        encounterId: String
+    ) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -2531,8 +2576,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                         .request.url = "Observation"
                     val subjectReference = Reference("Patient/$patientId")
+                    val encounterReference = Reference("Encounter/$encounterId")
                     title = "DHM Dispensing"
-                    val encounterId = generateUuid()
+
+                    val order = NutritionOrder()
+                    order.id = orderId
+                    order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
+                    order.patient = subjectReference
+                    order.encounter = encounterReference
+                    fhirEngine.create(order)
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
 

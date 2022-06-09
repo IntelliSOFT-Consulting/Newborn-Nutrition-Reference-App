@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.child
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -30,6 +31,7 @@ import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedingCuesTips
+import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.utils.isTablet
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -62,6 +64,7 @@ class BabyMonitoringFragment : Fragment() {
     private val binding
         get() = _binding!!
 
+    private var exit: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,16 +92,6 @@ class BabyMonitoringFragment : Fragment() {
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
-    /*    val tab = isTablet(requireContext())
-        binding.apply {
-            if (!tab) {
-                screen.lnParent.visibility = View.GONE
-                btnSubmit.visibility = View.VISIBLE
-            } else {
-                btnSubmit.visibility = View.GONE
-            }
-        }*/
-     //   Toast.makeText(requireContext(), tab.toString(), Toast.LENGTH_SHORT).show()
 
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
@@ -112,40 +105,76 @@ class BabyMonitoringFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
 
-            if (motherBabyItem != null) {
+        binding.apply {
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > Baby Panel > <font color=\"#37379B\">Feeding</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+        }
+        patientDetailsViewModel.getMumChild()
+        patientDetailsViewModel.getCurrentPrescriptions()
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
+
+            if (data != null) {
                 binding.apply {
-                    val gest = motherBabyItem.dashboard.gestation ?: ""
-                    val status = motherBabyItem.status
-                    incDetails.tvBabyName.text = motherBabyItem.babyName
-                    incDetails.tvMumName.text = motherBabyItem.motherName
-                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
+                    val gest = data.dashboard.gestation ?: ""
+                    val status = data.status
+                    incDetails.tvBabyName.text = data.babyName
+                    incDetails.tvMumName.text = data.motherName
+                    incDetails.appBirthWeight.text = data.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = motherBabyItem.motherIp
-                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
+                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = data.motherIp
+                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
                     incDetails.appNeonatalSepsis.text =
-                        motherBabyItem.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
+                        data.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
 
                     /**
                      * Prescriptions
                      */
-                    incPrescribe.appTodayTotal.text =
-                        motherBabyItem.dashboard.prescription.totalVolume ?: ""
-                    incPrescribe.appRoute.text = motherBabyItem.dashboard.prescription.route ?: ""
+//                    incPrescribe.appTodayTotal.text =
+//                        data.dashboard.prescription.totalVolume ?: ""
+//                    incPrescribe.appRoute.text = data.dashboard.prescription.route ?: ""
+//
+
+                    val isSepsis = data.dashboard.neonatalSepsis
+                    if (isSepsis != "Yes") {
+                        incDetails.appNeonatalSepsis.visibility = View.GONE
+                        incDetails.tvNeonatalSepsis.visibility = View.GONE
+                    }
+
+                    val isAsphyxia = data.dashboard.asphyxia
+                    if (isAsphyxia != "Yes") {
+                        incDetails.appAsphyxia.visibility = View.GONE
+                        incDetails.tvAsphyxia.visibility = View.GONE
+                    }
+
+                    val isJaundice = data.dashboard.jaundice
+                    if (isJaundice != "Yes") {
+                        incDetails.tvJaundice.visibility = View.GONE
+                        incDetails.appJaundice.visibility = View.GONE
+                    }
+
 
                 }
             }
         }
+
+
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
+        }
+
         binding.apply {
             btnSubmit.setOnClickListener {
+                exit = true
                 confirmationDialog.show(childFragmentManager, "Confirm Action")
             }
             btnCancel.setOnClickListener {
@@ -167,6 +196,7 @@ class BabyMonitoringFragment : Fragment() {
     }
 
     private fun handleShowCues() {
+        exit = false
         feedingCues = TipsDialog(this::feedingCuesClick)
         feedingCues.show(childFragmentManager, "bundle")
     }
@@ -284,8 +314,9 @@ class BabyMonitoringFragment : Fragment() {
 
     private fun proceedClick() {
         successDialog.dismiss()
-        findNavController().navigateUp()
-
+        if (exit) {
+            findNavController().navigateUp()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

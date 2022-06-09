@@ -9,6 +9,10 @@
     tools:context=".screens.dashboard.child.BabyFeedsFragment">
 
     <include
+        android:id="@+id/breadcrumb"
+        layout="@layout/breadcrumb" />
+
+    <include
 
         android:id="@+id/inc_details"
         layout="@layout/baby_item" />
@@ -27,6 +31,7 @@
             android:layout_marginEnd="@dimen/_5dp"
             android:backgroundTint="@color/dim_black"
             android:text="@string/action_update_prescription"
+            android:textColor="@android:color/white"
             android:visibility="invisible"
             app:cornerRadius="@dimen/_25sp" />
 
@@ -36,6 +41,7 @@
             android:layout_height="40dp"
             android:backgroundTint="@color/dim_red"
             android:text="@string/action_new_prescription"
+            android:textColor="@android:color/white"
             app:cornerRadius="@dimen/_25sp" />
     </LinearLayout>
 
@@ -54,10 +60,10 @@
             android:id="@+id/prescription_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            app:layoutManager="LinearLayoutManager"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/_100dp"
+            android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/prescription_list_item" />
 
         <ProgressBar

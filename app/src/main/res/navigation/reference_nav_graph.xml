@@ -190,6 +190,9 @@
             android:name="patient_id"
             app:argType="string" />
         <argument
+            android:name="encounter"
+            app:argType="string" />
+        <argument
             android:name="order"
             app:argType="string" />
     </fragment>

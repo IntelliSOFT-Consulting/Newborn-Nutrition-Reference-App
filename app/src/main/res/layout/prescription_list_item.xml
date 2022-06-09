@@ -246,7 +246,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/app_additional"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/dim_red"
             android:textStyle="bold" />
 
         <LinearLayout

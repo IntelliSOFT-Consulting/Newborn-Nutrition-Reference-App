@@ -18,6 +18,7 @@ import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createNutritionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
@@ -188,13 +189,40 @@ class PatientListViewModel(
         location: String
     ): List<OrdersItem> {
         val orders: MutableList<OrdersItem> = mutableListOf()
+        try {
+            fhirEngine
+                .search<NutritionOrder> {
+                    sort(NutritionOrder.DATETIME, Order.ASCENDING)
+                    from = 0
+                }
+                .map {
+                    loadOrders(it, createNutritionItem(it, getApplication<Application>().resources))
+
+                }
+                .filter { it.status == "ACTIVE" }
+                .let {
+
+                    orders.addAll(it)
+                }
+        } catch (e: Exception) {
+            Timber.e("Error::: ${e.localizedMessage}")
+        }
+
+        return orders
+    }
+
+    private suspend fun getOrdersSearchResultsOld(
+        nameQuery: String = "",
+        location: String
+    ): List<OrdersItem> {
+        val orders: MutableList<OrdersItem> = mutableListOf()
         fhirEngine
             .search<Encounter> {
                 sort(Encounter.DATE, Order.ASCENDING)
                 from = 0
             }
             .map {
-                loadOrders(it, createEncounterItem(it, getApplication<Application>().resources))
+                loadOrdersOld(it, createEncounterItem(it, getApplication<Application>().resources))
 
             }
             .filter { it.description == "DHM Recipient" }
@@ -206,7 +234,53 @@ class PatientListViewModel(
         return orders
     }
 
-    private suspend fun loadOrders(it: Encounter, item: EncounterItem): OrdersItem {
+    private suspend fun loadOrders(it: NutritionOrder, item: NutritionItem): OrdersItem {
+
+        val patientId = it.patient.reference.drop(8)
+        val baby = getPatient(patientId)
+
+        val mother = getMothersDetails(it.patient.reference)
+        val motherName = mother.first.toString()
+        val motherIp = mother.second.toString()
+
+        var dhmType = ""
+        var consentGiven = ""
+        var dhmReason = ""
+
+        val observations = getObservationsPerEncounter(it.encounter.reference)
+        if (observations.isNotEmpty()) {
+            for (element in observations) {
+                if (element.code == "Consent-Given") {
+                    Timber.e("Consent Given ${element.value}")
+                    consentGiven = element.value
+                }
+                if (element.code == "DHM-Type") {
+                    dhmType = element.value
+                }
+                if (element.code == "DHM-Reason") {
+                    dhmReason = element.value
+                }
+            }
+        }
+
+        return OrdersItem(
+            id = it.logicalId,
+            resourceId = it.logicalId,
+            patientId = it.patient.reference.drop(8),
+            encounterId = it.encounter.reference.drop(10),
+            motherName = motherName,
+            babyAge = getFormattedAge(baby.dob),
+            dhmType = dhmType,
+            babyName = baby.name,
+            ipNumber = motherIp,
+            consentGiven = consentGiven,
+            dhmReason = dhmReason,
+            description = dhmReason,
+            status = item.status.toString()
+        )
+    }
+
+    private suspend fun loadOrdersOld(it: Encounter, item: EncounterItem): OrdersItem {
         val patientId = it.subject.reference.drop(8)
         val baby = getPatient(patientId)
 
@@ -237,6 +311,7 @@ class PatientListViewModel(
             id = it.logicalId,
             resourceId = it.logicalId,
             patientId = it.subject.reference.drop(8),
+            encounterId = it.logicalId,
             motherName = motherName,
             babyAge = getFormattedAge(baby.dob),
             dhmType = dhmType,
@@ -244,7 +319,7 @@ class PatientListViewModel(
             ipNumber = motherIp,
             consentGiven = consentGiven,
             dhmReason = dhmReason,
-            description = it.reasonCodeFirstRep.text
+            description = it.reasonCodeFirstRep.text, status = "active"
         )
     }
 
@@ -252,51 +327,6 @@ class PatientListViewModel(
     private suspend fun getPatient(patientId: String): PatientItem {
         val patient = fhirEngine.load(Patient::class.java, patientId)
         return patient.toPatientItem(0)
-    }
-
-    private suspend fun createOrdersItem(it: NutritionOrder): OrdersItem {
-        val patientId = it.patient.reference.drop(8)
-        val encounterId = it.encounter.reference
-
-        /**
-         * Return Baby's Details
-         */
-        val baby = getPatient(patientId)
-
-        val mother = getMothersDetails(it.patient.reference)
-        val motherName = mother.first.toString()
-        val motherIp = mother.second.toString()
-
-        /**
-         * Collect Observations from Encounter
-         */
-        var consent = ""
-        var dhm = ""
-        val observations = getObservationsPerEncounter(encounterId)
-
-        if (observations.isNotEmpty()) {
-            for (element in observations) {
-                if (element.code == "Consent-Given") {
-                    consent = element.value
-                }
-                if (element.code == "DHM-Type") {
-                    dhm = element.value
-                }
-            }
-        }
-
-        return OrdersItem(
-            id = it.id,
-            resourceId = it.logicalId,
-            patientId = patientId,
-            ipNumber = motherIp,
-            motherName = motherName,
-            babyName = baby.name,
-            babyAge = getFormattedAge(baby.dob),
-            consentGiven = consent,
-            dhmType = dhm,
-            description = "Data"
-        )
     }
 
     private fun getFormattedAge(
@@ -410,7 +440,6 @@ class PatientListViewModel(
                     Patient.LINK, { value = "Patient/${baby.resourceId}" }
 
                 )
-
             }
             .mapIndexed { index, fhirPatient ->
                 fhirPatient.toPatientItem(
@@ -423,6 +452,7 @@ class PatientListViewModel(
         val obs = getObservations(baby.resourceId)
         var birthWeight = ""
         var status = ""
+
         if (obs.isNotEmpty()) {
             for (element in obs) {
                 Timber.e("Baby Observations Found ${obs.size}")
@@ -437,6 +467,7 @@ class PatientListViewModel(
                         "Term"
                     }
 
+
                 }
             }
         }
@@ -446,6 +477,7 @@ class PatientListViewModel(
             mumName = mother[0].name
             motherIp = mother[0].resourceId
         }
+
 
         return MotherBabyItem(
             id = position.toString(),
@@ -458,7 +490,6 @@ class PatientListViewModel(
             status = status,
             gainRate = "Normal",
             dashboard = BabyDashboard(
-                prescription = PrescriptionItem()
             ),
             mother = MotherDashboard(),
             assessment = AssessmentItem()

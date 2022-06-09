@@ -13,6 +13,12 @@
         android:orientation="vertical">
 
         <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp"
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb" />
+        <include
             android:id="@+id/inc_details"
             layout="@layout/baby_item" />
 
@@ -42,13 +48,13 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_baby_curve"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/growth_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp" />
+                        android:layout_height="300dp"
+                        android:layout_margin="@dimen/_10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -77,15 +83,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorPrimary"
+
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_current_weight"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -138,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorPrimary"
+
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
@@ -146,8 +151,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_mothers_milk"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -180,8 +184,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_distribution"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/feeds_chart"
@@ -215,15 +218,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorPrimary"
+
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_daily_feeds"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -276,7 +278,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
@@ -284,8 +285,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_expressions"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

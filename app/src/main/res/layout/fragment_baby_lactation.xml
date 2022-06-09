@@ -14,6 +14,9 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb" />
+        <include
             android:id="@+id/inc_mum"
             layout="@layout/mother_item" />
 
@@ -35,6 +38,7 @@
                 android:layout_height="40dp"
                 android:backgroundTint="@color/dim_red"
                 android:text="@string/action_provide_support"
+                android:textColor="@android:color/white"
                 app:cornerRadius="@dimen/_25sp" />
         </LinearLayout>
 
@@ -44,7 +48,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:paddingTop="@dimen/_15dp"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
@@ -59,8 +63,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_10"
                     android:text="@string/app_lactation_status"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/black" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <View
                     android:layout_width="match_parent"
@@ -129,15 +132,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorPrimary"
+
                                     android:textSize="@dimen/_20sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/app_total_expressed"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                    android:textColor="@color/colorPrimary" />
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"

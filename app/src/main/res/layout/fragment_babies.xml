@@ -45,6 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@android:color/white"
             android:backgroundTint="@color/design_default_color_error"
             android:text="@string/action_register_baby"
             app:cornerRadius="@dimen/_35dp" />

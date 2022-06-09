@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_marginBottom="@dimen/_100dp"
+    android:orientation="vertical"
     tools:context=".screens.dashboard.child.BabyAssessmentFragment">
 
     <LinearLayout
@@ -37,8 +37,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_10"
                     android:text="@string/app_first_session"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/black" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <View
                     android:layout_width="match_parent"
@@ -64,7 +63,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5dp"
                         android:backgroundTint="@color/dim_red"
-                        android:text="@string/action_submit" />
+                        android:text="@string/action_submit"
+                        android:textColor="@android:color/white" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cancel"

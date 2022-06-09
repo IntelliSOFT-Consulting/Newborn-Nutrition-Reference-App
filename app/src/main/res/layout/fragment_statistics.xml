@@ -111,13 +111,12 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tv_total"
+                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/action_dummy"
                                     android:textAlignment="textEnd"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/_35dp" />
+                                    android:textSize="@dimen/_35sp" />
 
 
                             </LinearLayout>
@@ -125,12 +124,11 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/action_numbers"
-                            android:textAlignment="textEnd"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:text="@string/total_babies"
+                            android:textAlignment="textEnd" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -222,14 +220,12 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tv_preterm"
+                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/action_dummy"
-
                                     android:textAlignment="textEnd"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/_35dp" />
+                                    android:textSize="@dimen/_35sp" />
 
 
                             </LinearLayout>
@@ -237,12 +233,11 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/action_preterm"
-                            android:textAlignment="textEnd"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAlignment="textEnd" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -258,9 +253,9 @@
                                 app:tint="@color/design_default_color_error" />
 
                             <TextView
+                                android:id="@+id/tv_pre_average"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/design_default_color_error" />
@@ -269,6 +264,7 @@
                         </LinearLayout>
 
                         <ProgressBar
+                            android:id="@+id/pb_pre_term"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -343,13 +339,12 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tv_term"
+                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/action_dummy"
                                     android:textAlignment="textEnd"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/_35dp" />
+                                    android:textSize="@dimen/_35sp" />
 
 
                             </LinearLayout>
@@ -357,12 +352,11 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/action_term"
-                            android:textAlignment="textEnd"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAlignment="textEnd" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -378,9 +372,9 @@
                                 app:tint="@color/design_default_color_error" />
 
                             <TextView
+                                android:id="@+id/tv_term_average"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/design_default_color_error" />
 
@@ -388,6 +382,7 @@
                         </LinearLayout>
 
                         <ProgressBar
+                            android:id="@+id/pb_term"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -454,14 +449,13 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/action_dummy"
 
+                                    android:text="@string/action_dummy"
                                     android:textAlignment="textEnd"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="@dimen/_35dp" />
+                                    android:textSize="@dimen/_35sp" />
 
 
                             </LinearLayout>
@@ -469,12 +463,11 @@
                         </LinearLayout>
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/action_average_days"
-                            android:textAlignment="textEnd"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary" />
+                            android:textAlignment="textEnd" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -531,17 +524,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
-                        android:text="@string/app_feed_time"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:text="@string/app_feed_time" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/total_term_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="300dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -565,13 +557,12 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_percentage"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/percentage_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="300dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -595,13 +586,29 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_mortality"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/mortality_chart"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/mortality_chart"
+                            android:layout_width="0dp"
+                            android:layout_height="300dp"
+                            android:layout_weight="1.5" />
+
+                        <TextView
+                            android:layout_width="@dimen/_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:text="@string/app_mortality"
+                            android:textColor="@color/dim_red" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -625,13 +632,12 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_expressing"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/black" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/expressing_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="300dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

@@ -35,16 +35,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_mother_name"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorPrimary" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
+                android:id="@+id/tv_mum_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:id="@+id/tv_mum_name"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorPrimary" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

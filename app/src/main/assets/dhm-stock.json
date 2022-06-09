@@ -60,7 +60,7 @@
               ],
               "required": true,
               "linkId": "/Unpasteurized",
-              "text": "Unpasteurized"
+              "text": "Unpasteurized (mls)"
             }
           ]
         },
@@ -89,7 +89,7 @@
               ],
               "required": true,
               "linkId": "/Pasteurized",
-              "text": "Pasteurized"
+              "text": "Pasteurized (mls)"
             }
           ]
         }

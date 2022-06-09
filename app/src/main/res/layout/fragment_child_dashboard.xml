@@ -11,6 +11,13 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5dp" />
+
+        <include
             android:id="@+id/inc_details"
             layout="@layout/baby_list_item_view" />
 
@@ -59,8 +66,10 @@
                             app:tint="@color/dim_red" />
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
                             android:text="@string/app_baby_dashboard"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -110,8 +119,10 @@
                             app:tint="@color/dim_red" />
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
                             android:text="@string/app_assess"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -169,8 +180,10 @@
                             app:tint="@color/dim_red" />
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
                             android:text="@string/app_prescribe_feed"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -221,8 +234,10 @@
                             app:tint="@color/dim_red" />
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
                             android:text="@string/app_feeding"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -280,8 +295,10 @@
                             app:tint="@color/dim_red" />
 
                         <TextView
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
                             android:text="@string/app_lactation_support"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -296,6 +313,8 @@
         </LinearLayout>
     </LinearLayout>
 </androidx.slidingpanelayout.widget.SlidingPaneLayout>-->
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -307,19 +326,30 @@
 
     <!--    Top Layer-->
 
+    <include
+        android:id="@+id/breadcrumb"
+        layout="@layout/breadcrumb"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/inc_details"
         layout="@layout/baby_list_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/breadcrumb" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/_5dp"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView3"
@@ -338,34 +368,43 @@
                 android:padding="@dimen/_5dp"
                 android:src="@drawable/ic_baseline_more_horiz_24" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_baby_dashboard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_large">
+                android:padding="@dimen/spacing_large"
+                android:paddingTop="@dimen/_15dp">
 
                 <ImageView
                     android:id="@+id/img_dashboard"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginBottom="@dimen/spacing_mlarge"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     app:srcCompat="@drawable/monitor"
                     app:tint="@color/dim_red" />
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:text="@string/app_baby_dashboard"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_dashboard" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
 
@@ -376,7 +415,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_5dp"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
@@ -396,33 +434,45 @@
                 android:padding="@dimen/_5dp"
                 android:src="@drawable/ic_baseline_more_horiz_24" />
 
-            <LinearLayout
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_baby_assessment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_large">
+                android:padding="@dimen/spacing_large"
+                android:paddingTop="@dimen/_15dp">
 
                 <ImageView
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginBottom="@dimen/spacing_mlarge"
+                    android:id="@+id/img_assess"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     app:srcCompat="@drawable/preview"
                     app:tint="@color/dim_red" />
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:text="@string/app_assess"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_assess" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            >
 
         </RelativeLayout>
 
@@ -434,7 +484,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/_5dp"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView4"
@@ -454,34 +503,44 @@
                 android:padding="@dimen/_5dp"
                 android:src="@drawable/ic_baseline_more_horiz_24" />
 
-            <LinearLayout
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_baby_feeding"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_large">
+                android:padding="@dimen/spacing_large"
+                android:paddingTop="@dimen/_15dp">
 
                 <ImageView
                     android:id="@+id/img_feeds"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginBottom="@dimen/spacing_mlarge"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     app:srcCompat="@drawable/prescribe"
                     app:tint="@color/dim_red" />
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:text="@string/app_prescribe_feed"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_feeds" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
 
@@ -491,7 +550,6 @@
         android:id="@+id/cardView6"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView3"
@@ -512,34 +570,43 @@
                 android:padding="@dimen/_5dp"
                 android:src="@drawable/ic_baseline_more_horiz_24" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_baby_monitoring"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_large">
+                android:padding="@dimen/spacing_large"
+                android:paddingTop="@dimen/_15dp">
 
                 <ImageView
                     android:id="@+id/img_monitor"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginBottom="@dimen/spacing_mlarge"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     app:srcCompat="@drawable/feeding"
                     app:tint="@color/dim_red" />
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:text="@string/app_feeding"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_monitor" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
 
@@ -551,7 +618,6 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/_5dp"
         android:layout_weight="1"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -571,34 +637,44 @@
                 android:padding="@dimen/_5dp"
                 android:src="@drawable/ic_baseline_more_horiz_24" />
 
-            <LinearLayout
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_baby_lactation"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_large">
+                android:padding="@dimen/spacing_large"
+                android:paddingTop="@dimen/_15dp">
 
                 <ImageView
                     android:id="@+id/img_lactation"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="@dimen/spacing_mlarge"
-                    android:layout_marginBottom="@dimen/spacing_mlarge"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     app:srcCompat="@drawable/breastfeeding"
                     app:tint="@color/dim_red" />
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:text="@string/app_lactation_support"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_lactation" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
 

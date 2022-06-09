@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -23,6 +24,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
+import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -64,6 +66,15 @@ class ChildDashboardFragment : Fragment() {
         onBackPressed()
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
+
+        binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > <font color=\"#37379B\">Baby Profile</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =

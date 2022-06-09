@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_today_total"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_today_total"
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_route"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_route"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_three_hourly"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_three_hourly"
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_three_hourly_break"
-            android:textColor="@color/colorPrimary" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_three_hourly_break"

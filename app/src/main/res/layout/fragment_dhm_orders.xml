@@ -47,6 +47,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/design_default_color_error"
             android:text="@string/action_add_recipient"
+            android:visibility="gone"
             app:cornerRadius="@dimen/_35dp" />
     </LinearLayout>
 
@@ -61,6 +62,7 @@
             layout="@layout/order_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <include
             android:id="@+id/patient_list_container"
             layout="@layout/patient_list_view"
@@ -74,4 +76,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty"
+        android:visibility="gone" />
 </RelativeLayout>

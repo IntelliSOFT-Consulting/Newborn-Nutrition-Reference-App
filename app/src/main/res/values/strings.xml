@@ -142,7 +142,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="menu_apgar_score">APGAR Score</string>
     <string name="menu_new">New Born</string>
-    <string name="action_score">Apgar Score</string>
+    <string name="action_score">APGAR Score</string>
     <string name="action_assess">Assessment</string>
     <string name="edit_child">Edit Child</string>
     <string name="action_additional">Complete</string>
@@ -177,6 +177,7 @@
     <string name="app_total_term">Total Term and Preterm DHM Available</string>
     <string name="action_dummy">20</string>
     <string name="action_numbers">No of Infants on DHM</string>
+    <string name="total_babies">Total Number of Babies</string>
     <string name="action_percent">5%</string>
     <string name="query_ip_search">IP Number</string>
     <string name="app_hint">Sort By</string>
@@ -302,9 +303,9 @@
     <string name="audible">Does baby swallow audibly?</string>
     <string name="chocking">Does baby feed without chocking, turning blue or pale?</string>
     <string name="softening">Has mother reported breast softening?</string>
-    <string name="side_feed">Does baby feed for atlear 10 minutes per side?</string>
-    <string name="three_hours">Does baby sleep comfortably between feedings every 2-3 hours?</string>
-    <string name="diapers">Does baby have 6-8 wet diapers a day?</string>
+    <string name="side_feed">Does baby feed for after 10 minutes per side?</string>
+    <string name="three_hours">Does baby sleep comfortably between feedings every 2–3 hours?</string>
+    <string name="diapers">Does baby have 6–8 wet diapers a day?</string>
     <string name="stimulate">Stimulated Nipples Prior to Feeding.</string>
     <string name="proper"><![CDATA[Proper Positioning of the Baby & Supports Head]]></string>
     <string name="early_latch">Practice Early Latching at Breast.</string>
@@ -313,7 +314,7 @@
     <string name="action_feeding_tips">Feeding Tips</string>
     <string name="action_feeding_tips_explanation">Below are the Usual Tips for the Mother during Feeding. Indicate if followed</string>
     <string name="process">Process Order</string>
-    <string name="app_dispensing">Enter Dispencing Details</string>
+    <string name="app_dispensing">Enter Dispensing Details</string>
     <string name="app_review_pres">Review Prescription Details</string>
     <string name="mother_breastfeeding_baby">Mother Breastfeeding Baby?</string>
     <string name="breast_problems">Breast Problems</string>
@@ -325,7 +326,9 @@
     <string name="action_weight">Weight (gm)</string>
     <string name="app_enter_feeds">Enter Feeds Prescription</string>
     <string name="app_enter_type_feeds">Enter Type of Feeds</string>
-    <string-array name="birds">
+    <string name="log_out">Log out</string>
+    <string name="nothing_found">Nothing Found</string>
+     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
         <item>National Id</item>

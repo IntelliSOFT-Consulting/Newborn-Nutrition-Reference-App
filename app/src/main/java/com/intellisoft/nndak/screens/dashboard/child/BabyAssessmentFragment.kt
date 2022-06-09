@@ -28,6 +28,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -53,7 +54,6 @@ class BabyAssessmentFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
-
     private var _binding: FragmentBabyAssessmentBinding? = null
     private val binding
         get() = _binding!!
@@ -106,30 +106,53 @@ class BabyAssessmentFragment : Fragment() {
             resources.getString(R.string.app_okay_saved)
         )
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
-            if (motherBabyItem != null) {
+            if (data != null) {
+
                 binding.apply {
-                    val gest = motherBabyItem.dashboard.gestation ?: ""
-                    val status = motherBabyItem.status
-                    incDetails.tvBabyName.text = motherBabyItem.babyName
-                    incDetails.tvMumName.text = motherBabyItem.motherName
-                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
+                    val gest = data.dashboard.gestation ?: ""
+                    val status = data.status
+                    incDetails.tvBabyName.text = data.babyName
+                    incDetails.tvMumName.text = data.motherName
+                    incDetails.appBirthWeight.text = data.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = motherBabyItem.motherIp
-                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text =
-                        motherBabyItem.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
+                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = data.motherIp
+                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
+
+                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
+
+                    incDetails.appNeonatalSepsis.text = data.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
+                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
+
+
+                    val isSepsis = data.dashboard.neonatalSepsis
+                    if (isSepsis != "Yes") {
+                        incDetails.appNeonatalSepsis.visibility = View.GONE
+                        incDetails.tvNeonatalSepsis.visibility = View.GONE
+                    }
+
+                    val isAsphyxia = data.dashboard.asphyxia
+                    if (isAsphyxia != "Yes") {
+                        incDetails.appAsphyxia.visibility = View.GONE
+                        incDetails.tvAsphyxia.visibility = View.GONE
+                    }
+
+                    val isJaundice = data.dashboard.jaundice
+                    if (isJaundice != "Yes") {
+                        incDetails.tvJaundice.visibility = View.GONE
+                        incDetails.appJaundice.visibility = View.GONE
+                    }
+
 
                 }
             }
         }
+
         binding.apply {
             btnCancel.setOnClickListener {
                 findNavController().navigateUp()
@@ -215,7 +238,8 @@ class BabyAssessmentFragment : Fragment() {
                 builder.apply {
                     setMessage(getString(R.string.cancel_questionnaire_message))
                     setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@BabyAssessmentFragment).navigateUp()
+                        NavHostFragment.findNavController(this@BabyAssessmentFragment)
+                            .navigateUp()
                     }
                     setNegativeButton(getString(android.R.string.no)) { _, _ -> }
                 }

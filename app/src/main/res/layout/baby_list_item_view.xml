@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="5">
+        android:weightSum="4">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -23,18 +23,23 @@
             android:padding="2dp">
 
             <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_baby_name"
                 android:textStyle="bold" />
 
             <TextView
+
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_mother_name"
                 android:textStyle="bold" />
 
             <TextView
+
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,51 +50,53 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.3"
-            android:orientation="vertical"
-            android:padding="2dp">
-
-            <TextView
-                android:id="@+id/app_baby_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/app_mother_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/app_ip_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="10dp"
-            android:layout_weight="0.4" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:padding="2dp">
 
             <TextView
+
+                android:id="@+id/app_baby_name"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/app_mother_name"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/app_ip_number"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_birth_weight"
                 android:textStyle="bold" />
 
             <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_status"
                 android:textStyle="bold" />
 
             <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_rate_gain"
@@ -99,26 +106,29 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.3"
+            android:layout_weight="0.8"
             android:orientation="vertical"
             android:padding="2dp">
 
             <TextView
                 android:id="@+id/app_birth_weight"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/app_status"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dim_red" />
 
             <TextView
                 android:id="@+id/app_rate_gain"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="match_parent"
-                android:textColor="@color/dim_green"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/dim_green" />
         </LinearLayout>
 
     </LinearLayout>

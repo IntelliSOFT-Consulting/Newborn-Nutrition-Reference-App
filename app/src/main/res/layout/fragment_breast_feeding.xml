@@ -37,6 +37,7 @@
                 android:layout_gravity="end"
                 android:backgroundTint="@color/dim_green"
                 android:text="@string/action_click_assess"
+                android:textColor="@android:color/white"
                 app:cornerRadius="@dimen/_35dp" />
         </LinearLayout>
 
@@ -46,7 +47,7 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_weight="0.5"
@@ -152,7 +153,7 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_weight="0.5"

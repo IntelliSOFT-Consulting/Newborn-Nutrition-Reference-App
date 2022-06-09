@@ -1,6 +1,5 @@
 package com.intellisoft.nndak.models
 
-import android.content.res.Resources
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
 
 data class PatientItem(
@@ -71,6 +70,16 @@ data class EncounterItem(
 }
 
 
+data class NutritionItem(
+    val id: String,
+    val patient: String,
+    val encounter: String,
+    val status: String?,
+) {
+    override fun toString(): String = id
+}
+
+
 data class DbObservations(
     val value: String,
     val title: String
@@ -92,7 +101,9 @@ data class OrdersItem(
     val id: String,
     val resourceId: String,
     val patientId: String,
+    val encounterId: String,
     val description: String,
+    val status: String,
     val ipNumber: String? = "",
     val motherName: String? = "",
     val babyName: String? = "",
@@ -145,7 +156,6 @@ data class BabyDashboard(
     val jaundice: String? = "",
     val cWeight: String? = "",
     val motherMilk: String? = "",
-    val prescription: PrescriptionItem
 
 ) {
     override fun toString(): String = babyWell.toString()
@@ -206,7 +216,8 @@ data class PrescriptionItem(
     val dhmReason: String? = "",
     val additionalFeeds: String? = "",
     val supplements: String? = "",
-    val expressions: String? = ""
+    val expressions: String? = "",
+    val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
 }
@@ -231,12 +242,12 @@ data class MessageItem(
 }
 
 data class FeedItem(
-    val id: String,
-    val resourceId: String,
-    val type: String,
-    val route: String,
-    val volume: String,
-    val frequency: String
+    val id: String? = "",
+    val resourceId: String? = "",
+    val type: String? = "",
+    val route: String? = "",
+    val volume: String? = "",
+    val frequency: String? = ""
 ) {
-    override fun toString(): String = type
+    override fun toString(): String = type.toString()
 }

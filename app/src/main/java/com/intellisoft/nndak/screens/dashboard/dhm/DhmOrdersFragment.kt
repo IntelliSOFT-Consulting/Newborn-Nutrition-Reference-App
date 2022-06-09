@@ -101,6 +101,11 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             )
             patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
+                if (it.isEmpty()){
+                    binding.empty.cpBgView.visibility=View.VISIBLE
+                }else{
+                    binding.empty.cpBgView.visibility=View.GONE
+                }
 
                 binding.pbLoading.visibility = View.GONE
                 adapter.submitList(it)
@@ -245,11 +250,10 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onOrderClick(ordersItem: OrdersItem) {
+    private fun onOrderClick(order: OrdersItem) {
         findNavController().navigate(
             DhmOrdersFragmentDirections.navigateToProcessing(
-                ordersItem.patientId,
-                ordersItem.resourceId
+                order.patientId, order.encounterId, order.resourceId
             ),
         )
     }

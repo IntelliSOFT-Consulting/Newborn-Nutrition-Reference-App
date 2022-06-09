@@ -60,6 +60,7 @@
                 android:layout_weight="1.3"
                 android:backgroundTint="@color/design_default_color_error"
                 android:text="@string/action_enter_stock"
+                android:textColor="@android:color/white"
                 app:cornerRadius="@dimen/_25sp" />
 
             <View
@@ -74,6 +75,7 @@
                 android:layout_weight="1.3"
                 android:backgroundTint="@color/design_default_color_error"
                 android:text="@string/action_view_dhm"
+                android:textColor="@android:color/white"
                 app:cornerRadius="@dimen/_25sp" />
         </LinearLayout>
 
@@ -141,7 +143,6 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -153,8 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_numbers"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -241,7 +241,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorPrimary"
+
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -253,8 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_total_dhm"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -342,7 +341,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorPrimary"
+
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -354,8 +353,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_average_dhm"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
 
                     <TextView
@@ -436,7 +434,6 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -448,8 +445,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_infants"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -536,7 +532,6 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/colorPrimary"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -548,8 +543,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_dhm_length"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -600,13 +594,13 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_10"
                     android:text="@string/app_total_term"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textColor="@color/black" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/total_term_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="400dp"
+                    android:padding="@dimen/_5dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -34,49 +34,6 @@
       ],
       "item": [
         {
-          "linkId": "Day-Of-Life",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
-            }
-          ],
-          "item": [
-            {
-              "type": "integer",
-              "required": true,
-              "linkId": "/Current-Weight",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Day of Life",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "linkId": "Current-Weight",
           "type": "group",
           "extension": [
@@ -1930,6 +1887,36 @@
                   }
                 }
               ]
+            }
+          ]
+        },
+
+        {
+          "linkId": "Additional-Notes",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "Additional-Notes",
+                  "display": "Additional-Notes",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/Additional-Notes",
+              "text": "Additional Notes and Remarks"
             }
           ]
         }

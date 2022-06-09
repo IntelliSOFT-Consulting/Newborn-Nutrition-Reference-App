@@ -29,6 +29,7 @@ import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.android.synthetic.main.success_dialog.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,7 +93,7 @@ class ProcessOrderFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-        patientDetailsViewModel.getOrder(args.order)
+        patientDetailsViewModel.getOrder(args.encounter)
         patientDetailsViewModel.liveOrder.observe(viewLifecycleOwner) { ordersItem ->
             if (ordersItem != null) {
                 binding.apply {
@@ -105,6 +106,8 @@ class ProcessOrderFragment : Fragment() {
                     incDetails.appDhmType.text = ordersItem.dhmType
                     incDetails.appConsent.text = ordersItem.consentGiven
 
+
+                    incDetails.appBabyAge.visibility = View.VISIBLE
                     incDetails.appAction.visibility = View.GONE
                     incDetails.lnAction.visibility = View.GONE
                     incDetails.appConsent.visibility = View.GONE
@@ -116,6 +119,7 @@ class ProcessOrderFragment : Fragment() {
                      * Hide Titles
                      */
 
+                    incTitle.appBabyAge.visibility = View.VISIBLE
                     incTitle.appAction.visibility = View.GONE
                     incTitle.lnAction.visibility = View.GONE
                     incTitle.appConsent.visibility = View.GONE
@@ -166,9 +170,10 @@ class ProcessOrderFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
+
             viewModel.dispensingDetails(
                 questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId
+                args.patientId,args.order,args.encounter
             )
         }
 

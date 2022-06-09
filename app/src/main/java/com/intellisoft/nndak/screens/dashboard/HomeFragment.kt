@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.screens.dashboard
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -78,7 +80,7 @@ class HomeFragment : Fragment() {
                     tvFullyInfants.text = it.dhmFullyInfants
                     tvAverageLength.text = it.dhmAverageLength
 
-                    populateGraphData()
+                    populateData()
 
                 }
             }
@@ -96,60 +98,74 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun populateGraphData() {
+    private fun populateData() {
 
-        val values = arrayListOf<Int>(2, 4, 6, 8, 6, 4)
-        val ourLineChartEntries: ArrayList<Entry> = ArrayList()
+        val values = arrayListOf<Int>(4, 7, 12, 2, 3, 2, 1, 8, 6, 4, 2, 7)
+        if (values.isNotEmpty()) {
+            val lessFive: ArrayList<Entry> = ArrayList()
+            val lessSeven: ArrayList<Entry> = ArrayList()
+            val moreSeven: ArrayList<Entry> = ArrayList()
 
-        for ((i, entry) in values.withIndex()) {
-            val value = values[i].toFloat()
-            ourLineChartEntries.add(Entry(i.toFloat(), value))
+            for ((i, entry) in values.withIndex()) {
+                val value = values[i].toFloat()
+                lessFive.add(Entry(i.toFloat(), value))
+                lessSeven.add(Entry(i.toFloat() + 1, value))
+                moreSeven.add(Entry(i.toFloat() - 1, value))
+            }
+            val lessThanFive = LineDataSet(lessFive, "Preterm DHM")
+            lessThanFive.setColors(Color.parseColor("#F65050"))
+            lessThanFive.setDrawCircleHole(false)
+            lessThanFive.setDrawValues(false)
+            lessThanFive.setDrawCircles(false)
+            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val lessThanSeven = LineDataSet(lessSeven, "Term DHM")
+            lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
+            lessThanSeven.setDrawCircleHole(false)
+            lessThanSeven.setDrawValues(false)
+            lessThanSeven.setDrawCircles(false)
+            lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val moreThanSeven = LineDataSet(moreSeven, "Total DHM")
+            moreThanSeven.setColors(Color.parseColor("#77A9FF"))
+            moreThanSeven.setDrawCircleHole(false)
+            moreThanSeven.setDrawValues(false)
+            moreThanSeven.setDrawCircles(false)
+            moreThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val data = LineData(lessThanFive, lessThanSeven, moreThanSeven)
+            binding.totalTermChart.axisLeft.setDrawGridLines(false)
+
+            val xAxis: XAxis = binding.totalTermChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+            binding.totalTermChart.legend.isEnabled = true
+
+            //remove description label
+            binding.totalTermChart.description.isEnabled = true
+            binding.totalTermChart.isDragEnabled = true
+            binding.totalTermChart.setScaleEnabled(true)
+            binding.totalTermChart.description.text = "Age (Days)"
+            //add animation
+            binding.totalTermChart.animateX(1000, Easing.EaseInSine)
+            binding.totalTermChart.data = data
+
+            val leftAxis: YAxis = binding.totalTermChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+
+
+            val rightAxis: YAxis = binding.totalTermChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+            //refresh
+            binding.totalTermChart.invalidate()
         }
-        val values2 = arrayListOf<Int>(1, 3, 5, 7, 5, 3)
-        val ourLineChartEntries2: ArrayList<Entry> = ArrayList()
-
-        for ((i, entry) in values2.withIndex()) {
-            val value = values2[i].toFloat()
-            ourLineChartEntries2.add(Entry(i.toFloat(), value))
-        }
-        val values3 = arrayListOf<Int>(0, 2, 4, 6, 4, 2, 0)
-        val ourLineChartEntries3: ArrayList<Entry> = ArrayList()
-
-        for ((i, entry) in values3.withIndex()) {
-            val value = values3[i].toFloat()
-            ourLineChartEntries3.add(Entry(i.toFloat(), value))
-        }
-
-        /**First Line Chart Data*/
-        val lineDataSet = LineDataSet(ourLineChartEntries, "")
-        lineDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
-
-        val lineDataSet2 = LineDataSet(ourLineChartEntries2, "")
-        lineDataSet2.setColors(*ColorTemplate.PASTEL_COLORS)
-
-        val lineDataSet3 = LineDataSet(ourLineChartEntries3, "")
-        lineDataSet3.setColors(*ColorTemplate.PASTEL_COLORS)
-
-
-        val data = LineData(lineDataSet, lineDataSet2, lineDataSet3)
-
-
-        binding.totalTermChart.axisLeft.setDrawGridLines(false)
-        val xAxis: XAxis = binding.totalTermChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(false)
-
-        binding.totalTermChart.legend.isEnabled = false
-
-        //remove description label
-        binding.totalTermChart.description.isEnabled = false
-        binding.totalTermChart.isDragEnabled = true
-        binding.totalTermChart.setScaleEnabled(true)
-        //add animation
-        binding.totalTermChart.animateX(1000, Easing.EaseInSine)
-        binding.totalTermChart.data = data
-        //refresh
-        binding.totalTermChart.invalidate()
     }
 
     override fun onDestroyView() {

@@ -13,14 +13,23 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.fhir.FhirEngine
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import com.intellisoft.nndak.viewmodels.PatientListViewModel
+import timber.log.Timber
+import kotlin.math.roundToInt
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,7 +47,11 @@ class StatisticsFragment : Fragment() {
     private val binding
         get() = _binding!!
 
-
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientListViewModel: PatientListViewModel
+    private var totalTerm: Int = 0
+    private var totalPreTerm: Int = 0
+    private var totalBabies: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +72,50 @@ class StatisticsFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientListViewModel =
+            ViewModelProvider(
+                this,
+                PatientListViewModel.PatientListViewModelFactory(
+                    requireActivity().application,
+                    fhirEngine, "0"
+                )
+            ).get(PatientListViewModel::class.java)
+
+        patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
+
+            if (it != null) {
+                totalBabies = it.count()
+                for (count in it) {
+                    if (count.status == "Preterm") {
+                        totalPreTerm++
+                    } else {
+                        totalTerm++
+                    }
+                }
+                Timber.d("Babies Total $totalBabies")
+                Timber.d("Babies Total $totalPreTerm")
+                Timber.d("Babies Total $totalTerm")
+
+                val prePercentage = (totalPreTerm.toDouble() / totalBabies) * 100
+                val termPercentage = (totalTerm.toDouble() / totalBabies) * 100
+
+                Timber.d("Babies Total $prePercentage")
+
+                binding.apply {
+                    tvTotal.text = totalBabies.toString()
+                    tvPreterm.text = totalPreTerm.toString()
+                    tvTerm.text = totalTerm.toString()
+                    tvPreAverage.text = "${prePercentage.roundToInt()} %"
+                    tvTermAverage.text = "${termPercentage.roundToInt()} %"
+
+                    pbTerm.progress = termPercentage.roundToInt()
+                    pbPreTerm.progress = prePercentage.roundToInt()
+
+                }
+            }
+
+        }
         binding.apply {
             firstFeedsChart()
             percentageFeedsChart()
@@ -82,10 +139,8 @@ class StatisticsFragment : Fragment() {
         val ourPieEntry = ArrayList<PieEntry>()
 
         for ((i, entry) in values.withIndex()) {
-            //converting to float
             val value = values[i].toFloat()
             val label = labels[i]
-            //adding each value to the pieentry array
             ourPieEntry.add(PieEntry(value, label))
         }
 
@@ -99,7 +154,6 @@ class StatisticsFragment : Fragment() {
         //add values to the pie dataset and passing them to the constructor
         val ourSet = PieDataSet(ourPieEntry, "")
         val data = PieData(ourSet)
-
         //setting the slices divider width
         ourSet.sliceSpace = 1f
 
@@ -120,6 +174,7 @@ class StatisticsFragment : Fragment() {
         binding.totalTermChart.legend.isEnabled = true
         binding.totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         binding.totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        binding.totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         binding.totalTermChart.legend.isWordWrapEnabled = true
 
 
@@ -169,35 +224,23 @@ class StatisticsFragment : Fragment() {
         pieShades.add(Color.parseColor("#DA1F12"))
         pieShades.add(Color.parseColor("#B7520E"))
 
-        //add values to the pie dataset and passing them to the constructor
         val ourSet = PieDataSet(ourPieEntry, "")
         val data = PieData(ourSet)
 
-        //setting the slices divider width
         ourSet.sliceSpace = 1f
-
-        //populating the colors and data
         ourSet.colors = pieShades
         binding.percentageChart.data = data
-        //setting color and size of text
         data.setValueTextColor(Color.WHITE)
         data.setValueTextSize(10f)
-
-        //add an animation when rendering the pie chart
         binding.percentageChart.animateY(1400, Easing.EaseInOutQuad)
-        //disabling center hole
         binding.percentageChart.isDrawHoleEnabled = false
-        //do not show description text
         binding.percentageChart.description.isEnabled = false
-        //legend enabled and its various appearance settings
         binding.percentageChart.legend.isEnabled = true
         binding.percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         binding.percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        binding.percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         binding.percentageChart.legend.isWordWrapEnabled = true
-
-        //dont show the text values on slices e.g Antelope, impala etc
         binding.percentageChart.setDrawEntryLabels(false)
-        //refreshing the chart
         binding.percentageChart.invalidate()
     }
 
@@ -205,29 +248,48 @@ class StatisticsFragment : Fragment() {
     private fun mortalityRateChart() {
 
         val values = arrayListOf<Int>(4, 7, 9, 2, 4, 2, 5, 3, 6, 4, 3)
-        val ourLineChartEntries: ArrayList<Entry> = ArrayList()
+        val mortality: ArrayList<Entry> = ArrayList()
 
         for ((i, entry) in values.withIndex()) {
             val value = values[i].toFloat()
-            ourLineChartEntries.add(Entry(i.toFloat(), value))
+            mortality.add(Entry(i.toFloat(), value))
         }
-        val lineDataSet = LineDataSet(ourLineChartEntries, "")
-        lineDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
-        val data = LineData(lineDataSet)
+        val actual = LineDataSet(mortality, "Mortality Rate")
+        actual.setColors(Color.parseColor("#F65050"))
+        actual.setDrawCircleHole(false)
+        actual.setDrawValues(false)
+        actual.setDrawCircles(false)
+        actual.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+        val data = LineData(actual)
         binding.mortalityChart.axisLeft.setDrawGridLines(false)
+
         val xAxis: XAxis = binding.mortalityChart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        binding.mortalityChart.legend.isEnabled = false
+
+        binding.mortalityChart.legend.isEnabled = true
 
         //remove description label
-        binding.mortalityChart.description.isEnabled = false
+        binding.mortalityChart.description.isEnabled = true
         binding.mortalityChart.isDragEnabled = true
         binding.mortalityChart.setScaleEnabled(true)
         //add animation
         binding.mortalityChart.animateX(1000, Easing.EaseInSine)
         binding.mortalityChart.data = data
+        val leftAxis: YAxis = binding.mortalityChart.axisLeft
+        leftAxis.axisMinimum = 0f
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = true
+
+
+        val rightAxis: YAxis = binding.mortalityChart.axisRight
+        rightAxis.setDrawGridLines(false)
+        rightAxis.setDrawZeroLine(false)
+        rightAxis.isGranularityEnabled = false
+        rightAxis.isEnabled = false
         //refresh
         binding.mortalityChart.invalidate()
     }
@@ -235,29 +297,71 @@ class StatisticsFragment : Fragment() {
     private fun expressingTimesChart() {
 
         val values = arrayListOf<Int>(4, 7, 12, 2, 3, 2, 1, 8, 6, 4, 2, 7)
-        val ourLineChartEntries: ArrayList<Entry> = ArrayList()
+        if (values.isNotEmpty()) {
+            val lessFive: ArrayList<Entry> = ArrayList()
+            val lessSeven: ArrayList<Entry> = ArrayList()
+            val moreSeven: ArrayList<Entry> = ArrayList()
 
-        for ((i, entry) in values.withIndex()) {
-            val value = values[i].toFloat()
-            ourLineChartEntries.add(Entry(i.toFloat(), value))
+            for ((i, entry) in values.withIndex()) {
+                val value = values[i].toFloat()
+                lessFive.add(Entry(i.toFloat(), value))
+                lessSeven.add(Entry(i.toFloat() + 1, value))
+                moreSeven.add(Entry(i.toFloat() - 1, value))
+            }
+            val lessThanFive = LineDataSet(lessFive, "0-5 Times")
+            lessThanFive.setColors(Color.parseColor("#F65050"))
+            lessThanFive.setDrawCircleHole(false)
+            lessThanFive.setDrawValues(false)
+            lessThanFive.setDrawCircles(false)
+            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val lessThanSeven = LineDataSet(lessSeven, "6-7 Times")
+            lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
+            lessThanSeven.setDrawCircleHole(false)
+            lessThanSeven.setDrawValues(false)
+            lessThanSeven.setDrawCircles(false)
+            lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val moreThanSeven = LineDataSet(moreSeven, "More than 7 times")
+            moreThanSeven.setColors(Color.parseColor("#77A9FF"))
+            moreThanSeven.setDrawCircleHole(false)
+            moreThanSeven.setDrawValues(false)
+            moreThanSeven.setDrawCircles(false)
+            moreThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val data = LineData(lessThanFive, lessThanSeven, moreThanSeven)
+            binding.expressingChart.axisLeft.setDrawGridLines(false)
+
+            val xAxis: XAxis = binding.expressingChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+
+            binding.expressingChart.legend.isEnabled = true
+
+            //remove description label
+            binding.expressingChart.description.isEnabled = true
+            binding.expressingChart.isDragEnabled = true
+            binding.expressingChart.setScaleEnabled(true)
+            binding.expressingChart.description.text = "Age (Days)"
+            //add animation
+            binding.expressingChart.animateX(1000, Easing.EaseInSine)
+            binding.expressingChart.data = data
+            val leftAxis: YAxis = binding.expressingChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = true
+
+
+            val rightAxis: YAxis = binding.expressingChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+            //refresh
+            binding.expressingChart.invalidate()
         }
-        val lineDataSet = LineDataSet(ourLineChartEntries, "")
-        lineDataSet.setColors(*ColorTemplate.PASTEL_COLORS)
-        val data = LineData(lineDataSet)
-        binding.expressingChart.axisLeft.setDrawGridLines(false)
-        val xAxis: XAxis = binding.expressingChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(false)
-        binding.expressingChart.legend.isEnabled = false
-
-        //remove description label
-        binding.expressingChart.description.isEnabled = false
-
-        //add animation
-        binding.expressingChart.animateX(1000, Easing.EaseInSine)
-        binding.expressingChart.data = data
-        //refresh
-        binding.expressingChart.invalidate()
     }
 
     private fun generateCenterText(): CharSequence {

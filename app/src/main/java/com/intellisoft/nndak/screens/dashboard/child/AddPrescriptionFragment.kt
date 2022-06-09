@@ -77,11 +77,6 @@ class AddPrescriptionFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        /**Custom Prescription*/
-        /*   val recyclerView: RecyclerView = binding.custom.list
-           val adapter = FeedAdapter(this::handleClick)
-           recyclerView.adapter = adapter*/
-
         binding.apply {
               btnSubmit.setOnClickListener {
                   onSubmitAction()

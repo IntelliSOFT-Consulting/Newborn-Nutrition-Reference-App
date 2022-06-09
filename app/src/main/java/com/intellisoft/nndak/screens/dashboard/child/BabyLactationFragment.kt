@@ -1,7 +1,9 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,20 +14,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.formatter.LargeValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
+import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -41,12 +46,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [BabyLactationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
+class BabyLactationFragment : Fragment() {
     private var _binding: FragmentBabyLactationBinding? = null
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
-    private val args: BabyAssessmentFragmentArgs by navArgs()
-
+    private val args: BabyLactationFragmentArgs by navArgs()
+    private var bWeight: Int = 0
     private var chart: BarChart? = null
     private val binding
         get() = _binding!!
@@ -85,7 +90,14 @@ class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
             )
                 .get(PatientDetailsViewModel::class.java)
 
+
         binding.apply {
+            breadcrumb.page.text =
+                Html.fromHtml("Baby Panel > <font color=\"#37379B\">Lactation Support</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
 
             /**
              * Three Columns
@@ -118,55 +130,72 @@ class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
             response.appAction.visibility = View.GONE
 
 
-            /**
-             * Lactation Status Chart
-             */
-            chart = binding.statusChart
-            chart!!.setOnChartValueSelectedListener(this@BabyLactationFragment)
-
-
-         //   populateBarChart()
 
             actionProvideSupport.setOnClickListener {
                 findNavController().navigate(BabyLactationFragmentDirections.navigateToFeeding(args.patientId))
             }
         }
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
-            if (motherBabyItem != null) {
+            if (data != null) {
                 binding.apply {
-                    val gest = motherBabyItem.dashboard.gestation ?: ""
-                    val sta = motherBabyItem.status
-                    incDetails.tvBabyName.text = motherBabyItem.babyName
-                    incDetails.tvMumName.text = motherBabyItem.motherName
-                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
+                    val gest = data.dashboard.gestation ?: ""
+                    val sta = data.status
+                    val weight = data.birthWeight
+                    val code = weight?.split("\\.".toRegex())?.toTypedArray()
+                    bWeight = code?.get(0)?.toInt()!!
+
+                    incDetails.tvBabyName.text = data.babyName
+                    incDetails.tvMumName.text = data.motherName
+                    incDetails.appBirthWeight.text = data.birthWeight
                     incDetails.appGestation.text = "$gest-$sta"
-                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = motherBabyItem.motherIp
-                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
+                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = data.motherIp
+                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
                     incDetails.appNeonatalSepsis.text =
-                        motherBabyItem.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
+                        data.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
 
                     /**
                      * Mum Details
                      */
-                    incMum.tvMumName.text = motherBabyItem.motherName
-                    incMum.appIpNumber.text = motherBabyItem.motherIp
-                    incMum.appDeliveryMethod.text = motherBabyItem.mother.deliveryMethod
-                    incMum.appParity.text = motherBabyItem.mother.parity
-                    incMum.appPmctcStatus.text = motherBabyItem.mother.pmtctStatus
-                    incMum.appDeliveryDate.text = motherBabyItem.mother.deliveryDate
-                    incMum.appMultiplePregnancy.text = motherBabyItem.mother.multiPregnancy
+                    incMum.tvMumName.text = data.motherName
+                    incMum.appIpNumber.text = data.motherIp
+                    incMum.appDeliveryMethod.text = data.mother.deliveryMethod
+                    incMum.appParity.text = data.mother.parity
+                    incMum.appPmctcStatus.text = data.mother.pmtctStatus
+                    incMum.appDeliveryDate.text = data.mother.deliveryDate
+                    incMum.appMultiplePregnancy.text = data.mother.multiPregnancy
 
-                    response.appIpNumber.text = motherBabyItem.assessment.breastfeedingBaby
-                    response.appMotherName.text = motherBabyItem.assessment.breastProblems
-                    response.appBabyName.text = motherBabyItem.assessment.contraindicated
+                    response.appIpNumber.text = data.assessment.breastfeedingBaby
+                    response.appMotherName.text = data.assessment.breastProblems
+                    response.appBabyName.text = data.assessment.contraindicated
+
+
+                    val isSepsis = data.dashboard.neonatalSepsis
+                    if (isSepsis != "Yes") {
+                        incDetails.appNeonatalSepsis.visibility = View.GONE
+                        incDetails.tvNeonatalSepsis.visibility = View.GONE
+                    }
+
+                    val isAsphyxia = data.dashboard.asphyxia
+                    if (isAsphyxia != "Yes") {
+                        incDetails.appAsphyxia.visibility = View.GONE
+                        incDetails.tvAsphyxia.visibility = View.GONE
+                    }
+
+                    val isJaundice = data.dashboard.jaundice
+                    if (isJaundice != "Yes") {
+                        incDetails.tvJaundice.visibility = View.GONE
+                        incDetails.appJaundice.visibility = View.GONE
+                    }
+
+                    populateBarChart(data.assessment.weights)
 
                 }
             }
@@ -175,40 +204,76 @@ class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
 
     }
 
-    private fun populateBarChart() {
+    private fun populateBarChart(values: MutableList<Int>?) {
+        val groupCount = 6
+        val groupSpace = 0.08f
+        val barSpace = 0.03f
+        val barWidth = 0.2f
 
-        val values = arrayListOf<Int>(4, 7, 12, 2, 14, 30)
-        //adding values
-        val ourBarEntries: ArrayList<BarEntry> = ArrayList()
+        val startYear = 2022
+        val endYear: Int = +groupCount
+        val iv: ArrayList<BarEntry> = ArrayList()
+        val ebm: ArrayList<BarEntry> = ArrayList()
+        val dhm: ArrayList<BarEntry> = ArrayList()
+        if (values != null) {
+            if (values.isNotEmpty()) {
+                for ((i, entry) in values.withIndex()) {
+                    val value = values[i].toFloat()
+                    bWeight += 100
+                    iv.add(BarEntry(i.toFloat(), value))
+                    ebm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
+                    dhm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
+                }
 
-        for ((i, entry) in values.withIndex()) {
-            val value = values[i].toFloat()
-            ourBarEntries.add(BarEntry(i.toFloat(), value))
+                val fluids = BarDataSet(iv, "IV")
+                fluids.setColors(Color.parseColor("#4472C4"))
+                fluids.setDrawValues(false)
+
+                val expressed = BarDataSet(ebm, "EBM")
+                expressed.setColors(Color.parseColor("#ED7D31"))
+                expressed.setDrawValues(false)
+
+                val donor = BarDataSet(dhm, "DHM")
+                donor.setColors(Color.parseColor("#A5A5A5"))
+                donor.setDrawValues(false)
+
+                val data = BarData(fluids, expressed, donor)
+                data.setValueFormatter(LargeValueFormatter())
+
+                binding.statusChart.data = data
+                //setting the x-axis
+                val xAxis: XAxis = binding.statusChart.xAxis
+                //calling methods to hide x-axis gridlines
+                binding.statusChart.axisLeft.setDrawGridLines(false)
+                xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(false)
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+
+                binding.statusChart.legend.isEnabled = true
+                binding.statusChart.description.isEnabled = false
+                binding.statusChart.animateY(3000, Easing.EaseInSine)
+
+                binding.statusChart.barData.barWidth = barWidth
+                binding.statusChart.xAxis.axisMinimum = startYear.toFloat()
+                binding.statusChart.xAxis.axisMaximum =
+                    startYear + binding.statusChart.barData.getGroupWidth(
+                        groupSpace,
+                        barSpace
+                    ) * groupCount
+                binding.statusChart.groupBars(startYear.toFloat(), groupSpace, barSpace)
+
+
+                val rightAxis: YAxis = binding.statusChart.axisRight
+                rightAxis.setDrawGridLines(false)
+                rightAxis.setDrawZeroLine(false)
+                rightAxis.isGranularityEnabled = false
+                rightAxis.isEnabled = false
+
+                //refresh the chart
+                binding.statusChart.invalidate()
+            }
         }
-
-
-        val barDataSet = BarDataSet(ourBarEntries, "Volume of Milk Expressed in 24 hours")
-        //set a template coloring
-        barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
-        val data = BarData(barDataSet)
-        binding.statusChart.data = data
-        //setting the x-axis
-        val xAxis: XAxis = binding.statusChart.xAxis
-        //calling methods to hide x-axis gridlines
-        binding.statusChart.axisLeft.setDrawGridLines(false)
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(false)
-
-        //remove legend
-        binding.statusChart.legend.isEnabled = true
-
-        //remove description label
-        binding.statusChart.description.isEnabled = true
-
-        //add animation
-        binding.statusChart.animateY(3000)
-        //refresh the chart
-        binding.statusChart.invalidate()
     }
 
 
@@ -228,11 +293,5 @@ class BabyLactationFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-    override fun onValueSelected(e: Entry?, h: Highlight?) {
-      Timber.e("onValueSelected ")
-    }
 
-    override fun onNothingSelected() {
-        Timber.e("onNothingSelected ")
-    }
 }

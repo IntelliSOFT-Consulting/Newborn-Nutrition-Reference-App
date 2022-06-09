@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.child
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -23,6 +24,7 @@ import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
 import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -41,7 +43,7 @@ class BabyFeedsFragment : Fragment() {
     private var _binding: FragmentBabyFeedsBinding? = null
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
-    private val args: BabyAssessmentFragmentArgs by navArgs()
+    private val args: BabyFeedsFragmentArgs by navArgs()
     private val binding
         get() = _binding!!
 
@@ -80,28 +82,57 @@ class BabyFeedsFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+
+        binding.apply {
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > Baby Panel > <font color=\"#37379B\">Prescribe Feeds</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+        }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { motherBabyItem ->
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
-            if (motherBabyItem != null) {
+            if (data != null) {
                 binding.apply {
-                    val gest = motherBabyItem.dashboard.gestation ?: ""
-                    val status = motherBabyItem.status
-                    incDetails.tvBabyName.text = motherBabyItem.babyName
-                    incDetails.tvMumName.text = motherBabyItem.motherName
-                    incDetails.appBirthWeight.text = motherBabyItem.birthWeight
+                    val gest = data.dashboard.gestation ?: ""
+                    val status = data.status
+                    incDetails.tvBabyName.text = data.babyName
+                    incDetails.tvMumName.text = data.motherName
+                    incDetails.appBirthWeight.text = data.birthWeight
                     incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = motherBabyItem.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = motherBabyItem.motherIp
-                    incDetails.appBabyWell.text = motherBabyItem.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = motherBabyItem.dashboard.asphyxia ?: ""
+                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
+                    incDetails.appMumIp.text = data.motherIp
+                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
+                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
                     incDetails.appNeonatalSepsis.text =
-                        motherBabyItem.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = motherBabyItem.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = motherBabyItem.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = motherBabyItem.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = motherBabyItem.dashboard.dateOfAdm ?: ""
+                        data.dashboard.neonatalSepsis ?: ""
+                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
+                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
+                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
+                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
+
+
+                    val isSepsis = data.dashboard.neonatalSepsis
+                    if (isSepsis != "Yes") {
+                        incDetails.appNeonatalSepsis.visibility = View.GONE
+                        incDetails.tvNeonatalSepsis.visibility = View.GONE
+                    }
+
+                    val isAsphyxia = data.dashboard.asphyxia
+                    if (isAsphyxia != "Yes") {
+                        incDetails.appAsphyxia.visibility = View.GONE
+                        incDetails.tvAsphyxia.visibility = View.GONE
+                    }
+
+                    val isJaundice = data.dashboard.jaundice
+                    if (isJaundice != "Yes") {
+                        incDetails.tvJaundice.visibility = View.GONE
+                        incDetails.appJaundice.visibility = View.GONE
+                    }
+
 
                 }
             }
@@ -134,7 +165,7 @@ class BabyFeedsFragment : Fragment() {
             actionUpdatePrescription.setOnClickListener {
 
                 Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
-              //  findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
+                //  findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
             }
         }
 

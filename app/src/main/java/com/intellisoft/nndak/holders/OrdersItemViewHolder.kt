@@ -28,17 +28,7 @@ class OrdersItemViewHolder(binding: OrderListViewBinding) :
         this.appIpNumber.text = ordersItem.ipNumber
         this.appBabyAge.text = ordersItem.babyAge
         this.appDhmType.text = ordersItem.dhmType
-        Timber.e("Consent Data ${ordersItem.consentGiven}")
-        val consent = when (ordersItem.consentGiven) {
-            "Yes" -> {
-                "Signed"
-            }
-            else -> {
-                "Not Signed"
-            }
-        }
-
-        this.appConsent.text = consent
+        this.appConsent.text = ordersItem.consentGiven
 
         /**
          * Hide Action Textview and Show Linear
