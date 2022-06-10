@@ -114,10 +114,9 @@ class ProcessOrderFragment : Fragment() {
                     incDetails.lnParent.weightSum = 5F
 
                     appDhmReason.text = ordersItem.dhmReason
+                    appDhmVolume.text = ordersItem.description
 
-                    /**
-                     * Hide Titles
-                     */
+                    /** Hide Titles */
 
                     incTitle.appBabyAge.visibility = View.VISIBLE
                     incTitle.appAction.visibility = View.GONE
@@ -173,7 +172,7 @@ class ProcessOrderFragment : Fragment() {
 
             viewModel.dispensingDetails(
                 questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId,args.order,args.encounter
+                args.patientId, args.order, args.encounter
             )
         }
 

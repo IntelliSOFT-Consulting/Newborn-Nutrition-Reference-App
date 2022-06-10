@@ -87,7 +87,7 @@ class PatientDetailsViewModel(
             .map { createEncounterItem(it, getApplication<Application>().resources) }
             .let { encounters.addAll(it) }
 
-        return encounters
+        return encounters.reversed()
     }
 
 
@@ -341,20 +341,42 @@ class PatientDetailsViewModel(
 
     fun getCurrentPrescriptions() {
         viewModelScope.launch {
-            livePrescriptionsData.value = getCurrentPrescriptionsDataModel(context)
+            livePrescriptionsData.value = getActivePrescriptionsDataModel(context)
         }
     }
 
+    private suspend fun getActivePrescriptionsDataModel(context: Application): List<PrescriptionItem> {
+        val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
+        val encounters = getPatientEncounters()
+        if (encounters.isNotEmpty()) {
+//            Timber.e("Total So Far ${encounters.size}")
+//            val item = encounters.first{
+//                it.code == "Feeds Prescription"
+//            }
+//            prescriptions.add(prescription(item))
+            for (element in encounters) {
+                if (element.code == "Feeds Prescription") {
+                    Timber.e("Total Prescriptions ${encounters.size}")
+                    prescriptions.add(prescription(element))
+                }
+            }
+        }
+
+        return prescriptions
+
+    }
     private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem> {
         val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
         val encounters = getPatientEncounters()
         if (encounters.isNotEmpty()) {
             for (element in encounters) {
                 if (element.code == "Feeds Prescription") {
+                    Timber.e("Total Prescriptions ${encounters.size}")
                     prescriptions.add(prescription(element))
                 }
             }
         }
+
         return prescriptions
 
     }
@@ -378,6 +400,15 @@ class PatientDetailsViewModel(
         var supplements = ""
         var additional = ""
         var consentDate = "N/A"
+        var expressions = 0;
+        val exp = getPatientEncounters()
+        if (exp.isNotEmpty()) {
+            for (ex in exp) {
+                if (ex.code == "Milk Expression") {
+                    expressions++
+                }
+            }
+        }
         if (observations.isNotEmpty()) {
             for (element in observations) {
                 Timber.e("Codes Found::: ${element.code}")
@@ -427,6 +458,7 @@ class PatientDetailsViewModel(
         }
 
         feeds.add(FeedItem())
+
         return PrescriptionItem(
             id = encounterItem.id,
             resourceId = encounterItem.code,
@@ -443,7 +475,7 @@ class PatientDetailsViewModel(
             supplements = supplements,
             additionalFeeds = additional,
             consentDate = consentDate,
-            feed = feeds
+            feed = feeds, expressions = expressions.toString()
         )
     }
 
@@ -510,17 +542,23 @@ class PatientDetailsViewModel(
         var consent = ""
         var dhm = ""
         var reason = ""
+        var dhmVolume = "N/A"
         val observations = getObservationsPerEncounter(orderId)
-        Timber.e("Observations ${observations.size}")
         if (observations.isNotEmpty()) {
             for (element in observations) {
+
+                Timber.e("Option:::: ${element.code} ${element.value}")
+
                 if (element.code == "Consent-Given") {
                     consent = element.value
                 }
                 if (element.code == "DHM-Type") {
                     dhm = element.value
                 }
-                if (element.code == "DHM-Reasons") {
+                if (element.code == "DHM-Volume") {
+                    dhmVolume = element.value
+                }
+                if (element.code == "DHM-Reason") {
                     reason = element.value
                 }
             }
@@ -536,13 +574,13 @@ class PatientDetailsViewModel(
             babyName = baby.name,
             babyAge = getFormattedAge(baby.dob),
             consentGiven = consent,
-            dhmType = dhm, dhmReason = reason, description = orderId, status = "active"
+            dhmType = dhm,
+            dhmReason = reason,
+            description = dhmVolume,
+            status = "active"
         )
     }
 
-    fun pullWeightData() {
-        TODO("Not yet implemented")
-    }
 
     companion object {
         /**
@@ -706,53 +744,12 @@ interface PatientDetailData {
     val lastInGroup: Boolean
 }
 
-data class PatientDetailHeader(
-    val header: String,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
-
-data class PatientDetailProperty(
-    val patientProperty: PatientProperty,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
-
-data class PatientDetailOverview(
-    val patient: PatientItem,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
-
-/**
- * Child Overview
- **/
-data class ChildDetailOverview(
-    val relation: RelatedPersonItem,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
-
-data class PatientDetailRelation(
-    val relation: RelatedPersonItem,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
-
 data class PatientDetailObservation(
     val observation: ObservationItem,
     override val firstInGroup: Boolean = false,
     override val lastInGroup: Boolean = false
 ) : PatientDetailData
 
-/**
- * Encounter
- */
-data class PatientDetailEncounter(
-    val encounter: EncounterItem,
-    override val firstInGroup: Boolean = false,
-    override val lastInGroup: Boolean = false
-) : PatientDetailData
 
 data class PatientDetailCondition(
     val condition: ConditionItem,
@@ -760,7 +757,6 @@ data class PatientDetailCondition(
     override val lastInGroup: Boolean = false
 ) : PatientDetailData
 
-data class PatientProperty(val header: String, val value: String)
 
 class PatientDetailsViewModelFactory(
     private val application: Application,
@@ -778,34 +774,6 @@ class PatientDetailsViewModelFactory(
 
 }
 
-
-/***
- *
- * Related Person Details
- * ***/
-class RelatedPersonDetailsViewModel(
-    application: Application,
-    private val fhirEngine: FhirEngine,
-    private val patientId: String
-) : AndroidViewModel(application) {
-
-}
-
-class RelatedPersonDetailsViewModelFactory(
-    private val application: Application,
-    private val fhirEngine: FhirEngine,
-    private val patientId: String
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        require(modelClass.isAssignableFrom(RelatedPersonDetailsViewModel::class.java)) {
-            "Unknown ViewModel class"
-        }
-        return PatientDetailsViewModel(application, fhirEngine, patientId) as T
-    }
-
-
-}
 
 data class RiskAssessmentItem(
     var riskStatusColor: Int,

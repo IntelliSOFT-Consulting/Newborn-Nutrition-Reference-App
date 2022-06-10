@@ -56,9 +56,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = resources.getString(R.string.home_menu_dashboard)
+            setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)
+        (activity as MainActivity).setDrawerEnabled(true)
+
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientListViewModel =
@@ -144,7 +147,7 @@ class HomeFragment : Fragment() {
             binding.totalTermChart.legend.isEnabled = true
 
             //remove description label
-            binding.totalTermChart.description.isEnabled = true
+            binding.totalTermChart.description.isEnabled = false
             binding.totalTermChart.isDragEnabled = true
             binding.totalTermChart.setScaleEnabled(true)
             binding.totalTermChart.description.text = "Age (Days)"

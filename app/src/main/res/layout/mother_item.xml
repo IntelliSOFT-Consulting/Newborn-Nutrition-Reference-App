@@ -31,18 +31,19 @@
                 app:srcCompat="@drawable/mum" />
 
             <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_mother_name"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/tv_mum_name"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:textAlignment="center" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -75,6 +76,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -82,6 +84,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_ip_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -94,6 +97,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -101,6 +105,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_delivery_method"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -113,6 +118,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -120,6 +126,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_delivery_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -132,6 +139,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -139,6 +147,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_mother_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -158,6 +167,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -165,6 +175,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_parity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -177,6 +188,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -184,6 +196,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_pmctc_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -196,6 +209,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -203,6 +217,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_multiple_pregnancy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -215,6 +230,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
@@ -222,6 +238,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_mum_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

@@ -65,7 +65,7 @@ class AddPrescriptionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.action_new_prescription)
+            title = args.title
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }

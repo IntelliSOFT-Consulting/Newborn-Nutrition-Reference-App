@@ -328,7 +328,12 @@
     <string name="app_enter_type_feeds">Enter Type of Feeds</string>
     <string name="log_out">Log out</string>
     <string name="nothing_found">Nothing Found</string>
-     <string-array name="birds">
+    <string name="ebm">EBM</string>
+    <string name="deficit">Deficit</string>
+    <string name="enter_feeds">Enter the amount of feeds taken</string>
+    <string name="tv_feed">Feeding</string>
+    <string name="app_dhm_volume">DHM Volume</string>
+    <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
         <item>National Id</item>

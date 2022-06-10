@@ -31,12 +31,14 @@ import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedingCuesTips
+import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
 import com.intellisoft.nndak.utils.isTablet
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.android.synthetic.main.prescribe_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -137,13 +139,6 @@ class BabyMonitoringFragment : Fragment() {
                     incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
                     incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
 
-                    /**
-                     * Prescriptions
-                     */
-//                    incPrescribe.appTodayTotal.text =
-//                        data.dashboard.prescription.totalVolume ?: ""
-//                    incPrescribe.appRoute.text = data.dashboard.prescription.route ?: ""
-//
 
                     val isSepsis = data.dashboard.neonatalSepsis
                     if (isSepsis != "Yes") {
@@ -170,6 +165,23 @@ class BabyMonitoringFragment : Fragment() {
 
 
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    val pr = it[0]
+                    binding.apply {
+                        incPrescribe.appTodayTotal.text =
+                            pr.totalVolume
+                        incPrescribe.appRoute.text = pr.route ?: ""
+                        val threeHourly = calculateFeeds(pr.totalVolume ?: "0")
+                        incPrescribe.appThreeHourly.text = threeHourly
+                        val breakDown = generateFeedsBreakDown(pr)
+                        incPrescribe.appThreeHourlyBreak.text = breakDown
+
+                        regulateViews(pr)
+
+                    }
+                }
+            }
         }
 
         binding.apply {
@@ -193,6 +205,48 @@ class BabyMonitoringFragment : Fragment() {
             this::proceedClick, resources.getString(R.string.app_okay_saved)
         )
 
+    }
+
+    private fun regulateViews(pr: PrescriptionItem) {
+        binding.apply {
+            if (pr.ivFluids == "N/A") {
+                control.tilIv.visibility = View.GONE
+            }
+            if (pr.breastMilk == "N/A") {
+                control.tilEbm.visibility = View.GONE
+            }
+            if (pr.donorMilk == "N/A") {
+                control.tilDhm.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun generateFeedsBreakDown(pr: PrescriptionItem): String {
+        val sb = StringBuilder()
+        if (pr.ivFluids != "N/A") {
+            sb.append("IV- ${pr.ivFluids}\n")
+        }
+        if (pr.breastMilk != "N/A") {
+            sb.append("EBM- ${pr.breastMilk}\n")
+        }
+        if (pr.donorMilk != "N/A") {
+            sb.append("DHM- ${pr.donorMilk}\n")
+        }
+        return sb.toString()
+    }
+
+    private fun calculateFeeds(totalVolume: String): String {
+        var total = 0.0
+        try {
+            val code = totalVolume.split("\\.".toRegex()).toTypedArray()
+            val times = 24 / 3
+            val j: Float = times.toFloat()
+            val k: Float = code[0].toFloat()
+            total = (k / j).toDouble()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return "$total mls"
     }
 
     private fun handleShowCues() {
@@ -261,7 +315,7 @@ class BabyMonitoringFragment : Fragment() {
     private fun updateArguments() {
         requireArguments().putString(
             QUESTIONNAIRE_FILE_PATH_KEY,
-            "baby-monitoring.json"
+            "date-time.json"
         )
     }
 

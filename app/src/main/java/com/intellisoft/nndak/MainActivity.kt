@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.babiesFragment, R.id.registrationFragment,
+                R.id.landingFragment, R.id.babiesFragment, R.id.registrationFragment,
             ), drawerLayout
         )
 
@@ -199,8 +199,8 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.homeFragment -> {
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.homeFragment)
+                R.id.landingFragment -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.landingFragment)
                 }
                 R.id.babiesFragment -> {
                     findNavController(R.id.nav_host_fragment).navigate(R.id.babiesFragment)

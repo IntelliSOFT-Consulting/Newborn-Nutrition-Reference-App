@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reference_nav_graph"
-    app:startDestination="@id/homeFragment">
-
+    app:startDestination="@id/landingFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -139,6 +138,9 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editPrescriptionFragment"
@@ -206,5 +208,23 @@
         android:name="com.intellisoft.nndak.screens.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.LandingFragment"
+        android:label="@string/app_dashboard"
+        tools:layout="@layout/fragment_landing">
+        <action
+            android:id="@+id/navigate_to_babies"
+            app:destination="@id/babiesFragment" />
+        <action
+            android:id="@+id/navigate_to_milk"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/navigate_to_registration"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/navigate_to_statistics"
+            app:destination="@id/statisticsFragment" />
+    </fragment>
 
 </navigation>

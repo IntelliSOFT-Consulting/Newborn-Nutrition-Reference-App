@@ -15,7 +15,10 @@
 
         <include
             android:id="@+id/breadcrumb"
-            layout="@layout/breadcrumb" />
+            layout="@layout/breadcrumb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5dp" />
 
         <include
             android:id="@+id/inc_details"
@@ -88,10 +91,14 @@
                         android:layout_height="1dp"
                         android:background="@color/black" />
 
+                    <include
+                        android:id="@+id/control"
+                        layout="@layout/feeding" />
+
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/add_patient_container"
                         android:layout_width="match_parent"
-                        android:layout_height="700dp" />
+                        android:layout_height="500dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -56,5 +56,6 @@
     <dimen name="design_bottom_navigation_active_item_max_width" tools:override="true">600dp</dimen>
     <dimen name="_35sp">35sp</dimen>
     <dimen name="_0dp">0dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
 
 </resources>

@@ -25,6 +25,7 @@ import org.hl7.fhir.r4.model.*
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.Period
+import java.util.*
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -39,6 +40,7 @@ class PatientListViewModel(
 
     private val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
+    val liveFeedsTime = MutableLiveData<StaticCharts>()
     val liveOrders = MutableLiveData<List<OrdersItem>>()
     val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
     val patientCount = MutableLiveData<Long>()
@@ -251,7 +253,7 @@ class PatientListViewModel(
         if (observations.isNotEmpty()) {
             for (element in observations) {
                 if (element.code == "Consent-Given") {
-                    Timber.e("Consent Given ${element.value}")
+
                     consentGiven = element.value
                 }
                 if (element.code == "DHM-Type") {
@@ -259,6 +261,7 @@ class PatientListViewModel(
                 }
                 if (element.code == "DHM-Reason") {
                     dhmReason = element.value
+                    Timber.e("DHM Order ${element.value}")
                 }
             }
         }
@@ -559,6 +562,41 @@ class PatientListViewModel(
                     .sortedByDescending { it.occurrenceDateTimeType.value }
                     .firstOrNull()
             }
+    }
+
+    fun loadFeedingTime() {
+
+        viewModelScope.launch { liveFeedsTime.value = retrieveFeedingTimes() }
+    }
+
+    private fun retrieveFeedingTimes(): StaticCharts {
+        val feeds: MutableList<PieItem> = mutableListOf()
+        val times: MutableList<PieItem> = mutableListOf()
+        val random = Random()
+
+        val time = mapOf(
+            "Fed Within 1 hour" to "#0E2DEC",
+            "Fed After 1 hour" to "#B7520E",
+            "Fed After 2 hours" to "#5E6D4E",
+            "Fed After 3 hours" to "#DA1F12"
+        )
+
+        for (i in time) {
+            times.add(PieItem(random.nextInt(14).toString(), i.key, i.value))
+        }
+        val feed = mapOf(
+            "Donated Human Milk" to "#1EAF5F",
+            "Breastfeeding" to "#F65050",
+            "Oral Feeds" to "#FFC600",
+            "Expressed Breast Milk" to "#6C63FF",
+            "Formula" to "#BA1B22"
+        )
+
+
+        for (i in feed) {
+            feeds.add(PieItem(random.nextInt(24).toString(), i.key, i.value))
+        }
+        return StaticCharts(feeds = feeds, times = times)
     }
 
 

@@ -158,14 +158,19 @@ class BabyFeedsFragment : Fragment() {
             actionNewPrescription.setOnClickListener {
                 findNavController().navigate(
                     BabyFeedsFragmentDirections.navigateToAddPrescription(
-                        args.patientId
+                        args.patientId, "Add Prescription"
                     )
                 )
             }
             actionUpdatePrescription.setOnClickListener {
 
-                Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
-                //  findNavController().navigate(BabyFeedsFragmentDirections.navigateToEditPrescription())
+                // Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(
+                    BabyFeedsFragmentDirections.navigateToAddPrescription(
+                        args.patientId,
+                        "Edit Prescription"
+                    )
+                )
             }
         }
 

@@ -93,6 +93,7 @@ class BabyDashboardFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
         patientDetailsViewModel.getMumChild()
+        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
 
             if (it != null) {
@@ -121,8 +122,6 @@ class BabyDashboardFragment : Fragment() {
 
                         tvCurrentWeight.text = it.dashboard.cWeight ?: ""
                         tvMotherMilk.text = it.dashboard.motherMilk ?: ""
-//                        tvTotalVolume.text = it.dashboard.prescription.totalVolume ?: ""
-//                        tvExpressionNumber.text = it.dashboard.prescription.expressions ?: ""
 
 
                         val isSepsis = it.dashboard.neonatalSepsis
@@ -150,6 +149,19 @@ class BabyDashboardFragment : Fragment() {
                         e.printStackTrace()
                     }
                 }
+            }
+        }
+
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    val pr = it[0]
+                    binding.apply {
+                        tvTotalVolume.text = pr.feedsGiven
+                        tvExpressionNumber.text = pr.expressions
+                    }
+                }
+
             }
         }
 
@@ -195,7 +207,7 @@ class BabyDashboardFragment : Fragment() {
                 binding.growthChart.legend.isEnabled = true
 
                 //remove description label
-                binding.growthChart.description.isEnabled = true
+                binding.growthChart.description.isEnabled = false
                 binding.growthChart.isDragEnabled = true
                 binding.growthChart.setScaleEnabled(true)
                 binding.growthChart.description.text = "Age (Days)"

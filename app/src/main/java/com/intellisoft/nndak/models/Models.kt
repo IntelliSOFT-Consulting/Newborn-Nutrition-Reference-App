@@ -157,7 +157,7 @@ data class BabyDashboard(
     val cWeight: String? = "",
     val motherMilk: String? = "",
 
-) {
+    ) {
     override fun toString(): String = babyWell.toString()
 }
 
@@ -217,6 +217,7 @@ data class PrescriptionItem(
     val additionalFeeds: String? = "",
     val supplements: String? = "",
     val expressions: String? = "",
+    val feedsGiven: String? = "0",
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
@@ -251,3 +252,14 @@ data class FeedItem(
 ) {
     override fun toString(): String = type.toString()
 }
+
+data class PieItem(
+    val value: String,
+    val label: String,
+    val color: String
+)
+
+data class StaticCharts(
+    val feeds: List<PieItem>,
+    val times: List<PieItem>,
+)

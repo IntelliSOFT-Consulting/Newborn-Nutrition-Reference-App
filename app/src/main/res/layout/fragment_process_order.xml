@@ -53,14 +53,27 @@
             android:layout_marginStart="@dimen/padding_10"
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_10dp"
-            android:text="@string/app_dhm_reason"
-            android:textColor="@color/black" />
+            android:text="@string/app_dhm_reason" />
 
         <TextView
             android:id="@+id/app_dhm_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_10" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:text="@string/app_dhm_volume" />
+
+        <TextView
+            android:id="@+id/app_dhm_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:padding="@dimen/padding_5" />
 
         <TextView
             android:layout_width="match_parent"

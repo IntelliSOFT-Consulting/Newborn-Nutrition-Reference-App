@@ -19,16 +19,16 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
-import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import com.intellisoft.nndak.models.PieItem
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
 
 
@@ -65,7 +65,7 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.app_dashboard)
+            title = resources.getString(R.string.app_statistics)
             setHomeAsUpIndicator(R.drawable.dash)
             setDisplayHomeAsUpEnabled(true)
         }
@@ -93,9 +93,7 @@ class StatisticsFragment : Fragment() {
                         totalTerm++
                     }
                 }
-                Timber.d("Babies Total $totalBabies")
-                Timber.d("Babies Total $totalPreTerm")
-                Timber.d("Babies Total $totalTerm")
+
 
                 val prePercentage = (totalPreTerm.toDouble() / totalBabies) * 100
                 val termPercentage = (totalTerm.toDouble() / totalBabies) * 100
@@ -116,43 +114,35 @@ class StatisticsFragment : Fragment() {
             }
 
         }
+
+        patientListViewModel.loadFeedingTime()
+        patientListViewModel.liveFeedsTime.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.apply {
+                    firstFeedsChart(it.times)
+                    percentageFeedsChart(it.feeds)
+                }
+
+            }
+        }
         binding.apply {
-            firstFeedsChart()
-            percentageFeedsChart()
+
             mortalityRateChart()
             expressingTimesChart()
         }
 
     }
 
-    private fun firstFeedsChart() {
-
-        val values = arrayListOf<Int>(4, 7, 12, 2)
-        val labels = arrayListOf<String>(
-            "Fed Within 1 hour ",
-            "Fed After 1 hour ",
-            "Fed After 2 hours",
-            "Fed After 3 hours"
-        )
-
-        //an array to store the pie slices entry
-        val ourPieEntry = ArrayList<PieEntry>()
-
-        for ((i, entry) in values.withIndex()) {
-            val value = values[i].toFloat()
-            val label = labels[i]
-            ourPieEntry.add(PieEntry(value, label))
+    private fun firstFeedsChart(list: List<PieItem>) {
+        val pieShades: ArrayList<Int> = ArrayList()
+        val entries = ArrayList<PieEntry>()
+        for (pie in list) {
+            entries.add(PieEntry(pie.value.toFloat(), pie.label))
+            pieShades.add(Color.parseColor(pie.color))
         }
 
-        //assigning color to each slices
-        val pieShades: ArrayList<Int> = ArrayList()
-        pieShades.add(Color.parseColor("#0E2DEC"))
-        pieShades.add(Color.parseColor("#B7520E"))
-        pieShades.add(Color.parseColor("#5E6D4E"))
-        pieShades.add(Color.parseColor("#DA1F12"))
-
         //add values to the pie dataset and passing them to the constructor
-        val ourSet = PieDataSet(ourPieEntry, "")
+        val ourSet = PieDataSet(entries, "")
         val data = PieData(ourSet)
         //setting the slices divider width
         ourSet.sliceSpace = 1f
@@ -193,38 +183,16 @@ class StatisticsFragment : Fragment() {
         binding.totalTermChart.invalidate()
     }
 
-    private fun percentageFeedsChart() {
-
-        val values = arrayListOf<Int>(4, 7, 12, 2, 9)
-        val labels =
-            arrayListOf<String>(
-                "Donated Human Milk",
-                "Breastfeeding",
-                "Oral Feeds",
-                "Expressed Breast Milk",
-                "Formula"
-            )
-
-        //an array to store the pie slices entry
-        val ourPieEntry = ArrayList<PieEntry>()
-
-        for ((i, entry) in values.withIndex()) {
-            //converting to float
-            val value = values[i].toFloat()
-            val label = labels[i]
-            //adding each value to the pieentry array
-            ourPieEntry.add(PieEntry(value, label))
+    private fun percentageFeedsChart(list: List<PieItem>) {
+        val pieShades: ArrayList<Int> = ArrayList()
+        val entries = ArrayList<PieEntry>()
+        for (pie in list) {
+            entries.add(PieEntry(pie.value.toFloat(), pie.label))
+            pieShades.add(Color.parseColor(pie.color))
         }
 
-        //assigning color to each slices
-        val pieShades: ArrayList<Int> = ArrayList()
-        pieShades.add(Color.parseColor("#0E2DEC"))
-        pieShades.add(Color.parseColor("#B7520E"))
-        pieShades.add(Color.parseColor("#5E6D4E"))
-        pieShades.add(Color.parseColor("#DA1F12"))
-        pieShades.add(Color.parseColor("#B7520E"))
 
-        val ourSet = PieDataSet(ourPieEntry, "")
+        val ourSet = PieDataSet(entries, "")
         val data = PieData(ourSet)
 
         ourSet.sliceSpace = 1f
@@ -246,7 +214,15 @@ class StatisticsFragment : Fragment() {
 
 
     private fun mortalityRateChart() {
-
+        val counters = arrayOf(
+            "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+        )
+        val cal = Calendar.getInstance()
+        val month: Int = cal.get(Calendar.MONTH + 1)
+//
+//        for (i in 0 until month) {
+//            Timber.e("Name ${counters[i]}")
+//        }
         val values = arrayListOf<Int>(4, 7, 9, 2, 4, 2, 5, 3, 6, 4, 3)
         val mortality: ArrayList<Entry> = ArrayList()
 
@@ -341,7 +317,7 @@ class StatisticsFragment : Fragment() {
             binding.expressingChart.legend.isEnabled = true
 
             //remove description label
-            binding.expressingChart.description.isEnabled = true
+            binding.expressingChart.description.isEnabled = false
             binding.expressingChart.isDragEnabled = true
             binding.expressingChart.setScaleEnabled(true)
             binding.expressingChart.description.text = "Age (Days)"
