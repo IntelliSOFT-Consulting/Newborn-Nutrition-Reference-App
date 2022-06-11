@@ -81,7 +81,7 @@ class CuesFragment : Fragment() {
             resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered)
+            this::proceedClick, resources.getString(R.string.app_client_registered),false
         )
 
     }

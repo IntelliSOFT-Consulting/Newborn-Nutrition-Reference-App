@@ -333,6 +333,13 @@
     <string name="enter_feeds">Enter the amount of feeds taken</string>
     <string name="tv_feed">Feeding</string>
     <string name="app_dhm_volume">DHM Volume</string>
+    <string name="_0">0</string>
+    <string name="menu_dhm_mls">DHM (mls)</string>
+    <string name="app_iv_fluids_mls">IV Fluids (mls)</string>
+    <string name="ebm_mls">EBM mls</string>
+    <string name="deficit_mls">Deficit (mls)</string>
+    <string name="refresh">Refresh</string>
+    <string name="no_active">No active prescription</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

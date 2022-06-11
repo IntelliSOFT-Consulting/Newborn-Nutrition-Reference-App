@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.dialogs
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.intellisoft.nndak.databinding.SuccessDialogBinding
+import com.intellisoft.nndak.utils.dimOption
 
 class SuccessDialog(
     private val proceed: () -> Unit,
-    private val message: String
+    private val message: String,
+    private val error: Boolean
 ) : DialogFragment() {
     private var _binding: SuccessDialogBinding? = null
     private val binding
@@ -38,8 +41,14 @@ class SuccessDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            binding.title.text = message
+            title.text = message
             btnSubmit.setOnClickListener { proceed() }
+            if (error) {
+                tvTitle.text = "Error"
+                tvTitle.setTextColor(ColorStateList.valueOf(Color.parseColor("#A8001E")))
+                title.setTextColor(ColorStateList.valueOf(Color.parseColor("#A8001E")))
+                dimOption(icon, "#A8001E")
+            }
         }
 
     }

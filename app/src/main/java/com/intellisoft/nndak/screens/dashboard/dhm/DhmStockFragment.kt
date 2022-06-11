@@ -84,7 +84,7 @@ class DhmStockFragment : Fragment() {
             resources.getString(R.string.app_okay_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved)
+            this::proceedClick, resources.getString(R.string.app_okay_saved),false
         )
 
     }

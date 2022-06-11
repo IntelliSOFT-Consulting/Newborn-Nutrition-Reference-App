@@ -34,7 +34,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:hint="@string/app_iv_fluids"
+            android:hint="@string/app_iv_fluids_mls"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimary">
 
@@ -43,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text="@string/_0"
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
 
@@ -58,7 +59,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:hint="@string/menu_dhm"
+            android:hint="@string/menu_dhm_mls"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimary">
 
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text="@string/_0"
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
 
@@ -89,7 +91,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:hint="@string/ebm"
+            android:hint="@string/ebm_mls"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimary">
 
@@ -98,6 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text="@string/_0"
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
 
@@ -112,7 +115,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:hint="@string/deficit"
+            android:hint="@string/deficit_mls"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimary">
 
@@ -121,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text="@string/_0"
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
 

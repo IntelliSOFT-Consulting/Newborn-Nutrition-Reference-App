@@ -31,14 +31,6 @@
                 app:srcCompat="@drawable/mum" />
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_mother_name"
-
-                android:textAlignment="center" />
-
-            <TextView
                 android:id="@+id/tv_mum_name"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="wrap_content"
@@ -84,8 +76,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_ip_number"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -105,8 +97,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_delivery_method"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -126,8 +118,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_delivery_date"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -147,8 +139,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_mother_status"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -175,8 +167,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_parity"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -196,8 +188,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_pmctc_status"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -217,8 +209,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_multiple_pregnancy"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -238,8 +230,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:id="@+id/app_mum_location"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

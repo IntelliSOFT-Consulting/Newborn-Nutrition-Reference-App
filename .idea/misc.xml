@@ -102,6 +102,7 @@
         <entry key="app/src/main/res/layout/breadcrumb.xml" value="0.2787516032492518" />
         <entry key="app/src/main/res/layout/confirmation_dialog.xml" value="0.14479166666666668" />
         <entry key="app/src/main/res/layout/connection_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/custom_edittext_layout.xml" value="0.25317028985507245" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.29157759726378796" />
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />

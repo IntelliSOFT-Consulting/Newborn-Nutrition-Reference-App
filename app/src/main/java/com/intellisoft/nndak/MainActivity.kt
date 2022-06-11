@@ -28,6 +28,7 @@ import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
+import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -258,16 +259,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun syncProfile() {
         val apiService = RestManager()
-        apiService.loadUser(this) {
-
-            if (it != null) {
-                val gson = Gson()
-                val json = gson.toJson(it.data)
-                FhirApplication.updateProfile(this, json)
-            } else {
-                Timber.e("Error")
+        if (isNetworkAvailable(this)) {
+            apiService.loadUser(this) {
+                if (it != null) {
+                    val gson = Gson()
+                    val json = gson.toJson(it.data)
+                    FhirApplication.updateProfile(this, json)
+                } else {
+                    sessionTimeOut()
+                }
             }
         }
+    }
+
+    private fun sessionTimeOut() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Session Timeout")
+        builder.setMessage("Your session has expired, please login again to proceed")
+
+        builder.setPositiveButton(getString(R.string.refresh)) { dialog, which ->
+            try {
+                FhirApplication.setLoggedIn(this, false)
+                finishAffinity()
+                val i = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(i)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        builder.show()
     }
 
 

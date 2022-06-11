@@ -2,21 +2,15 @@ package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
 import android.os.Build
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
-import com.google.android.fhir.search.Order
-import com.google.android.fhir.search.Search
-import com.google.android.fhir.search.StringFilterModifier
-import com.google.android.fhir.search.count
-import com.google.android.fhir.search.search
+import com.google.android.fhir.search.*
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
+import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createNutritionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
@@ -25,7 +19,11 @@ import org.hl7.fhir.r4.model.*
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.Period
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
+import java.util.stream.*
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -149,12 +147,23 @@ class PatientListViewModel(
         }
     }
 
+
+
     private suspend fun getDhmDashboardSearchResults(
         nameQuery: String = "",
         location: String
     ): DHMDashboardItem {
         val orders = getOrdersSearchResults(nameQuery, location)
+        val data: MutableList<PieItem> = mutableListOf()
         val total = 0
+        val days = getPastDaysOnIntervalOf(7, 1)
+
+        days.forEach {
+            //  println("Dates $it")
+            val format = FormatHelper().getDayName(it.toString())
+            println("Dates $format")
+            data.add(PieItem(value = format, "10", "#F65050"))
+        }
         /**
          * Retrieve Stock Encounters & Observations
          */
@@ -182,7 +191,8 @@ class PatientListViewModel(
             dhmFullyInfants = orders.size.toString(),
             dhmVolume = total.toString(),
             dhmAverageVolume = orders.size.toString(),
-            dhmAverageLength = orders.size.toString()
+            dhmAverageLength = orders.size.toString(),
+
         )
     }
 

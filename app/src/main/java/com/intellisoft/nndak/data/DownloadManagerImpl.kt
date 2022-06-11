@@ -13,8 +13,9 @@ import timber.log.Timber
 
 class DownloadManagerImpl : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
-    private val urls = LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE"))
-    //  private val urls = LinkedList(listOf("Patient"))
+    private val urls =
+        LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE", "NutritionOrder", "CarePlan"))
+
 
     override suspend fun getNextRequestUrl(context: SyncDownloadContext): String? {
         var url = urls.poll() ?: return null
@@ -54,10 +55,11 @@ class DownloadManagerImpl : DownloadWorkManager {
 
             for (entry in response.entry) {
                 val type = entry.resource.resourceType.toString()
-                if (type == "Patient"){
+                if (type == "Patient") {
                     val patientUrl = "${entry.fullUrl}/\$everything"
                     urls.add(patientUrl)
                 }
+
             }
             val nextUrl =
                 response.link.firstOrNull { component -> component.relation == "next" }?.url
@@ -94,7 +96,11 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     // Affix lastUpdate to non-$everything queries as per:
     // https://hl7.org/fhir/operation-patient-everything.html
     if (!downloadUrl.contains("\$everything")) {
-        downloadUrl = "$downloadUrl&_lastUpdated=gt$lastUpdated"
+        downloadUrl = if (downloadUrl.contains("CarePlan") || downloadUrl.contains("NutritionOrder")) {
+            url
+        } else {
+            "$downloadUrl&_lastUpdated=gt$lastUpdated"
+        }
     }
 
     // Do not modify any URL set by a server that specifies the token of the page to return.

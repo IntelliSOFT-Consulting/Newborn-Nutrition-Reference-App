@@ -89,6 +89,25 @@ class FormatHelper {
 
     }
 
+     fun getDayName(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+     fun getMonthName(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("MMM", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
     private fun getRefinedDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)

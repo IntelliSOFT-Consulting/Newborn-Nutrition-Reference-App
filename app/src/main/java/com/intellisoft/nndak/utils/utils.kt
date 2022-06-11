@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -12,11 +14,13 @@ import android.os.Build
 import android.util.Patterns
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -44,6 +48,34 @@ fun boldText(textView: TextView) {
 
 fun isTablet(ctx: Context): Boolean {
     return ctx.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
+}
+
+fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.now()
+    for (i in 1..times) {
+        list.add(date)
+        date = date.minusDays(interval.toLong())
+    }
+    return list.reversed()
+}
+fun getPastMonthsOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.now()
+    for (i in 1..times) {
+        list.add(date)
+        date = date.minusMonths(interval.toLong())
+    }
+    return list.reversed()
+}
+
+fun dimOption(imageView: ImageView, color: String) {
+    ImageViewCompat.setImageTintMode(imageView, PorterDuff.Mode.SRC_ATOP)
+    ImageViewCompat.setImageTintList(
+        imageView,
+        ColorStateList.valueOf(Color.parseColor(color))
+    )
+
 }
 
 fun setSystemBarColor(act: Activity, @ColorRes color: Int) {

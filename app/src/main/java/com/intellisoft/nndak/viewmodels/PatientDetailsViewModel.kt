@@ -3,27 +3,24 @@ package com.intellisoft.nndak.viewmodels
 import android.app.Application
 import android.content.res.Resources
 import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
-import com.intellisoft.nndak.utils.Constants.SINGLE_RECORD
+import com.intellisoft.nndak.utils.Constants.MILK_PRESCRIPTION
 import com.intellisoft.nndak.utils.getFormattedAge
 import kotlinx.coroutines.launch
-import org.apache.commons.lang3.StringUtils
 import org.hl7.fhir.r4.model.*
-import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -85,6 +82,7 @@ class PatientDetailsViewModel(
                 sort(Encounter.DATE, Order.DESCENDING)
             }
             .map { createEncounterItem(it, getApplication<Application>().resources) }
+
             .let { encounters.addAll(it) }
 
         return encounters.reversed()
@@ -96,9 +94,10 @@ class PatientDetailsViewModel(
         fhirEngine
             .search<Observation> {
                 filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                sort(Encounter.DATE, Order.ASCENDING)
             }
             .map { createObservationItem(it, getApplication<Application>().resources) }
-            .filter { it.code == "Current-Weight" || it.code == "29463-7" || it.code == "3141-9" }
+            .filter { it.code == ADMISSION_WEIGHT || it.code == CURRENT_WEIGHT }
             .let { observations.addAll(it) }
         return observations
     }
@@ -341,49 +340,61 @@ class PatientDetailsViewModel(
 
     fun getCurrentPrescriptions() {
         viewModelScope.launch {
-            livePrescriptionsData.value = getActivePrescriptionsDataModel(context)
+            livePrescriptionsData.value = getCurrentPrescriptionsDataModel(context)
         }
     }
 
-    private suspend fun getActivePrescriptionsDataModel(context: Application): List<PrescriptionItem> {
-        val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
-        val encounters = getPatientEncounters()
-        if (encounters.isNotEmpty()) {
-//            Timber.e("Total So Far ${encounters.size}")
-//            val item = encounters.first{
-//                it.code == "Feeds Prescription"
-//            }
-//            prescriptions.add(prescription(item))
-            for (element in encounters) {
-                if (element.code == "Feeds Prescription") {
-                    Timber.e("Total Prescriptions ${encounters.size}")
-                    prescriptions.add(prescription(element))
-                }
-            }
-        }
-
-        return prescriptions
-
-    }
     private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem> {
         val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
-        val encounters = getPatientEncounters()
-        if (encounters.isNotEmpty()) {
-            for (element in encounters) {
-                if (element.code == "Feeds Prescription") {
-                    Timber.e("Total Prescriptions ${encounters.size}")
-                    prescriptions.add(prescription(element))
-                }
-            }
+        val pres = fetchCarePlans()
+        Timber.e("Care Provide ${pres.size}")
+        pres.forEach { item ->
+            prescriptions.add(prescription(item))
         }
+//        val encounters = getPatientEncounters()
+//        if (encounters.isNotEmpty()) {
 
+//            var item = encounters.firstOrNull {
+//                it.code == "Feeds Prescription"
+//            }
+//            if (item != null) {
+//                prescriptions.add(prescription(item))
+//            }
+//            for (element in encounters) {
+//                if (element.code == "Feeds Prescription") {
+//                    prescriptions.add(prescription(element))
+//                }
+//            }
+//        }
         return prescriptions
 
     }
 
-    private suspend fun prescription(encounterItem: EncounterItem): PrescriptionItem {
-        val observations = getObservationsPerEncounter(encounterItem.id)
-        Timber.e("Encounter ${encounterItem.id}")
+    private suspend fun fetchCarePlans(): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == CarePlan.CarePlanStatus.ACTIVE.toString() }
+            .let { cares.addAll(it) }
+        return cares
+    }
+
+    // private suspend fun prescription(encounterItem: EncounterItem): PrescriptionItem {
+    private suspend fun prescription(care: CareItem): PrescriptionItem {
+        val observations = getReferencedObservations(care.encounterId)
+        Timber.e("Encounter From Care ${care.encounterId}")
 
         val feeds: MutableList<FeedItem> = mutableListOf()
         var date = ""
@@ -400,7 +411,12 @@ class PatientDetailsViewModel(
         var supplements = ""
         var additional = ""
         var consentDate = "N/A"
-        var expressions = 0;
+        var expressions = 0
+
+
+        /**
+         * Expressions Count
+         */
         val exp = getPatientEncounters()
         if (exp.isNotEmpty()) {
             for (ex in exp) {
@@ -460,15 +476,15 @@ class PatientDetailsViewModel(
         feeds.add(FeedItem())
 
         return PrescriptionItem(
-            id = encounterItem.id,
-            resourceId = encounterItem.code,
+            id = care.resourceId,
+            resourceId = care.resourceId,
             date = date,
             time = time,
             totalVolume = total,
             frequency = frequency,
             route = route,
             ivFluids = iv,
-            breastMilk = bm,
+            breastMilk = ebm,
             donorMilk = dhm,
             consent = consent,
             dhmReason = reason,
@@ -488,6 +504,27 @@ class PatientDetailsViewModel(
                 filter(
                     Observation.ENCOUNTER,
                     { value = "Encounter/$code" })
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { conditions.addAll(it) }
+        return conditions
+    }
+
+    private suspend fun getReferencedObservations(
+        code: String,
+    ): List<ObservationItem> {
+        val conditions: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.ENCOUNTER,
+                    { value = code })
             }
             .take(MAX_RESOURCE_COUNT)
             .map {
@@ -631,7 +668,6 @@ class PatientDetailsViewModel(
                 } else {
                     resources.getText(R.string.message_no_datetime).toString()
                 }
-            val created = observation.dateTimeValue()
             val value =
                 when {
                     observation.hasValueQuantity() -> {
@@ -659,7 +695,7 @@ class PatientDetailsViewModel(
             return ObservationItem(
                 observation.logicalId,
                 observationCode,
-                "$created",
+                dateTimeString,
                 valueString,
 
                 )
@@ -668,6 +704,20 @@ class PatientDetailsViewModel(
         /**
          * Creates EncounterItem objects with displayable values from the Fhir Observation objects.
          */
+        fun createCarePlanItem(
+            care: CarePlan,
+            resources: Resources
+        ): CareItem {
+            val status = care.status
+            Timber.e("Care Status:::: $status")
+
+            return CareItem(
+                care.logicalId,
+                care.subject.reference,
+                care.encounter.reference, care.status.toString()
+            )
+        }
+
         fun createEncounterItem(
             encounter: Encounter,
             resources: Resources

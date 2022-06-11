@@ -231,6 +231,7 @@ data class DHMDashboardItem(
     val dhmAverageVolume: String? = "",
     val dhmFullyInfants: String? = "",
     val dhmAverageLength: String? = "",
+    val data: List<PieItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
 }
@@ -263,3 +264,12 @@ data class StaticCharts(
     val feeds: List<PieItem>,
     val times: List<PieItem>,
 )
+
+data class CareItem(
+    val resourceId: String,
+    val patientId: String,
+    val encounterId: String,
+    val status: String,
+) {
+    override fun toString(): String = resourceId
+}

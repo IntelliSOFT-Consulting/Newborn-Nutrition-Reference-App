@@ -19,15 +19,18 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
+import com.intellisoft.nndak.utils.getPastMonthsOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -46,7 +49,7 @@ class StatisticsFragment : Fragment() {
     private var _binding: FragmentStatisticsBinding? = null
     private val binding
         get() = _binding!!
-
+    private var c: Calendar = Calendar.getInstance()
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
     private var totalTerm: Int = 0
@@ -214,91 +217,107 @@ class StatisticsFragment : Fragment() {
 
 
     private fun mortalityRateChart() {
-        val counters = arrayOf(
-            "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-        )
-        val cal = Calendar.getInstance()
-        val month: Int = cal.get(Calendar.MONTH + 1)
-//
-//        for (i in 0 until month) {
-//            Timber.e("Name ${counters[i]}")
-//        }
-        val values = arrayListOf<Int>(4, 7, 9, 2, 4, 2, 5, 3, 6, 4, 3)
-        val mortality: ArrayList<Entry> = ArrayList()
+        val month: Int = c.get(Calendar.MONTH) + 1
+        Timber.e("Which Month $month")
+        val values = getPastMonthsOnIntervalOf(month, 1)
 
-        for ((i, entry) in values.withIndex()) {
-            val value = values[i].toFloat()
-            mortality.add(Entry(i.toFloat(), value))
-        }
-        val actual = LineDataSet(mortality, "Mortality Rate")
-        actual.setColors(Color.parseColor("#F65050"))
-        actual.setDrawCircleHole(false)
-        actual.setDrawValues(false)
-        actual.setDrawCircles(false)
-        actual.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-        val data = LineData(actual)
-        binding.mortalityChart.axisLeft.setDrawGridLines(false)
-
-        val xAxis: XAxis = binding.mortalityChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(false)
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-
-        binding.mortalityChart.legend.isEnabled = true
-
-        //remove description label
-        binding.mortalityChart.description.isEnabled = true
-        binding.mortalityChart.isDragEnabled = true
-        binding.mortalityChart.setScaleEnabled(true)
-        //add animation
-        binding.mortalityChart.animateX(1000, Easing.EaseInSine)
-        binding.mortalityChart.data = data
-        val leftAxis: YAxis = binding.mortalityChart.axisLeft
-        leftAxis.axisMinimum = 0f
-        leftAxis.setDrawGridLines(true)
-        leftAxis.isGranularityEnabled = true
-
-
-        val rightAxis: YAxis = binding.mortalityChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.setDrawZeroLine(false)
-        rightAxis.isGranularityEnabled = false
-        rightAxis.isEnabled = false
-        //refresh
-        binding.mortalityChart.invalidate()
-    }
-
-    private fun expressingTimesChart() {
-
-        val values = arrayListOf<Int>(4, 7, 12, 2, 3, 2, 1, 8, 6, 4, 2, 7)
         if (values.isNotEmpty()) {
-            val lessFive: ArrayList<Entry> = ArrayList()
-            val lessSeven: ArrayList<Entry> = ArrayList()
-            val moreSeven: ArrayList<Entry> = ArrayList()
+            val input = arrayListOf<Int>(4, 7, 9, 4, 7, 5)
+            val dayNames = formatMonths(values)
+            Timber.e("Days $dayNames")
+            Timber.e("Values Count ${values.size}")
 
-            for ((i, entry) in values.withIndex()) {
-                val value = values[i].toFloat()
+            val lessFive: ArrayList<Entry> = ArrayList()
+
+            for ((i, entry) in input.withIndex()) {
+                val value = input[i].toFloat()
                 lessFive.add(Entry(i.toFloat(), value))
-                lessSeven.add(Entry(i.toFloat() + 1, value))
-                moreSeven.add(Entry(i.toFloat() - 1, value))
             }
-            val lessThanFive = LineDataSet(lessFive, "0-5 Times")
+
+            val lessThanFive = LineDataSet(lessFive, "Mortality Rate")
             lessThanFive.setColors(Color.parseColor("#F65050"))
             lessThanFive.setDrawCircleHole(false)
             lessThanFive.setDrawValues(false)
             lessThanFive.setDrawCircles(false)
             lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
 
-            val lessThanSeven = LineDataSet(lessSeven, "6-7 Times")
+
+            val data = LineData(lessThanFive)
+            binding.mortalityChart.axisLeft.setDrawGridLines(false)
+
+            val xAxis: XAxis = binding.mortalityChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -60f
+            xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
+
+
+            binding.mortalityChart.legend.isEnabled = true
+
+            //remove description label
+            binding.mortalityChart.description.isEnabled = false
+            binding.mortalityChart.isDragEnabled = true
+            binding.mortalityChart.setScaleEnabled(true)
+            binding.mortalityChart.description.text = "Age (Days)"
+            //add animation
+            binding.mortalityChart.animateX(1000, Easing.EaseInSine)
+            binding.mortalityChart.data = data
+
+            val leftAxis: YAxis = binding.mortalityChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+
+
+            val rightAxis: YAxis = binding.mortalityChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+            //refresh
+            binding.mortalityChart.invalidate()
+        }
+
+    }
+
+
+    private fun expressingTimesChart() {
+        val month: Int = c.get(Calendar.MONTH) + 1
+        Timber.e("Which Month $month")
+        val values = getPastMonthsOnIntervalOf(month, 1)
+        if (values.isNotEmpty()) {
+            val input = arrayListOf<Int>(4, 7, 9, 3, 4, 7, 5)
+            val dayNames = formatMonths(values)
+            Timber.e("Days $dayNames")
+            Timber.e("Values Count ${values.size}")
+
+            val lessFive: ArrayList<Entry> = ArrayList()
+            val lessSeven: ArrayList<Entry> = ArrayList()
+            val moreSeven: ArrayList<Entry> = ArrayList()
+
+            for ((i, entry) in input.withIndex()) {
+                val value = input[i].toFloat()
+                lessFive.add(Entry(i.toFloat(), value))
+                lessSeven.add(Entry(i.toFloat(), value + 1))
+                moreSeven.add(Entry(i.toFloat(), value - 2))
+            }
+
+            val lessThanFive = LineDataSet(lessFive, "5 or Less")
+            lessThanFive.setColors(Color.parseColor("#F65050"))
+            lessThanFive.setDrawCircleHole(false)
+            lessThanFive.setDrawValues(false)
+            lessThanFive.setDrawCircles(false)
+            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val lessThanSeven = LineDataSet(lessSeven, "6-7 times")
             lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
             lessThanSeven.setDrawCircleHole(false)
             lessThanSeven.setDrawValues(false)
             lessThanSeven.setDrawCircles(false)
             lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
 
-            val moreThanSeven = LineDataSet(moreSeven, "More than 7 times")
+            val moreThanSeven = LineDataSet(moreSeven, "7 or More")
             moreThanSeven.setColors(Color.parseColor("#77A9FF"))
             moreThanSeven.setDrawCircleHole(false)
             moreThanSeven.setDrawValues(false)
@@ -312,6 +331,8 @@ class StatisticsFragment : Fragment() {
             xAxis.setDrawGridLines(false)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -60f
+            xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
 
 
             binding.expressingChart.legend.isEnabled = true
@@ -324,10 +345,11 @@ class StatisticsFragment : Fragment() {
             //add animation
             binding.expressingChart.animateX(1000, Easing.EaseInSine)
             binding.expressingChart.data = data
+
             val leftAxis: YAxis = binding.expressingChart.axisLeft
             leftAxis.axisMinimum = 0f
             leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = true
+            leftAxis.isGranularityEnabled = false
 
 
             val rightAxis: YAxis = binding.expressingChart.axisRight
@@ -338,6 +360,17 @@ class StatisticsFragment : Fragment() {
             //refresh
             binding.expressingChart.invalidate()
         }
+
+    }
+
+
+    private fun formatMonths(values: List<LocalDate>): ArrayList<String> {
+        val days = ArrayList<String>()
+        values.forEach {
+            val format = FormatHelper().getMonthName(it.toString())
+            days.add(format)
+        }
+        return days
     }
 
     private fun generateCenterText(): CharSequence {

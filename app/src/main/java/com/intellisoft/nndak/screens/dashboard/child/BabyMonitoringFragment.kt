@@ -2,8 +2,9 @@ package com.intellisoft.nndak.screens.dashboard.child
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
-import androidx.fragment.app.Fragment
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +25,7 @@ import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -30,11 +33,10 @@ import com.intellisoft.nndak.databinding.FragmentBabyMonitoringBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.dialogs.TipsDialog
+import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.models.PrescriptionItem
-import com.intellisoft.nndak.screens.dashboard.BaseFragment
-import com.intellisoft.nndak.screens.dashboard.RegistrationFragmentDirections
-import com.intellisoft.nndak.utils.isTablet
+import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -43,6 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,6 +66,15 @@ class BabyMonitoringFragment : Fragment() {
     private lateinit var feedingCues: TipsDialog
     private lateinit var confirmationDialog: ConfirmationDialog
     private lateinit var successDialog: SuccessDialog
+    private lateinit var errorDialog: SuccessDialog
+    private var totalV: Float = 0.0f
+    private lateinit var careID: String
+    private var ivPresent: Boolean = true
+    private var dhmPresent: Boolean = true
+    private var ebmPresent: Boolean = true
+    private val feedsList: MutableList<FeedItem> = mutableListOf()
+
+
     private val binding
         get() = _binding!!
 
@@ -107,6 +119,17 @@ class BabyMonitoringFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+        confirmationDialog = ConfirmationDialog(
+            this::okClick,
+            resources.getString(R.string.app_okay_message)
+        )
+        successDialog = SuccessDialog(
+            this::proceedClick, resources.getString(R.string.app_okay_saved), false
+        )
+        errorDialog = SuccessDialog(
+            this::exitBack, resources.getString(R.string.no_active), true
+        )
+
 
         binding.apply {
             breadcrumb.page.text =
@@ -163,11 +186,12 @@ class BabyMonitoringFragment : Fragment() {
             }
         }
 
-
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     val pr = it[0]
+
+                    careID = pr.resourceId.toString()
                     binding.apply {
                         incPrescribe.appTodayTotal.text =
                             pr.totalVolume
@@ -180,12 +204,62 @@ class BabyMonitoringFragment : Fragment() {
                         regulateViews(pr)
 
                     }
+                } else {
+                    exit = true
+                    errorDialog.show(childFragmentManager, "Confirm Action")
                 }
             }
         }
-
+        listenToChange(binding.control.edDhm)
+        listenToChange(binding.control.edEbm)
+        listenToChange(binding.control.edIv)
         binding.apply {
+
+            disableEditing(control.edDeficit)
+
             btnSubmit.setOnClickListener {
+
+                val ivVolume = control.edIv.text.toString()
+                val dhmVolume = control.edIv.text.toString()
+                val ebmVolume = control.edIv.text.toString()
+
+                if (ivPresent) {
+                    if (ivVolume.isNotEmpty()) {
+                        feedsList.add(FeedItem(type = "IV", volume = ivVolume))
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+                if (dhmPresent) {
+                    if (dhmVolume.isNotEmpty()) {
+                        feedsList.add(FeedItem(type = "DHM", volume = dhmVolume))
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+                if (ebmPresent) {
+                    if (ebmVolume.isNotEmpty()) {
+                        feedsList.add(FeedItem(type = "EBM", volume = ebmVolume))
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+
                 exit = true
                 confirmationDialog.show(childFragmentManager, "Confirm Action")
             }
@@ -197,13 +271,67 @@ class BabyMonitoringFragment : Fragment() {
             }
         }
 
-        confirmationDialog = ConfirmationDialog(
-            this::okClick,
-            resources.getString(R.string.app_okay_message)
-        )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved)
-        )
+
+    }
+
+    private fun listenToChange(input: TextInputEditText) {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) };
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this);
+
+                        getTotals()
+                    } else {
+                        input.setText("0")
+                        getTotals()
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+
+    private fun getTotals() {
+        try {
+            binding.apply {
+                val dhm = control.edDhm.text.toString()
+                val ebm = control.edEbm.text.toString()
+                val iv = control.edIv.text.toString()
+                val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat()
+                val def = totalV - total
+
+                control.edDeficit.setText(def.toString())
+
+            }
+
+        } catch (e: Exception) {
+            Timber.e("Exception::: ${e.localizedMessage}")
+        }
 
     }
 
@@ -211,12 +339,15 @@ class BabyMonitoringFragment : Fragment() {
         binding.apply {
             if (pr.ivFluids == "N/A") {
                 control.tilIv.visibility = View.GONE
+                ivPresent = false
             }
             if (pr.breastMilk == "N/A") {
                 control.tilEbm.visibility = View.GONE
+                ebmPresent = false
             }
             if (pr.donorMilk == "N/A") {
                 control.tilDhm.visibility = View.GONE
+                dhmPresent = false
             }
         }
     }
@@ -242,6 +373,7 @@ class BabyMonitoringFragment : Fragment() {
             val times = 24 / 3
             val j: Float = times.toFloat()
             val k: Float = code[0].toFloat()
+            totalV = k
             total = (k / j).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -359,11 +491,28 @@ class BabyMonitoringFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
+            Timber.e("Care Plan $careID")
+            if (feedsList.isNotEmpty()) {
 
-            viewModel.babyMonitoring(
-                questionnaireFragment.getQuestionnaireResponse(), args.patientId
-            )
+                viewModel.babyMonitoring(
+                    questionnaireFragment.getQuestionnaireResponse(), args.patientId, careID,feedsList
+                )
+
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.inputs_missing),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
         }
+    }
+
+    private fun exitBack() {
+        errorDialog.dismiss()
+        findNavController().navigateUp()
+
     }
 
     private fun proceedClick() {

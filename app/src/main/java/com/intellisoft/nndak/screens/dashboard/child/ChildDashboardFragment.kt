@@ -25,6 +25,7 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
 import com.intellisoft.nndak.screens.dashboard.BaseFragment
+import com.intellisoft.nndak.utils.dimOption
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -115,10 +116,10 @@ class ChildDashboardFragment : Fragment() {
                 lnBabyFeeding.isEnabled = false
                 lnBabyMonitoring.isEnabled = false
                 lnBabyLactation.isEnabled = false
-                dimOption(imgDashboard)
-                dimOption(imgFeeds)
-                dimOption(imgMonitor)
-                dimOption(imgLactation)
+                dimOption(imgDashboard, "#94C4C4C4")
+                dimOption(imgFeeds, "#94C4C4C4")
+                dimOption(imgMonitor, "#94C4C4C4")
+                dimOption(imgLactation, "#94C4C4C4")
             }
             lnBabyDashboard.setOnClickListener {
                 findNavController().navigate(
@@ -173,14 +174,6 @@ class ChildDashboardFragment : Fragment() {
         }
     }
 
-    private fun dimOption(imageView: ImageView) {
-        ImageViewCompat.setImageTintMode(imageView, PorterDuff.Mode.SRC_ATOP)
-        ImageViewCompat.setImageTintList(
-            imageView,
-            ColorStateList.valueOf(Color.parseColor("#94C4C4C4"))
-        )
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

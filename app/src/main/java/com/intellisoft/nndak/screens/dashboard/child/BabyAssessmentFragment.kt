@@ -103,7 +103,7 @@ class BabyAssessmentFragment : Fragment() {
         )
         successDialog = SuccessDialog(
             this::proceedClick,
-            resources.getString(R.string.app_okay_saved)
+            resources.getString(R.string.app_okay_saved),false
         )
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->

@@ -6,17 +6,18 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.fhir.logicalId
+import com.google.android.fhir.search.Order
+import com.google.android.fhir.search.search
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
-import com.intellisoft.nndak.models.ApGar
-import com.intellisoft.nndak.models.FeedingCuesTips
-import com.intellisoft.nndak.models.MessageItem
-import com.intellisoft.nndak.models.PatientItem
+import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -657,7 +658,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      */
 
                     val subjectReference = Reference("Patient/$patientId")
-
+                    updatePreviousPrescriptions(patientId)
                     val qh = QuestionnaireHelper()
 
                     val date = FormatHelper().getTodayDate()
@@ -1190,9 +1191,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
                             no.dateTime = Date()
                             no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
-                            fhirEngine.create(no)
+                            saveResourceToDatabase(no)
                         }
                     }
+
+                    val care = CarePlan()
+                    care.encounter = encounterReference
+                    care.subject = subjectReference
+                    care.status = CarePlan.CarePlanStatus.ACTIVE
+                    care.title = title
+                    care.intent = CarePlan.CarePlanIntent.ORDER
+                    saveResourceToDatabase(care)
+
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
 
@@ -1202,6 +1212,43 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     return@launch
 
                 }
+            }
+        }
+    }
+
+    private suspend fun updatePreviousPrescriptions(patientId: String) {
+
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(Constants.MAX_RESOURCE_COUNT)
+            .map {
+                PatientDetailsViewModel.createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == CarePlan.CarePlanStatus.ACTIVE.toString() }
+            .let { cares.addAll(it) }
+
+        if (cares.isNotEmpty()) {
+            cares.forEach { cp ->
+
+                val encounterReference = Reference(cp.encounterId)
+                val subjectReference = Reference(cp.patientId)
+                val carePlan = CarePlan()
+                carePlan.id = cp.resourceId
+                carePlan.encounter = encounterReference
+                carePlan.subject = subjectReference
+                carePlan.status = CarePlan.CarePlanStatus.COMPLETED
+                carePlan.title = PRESCRIPTION
+                carePlan.intent = CarePlan.CarePlanIntent.ORDER
+                saveResourceToDatabase(carePlan)
             }
         }
     }
@@ -1268,7 +1315,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         bundle: Bundle,
         subjectReference: Reference,
         encounterId: String,
-        reason: String
+        reason: String,
     ) {
 
         val encounterReference = Reference("Encounter/$encounterId")
@@ -1279,6 +1326,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         resource.id = generateUuid()
                         resource.subject = subjectReference
                         resource.encounter = encounterReference
+                        resource.issued = Date()
                         saveResourceToDatabase(resource)
                     }
                 }
@@ -1294,7 +1342,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.subject = subjectReference
                     resource.id = encounterId
                     resource.reasonCodeFirstRep.text = reason
-                  //  resource.reasonReferenceFirstRep.reference = reason
                     saveResourceToDatabase(resource)
                 }
 
@@ -1962,7 +2009,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     fun babyMonitoring(
         questionnaireResponse: QuestionnaireResponse,
-        patientId: String
+        patientId: String,
+        careID: String,
+        feedsList: MutableList<FeedItem>
     ) {
         viewModelScope.launch {
             val bundle =
@@ -1977,11 +2026,55 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
 
-
                     /**
                      * Extract Observations, Patient Data
                      */
                     val qh = QuestionnaireHelper()
+
+                    feedsList.forEach {
+                        when (it.type) {
+                            "IV" -> {
+
+                                bundle.addEntry().setResource(
+                                    qh.quantityQuestionnaire(
+                                        "IV-Volume",
+                                        "IV Volume",
+                                        "IV Volume",
+                                        it.volume.toString(),
+                                        "ml"
+                                    )
+                                )
+                                    .request.url = "Observation"
+                            }
+                            "DHM" -> {
+
+                                bundle.addEntry().setResource(
+                                    qh.quantityQuestionnaire(
+                                        "DHM-Volume",
+                                        "DHM Volume",
+                                        "DHM Volume",
+                                        it.volume.toString(), "ml"
+                                    )
+                                )
+                                    .request.url = "Observation"
+                            }
+                            "EBM" -> {
+
+                                bundle.addEntry().setResource(
+                                    qh.quantityQuestionnaire(
+                                        "EBM-Volume",
+                                        "EBM Volume",
+                                        "EBM Volume",
+                                        it.volume.toString(), "ml"
+                                    )
+                                )
+                                    .request.url = "Observation"
+                            }
+                            else -> {
+                                println("Skipped Feeds Items")
+                            }
+                        }
+                    }
 
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
@@ -2135,7 +2228,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
-                    title = "Baby Assessment"
+                    val encounterReference = Reference("Encounter/$encounterId")
+                    val basedOnReference = Reference("CarePlan/$careID")
+                    title = BABY_ASSESSMENT
+
+                    val care = CarePlan()
+                    care.encounter = encounterReference
+                    care.subject = subjectReference
+                    care.status = CarePlan.CarePlanStatus.COMPLETED
+                    care.title = title
+                    care.intent = CarePlan.CarePlanIntent.ORDER
+                    care.addPartOf(basedOnReference)
+                    saveResourceToDatabase(care)
+
                     saveResources(bundle, subjectReference, encounterId, title)
                     generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                     isResourcesSaved.postValue(true)
@@ -2171,7 +2276,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      * Retrieve Mother Using the Provided ID
                      */
 
-                    //val subjectReference = Reference("Patient/$patientId")
 
                     val qh = QuestionnaireHelper()
 

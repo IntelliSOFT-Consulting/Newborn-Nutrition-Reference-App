@@ -15,14 +15,19 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
+import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.models.PieItem
+import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
+import timber.log.Timber
+import java.time.LocalDate
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,18 +108,25 @@ class HomeFragment : Fragment() {
 
     private fun populateData() {
 
-        val values = arrayListOf<Int>(4, 7, 12, 2, 3, 2, 1, 8, 6, 4, 2, 7)
+        val values = getPastDaysOnIntervalOf(7, 1)
+
         if (values.isNotEmpty()) {
+            val input = arrayListOf<Int>(4, 7, 9, 3, 4, 7, 5)
+            val dayNames = formatDays(values)
+            Timber.e("Days $dayNames")
+            Timber.e("Values Count ${values.size}")
+
             val lessFive: ArrayList<Entry> = ArrayList()
             val lessSeven: ArrayList<Entry> = ArrayList()
             val moreSeven: ArrayList<Entry> = ArrayList()
 
-            for ((i, entry) in values.withIndex()) {
-                val value = values[i].toFloat()
+            for ((i, entry) in input.withIndex()) {
+                val value = input[i].toFloat()
                 lessFive.add(Entry(i.toFloat(), value))
-                lessSeven.add(Entry(i.toFloat() + 1, value))
-                moreSeven.add(Entry(i.toFloat() - 1, value))
+                lessSeven.add(Entry(i.toFloat(), value + 1))
+                moreSeven.add(Entry(i.toFloat(), value - 2))
             }
+
             val lessThanFive = LineDataSet(lessFive, "Preterm DHM")
             lessThanFive.setColors(Color.parseColor("#F65050"))
             lessThanFive.setDrawCircleHole(false)
@@ -143,6 +155,9 @@ class HomeFragment : Fragment() {
             xAxis.setDrawGridLines(false)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -60f
+            xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
+
 
             binding.totalTermChart.legend.isEnabled = true
 
@@ -169,7 +184,18 @@ class HomeFragment : Fragment() {
             //refresh
             binding.totalTermChart.invalidate()
         }
+
     }
+
+    private fun formatDays(values: List<LocalDate>): ArrayList<String> {
+        val days = ArrayList<String>()
+        values.forEach {
+            val format = FormatHelper().getDayName(it.toString())
+            days.add(format)
+        }
+        return days
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
