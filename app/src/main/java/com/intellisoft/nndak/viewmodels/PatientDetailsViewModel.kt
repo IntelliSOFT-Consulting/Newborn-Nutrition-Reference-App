@@ -9,6 +9,7 @@ import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.EBM
@@ -16,6 +17,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getFormattedAge
+import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
@@ -35,8 +37,32 @@ class PatientDetailsViewModel(
 ) : AndroidViewModel(application) {
     val liveMumChild = MutableLiveData<MotherBabyItem>()
     val liveOrder = MutableLiveData<OrdersItem>()
+    val liveFeeds = MutableLiveData<DistributionItem>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
     val context: Application = application
+
+
+    fun feedsDistribution() {
+        viewModelScope.launch { liveFeeds.value = getFeedsDataModel() }
+    }
+
+    private fun getFeedsDataModel(): DistributionItem {
+        val intervals = getPastHoursOnIntervalOf(8, 3)
+        val times: MutableList<String> = mutableListOf()
+        val feeds: MutableList<FeedItem> = mutableListOf()
+        intervals.forEach {
+            val time = FormatHelper().getHour(it.toString())
+            times.add(time)
+            feeds.add(loadFeed(time))
+        }
+
+        return DistributionItem(time = times, feed = feeds)
+    }
+
+    private fun loadFeed(time: String): FeedItem {
+
+        return FeedItem(volume = "200")
+    }
 
 
     fun getMumChild() {
@@ -74,10 +100,6 @@ class PatientDetailsViewModel(
             .map { createObservationItem(it, getApplication<Application>().resources) }
             .filter { it.code == ADMISSION_WEIGHT || it.code == CURRENT_WEIGHT }
             .let { observations.addAll(it) }
-
-        observations.forEach {
-            Timber.e("Ordered Weights:::: ${it.value} :::: ${it.effective}.")
-        }
         return observations
     }
 
@@ -128,7 +150,7 @@ class PatientDetailsViewModel(
         var motherMilk = ""
         var totalFeeds = ""
         var expressions = ""
-        var breastfeeding = ""
+        var breastfeeding =""
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
@@ -138,12 +160,6 @@ class PatientDetailsViewModel(
                 }
             }
         }
-        val feedsGiven = pullFeeds()
-        expressions = i.toString()
-
-        var route = "N/A"
-        var threeHours = "N/A"
-        var breakdown = "N/A"
 
         val obs = getObservations()
 
@@ -155,7 +171,6 @@ class PatientDetailsViewModel(
         if (refined.isNotEmpty()) {
             cWeight = refined.last().value
             for (element in refined) {
-                Timber.e("Time Created::: ${element.effective}")
                 val code = element.value.split("\\.".toRegex()).toTypedArray()
                 weights.add(code[0].toInt())
             }
@@ -164,7 +179,6 @@ class PatientDetailsViewModel(
         if (obs.isNotEmpty()) {
 
             for (element in obs) {
-                Timber.e("Observations ${element.code}")
                 if (element.code == "Feeding-Frequency") {
                     feeds.add(FeedItem("test", "test", "test", "test", "test", "test"))
                 }
@@ -405,7 +419,7 @@ class PatientDetailsViewModel(
         }
 //        val encounters = getPatientEncounters()
 //        if (encounters.isNotEmpty()) {
-
+//
 //            var item = encounters.firstOrNull {
 //                it.code == "Feeds Prescription"
 //            }

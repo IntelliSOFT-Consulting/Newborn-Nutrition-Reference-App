@@ -2,6 +2,9 @@ package com.intellisoft.nndak.screens.dashboard.dhm
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,15 +19,18 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.ServiceRequest
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +48,9 @@ class DhmStockFragment : Fragment() {
     private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentDhmStockBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
+    private lateinit var pa: String
+    private lateinit var upa: String
+    private lateinit var totalDhm: String
     private val binding
         get() = _binding!!
 
@@ -69,9 +78,12 @@ class DhmStockFragment : Fragment() {
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
-        setHasOptionsMenu(true)
-
         binding.apply {
+
+            listenToChange(edPasteurized)
+            listenToChange(edUnpasteurized)
+            disableEditing(edTotal)
+
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
@@ -84,8 +96,93 @@ class DhmStockFragment : Fragment() {
             resources.getString(R.string.app_okay_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved),false
+            this::proceedClick, resources.getString(R.string.app_okay_saved), false
         )
+
+    }
+
+    private fun updateArguments() {
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
+    }
+
+    private fun addQuestionnaireFragment() {
+        try {
+            val fragment = QuestionnaireFragment()
+            fragment.arguments =
+                bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
+            childFragmentManager.commit {
+                add(
+                    R.id.add_patient_container, fragment,
+                    QUESTIONNAIRE_FRAGMENT_TAG
+                )
+            }
+        } catch (e: Exception) {
+            Timber.e("Exception ${e.localizedMessage}")
+        }
+    }
+
+    private fun listenToChange(input: TextInputEditText) {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this)
+
+                        calculateTotals()
+                    } else {
+                        input.setText("")
+                        calculateTotals()
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+
+    private fun calculateTotals() {
+        try {
+            binding.apply {
+                pa = edPasteurized.text.toString()
+                upa = edUnpasteurized.text.toString()
+                if (pa.isNotEmpty() && upa.isNotEmpty()) {
+                    val total = pa.toFloat() + upa.toFloat()
+
+                    totalDhm = total.toString()
+
+                    edTotal.setText(total.toString())
+                } else {
+                    edTotal.setText("0")
+                }
+
+            }
+
+        } catch (e: Exception) {
+            Timber.e("Exception::: ${e.localizedMessage}")
+        }
 
     }
 
@@ -103,7 +200,13 @@ class DhmStockFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
-            viewModel.addDhmStock(questionnaireFragment.getQuestionnaireResponse())
+
+            viewModel.updateStock(
+                questionnaireFragment.getQuestionnaireResponse(),
+                pa,
+                upa,
+                totalDhm
+            )
         }
     }
 
@@ -130,28 +233,18 @@ class DhmStockFragment : Fragment() {
 
     }
 
-    private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
-    }
-
-    private fun addQuestionnaireFragment() {
-        try {
-            val fragment = QuestionnaireFragment()
-            fragment.arguments =
-                bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
-            childFragmentManager.commit {
-                add(
-                    R.id.add_patient_container, fragment,
-                    QUESTIONNAIRE_FRAGMENT_TAG
-                )
-            }
-        } catch (e: Exception) {
-            Timber.e("Exception ${e.localizedMessage}")
-        }
-    }
-
     private fun onSubmitAction() {
-
+        pa = binding.edPasteurized.text.toString()
+        upa = binding.edUnpasteurized.text.toString()
+        if (TextUtils.isEmpty(pa) || pa == "0" || TextUtils.isEmpty(upa) || upa == "0") {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.inputs_missing),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            return
+        }
         confirmationDialog.show(childFragmentManager, "Confirm Details")
 
     }

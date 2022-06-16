@@ -340,6 +340,11 @@
     <string name="deficit_mls">Deficit (mls)</string>
     <string name="refresh">Refresh</string>
     <string name="no_active">No active prescription</string>
+    <string name="app_pasteurized">Pasteurized</string>
+    <string name="app_unpasteurized">Unpasteurized</string>
+    <string name="app_total">Total</string>
+    <string name="app_closing_stock">DHM Closing Stock</string>
+    <string name="app_closing">Fill this form Daily at Midnight during operations days</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>

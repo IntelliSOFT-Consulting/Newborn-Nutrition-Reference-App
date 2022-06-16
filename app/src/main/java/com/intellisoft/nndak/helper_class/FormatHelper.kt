@@ -89,6 +89,15 @@ class FormatHelper {
 
     }
 
+     fun getHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
      fun getDayName(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)

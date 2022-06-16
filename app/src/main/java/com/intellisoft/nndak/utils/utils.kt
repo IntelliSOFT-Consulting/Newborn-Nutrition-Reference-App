@@ -37,7 +37,9 @@ import java.net.URISyntaxException
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Period
+import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.regex.Pattern
 
@@ -50,9 +52,19 @@ fun isTablet(ctx: Context): Boolean {
     return ctx.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
-fun extractUnits(value:String):String{
+fun extractUnits(value: String): String {
     val code = value.split("\\.".toRegex()).toTypedArray()
     return code[0]
+}
+
+fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
+    val list: MutableList<LocalDateTime> = ArrayList()
+    var date = LocalDateTime.now()
+    for (i in 1..times) {
+        list.add(date)
+        date = date.minusHours(interval.toLong())
+    }
+    return list.reversed()
 }
 
 fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
@@ -64,6 +76,7 @@ fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     }
     return list.reversed()
 }
+
 fun getPastMonthsOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     val list: MutableList<LocalDate> = ArrayList()
     var date = LocalDate.now()

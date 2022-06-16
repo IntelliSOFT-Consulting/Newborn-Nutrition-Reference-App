@@ -287,11 +287,11 @@ class BabyMonitoringFragment : Fragment() {
                         val position: Int = input.selectionEnd
                         input.setText(newValue)
                         if (position > (input.text?.length ?: 0)) {
-                            input.text?.let { input.setSelection(it.length) };
+                            input.text?.let { input.setSelection(it.length) }
                         } else {
                             input.setSelection(position);
                         }
-                        input.addTextChangedListener(this);
+                        input.addTextChangedListener(this)
 
                         getTotals()
                     } else {

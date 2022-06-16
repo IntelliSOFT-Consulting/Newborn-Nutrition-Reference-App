@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView.BufferType
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,17 +19,25 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
+import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.models.DistributionItem
 import com.intellisoft.nndak.utils.extractUnits
+import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
+import com.intellisoft.nndak.utils.getPastMonthsOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -148,7 +155,6 @@ class BabyDashboardFragment : Fragment() {
 
 
                         lineChart(it.assessment.weights)
-                        barGraph(it.assessment.weights)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -156,6 +162,12 @@ class BabyDashboardFragment : Fragment() {
             }
         }
 
+        patientDetailsViewModel.feedsDistribution()
+        patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
+            if (it != null) {
+                barGraph(it)
+            }
+        }
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
@@ -174,15 +186,14 @@ class BabyDashboardFragment : Fragment() {
 
                             val percentage = (given.toDouble() / total.toDouble()) * 100
 
-                            tvFeedAverage.text="${percentage.toInt()} %"
+                            tvFeedAverage.text = "${percentage.toInt()} %"
 
-                            Timber.e("Feeds Given $total Taken $given Percentage ${percentage.toInt()}" )
+                            Timber.e("Feeds Given $total Taken $given Percentage ${percentage.toInt()}")
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-
-
                     }
+
                 }
 
             }
@@ -193,6 +204,7 @@ class BabyDashboardFragment : Fragment() {
     private fun lineChart(values: MutableList<Int>?) {
         if (values != null) {
             if (values.isNotEmpty()) {
+
                 val actualEntries: ArrayList<Entry> = ArrayList()
                 val projectedEntries: ArrayList<Entry> = ArrayList()
 
@@ -225,7 +237,7 @@ class BabyDashboardFragment : Fragment() {
                 xAxis.setDrawGridLines(false)
                 xAxis.setDrawAxisLine(false)
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
-
+                // xAxis.valueFormatter = IndexAxisValueFormatter(days)
 
                 binding.growthChart.legend.isEnabled = true
 
@@ -256,27 +268,33 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
-    private fun barGraph(values: MutableList<Int>?) {
-        val groupCount = 6
-        val groupSpace = 0.08f
-        val barSpace = 0.03f
-        val barWidth = 0.2f
+    private fun barGraph(values: DistributionItem) {
 
-        val startYear = 2022
-        val endYear: Int = +groupCount
-        val iv: ArrayList<BarEntry> = ArrayList()
-        val ebm: ArrayList<BarEntry> = ArrayList()
-        val dhm: ArrayList<BarEntry> = ArrayList()
-        if (values != null) {
-            if (values.isNotEmpty()) {
-                for ((i, entry) in values.withIndex()) {
-                    val value = values[i].toFloat()
-                    bWeight += 100
-                    iv.add(BarEntry(i.toFloat(), value))
-                    ebm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
-                    dhm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
+        if (values.time.isNotEmpty()) {
+            val groupCount = 6
+            val groupSpace = 0.08f
+            val barSpace = 0.03f
+            val barWidth = 0.2f
+
+            binding.apply {
+
+                val input = arrayListOf<Int>(4, 7, 9, 3, 4, 7, 5)
+                val hours = getPastHoursOnIntervalOf(8, 3)
+
+                val hourName = formatFeedingTime(hours)
+                Timber.e("Days $hourName")
+                val iv: ArrayList<BarEntry> = ArrayList()
+                val ebm: ArrayList<BarEntry> = ArrayList()
+                val dhm: ArrayList<BarEntry> = ArrayList()
+
+                for ((i, entry) in values.feed.withIndex()) {
+                    val value = values.feed[i].volume?.toFloat()
+                    if (value != null) {
+                        iv.add(BarEntry(i.toFloat(), value))
+                        ebm.add(BarEntry(i.toFloat(), value + 1))
+                        dhm.add(BarEntry(i.toFloat(), value - 2))
+                    }
                 }
-
                 val fluids = BarDataSet(iv, "IV")
                 fluids.setColors(Color.parseColor("#4472C4"))
                 fluids.setDrawValues(false)
@@ -292,40 +310,137 @@ class BabyDashboardFragment : Fragment() {
                 val data = BarData(fluids, expressed, donor)
                 data.setValueFormatter(LargeValueFormatter())
 
-                binding.feedsChart.data = data
-                //setting the x-axis
-                val xAxis: XAxis = binding.feedsChart.xAxis
-                //calling methods to hide x-axis gridlines
-                binding.feedsChart.axisLeft.setDrawGridLines(false)
+
+                val xAxis: XAxis = feedsChart.xAxis
                 xAxis.setDrawGridLines(false)
                 xAxis.setDrawAxisLine(false)
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.labelRotationAngle = -60f
+                xAxis.valueFormatter = IndexAxisValueFormatter(hourName)
+                feedsChart.axisLeft.setDrawGridLines(false)
+                feedsChart.legend.isEnabled = true
 
+                //remove description label
+                feedsChart.description.isEnabled = false
+                feedsChart.isDragEnabled = true
+                feedsChart.setScaleEnabled(true)
+                feedsChart.description.text = "Age (Days)"
+                //add animation
+                feedsChart.animateX(1000, Easing.EaseInSine)
+                feedsChart.data = data
 
-                binding.feedsChart.legend.isEnabled = true
-                binding.feedsChart.description.isEnabled = false
-                binding.feedsChart.animateY(3000, Easing.EaseInSine)
+                val leftAxis: YAxis = feedsChart.axisLeft
+                leftAxis.axisMinimum = 0f
+                leftAxis.setDrawGridLines(true)
+                leftAxis.isGranularityEnabled = false
 
-                binding.feedsChart.barData.barWidth = barWidth
-                binding.feedsChart.xAxis.axisMinimum = startYear.toFloat()
-                binding.feedsChart.xAxis.axisMaximum =
-                    startYear + binding.feedsChart.barData.getGroupWidth(
-                        groupSpace,
-                        barSpace
-                    ) * groupCount
-                binding.feedsChart.groupBars(startYear.toFloat(), groupSpace, barSpace)
+//                feedsChart.barData.barWidth = barWidth
+//                feedsChart.xAxis.axisMinimum = 0f
+//                feedsChart.xAxis.axisMaximum =
+//                    0 + feedsChart.barData.getGroupWidth(
+//                        groupSpace,
+//                        barSpace
+//                    ) * groupCount
+//                feedsChart.groupBars(0f, groupSpace, barSpace)
+//
 
-
-                val rightAxis: YAxis = binding.feedsChart.axisRight
+                val rightAxis: YAxis = feedsChart.axisRight
                 rightAxis.setDrawGridLines(false)
                 rightAxis.setDrawZeroLine(false)
                 rightAxis.isGranularityEnabled = false
                 rightAxis.isEnabled = false
-
-                //refresh the chart
-                binding.feedsChart.invalidate()
+                //refresh
+                feedsChart.invalidate()
             }
         }
+
+    }
+//    private fun barGraph(values: DistributionItem) {
+//
+//        val groupCount = 6
+//        val groupSpace = 0.08f
+//        val barSpace = 0.03f
+//        val barWidth = 0.2f
+//
+//        val startYear = 2022
+//        val endYear: Int = +groupCount
+//        val iv: ArrayList<BarEntry> = ArrayList()
+//        val ebm: ArrayList<BarEntry> = ArrayList()
+//        val dhm: ArrayList<BarEntry> = ArrayList()
+//        if (values.time.isNotEmpty()) {
+//            val intervals = getPastHoursOnIntervalOf(8, 3)
+//            val times = formatFeedingTime(intervals)
+//
+//            for ((i, entry) in values.feed.withIndex()) {
+//
+//                val value = values.feed[i].volume
+//                if (value != null) {
+//
+//                    iv.add(BarEntry(value.toFloat(), value.toFloat()))
+//                    ebm.add(BarEntry(value.toFloat(), value.toFloat()))
+//                    dhm.add(BarEntry(value.toFloat(), value.toFloat()))
+//                }
+//            }
+//
+//            val fluids = BarDataSet(iv, "IV")
+//            fluids.setColors(Color.parseColor("#4472C4"))
+//            fluids.setDrawValues(false)
+//
+//            val expressed = BarDataSet(ebm, "EBM")
+//            expressed.setColors(Color.parseColor("#ED7D31"))
+//            expressed.setDrawValues(false)
+//
+//            val donor = BarDataSet(dhm, "DHM")
+//            donor.setColors(Color.parseColor("#A5A5A5"))
+//            donor.setDrawValues(false)
+//
+//            val data = BarData(fluids, expressed, donor)
+//            data.setValueFormatter(LargeValueFormatter())
+//
+//            binding.feedsChart.data = data
+//            //setting the x-axis
+//            val xAxis: XAxis = binding.feedsChart.xAxis
+//            binding.feedsChart.axisLeft.setDrawGridLines(false)
+//            xAxis.setDrawGridLines(false)
+//            xAxis.setDrawAxisLine(false)
+//            xAxis.position = XAxis.XAxisPosition.BOTTOM
+//            xAxis.labelRotationAngle = -60f
+//            xAxis.valueFormatter = IndexAxisValueFormatter(times)
+//
+//
+//            binding.feedsChart.legend.isEnabled = true
+//            binding.feedsChart.description.isEnabled = false
+//            binding.feedsChart.animateY(3000, Easing.EaseInSine)
+//
+//            binding.feedsChart.barData.barWidth = barWidth
+//            binding.feedsChart.xAxis.axisMinimum = startYear.toFloat()
+//            binding.feedsChart.xAxis.axisMaximum =
+//                startYear + binding.feedsChart.barData.getGroupWidth(
+//                    groupSpace,
+//                    barSpace
+//                ) * groupCount
+//            binding.feedsChart.groupBars(startYear.toFloat(), groupSpace, barSpace)
+//
+//
+//            val rightAxis: YAxis = binding.feedsChart.axisRight
+//            rightAxis.setDrawGridLines(false)
+//            rightAxis.setDrawZeroLine(false)
+//            rightAxis.isGranularityEnabled = false
+//            rightAxis.isEnabled = false
+//
+//            //refresh the chart
+//            binding.feedsChart.invalidate()
+//        }
+//    }
+
+    private fun formatFeedingTime(values: List<LocalDateTime>): ArrayList<String> {
+        val days = ArrayList<String>()
+        values.forEach {
+            val time = FormatHelper().getHour(it.toString())
+            days.add(time)
+        }
+        return days
+
     }
 
     private fun barGraphAlt(values: MutableList<Int>?) {

@@ -14,6 +14,7 @@ import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_STOCK
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
 import com.intellisoft.nndak.models.*
@@ -1387,10 +1388,34 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    private suspend fun emptyObservations(
+        bundle: Bundle, encounterId: String,
+        reason: String,
+    ) {
+
+        val encounterReference = Reference("Encounter/$encounterId")
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.issued = Date()
+                        resource.encounter = encounterReference
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Encounter -> {
+                    resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
+                    saveResourceToDatabase(resource)
+                }
+            }
+        }
+    }
+
     private fun isRequiredFieldMissing(bundle: Bundle): Boolean {
         bundle.entry.forEach {
-            val resource = it.resource
-            when (resource) {
+            when (val resource = it.resource) {
                 is Observation -> {
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
@@ -2752,7 +2777,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
                     order.patient = subjectReference
                     order.encounter = encounterReference
-                    fhirEngine.create(order)
+                    saveResourceToDatabase(order)
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
 
@@ -2769,6 +2794,73 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     fun makeComplete() {
         customMessage.postValue(null)
+    }
+
+    fun updateStock(
+        questionnaireResponse: QuestionnaireResponse,
+        pa: String,
+        upa: String,
+        totalDhm: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+
+                    val qh = QuestionnaireHelper()
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                "Pasteurized",
+                                "Pasteurized",
+                                "Pasteurized",
+                                pa,
+                                "mls"
+                            )
+                        )
+                        .request.url = "Observation"
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                "Un-Pasteurized",
+                                "Un Pasteurized",
+                                "Un Pasteurized",
+                                upa,
+                                "mls"
+                            )
+                        )
+                        .request.url = "Observation"
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                "Total-Stock",
+                                "Total Stock",
+                                "Total Stock",
+                                totalDhm,
+                                "mls"
+                            )
+                        )
+                        .request.url = "Observation"
+                    emptyObservations(bundle, generateUuid(), DHM_STOCK)
+                    isResourcesSaved.postValue(true)
+
+                } catch (e: Exception) {
+                    isResourcesSaved.postValue(false)
+
+                }
+            }
+
+        }
+
     }
 
 

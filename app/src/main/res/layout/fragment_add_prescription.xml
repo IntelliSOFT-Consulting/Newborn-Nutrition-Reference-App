@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="3"
-    tools:context=".screens.dashboard.child.AddPrescriptionFragment">
+    tools:context=".screens.dashboard.prescription.AddPrescriptionFragment">
 
 <!--
     <include

@@ -133,6 +133,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@color/dim_red"
             android:text="@string/submit"
+            android:textColor="@android:color/white"
             app:cornerRadius="@dimen/_35dp" />
 
         <TextView
@@ -247,6 +248,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@color/dim_red"
             android:text="@string/submit"
+            android:textColor="@android:color/white"
             app:cornerRadius="@dimen/_35dp" />
     </LinearLayout>
 

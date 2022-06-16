@@ -224,6 +224,12 @@ data class PrescriptionItem(
     override fun toString(): String = resourceId.toString()
 }
 
+
+data class DistributionItem(
+    val time: List<String>,
+    val feed: List<FeedItem>
+)
+
 data class DHMDashboardItem(
     val id: String? = "",
     val resourceId: String? = "",

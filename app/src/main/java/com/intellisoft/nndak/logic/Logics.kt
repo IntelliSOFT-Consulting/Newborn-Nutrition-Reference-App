@@ -22,6 +22,7 @@ class Logics {
          */
         const val PRESCRIPTION = "Feeds Prescription"
         const val BABY_ASSESSMENT = "Baby Assessment"
+        const val DHM_STOCK = "DHM Stock"
         const val FEEDING_MONITORING = "Feeding and Monitoring"
         const val ADMISSION_WEIGHT = "29463-7"
         const val CURRENT_WEIGHT = "3141-9"

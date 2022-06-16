@@ -3,6 +3,7 @@ package com.intellisoft.nndak.data
 import com.google.android.fhir.sync.DownloadWorkManager
 
 import com.google.android.fhir.SyncDownloadContext
+import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
 import com.intellisoft.nndak.utils.Constants.SYNC_PARAM
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import java.util.LinkedList
@@ -48,7 +49,6 @@ class DownloadManagerImpl : DownloadWorkManager {
             }
         }
 
-
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
@@ -57,6 +57,20 @@ class DownloadManagerImpl : DownloadWorkManager {
                 val type = entry.resource.resourceType.toString()
                 if (type == "Patient") {
                     val patientUrl = "${entry.fullUrl}/\$everything"
+                    urls.add(patientUrl)
+                }
+                if (type == "NutritionOrder") {
+
+                    val no = entry.resource as NutritionOrder
+                    val patient = no.encounter.reference
+                    val patientUrl = "$DEMO_SERVER$patient/\$everything"
+                    urls.add(patientUrl)
+                }
+                if (type == "CarePlan") {
+
+                    val no = entry.resource as CarePlan
+                    val patient = no.encounter.reference
+                    val patientUrl = "$DEMO_SERVER$patient/\$everything"
                     urls.add(patientUrl)
                 }
 

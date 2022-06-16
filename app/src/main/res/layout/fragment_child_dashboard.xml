@@ -474,7 +474,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/img_assess" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            >
+
 
         </RelativeLayout>
 
