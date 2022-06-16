@@ -253,6 +253,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     }
 
                                 }
+                                "Additional-Notes" -> {
+                                    val type = extractResponse(inner, "valueString")
+                                    if (type.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Additional-Notes",
+                                                "Additional Notes and Remarks",
+                                                type,
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
                             }
                         }
 
@@ -455,6 +468,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     if (birthDate.isNotEmpty()) {
 
                                         baby.birthDate = FormatHelper().dateOfBirth(birthDate)
+                                    }
+
+                                }
+                                "Baby-State" -> {
+                                    val state = extractResponseCode(inner, "valueCoding")
+                                    if (state.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Baby-State",
+                                                "Baby's State",
+                                                state
+                                            )
+                                        )
+                                            .request.url = "Observation"
                                     }
 
                                 }

@@ -136,7 +136,8 @@ class PatientDetailsViewModel(
         var gestation = ""
         var apgar = ""
         var babyWell = ""
-        var asphyxia = ""
+        val asphyxia = retrieveCode("45735-8")
+
         var jaundice = ""
         var sepsis = ""
         val gainRate = "Normal"
@@ -150,7 +151,7 @@ class PatientDetailsViewModel(
         var motherMilk = ""
         var totalFeeds = ""
         var expressions = ""
-        var breastfeeding =""
+        var breastfeeding = ""
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
@@ -199,7 +200,6 @@ class PatientDetailsViewModel(
                 }
                 if (element.code == "8339-4") {
                     birthWeight = element.value
-                    Timber.e("Birth Weight $birthWeight")
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
                     birthWeight = if (code[0].toInt() < 2500) {
                         "$birthWeight (gm)-Low"
@@ -217,9 +217,9 @@ class PatientDetailsViewModel(
                 if (element.code == "45755-8") {
                     sepsis = element.value
                 }
-                if (element.code == "45735-8") {
-                    asphyxia = element.value
-                }
+//                if (element.code == "45735-8") {
+//                    asphyxia = element.value
+//                }
                 if (element.code == "45736-6") {
                     jaundice = element.value
                 }
@@ -299,6 +299,16 @@ class PatientDetailsViewModel(
                 totalExpressed = total
             )
         )
+    }
+
+    private suspend fun retrieveCode(code: String): String {
+        var data = ""
+        val obs = observationsPerCode(code)
+        if (obs.isNotEmpty()) {
+            val sort = sortCollected(obs)
+            data = sort.last().value.trim()
+        }
+        return data
     }
 
     private suspend fun pullFeeds(): String {

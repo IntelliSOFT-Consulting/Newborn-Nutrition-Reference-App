@@ -114,20 +114,23 @@ class BabyFeedsFragment : Fragment() {
                     incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
                     incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
 
-
                     val isSepsis = data.dashboard.neonatalSepsis
+                    val isAsphyxia = data.dashboard.asphyxia
+                    val isJaundice = data.dashboard.jaundice
+                    if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
+                        incDetails.lnConditions.visibility = View.VISIBLE
+                    }
+
                     if (isSepsis != "Yes") {
                         incDetails.appNeonatalSepsis.visibility = View.GONE
                         incDetails.tvNeonatalSepsis.visibility = View.GONE
                     }
 
-                    val isAsphyxia = data.dashboard.asphyxia
                     if (isAsphyxia != "Yes") {
                         incDetails.appAsphyxia.visibility = View.GONE
                         incDetails.tvAsphyxia.visibility = View.GONE
                     }
 
-                    val isJaundice = data.dashboard.jaundice
                     if (isJaundice != "Yes") {
                         incDetails.tvJaundice.visibility = View.GONE
                         incDetails.appJaundice.visibility = View.GONE

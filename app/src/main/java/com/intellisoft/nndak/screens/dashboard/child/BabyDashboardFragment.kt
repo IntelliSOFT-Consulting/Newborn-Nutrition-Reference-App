@@ -137,7 +137,9 @@ class BabyDashboardFragment : Fragment() {
                         val isAsphyxia = it.dashboard.asphyxia
                         val isJaundice = it.dashboard.jaundice
 
-
+                        if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
+                            incDetails.lnConditions.visibility = View.VISIBLE
+                        }
                         if (isSepsis != "Yes") {
                             incDetails.appNeonatalSepsis.visibility = View.GONE
                             incDetails.tvNeonatalSepsis.visibility = View.GONE

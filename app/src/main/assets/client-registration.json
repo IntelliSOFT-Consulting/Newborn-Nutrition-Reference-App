@@ -646,6 +646,85 @@
           ]
         },
         {
+          "type": "group",
+          "linkId": "Baby-State",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "73762-7",
+                  "display": "Baby's State",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Baby-State",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Baby's State",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA20039-6",
+                    "display": "Alive"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA20040-4",
+                    "display": "Dead"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
           "linkId": "VDRL",
           "type": "group",
           "extension": [

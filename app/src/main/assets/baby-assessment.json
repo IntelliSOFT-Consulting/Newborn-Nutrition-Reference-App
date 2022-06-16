@@ -853,6 +853,35 @@
               ]
             }
           ]
+        },
+        {
+          "linkId": "Additional-Notes",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "Additional-Notes",
+                  "display": "Additional-Notes",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/Additional-Notes",
+              "text": "Additional Notes and Remarks"
+            }
+          ]
         }
       ]
     }

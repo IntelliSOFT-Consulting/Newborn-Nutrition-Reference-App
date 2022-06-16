@@ -103,7 +103,7 @@ class BabyAssessmentFragment : Fragment() {
         )
         successDialog = SuccessDialog(
             this::proceedClick,
-            resources.getString(R.string.app_okay_saved),false
+            resources.getString(R.string.app_okay_saved), false
         )
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
@@ -131,18 +131,21 @@ class BabyAssessmentFragment : Fragment() {
 
 
                     val isSepsis = data.dashboard.neonatalSepsis
+                    val isAsphyxia = data.dashboard.asphyxia
+                    val isJaundice = data.dashboard.jaundice
+                    if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
+                        incDetails.lnConditions.visibility = View.VISIBLE
+                    }
                     if (isSepsis != "Yes") {
                         incDetails.appNeonatalSepsis.visibility = View.GONE
                         incDetails.tvNeonatalSepsis.visibility = View.GONE
                     }
 
-                    val isAsphyxia = data.dashboard.asphyxia
                     if (isAsphyxia != "Yes") {
                         incDetails.appAsphyxia.visibility = View.GONE
                         incDetails.tvAsphyxia.visibility = View.GONE
                     }
 
-                    val isJaundice = data.dashboard.jaundice
                     if (isJaundice != "Yes") {
                         incDetails.tvJaundice.visibility = View.GONE
                         incDetails.appJaundice.visibility = View.GONE
