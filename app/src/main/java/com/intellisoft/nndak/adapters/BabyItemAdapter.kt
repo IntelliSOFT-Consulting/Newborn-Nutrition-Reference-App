@@ -30,7 +30,6 @@ class BabyItemAdapter(
             BabyListItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
-
     override fun onBindViewHolder(holder: BabyItemViewHolder, position: Int) {
         val item = currentList[position]
         holder.bindTo(item, onItemClicked)

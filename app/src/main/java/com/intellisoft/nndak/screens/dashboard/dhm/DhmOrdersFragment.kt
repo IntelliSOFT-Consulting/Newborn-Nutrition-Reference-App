@@ -258,7 +258,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
     }
 
-
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
         filterData = formatter.getSearchQuery(text, requireContext())

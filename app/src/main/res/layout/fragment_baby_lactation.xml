@@ -15,7 +15,11 @@
 
         <include
             android:id="@+id/breadcrumb"
-            layout="@layout/breadcrumb" />
+            layout="@layout/breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp" />
+
         <include
             android:id="@+id/inc_mum"
             layout="@layout/mother_item" />
@@ -128,11 +132,10 @@
                                 android:padding="@dimen/_5dp">
 
                                 <TextView
-                                    android:id="@+id/tv_current_weight"
+                                    android:id="@+id/tv_total_expressed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-
                                     android:textSize="@dimen/_20sp" />
 
                                 <TextView

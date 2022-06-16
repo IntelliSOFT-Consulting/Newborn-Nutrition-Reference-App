@@ -178,7 +178,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "55277-8",
@@ -261,7 +260,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "64708-1",
@@ -351,7 +349,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "Modified_96983-2",
@@ -484,7 +481,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "72149-8",
@@ -531,7 +527,6 @@
                   ]
                 }
               ],
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "answerOption": [
                 {
                   "valueCoding": {
@@ -587,7 +582,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "73762-7",
@@ -667,7 +661,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "Modified_14904-7",
@@ -714,7 +707,6 @@
                   ]
                 }
               ],
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "answerOption": [
                 {
                   "valueCoding": {
@@ -826,7 +818,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "74698-2",
@@ -1092,7 +1083,6 @@
           "item": [
             {
               "type": "choice",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
               "code": [
                 {
                   "code": "16491-3",

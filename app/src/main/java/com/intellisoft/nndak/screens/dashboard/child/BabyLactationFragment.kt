@@ -175,6 +175,7 @@ class BabyLactationFragment : Fragment() {
                     response.appIpNumber.text = data.assessment.breastfeedingBaby
                     response.appMotherName.text = data.assessment.breastProblems
                     response.appBabyName.text = data.assessment.contraindicated
+                    tvTotalExpressed.text = data.assessment.totalExpressed
 
 
                     val isSepsis = data.dashboard.neonatalSepsis

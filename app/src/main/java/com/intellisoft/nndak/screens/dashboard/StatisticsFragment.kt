@@ -24,6 +24,7 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.ChartFormatter
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
@@ -107,11 +108,15 @@ class StatisticsFragment : Fragment() {
                     tvTotal.text = totalBabies.toString()
                     tvPreterm.text = totalPreTerm.toString()
                     tvTerm.text = totalTerm.toString()
-                    tvPreAverage.text = "${prePercentage.roundToInt()} %"
-                    tvTermAverage.text = "${termPercentage.roundToInt()} %"
+                    try {
+                        tvPreAverage.text = "${prePercentage.roundToInt()} %"
+                        tvTermAverage.text = "${termPercentage.roundToInt()} %"
 
-                    pbTerm.progress = termPercentage.roundToInt()
-                    pbPreTerm.progress = prePercentage.roundToInt()
+                        pbTerm.progress = termPercentage.roundToInt()
+                        pbPreTerm.progress = prePercentage.roundToInt()
+                    } catch (e: Exception) {
+
+                    }
 
                 }
             }
@@ -144,46 +149,45 @@ class StatisticsFragment : Fragment() {
             pieShades.add(Color.parseColor(pie.color))
         }
 
-        //add values to the pie dataset and passing them to the constructor
         val ourSet = PieDataSet(entries, "")
         val data = PieData(ourSet)
-        //setting the slices divider width
         ourSet.sliceSpace = 1f
-
-        //populating the colors and data
         ourSet.colors = pieShades
-        binding.totalTermChart.data = data
-        //setting color and size of text
         data.setValueTextColor(Color.WHITE)
         data.setValueTextSize(10f)
+        data.setValueFormatter(ChartFormatter())
+        binding.apply {
+            totalTermChart.setExtraOffsets(20F, 8F, 75F, 8F)
+            totalTermChart.data = data
+            totalTermChart.animateY(1400, Easing.EaseInOutQuad)
+            totalTermChart.isDrawHoleEnabled = true
+            totalTermChart.description.isEnabled = false
+            totalTermChart.setUsePercentValues(true)
 
-        //add an animation when rendering the pie chart
-        binding.totalTermChart.animateY(1400, Easing.EaseInOutQuad)
-        //disabling center hole
-        binding.totalTermChart.isDrawHoleEnabled = true
-        //do not show description text
-        binding.totalTermChart.description.isEnabled = false
-        //legend enabled and its various appearance settings
-        binding.totalTermChart.legend.isEnabled = true
-        binding.totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-        binding.totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        binding.totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        binding.totalTermChart.legend.isWordWrapEnabled = true
+            totalTermChart.legend.setDrawInside(false)
+            totalTermChart.legend.isEnabled = true
+            totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+            totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            totalTermChart.legend.isWordWrapEnabled = true
+            totalTermChart.legend.xEntrySpace = 10f
+            totalTermChart.legend.yEntrySpace = 10f
+            totalTermChart.legend.yOffset = 10f
+            totalTermChart.legend.xOffset = 10f
+            totalTermChart.extraTopOffset = 15f
+            totalTermChart.extraBottomOffset = 15f
+            totalTermChart.extraLeftOffset = 0f
+            totalTermChart.extraRightOffset = 50f
 
+            totalTermChart.centerText = generateCenterText()
+            totalTermChart.setCenterTextSize(10f)
+            totalTermChart.holeRadius = 45f
+            totalTermChart.transparentCircleRadius = 50f
+            totalTermChart.setDrawEntryLabels(false)
+            //refreshing the chart
+            totalTermChart.invalidate()
+        }
 
-        binding.totalTermChart.centerText = generateCenterText()
-        binding.totalTermChart.setCenterTextSize(10f)
-
-        // radius of the center hole in percent of maximum radius
-
-        // radius of the center hole in percent of maximum radius
-        binding.totalTermChart.holeRadius = 45f
-        binding.totalTermChart.transparentCircleRadius = 50f
-
-        //dont show the text values on slices e.g Antelope, impala etc
-        binding.totalTermChart.setDrawEntryLabels(false)
-        //refreshing the chart
-        binding.totalTermChart.invalidate()
     }
 
     private fun percentageFeedsChart(list: List<PieItem>) {
@@ -200,19 +204,33 @@ class StatisticsFragment : Fragment() {
 
         ourSet.sliceSpace = 1f
         ourSet.colors = pieShades
-        binding.percentageChart.data = data
         data.setValueTextColor(Color.WHITE)
         data.setValueTextSize(10f)
-        binding.percentageChart.animateY(1400, Easing.EaseInOutQuad)
-        binding.percentageChart.isDrawHoleEnabled = false
-        binding.percentageChart.description.isEnabled = false
-        binding.percentageChart.legend.isEnabled = true
-        binding.percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-        binding.percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        binding.percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        binding.percentageChart.legend.isWordWrapEnabled = true
-        binding.percentageChart.setDrawEntryLabels(false)
-        binding.percentageChart.invalidate()
+
+        binding.apply {
+
+            percentageChart.data = data
+            percentageChart.legend.setDrawInside(false)
+            percentageChart.legend.isEnabled = true
+            percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+            percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            percentageChart.legend.isWordWrapEnabled = true
+            percentageChart.legend.xEntrySpace = 10f
+            percentageChart.legend.yEntrySpace = 10f
+            percentageChart.legend.yOffset = 10f
+            percentageChart.legend.xOffset = 10f
+            percentageChart.extraTopOffset = 15f
+            percentageChart.extraBottomOffset = 15f
+            percentageChart.extraLeftOffset = 0f
+            percentageChart.extraRightOffset = 50f
+            percentageChart.animateY(1400, Easing.EaseInOutQuad)
+            percentageChart.isDrawHoleEnabled = false
+            percentageChart.description.isEnabled = false
+            percentageChart.setDrawEntryLabels(false)
+            percentageChart.invalidate()
+        }
+
     }
 
 

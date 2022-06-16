@@ -22,8 +22,18 @@ class Logics {
          */
         const val PRESCRIPTION = "Feeds Prescription"
         const val BABY_ASSESSMENT = "Baby Assessment"
+        const val FEEDING_MONITORING = "Feeding and Monitoring"
         const val ADMISSION_WEIGHT = "29463-7"
         const val CURRENT_WEIGHT = "3141-9"
+        const val EBM = "226790003"
+        const val FEEDS_TAKEN = "Total-Taken"
+
+        /**
+         * 104-9 Code
+         * 2hr 3hr 2hr 3hr 1hr 2hr value
+         * 3 2 1 count
+         */
+
 
 
         const val SPO2 = "59408-5"

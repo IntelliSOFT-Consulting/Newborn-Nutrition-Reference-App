@@ -7,6 +7,8 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.Translations.Companion.feedTypes
+import com.intellisoft.nndak.logic.Translations.Companion.feedingTimes
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
@@ -148,7 +150,6 @@ class PatientListViewModel(
     }
 
 
-
     private suspend fun getDhmDashboardSearchResults(
         nameQuery: String = "",
         location: String
@@ -193,7 +194,7 @@ class PatientListViewModel(
             dhmAverageVolume = orders.size.toString(),
             dhmAverageLength = orders.size.toString(),
 
-        )
+            )
     }
 
     private suspend fun getOrdersSearchResults(
@@ -474,12 +475,15 @@ class PatientListViewModel(
                 }
                 if (element.code == "11885-1") {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
-                    status = if (code[0].toInt() < 37) {
+                    status = try {
+                        if (code[0].toInt() < 37) {
+                            "Preterm"
+                        } else {
+                            "Term"
+                        }
+                    } catch (e: Exception) {
                         "Preterm"
-                    } else {
-                        "Term"
                     }
-
 
                 }
             }
@@ -548,7 +552,6 @@ class PatientListViewModel(
                 }
                 filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
-//                count = 100
                 from = 0
             }
             .mapIndexed { index, fhirPatient -> fhirPatient.toPatientItem(index + 1) }
@@ -562,51 +565,62 @@ class PatientListViewModel(
     }
 
 
-    private suspend fun getRiskAssessments(): Map<String, RiskAssessment?> {
-        return fhirEngine.search<RiskAssessment> {}.groupBy { it.subject.reference }
-            .mapValues { entry
-                ->
-                entry
-                    .value
-                    .filter { it.hasOccurrence() }
-                    .sortedByDescending { it.occurrenceDateTimeType.value }
-                    .firstOrNull()
-            }
-    }
-
     fun loadFeedingTime() {
 
         viewModelScope.launch { liveFeedsTime.value = retrieveFeedingTimes() }
     }
 
-    private fun retrieveFeedingTimes(): StaticCharts {
+    private suspend fun retrieveFeedingTimes(): StaticCharts {
         val feeds: MutableList<PieItem> = mutableListOf()
         val times: MutableList<PieItem> = mutableListOf()
         val random = Random()
 
-        val time = mapOf(
-            "Fed Within 1 hour" to "#0E2DEC",
-            "Fed After 1 hour" to "#B7520E",
-            "Fed After 2 hours" to "#5E6D4E",
-            "Fed After 3 hours" to "#DA1F12"
-        )
-
-        for (i in time) {
-            times.add(PieItem(random.nextInt(14).toString(), i.key, i.value))
+        for (i in feedingTimes) {
+            times.add(PieItem(extractPerHour(i.key), i.key, i.value))
         }
-        val feed = mapOf(
-            "Donated Human Milk" to "#1EAF5F",
-            "Breastfeeding" to "#F65050",
-            "Oral Feeds" to "#FFC600",
-            "Expressed Breast Milk" to "#6C63FF",
-            "Formula" to "#BA1B22"
-        )
 
-
-        for (i in feed) {
+        for (i in feedTypes) {
             feeds.add(PieItem(random.nextInt(24).toString(), i.key, i.value))
         }
         return StaticCharts(feeds = feeds, times = times)
+    }
+
+    private suspend fun extractPerHour(key: String): String {
+        var i = 0
+        val feedingTimes = countFeedingIntervals("Fed-After")
+        feedingTimes.forEach {
+            if (key == it.value.trim()) {
+                i++
+            }
+            Timber.e("Extraction Value ${it.value} Searched $key Results $i")
+        }
+        return i.toString()
+
+    }
+
+    private suspend fun countFeedingIntervals(key: String): List<ObservationItem> {
+
+        val obs: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.CODE,
+                    {
+                        value = of(Coding().apply {
+                            system = "http://snomed.info/sct"
+                            code = key
+                        })
+                    })
+                sort(Observation.VALUE_DATE, Order.DESCENDING)
+            }
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { obs.addAll(it) }
+        return obs
     }
 
 

@@ -619,6 +619,91 @@
           ]
         },
         {
+          "linkId": "Fed-After",
+          "type": "group",
+          "enableWhen": [
+            {
+              "question": "/46556-7",
+              "operator": "=",
+              "answerCoding": {
+                "code": "LA6128-8",
+                "display": "No"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/46556-70",
+              "text": "If not, when was baby's first feed?",
+              "answerOption": [
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                      "valueString": "0"
+                    }
+                  ],
+                  "valueCoding": {
+                    "code": "LA6133-8",
+                    "display": "After 1 Hour"
+                  }
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                      "valueString": "1"
+                    }
+                  ],
+                  "valueCoding": {
+                    "code": "LA6128-8",
+                    "display": "After 2 Hours"
+                  }
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                      "valueString": "1"
+                    }
+                  ],
+                  "valueCoding": {
+                    "code": "LA6128-8",
+                    "display": "After 3 Hours"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
           "linkId": "Feed-Type",
           "type": "group",
           "extension": [
@@ -678,16 +763,6 @@
                       }
                     }
                   ]
-                }
-              ],
-              "enableWhen": [
-                {
-                  "question": "/46556-7",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "LA6133-8",
-                    "display": "Yes"
-                  }
                 }
               ],
               "answerOption": [

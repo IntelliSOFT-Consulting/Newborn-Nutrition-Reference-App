@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.screens.dashboard.child
+package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle

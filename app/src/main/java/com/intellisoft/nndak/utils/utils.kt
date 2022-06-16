@@ -50,6 +50,11 @@ fun isTablet(ctx: Context): Boolean {
     return ctx.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
+fun extractUnits(value:String):String{
+    val code = value.split("\\.".toRegex()).toTypedArray()
+    return code[0]
+}
+
 fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     val list: MutableList<LocalDate> = ArrayList()
     var date = LocalDate.now()

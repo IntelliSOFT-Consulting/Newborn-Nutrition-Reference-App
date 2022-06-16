@@ -26,9 +26,11 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
+import com.intellisoft.nndak.utils.extractUnits
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import timber.log.Timber
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -125,18 +127,20 @@ class BabyDashboardFragment : Fragment() {
 
 
                         val isSepsis = it.dashboard.neonatalSepsis
+                        val isAsphyxia = it.dashboard.asphyxia
+                        val isJaundice = it.dashboard.jaundice
+
+
                         if (isSepsis != "Yes") {
                             incDetails.appNeonatalSepsis.visibility = View.GONE
                             incDetails.tvNeonatalSepsis.visibility = View.GONE
                         }
 
-                        val isAsphyxia = it.dashboard.asphyxia
                         if (isAsphyxia != "Yes") {
                             incDetails.appAsphyxia.visibility = View.GONE
                             incDetails.tvAsphyxia.visibility = View.GONE
                         }
 
-                        val isJaundice = it.dashboard.jaundice
                         if (isJaundice != "Yes") {
                             incDetails.tvJaundice.visibility = View.GONE
                             incDetails.appJaundice.visibility = View.GONE
@@ -155,10 +159,29 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    val pr = it[0]
                     binding.apply {
-                        tvTotalVolume.text = pr.feedsGiven
-                        tvExpressionNumber.text = pr.expressions
+                        tvTotalVolume.text = it.first().feedsGiven
+                        tvExpressionNumber.text = it.first().expressions
+
+                        /**
+                         * Calculate Rate
+                         */
+                        var total = it.first().totalVolume
+                        var given = it.first().feedsGiven
+                        try {
+                            total = extractUnits(total.toString())
+                            given = extractUnits(given.toString())
+
+                            val percentage = (given.toDouble() / total.toDouble()) * 100
+
+                            tvFeedAverage.text="${percentage.toInt()} %"
+
+                            Timber.e("Feeds Given $total Taken $given Percentage ${percentage.toInt()}" )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
+
                     }
                 }
 

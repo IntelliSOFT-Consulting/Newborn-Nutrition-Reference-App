@@ -96,7 +96,7 @@
     </fragment>
     <fragment
         android:id="@+id/babyFeedsFragment"
-        android:name="com.intellisoft.nndak.screens.dashboard.child.BabyFeedsFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.BabyFeedsFragment"
         android:label="@string/app_feeding"
         tools:layout="@layout/fragment_baby_feeds">
         <argument
@@ -132,7 +132,7 @@
     </fragment>
     <fragment
         android:id="@+id/addPrescriptionFragment"
-        android:name="com.intellisoft.nndak.screens.dashboard.child.AddPrescriptionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.AddPrescriptionFragment"
         android:label="@string/app_prescribe_feed"
         tools:layout="@layout/fragment_add_prescription">
         <argument
@@ -144,7 +144,7 @@
     </fragment>
     <fragment
         android:id="@+id/editPrescriptionFragment"
-        android:name="com.intellisoft.nndak.screens.dashboard.child.EditPrescriptionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
         android:label="EditPrescriptionFragment"
         tools:layout="@layout/fragment_add_prescription" />
     <fragment

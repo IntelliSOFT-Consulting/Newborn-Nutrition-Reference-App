@@ -3,6 +3,8 @@ package com.intellisoft.nndak
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -57,6 +59,24 @@ class MainActivity : AppCompatActivity() {
         viewModel.updateLastSyncTimestamp()
         handleMenuClicks()
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.dashboard_menu, menu)
+        return true
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+
+            R.id.menu_profile -> {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
+                return true
+            }
+            else -> false
+        }
     }
 
     private fun handleMenuClicks() {
@@ -165,7 +185,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initActionBar() {
-        val toolbar = binding.toolbar
+        val toolbar = binding.appBarMain.toolbar
         setSupportActionBar(toolbar)
     }
 
@@ -176,7 +196,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigationDrawer() {
         val drawerLayout: DrawerLayout = binding.drawer
-        val navView: BottomNavigationView = binding.navigation
+        val navView: BottomNavigationView = binding.appBarMain.content.navigation
         val navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
@@ -189,7 +209,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        binding.navigation.visibility = View.VISIBLE
+        binding.appBarMain.content.navigation.visibility = View.VISIBLE
         binding.navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected)
         drawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         binding.drawer.addDrawerListener(drawerToggle)

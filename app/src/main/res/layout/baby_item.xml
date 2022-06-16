@@ -39,9 +39,9 @@
             <TextView
                 android:id="@+id/tv_mum_name"
                 style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:autoSizeTextType="uniform"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -261,9 +261,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ln_conditions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="4">
 
                 <LinearLayout

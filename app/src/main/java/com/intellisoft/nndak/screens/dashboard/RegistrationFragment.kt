@@ -103,6 +103,7 @@ class RegistrationFragment : Fragment() {
 
     private fun proceedClick() {
         successDialog.dismiss()
+        viewModel.makeComplete()
         FhirApplication.setDashboardActive(requireContext(), false)
         findNavController().navigate(
             RegistrationFragmentDirections.navigateToBabyDashboard(

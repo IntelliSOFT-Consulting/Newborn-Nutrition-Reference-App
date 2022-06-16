@@ -18,7 +18,7 @@
             layout="@layout/breadcrumb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5dp" />
+            android:layout_margin="@dimen/_15dp" />
 
         <include
             android:id="@+id/inc_details"

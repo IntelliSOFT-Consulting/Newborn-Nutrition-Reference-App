@@ -13,11 +13,12 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_15dp"
-            android:id="@+id/breadcrumb"
-            layout="@layout/breadcrumb" />
+            android:layout_margin="@dimen/_15dp" />
+
         <include
             android:id="@+id/inc_details"
             layout="@layout/baby_item" />
@@ -103,14 +104,14 @@
                                 android:layout_width="@dimen/_15dp"
                                 android:layout_height="@dimen/_15dp"
                                 app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
+                                app:tint="@color/dim_green" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/action_percent"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
+                                android:textColor="@color/dim_green" />
 
 
                         </LinearLayout>
@@ -238,14 +239,14 @@
                                 android:layout_width="@dimen/_15dp"
                                 android:layout_height="@dimen/_15dp"
                                 app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
+                                app:tint="@color/dim_green" />
 
                             <TextView
+                                android:id="@+id/tv_feed_average"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
+                                android:textColor="@color/dim_green" />
 
 
                         </LinearLayout>

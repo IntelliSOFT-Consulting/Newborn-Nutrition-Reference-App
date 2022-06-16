@@ -69,6 +69,7 @@ class BabyMonitoringFragment : Fragment() {
     private lateinit var errorDialog: SuccessDialog
     private var totalV: Float = 0.0f
     private lateinit var careID: String
+    private lateinit var deficit: String
     private var ivPresent: Boolean = true
     private var dhmPresent: Boolean = true
     private var ebmPresent: Boolean = true
@@ -222,6 +223,7 @@ class BabyMonitoringFragment : Fragment() {
                 val ivVolume = control.edIv.text.toString()
                 val dhmVolume = control.edIv.text.toString()
                 val ebmVolume = control.edIv.text.toString()
+                deficit = control.edDeficit.text.toString()
 
                 if (ivPresent) {
                     if (ivVolume.isNotEmpty()) {
@@ -491,12 +493,12 @@ class BabyMonitoringFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
-            Timber.e("Care Plan $careID")
+
             if (feedsList.isNotEmpty()) {
 
-                viewModel.babyMonitoring(
-                    questionnaireFragment.getQuestionnaireResponse(), args.patientId, careID,feedsList
-                )
+                  viewModel.babyMonitoring(
+                     questionnaireFragment.getQuestionnaireResponse(), args.patientId, careID,feedsList,totalV,deficit
+                 )
 
             } else {
                 Toast.makeText(

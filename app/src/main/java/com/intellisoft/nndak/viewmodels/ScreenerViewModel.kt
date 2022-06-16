@@ -14,6 +14,7 @@ import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -95,125 +96,134 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         for (k in 0 until parent.length()) {
                             val inner = parent.getJSONObject(k)
                             val childChild = inner.getString("linkId")
-                            Timber.e("Child $parent")
-                            if (childChild == "Assessment-Date") {
-                                assessDate = extractResponse(inner, "valueDateTime")
-                                if (assessDate.isNotEmpty()) {
+                            Timber.e("Child $inner")
+                            when (childChild) {
+                                "Assessment-Date" -> {
+                                    assessDate = extractResponse(inner, "valueDateTime")
+                                    if (assessDate.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "50786-3",
-                                            "Assessment Date",
-                                            assessDate
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "50786-3",
+                                                "Assessment Date",
+                                                assessDate
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
+                                "Current-Weight" -> {
+                                    val code = extractResponseQuantity(inner, "valueQuantity")
+                                    if (code.isNotEmpty()) {
+                                        bundle.addEntry().setResource(
+                                            qh.quantityQuestionnaire(
+                                                "3141-9",
+                                                "Current Weight",
+                                                "Current Weight",
+                                                code,
+                                                "g"
 
-
-                            if (childChild == "Current-Weight") {
-                                val code = extractResponseQuantity(inner, "valueQuantity")
-                                if (code.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            "3141-9",
-                                            "Current Weight",
-                                            "Current Weight",
-                                            code,
-                                            "g"
-
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Baby-Well") {
-                                val code = extractResponseCode(inner, "valueCoding")
-                                if (code.isNotEmpty()) {
+                                "Baby-Well" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "71195-2",
-                                            "Baby is Well",
-                                            code
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "71195-2",
+                                                "Baby is Well",
+                                                code
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Asphyxia") {
-                                val code = extractResponseCode(inner, "valueCoding")
-                                if (code.isNotEmpty()) {
+                                "Asphyxia" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "45735-8",
-                                            "Asphyxia",
-                                            code
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "45735-8",
+                                                "Asphyxia",
+                                                code
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Jaundice") {
-                                val code = extractResponseCode(inner, "valueCoding")
-                                if (code.isNotEmpty()) {
+                                "Jaundice" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "45736-6",
-                                            "Jaundice",
-                                            code
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "45736-6",
+                                                "Jaundice",
+                                                code
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Neonatal-Sepsis") {
-                                val code = extractResponseCode(inner, "valueCoding")
-                                if (code.isNotEmpty()) {
+                                "Neonatal-Sepsis" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "45755-8",
-                                            "Neonatal Sepsis",
-                                            code
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "45755-8",
+                                                "Neonatal Sepsis",
+                                                code
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Other-Conditions") {
-                                val code = extractResponse(inner, "valueString")
-                                if (code.isNotEmpty()) {
+                                "Other-Conditions" -> {
+                                    val code = extractResponse(inner, "valueString")
+                                    if (code.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "457736-6",
-                                            "Other Conditions",
-                                            code
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "457736-6",
+                                                "Other Conditions",
+                                                code
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                    }
                                 }
-                            }
-                            if (childChild == "Baby-Fed") {
-                                feed = extractResponseCode(inner, "valueCoding")
-                                if (feed.isNotEmpty()) {
+                                "Baby-Fed" -> {
+                                    feed = extractResponseCode(inner, "valueCoding")
+                                    if (feed.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "46556-7",
-                                            "Baby Fed within 1 Hour",
-                                            feed
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "46556-7",
+                                                "Baby Fed within 1 Hour",
+                                                feed
+                                            )
                                         )
-                                    )
-                                        .request.url = "Observation"
+                                            .request.url = "Observation"
+                                        if (feed == "Yes") {
+
+                                            bundle.addEntry().setResource(
+                                                qh.codingQuestionnaire(
+                                                    "Fed-After",
+                                                    "Fed After",
+                                                    "Within 1 Hour"
+                                                )
+                                            )
+                                                .request.url = "Observation"
+                                        }
+                                    }
                                 }
-                            }
-                            if (childChild == "Feed-Type") {
-                                if (feed == "Yes") {
+                                "Feed-Type" -> {
                                     val code = extractResponseCode(inner, "valueCoding")
                                     if (code.isNotEmpty()) {
 
@@ -226,6 +236,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         )
                                             .request.url = "Observation"
                                     }
+                                }
+                                "Fed-After" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
+
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Fed-After",
+                                                "Fed After",
+                                                code
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+
                                 }
                             }
                         }
@@ -240,7 +265,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (validDate) {
                         val encounterId = generateUuid()
                         val subjectReference = Reference("Patient/$patientId")
-                        title = "Assessment"
+                        title = BABY_ASSESSMENT
                         saveResources(bundle, subjectReference, encounterId, title)
                         isResourcesSaved.postValue(true)
                     } else {
@@ -459,7 +484,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                                 "Birth Weight",
                                                 "Birth Weight",
                                                 bType,
-                                                "g"
+                                                "gm"
 
                                             )
                                         )
@@ -541,7 +566,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                                     "Admission Weight",
                                                     "Admission Weight",
                                                     bType,
-                                                    "g"
+                                                    "gm"
 
                                                 )
                                             )
@@ -598,6 +623,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val validAdmission =
                             FormatHelper().dateLessThanToday(admissionDate.substring(0, 10))
                         if (valid && validAdmission) {
+
+
+                            val value = retrieveUser(false)
+
+                            bundle.addEntry()
+                                .setResource(
+                                    qh.codingQuestionnaire(
+                                        "Completed By",
+                                        value,
+                                        value
+                                    )
+                                )
+                                .request.url = "Observation"
 
                             val encounterId = generateUuid()
                             title = "Client Registration"
@@ -1827,10 +1865,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (volume.isNotEmpty()) {
                                     Timber.e("Time: $volume")
                                     bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Milk-Expressed",
+                                        qh.quantityQuestionnaire(
+                                            "226790003",
                                             "Milk Expressed",
-                                            volume
+                                            "Milk Expressed",
+                                            volume, "mls"
                                         )
                                     )
                                         .request.url = "Observation"
@@ -2011,7 +2050,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireResponse: QuestionnaireResponse,
         patientId: String,
         careID: String,
-        feedsList: MutableList<FeedItem>
+        feedsList: MutableList<FeedItem>,
+        totalV: Float,
+        deficit: String
     ) {
         viewModelScope.launch {
             val bundle =
@@ -2031,6 +2072,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      */
                     val qh = QuestionnaireHelper()
 
+                    val taken = totalV - deficit.toFloat()
+
+                    bundle.addEntry().setResource(
+                        qh.quantityQuestionnaire(
+                            "Total-Taken",
+                            "Total Feeds Taken",
+                            "Total Feeds Taken",
+                            taken.toString(), "mls"
+                        )
+                    )
+                        .request.url = "Observation"
+
+                    bundle.addEntry().setResource(
+                        qh.quantityQuestionnaire(
+                            "Feeds-Deficit",
+                            "Feeds Deficit",
+                            "Feeds Deficit",
+                            deficit, "mls"
+                        )
+                    )
+                        .request.url = "Observation"
+
+
                     feedsList.forEach {
                         when (it.type) {
                             "IV" -> {
@@ -2041,7 +2105,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         "IV Volume",
                                         "IV Volume",
                                         it.volume.toString(),
-                                        "ml"
+                                        "mls"
                                     )
                                 )
                                     .request.url = "Observation"
@@ -2053,7 +2117,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         "DHM-Volume",
                                         "DHM Volume",
                                         "DHM Volume",
-                                        it.volume.toString(), "ml"
+                                        it.volume.toString(), "mls"
                                     )
                                 )
                                     .request.url = "Observation"
@@ -2065,7 +2129,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         "EBM-Volume",
                                         "EBM Volume",
                                         "EBM Volume",
-                                        it.volume.toString(), "ml"
+                                        it.volume.toString(), "mls"
                                     )
                                 )
                                     .request.url = "Observation"
@@ -2230,7 +2294,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val subjectReference = Reference("Patient/$patientId")
                     val encounterReference = Reference("Encounter/$encounterId")
                     val basedOnReference = Reference("CarePlan/$careID")
-                    title = BABY_ASSESSMENT
+                    title = FEEDING_MONITORING
 
                     val care = CarePlan()
                     care.encounter = encounterReference
@@ -2701,6 +2765,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             }
         }
+    }
+
+    fun makeComplete() {
+        customMessage.postValue(null)
     }
 
 

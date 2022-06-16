@@ -92,16 +92,18 @@
         <entry key="app/src/main/res/layout-v26/baby_list_item_view.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/activity_get_started.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2608695652173913" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.14505208333333333" />
         <entry key="app/src/main/res/layout/add_patient_fragment.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.12395833333333334" />
         <entry key="app/src/main/res/layout/baby_item.xml" value="0.2" />
         <entry key="app/src/main/res/layout/baby_list_item_view.xml" value="0.17325227963525835" />
         <entry key="app/src/main/res/layout/bottom_sheet_assessment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/breadcrumb.xml" value="0.2787516032492518" />
         <entry key="app/src/main/res/layout/confirmation_dialog.xml" value="0.14479166666666668" />
         <entry key="app/src/main/res/layout/connection_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/custom_edittext_layout.xml" value="0.25317028985507245" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.29157759726378796" />
@@ -164,8 +166,14 @@
         <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
-        <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.35625" />
+        <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
+        <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.15494791666666666" />
+        <entry key="app/src/main/res/menu/hidden_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/list_options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/maternity.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/post_menu.xml" value="0.15390625" />
       </map>
     </option>
   </component>

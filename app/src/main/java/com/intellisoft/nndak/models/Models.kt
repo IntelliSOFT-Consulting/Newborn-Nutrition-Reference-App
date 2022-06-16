@@ -139,6 +139,7 @@ data class AssessmentItem(
     val breastfeedingBaby: String? = "",
     val breastProblems: String? = "",
     val contraindicated: String? = "",
+    val totalExpressed: String? = "",
     val weights: MutableList<Int>? = null
 ) {
     override fun toString(): String = breastfeedingBaby.toString()
@@ -217,7 +218,7 @@ data class PrescriptionItem(
     val additionalFeeds: String? = "",
     val supplements: String? = "",
     val expressions: String? = "",
-    val feedsGiven: String? = "0",
+    val feedsGiven: String? = "",
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()

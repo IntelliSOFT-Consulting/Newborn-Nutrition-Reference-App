@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/_5dp"
-    tools:context=".screens.dashboard.child.BabyFeedsFragment">
+    tools:context=".screens.dashboard.prescription.BabyFeedsFragment">
 
     <include
         android:id="@+id/breadcrumb"
-        layout="@layout/breadcrumb" />
+        layout="@layout/breadcrumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15dp" />
 
     <include
 

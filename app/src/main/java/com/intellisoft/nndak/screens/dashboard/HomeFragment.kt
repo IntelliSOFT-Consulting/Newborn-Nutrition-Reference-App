@@ -203,7 +203,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.dashboard_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

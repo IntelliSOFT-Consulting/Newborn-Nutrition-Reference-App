@@ -16,7 +16,7 @@ import timber.log.Timber
 class RestManager {
     private lateinit var apiService: AuthService
 
-    fun getService(context: Context): AuthService {
+    private fun getService(context: Context): AuthService {
         val base = FhirApplication.getServerURL(context)
         Timber.e(base)
         // Initialize ApiService if not initialized yet

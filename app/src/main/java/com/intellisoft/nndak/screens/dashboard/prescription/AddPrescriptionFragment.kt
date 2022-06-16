@@ -1,4 +1,4 @@
-package com.intellisoft.nndak.screens.dashboard.child
+package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle
@@ -15,13 +15,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.adapters.FeedAdapter
-import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
@@ -110,6 +107,7 @@ class AddPrescriptionFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
+
             viewModel.feedPrescription(
                 questionnaireFragment.getQuestionnaireResponse(), args.patientId
             )
@@ -200,7 +198,7 @@ class AddPrescriptionFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.dashboard_menu, menu)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

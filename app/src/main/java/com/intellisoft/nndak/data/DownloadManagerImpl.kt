@@ -14,7 +14,7 @@ import timber.log.Timber
 class DownloadManagerImpl : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
     private val urls =
-        LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE", "NutritionOrder", "CarePlan"))
+        LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE", "CarePlan", "NutritionOrder"))
 
 
     override suspend fun getNextRequestUrl(context: SyncDownloadContext): String? {
@@ -96,11 +96,12 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     // Affix lastUpdate to non-$everything queries as per:
     // https://hl7.org/fhir/operation-patient-everything.html
     if (!downloadUrl.contains("\$everything")) {
-        downloadUrl = if (downloadUrl.contains("CarePlan") || downloadUrl.contains("NutritionOrder")) {
-            url
-        } else {
-            "$downloadUrl&_lastUpdated=gt$lastUpdated"
-        }
+        downloadUrl =
+            if (downloadUrl.contains("NutritionOrder") || downloadUrl.contains("CarePlan")) {
+                downloadUrl
+            } else {
+                "$downloadUrl&_lastUpdated=gt$lastUpdated"
+            }
     }
 
     // Do not modify any URL set by a server that specifies the token of the page to return.
