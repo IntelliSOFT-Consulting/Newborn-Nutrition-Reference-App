@@ -89,6 +89,13 @@
         <entry key="app/src/main/res/font/poppins_bold.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_light.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_medium.xml" value="0.10598958333333333" />
+        <entry key="app/src/main/res/layout-large/baby_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/baby_list_item_view.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/mother_item.xml" value="0.15260416666666668" />
+        <entry key="app/src/main/res/layout-large/prescribe_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/prescription_list_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-notnight/baby_list_item_view.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-v26/baby_item.xml" value="0.35625" />
         <entry key="app/src/main/res/layout-v26/baby_list_item_view.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/activity_get_started.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
@@ -110,10 +117,10 @@
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/feed_item_view.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/feeding.xml" value="0.17760416666666667" />
-        <entry key="app/src/main/res/layout/feeding_cues_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/feeding_cues_dialog.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_add_prescription.xml" value="0.16744791666666667" />
         <entry key="app/src/main/res/layout/fragment_assessment.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_babies.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_babies.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_baby_assessment.xml" value="0.12" />
         <entry key="app/src/main/res/layout/fragment_baby_dashboard.xml" value="0.1747112211221122" />
         <entry key="app/src/main/res/layout/fragment_baby_feeds.xml" value="0.1747112211221122" />
@@ -154,7 +161,7 @@
         <entry key="app/src/main/res/layout/patient_details_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/patient_list_content.xml" value="0.1" />
         <entry key="app/src/main/res/layout/patient_list_item_view.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/patient_list_view.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/patient_list_view.xml" value="0.2608187134502924" />
         <entry key="app/src/main/res/layout/prescribe_item.xml" value="0.16979166666666667" />
         <entry key="app/src/main/res/layout/prescription.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/prescription_list_item.xml" value="0.1375" />

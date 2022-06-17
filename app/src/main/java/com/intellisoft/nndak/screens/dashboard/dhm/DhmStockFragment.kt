@@ -122,8 +122,9 @@ class DhmStockFragment : Fragment() {
     }
 
     private fun listenToChange(input: TextInputEditText) {
-        input.addTextChangedListener(object : TextWatcher {
 
+        CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable) {
                 try {
                     if (editable.toString().isNotEmpty()) {
@@ -134,13 +135,13 @@ class DhmStockFragment : Fragment() {
                         if (position > (input.text?.length ?: 0)) {
                             input.text?.let { input.setSelection(it.length) }
                         } else {
-                            input.setSelection(position);
+                            input.setSelection(position)
                         }
                         input.addTextChangedListener(this)
 
                         calculateTotals()
                     } else {
-                        input.setText("")
+                        input.setText("0")
                         calculateTotals()
                     }
                 } catch (e: Exception) {
@@ -161,6 +162,7 @@ class DhmStockFragment : Fragment() {
 
             }
         })
+    }
     }
 
     private fun calculateTotals() {

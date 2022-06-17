@@ -26,6 +26,7 @@ import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR

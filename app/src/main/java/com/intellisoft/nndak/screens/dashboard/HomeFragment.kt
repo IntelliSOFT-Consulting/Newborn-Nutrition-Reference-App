@@ -20,6 +20,7 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
@@ -43,6 +44,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
+    private val apiService = RestManager()
     private val binding
         get() = _binding!!
 
@@ -103,6 +105,18 @@ class HomeFragment : Fragment() {
             }
         }
 
+        loadLiveData()
+    }
+
+    private fun loadLiveData() {
+        apiService.loadDonorMilk(requireContext()) {
+
+            if (it != null) {
+                Timber.e("Success")
+            } else {
+                Timber.e("Failed to Load Data")
+            }
+        }
     }
 
 

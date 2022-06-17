@@ -5,6 +5,8 @@ import android.util.Log
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.api.AuthInterceptor
 import com.intellisoft.nndak.api.AuthService
+import com.intellisoft.nndak.charts.DHMModel
+import com.intellisoft.nndak.charts.Statistics
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,8 +60,12 @@ class RestManager {
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
-                    Timber.e("onResponse " + response.body())
                     onResult(response.body())
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
 
                 }
             }
@@ -78,7 +84,11 @@ class RestManager {
                     call: Call<UserResponse>,
                     response: Response<UserResponse>
                 ) {
-                    onResult(response.body())
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
                 }
             }
         )
@@ -97,12 +107,61 @@ class RestManager {
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
-                    Timber.e("onResponse " + response.body())
-                    onResult(response.body())
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
                 }
             }
         )
     }
+
+    fun loadStatistics(context: Context, onResult: (Statistics?) -> Unit) {
+        getService(context).loadStatistics().enqueue(
+            object : Callback<Statistics> {
+                override fun onFailure(call: Call<Statistics>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<Statistics>,
+                    response: Response<Statistics>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+    fun loadDonorMilk(context: Context, onResult: (DHMModel?) -> Unit) {
+        getService(context).loadDonorMilk().enqueue(
+            object : Callback<DHMModel> {
+                override fun onFailure(call: Call<DHMModel>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<DHMModel>,
+                    response: Response<DHMModel>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+
 
 
 }

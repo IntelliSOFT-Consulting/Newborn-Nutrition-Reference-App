@@ -45,9 +45,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@android:color/white"
             android:backgroundTint="@color/design_default_color_error"
             android:text="@string/action_register_baby"
+            android:textColor="@android:color/white"
             app:cornerRadius="@dimen/_35dp" />
     </LinearLayout>
 
@@ -68,7 +68,7 @@
         android:id="@+id/img_empty"
         android:layout_width="@dimen/_50dp"
         android:layout_height="@dimen/_50dp"
-        android:visibility="gone"
         android:layout_centerInParent="true"
-        android:src="@drawable/crying" />
+        android:src="@drawable/crying"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -19,12 +18,9 @@ import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.adapters.BabyItemAdapter
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
-import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
 import com.intellisoft.nndak.models.PrescriptionItem
-import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -70,7 +66,6 @@ class BabyFeedsFragment : Fragment() {
         (activity as MainActivity).setDrawerEnabled(true)
 
 
-
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -82,6 +77,10 @@ class BabyFeedsFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+        binding.apply {
+            incDetails.pbLoading.visibility = View.VISIBLE
+            incDetails.lnBody.visibility = View.GONE
+        }
 
         binding.apply {
             breadcrumb.page.text =
@@ -97,6 +96,10 @@ class BabyFeedsFragment : Fragment() {
 
             if (data != null) {
                 binding.apply {
+
+                    incDetails.pbLoading.visibility = View.GONE
+                    incDetails.lnBody.visibility = View.VISIBLE
+
                     val gest = data.dashboard.gestation ?: ""
                     val status = data.status
                     incDetails.tvBabyName.text = data.babyName
@@ -153,7 +156,7 @@ class BabyFeedsFragment : Fragment() {
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
             }
-            binding.pbLoading.visibility = View.GONE
+            binding.pbLoadingTwo.visibility = View.GONE
             adapter.submitList(it)
         }
 

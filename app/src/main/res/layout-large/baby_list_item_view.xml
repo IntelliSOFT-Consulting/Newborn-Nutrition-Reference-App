@@ -28,6 +28,7 @@
                 android:padding="2dp">
 
                 <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_baby_name"
@@ -36,6 +37,7 @@
 
                 <TextView
 
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_mother_name"
@@ -44,8 +46,8 @@
 
                 <TextView
 
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content"
                     android:text="@string/app_ip_number"
                     android:textStyle="bold"
@@ -60,20 +62,24 @@
                 android:padding="2dp">
 
                 <TextView
-
                     android:id="@+id/app_baby_name"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
                     android:id="@+id/app_mother_name"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
                     android:id="@+id/app_ip_number"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:autoSizeTextType="uniform" />
@@ -87,6 +93,8 @@
                 android:padding="2dp">
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_birth_weight"
@@ -94,6 +102,8 @@
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_status"
@@ -101,6 +111,8 @@
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_rate_gain"
@@ -116,12 +128,16 @@
                 android:padding="2dp">
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:id="@+id/app_birth_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:id="@+id/app_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -129,6 +145,8 @@
                     app:autoSizeTextType="uniform" />
 
                 <TextView
+
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:id="@+id/app_rate_gain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

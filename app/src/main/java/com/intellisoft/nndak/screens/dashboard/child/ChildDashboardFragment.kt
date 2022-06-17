@@ -1,8 +1,5 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -11,11 +8,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,11 +19,9 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
-import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.utils.dimOption
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,7 +62,8 @@ class ChildDashboardFragment : Fragment() {
         (activity as MainActivity).setDrawerEnabled(true)
 
         binding.apply {
-
+            incDetails.lnBody.visibility = View.GONE
+            incDetails.pbLoading.visibility = View.VISIBLE
             breadcrumb.page.text =
                 Html.fromHtml("Babies > <font color=\"#37379B\">Baby Profile</font>")
             breadcrumb.page.setOnClickListener {
@@ -93,7 +87,11 @@ class ChildDashboardFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
 
             if (it != null) {
+
                 binding.apply {
+                    incDetails.lnBody.visibility = View.VISIBLE
+                    incDetails.pbLoading.visibility = View.GONE
+
                     incDetails.appBabyName.text = it.babyName
                     incDetails.appMotherName.text = it.motherName
                     incDetails.appBirthWeight.text = it.birthWeight
@@ -127,8 +125,6 @@ class ChildDashboardFragment : Fragment() {
                         args.patientId
                     )
                 )
-
-
             }
             lnBabyAssessment.setOnClickListener {
                 findNavController().navigate(
@@ -136,8 +132,6 @@ class ChildDashboardFragment : Fragment() {
                         args.patientId
                     )
                 )
-
-
             }
             lnBabyFeeding.setOnClickListener {
                 findNavController().navigate(
@@ -145,8 +139,6 @@ class ChildDashboardFragment : Fragment() {
                         args.patientId
                     )
                 )
-
-
             }
             lnBabyMonitoring.setOnClickListener {
                 findNavController().navigate(
@@ -154,7 +146,6 @@ class ChildDashboardFragment : Fragment() {
                         args.patientId
                     )
                 )
-
             }
             lnBabyLactation.setOnClickListener {
                 findNavController().navigate(
@@ -162,7 +153,6 @@ class ChildDashboardFragment : Fragment() {
                         args.patientId
                     )
                 )
-
             }
         }
 

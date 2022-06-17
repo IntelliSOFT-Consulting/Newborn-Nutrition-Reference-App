@@ -38,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:textAlignment="center"
                     app:autoSizeTextType="uniform" />
 
@@ -46,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:textAlignment="center"
                     app:autoSizeTextType="uniform" />
 
@@ -84,6 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_baby_well"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -93,6 +96,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -107,6 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_birth_date"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -116,6 +121,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -130,6 +136,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_adm_date"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -139,6 +146,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -153,6 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_life_day"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -162,6 +171,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>
@@ -183,6 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_gestation"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -192,6 +203,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -206,6 +218,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_birth_weight"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -215,6 +228,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -229,6 +243,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/menu_apgar_score"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -238,6 +253,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -252,6 +268,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_mum_ip"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -261,6 +278,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>
@@ -285,6 +303,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_asphyxia"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -294,6 +313,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -309,6 +329,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_neonatal_sepsis"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -318,6 +339,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -333,6 +355,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             android:text="@string/app_jaundice"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -342,6 +365,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            style="@android:style/TextAppearance.DeviceDefault.Medium"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 

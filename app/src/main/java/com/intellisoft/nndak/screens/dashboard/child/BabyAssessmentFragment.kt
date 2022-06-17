@@ -28,7 +28,6 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -97,6 +96,11 @@ class BabyAssessmentFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
 
+        binding.apply {
+            incDetails.pbLoading.visibility=View.VISIBLE
+            incDetails.lnBody.visibility=View.GONE
+        }
+
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_okay_message)
@@ -111,6 +115,9 @@ class BabyAssessmentFragment : Fragment() {
             if (data != null) {
 
                 binding.apply {
+                    incDetails.pbLoading.visibility=View.GONE
+                    incDetails.lnBody.visibility=View.VISIBLE
+
                     val gest = data.dashboard.gestation ?: ""
                     val status = data.status
                     incDetails.tvBabyName.text = data.babyName

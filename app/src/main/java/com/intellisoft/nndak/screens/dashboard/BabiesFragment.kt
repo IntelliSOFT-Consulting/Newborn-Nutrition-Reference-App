@@ -120,7 +120,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mySpinner.adapter = adapter
         mySpinner.onItemSelectedListener = this
 
-
         patientListViewModel.patientCount.observe(
             viewLifecycleOwner
         ) { binding.patientListContainer.patientCount.text = "$it Patient(s)" }

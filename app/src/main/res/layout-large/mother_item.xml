@@ -30,10 +30,10 @@
 
             <TextView
                 android:id="@+id/tv_mum_name"
-               app:autoSizeTextType="uniform"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -66,18 +66,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_ip_number"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_ip_number"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -87,18 +89,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_delivery_method"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_delivery_method"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -108,18 +112,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_delivery_date"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_delivery_date"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -129,18 +135,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_mother_status"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_mother_status"
-                        app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -157,18 +165,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_parity"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_parity"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,18 +188,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_pmctc_status"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_pmctc_status"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -199,18 +211,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/menu_multiple"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_multiple_pregnancy"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -220,18 +234,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:autoSizeTextType="uniform"
                         android:text="@string/app_mum_location"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_mum_location"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
             </LinearLayout>
 

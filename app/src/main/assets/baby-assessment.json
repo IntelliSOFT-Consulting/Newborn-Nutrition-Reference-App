@@ -499,6 +499,171 @@
           ]
         },
         {
+          "linkId": "Breast-Problem",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "Breast-Problem",
+                  "display": "Does mother have any breast problems?",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Breast-Problem",
+              "text": "Does mother have any breast problems?",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "None",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Engorged Breasts",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Sore Nipples",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Cracked Nipples",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Bleeding Nipples",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Inverted Nipples",
+                    "system": "http://snomed.info/sct"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "Breast Problems",
+                    "display": "Flat Nipples",
+                    "system": "http://snomed.info/sct"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Mother-Well",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "Mother-Well",
+                  "display": "Is the Mother Well?",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Mother-Well",
+              "text": "Is the Mother Well?",
+              "answerOption": [
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                      "valueString": "0"
+                    }
+                  ],
+                  "valueCoding": {
+                    "code": "PB6133-8",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                      "valueString": "1"
+                    }
+                  ],
+                  "valueCoding": {
+                    "code": "PB6128-8",
+                    "display": "No"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
           "linkId": "Other-Conditions",
           "type": "group",
           "extension": [
@@ -644,6 +809,13 @@
           "item": [
             {
               "type": "choice",
+              "code": [
+                {
+                  "code": "4658856-7",
+                  "display": "If not, when was baby's first feed?",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",

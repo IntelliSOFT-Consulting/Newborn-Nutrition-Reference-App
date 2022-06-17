@@ -8,6 +8,7 @@ object Constants {
     const val DEMO_API_SERVER="https://devnndak.intellisoftkenya.com/api/"
     const val DEMO_SERVER="https://devnndak.intellisoftkenya.com/fhir/"
     const val MAX_RESOURCE_COUNT = 40
+    const val MIN_RESOURCE_COUNT = 10
     const val SYNC_VALUE = "Pumwani"
     const val SYNC_PARAM = "address-postalcode"
     const val ACTIVE = "active"

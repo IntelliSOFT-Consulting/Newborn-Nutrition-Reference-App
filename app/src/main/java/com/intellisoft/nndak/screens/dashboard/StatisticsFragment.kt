@@ -25,6 +25,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.ChartFormatter
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
@@ -53,6 +54,7 @@ class StatisticsFragment : Fragment() {
     private var c: Calendar = Calendar.getInstance()
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
+    private val apiService = RestManager()
     private var totalTerm: Int = 0
     private var totalPreTerm: Int = 0
     private var totalBabies: Int = 0
@@ -137,6 +139,20 @@ class StatisticsFragment : Fragment() {
 
             mortalityRateChart()
             expressingTimesChart()
+        }
+
+        loadLiveData()
+
+    }
+
+    private fun loadLiveData() {
+        apiService.loadStatistics(requireContext()) {
+
+            if (it != null) {
+                Timber.e("Success")
+            } else {
+                Timber.e("Failed to Load Data")
+            }
         }
 
     }

@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,27 +15,28 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.adapters.BabyItemAdapter
 import com.intellisoft.nndak.adapters.OrdersAdapter
-import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.models.MotherBabyItem
+import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.HMB
 import com.intellisoft.nndak.models.OrdersItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
-import com.intellisoft.nndak.screens.dashboard.BabiesFragmentDirections
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -44,7 +44,6 @@ import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
 
 class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -101,10 +100,10 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             )
             patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
-                if (it.isEmpty()){
-                    binding.empty.cpBgView.visibility=View.VISIBLE
-                }else{
-                    binding.empty.cpBgView.visibility=View.GONE
+                if (it.isEmpty()) {
+                    binding.empty.cpBgView.visibility = View.VISIBLE
+                } else {
+                    binding.empty.cpBgView.visibility = View.GONE
                 }
 
                 binding.pbLoading.visibility = View.GONE
@@ -251,11 +250,34 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onOrderClick(order: OrdersItem) {
-        findNavController().navigate(
-            DhmOrdersFragmentDirections.navigateToProcessing(
-                order.patientId, order.encounterId, order.resourceId
-            ),
-        )
+        val role = (requireActivity() as MainActivity).retrieveUser(true)
+        if (role.isNotEmpty()) {
+            if (role == ADMIN || role == DOCTOR || role == HMB) {
+                findNavController().navigate(
+                    DhmOrdersFragmentDirections.navigateToProcessing(
+                        order.patientId, order.encounterId, order.resourceId
+                    ),
+                )
+            } else {
+                accessDenied()
+            }
+
+        } else {
+            accessDenied()
+        }
+
+
+    }
+
+    private fun accessDenied() {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized to Access")
+            .setCustomImage(R.drawable.smile)
+            .setConfirmClickListener {
+                findNavController().navigateUp()
+            }
+            .show()
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

@@ -21,7 +21,9 @@
 
         <include
             android:id="@+id/inc_details"
-            layout="@layout/baby_item" />
+            layout="@layout/baby_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"

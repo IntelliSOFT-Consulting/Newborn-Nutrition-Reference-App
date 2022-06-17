@@ -106,7 +106,7 @@
             android:paddingBottom="@dimen/_100dp"
             android:scrollbars="vertical"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/feed_item_view" />
+            tools:listitem="@layout/prescribe_item" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -101,6 +101,10 @@ class BabyDashboardFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+        binding.apply {
+            incDetails.pbLoading.visibility=View.VISIBLE
+            incDetails.lnBody.visibility=View.GONE
+        }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
@@ -108,6 +112,8 @@ class BabyDashboardFragment : Fragment() {
             if (it != null) {
 
                 binding.apply {
+                    incDetails.pbLoading.visibility=View.GONE
+                    incDetails.lnBody.visibility=View.VISIBLE
                     try {
                         val gest = it.dashboard.gestation ?: ""
                         val weight = it.birthWeight
@@ -336,15 +342,15 @@ class BabyDashboardFragment : Fragment() {
                 leftAxis.setDrawGridLines(true)
                 leftAxis.isGranularityEnabled = false
 
-//                feedsChart.barData.barWidth = barWidth
-//                feedsChart.xAxis.axisMinimum = 0f
-//                feedsChart.xAxis.axisMaximum =
-//                    0 + feedsChart.barData.getGroupWidth(
-//                        groupSpace,
-//                        barSpace
-//                    ) * groupCount
-//                feedsChart.groupBars(0f, groupSpace, barSpace)
-//
+                feedsChart.barData.barWidth = barWidth
+                feedsChart.xAxis.axisMinimum = 0f
+                feedsChart.xAxis.axisMaximum =
+                    0 + feedsChart.barData.getGroupWidth(
+                        groupSpace,
+                        barSpace
+                    ) * groupCount
+                feedsChart.groupBars(0f, groupSpace, barSpace)
+
 
                 val rightAxis: YAxis = feedsChart.axisRight
                 rightAxis.setDrawGridLines(false)

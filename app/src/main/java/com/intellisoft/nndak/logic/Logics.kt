@@ -17,6 +17,15 @@ class Logics {
         private const val COUGH = "49727002"
         private const val LOSS_OF_SMELL = "44169009"
 
+
+        /**
+         * Roles Access
+         */
+        const val ADMIN = "ADMINISTRATOR"
+        const val HMB = "ADMINISTRATOR"
+        const val DOCTOR = "Doctor"
+        const val NURSE = "Nurse"
+
         /**
          * Prescriptions
          */
@@ -34,7 +43,6 @@ class Logics {
          * 2hr 3hr 2hr 3hr 1hr 2hr value
          * 3 2 1 count
          */
-
 
 
         const val SPO2 = "59408-5"

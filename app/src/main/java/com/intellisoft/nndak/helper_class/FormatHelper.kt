@@ -117,10 +117,10 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
-    private fun getRefinedDate(date: String): String {
+    fun getRefinedDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()

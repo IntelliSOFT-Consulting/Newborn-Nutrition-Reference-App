@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.data.RestManager
+import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
@@ -47,17 +48,21 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
     private var exit = false
 
+    private val gson = Gson()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initActionBar()
         initNavigationDrawer()
         observeLastSyncTime()
         observeSyncState()
         viewModel.updateLastSyncTimestamp()
         handleMenuClicks()
+
 
     }
 
@@ -77,6 +82,22 @@ class MainActivity : AppCompatActivity() {
             }
             else -> false
         }
+    }
+
+    fun retrieveUser(isRole: Boolean): String {
+
+        val user = FhirApplication.getProfile(this)
+        val name = try {
+            val it: User = gson.fromJson(user, User::class.java)
+            if (isRole) {
+                it.role
+            } else {
+                it.names
+            }
+        } catch (e: Exception) {
+            "Unknown"
+        }
+        return name
     }
 
     private fun handleMenuClicks() {
@@ -286,7 +307,7 @@ class MainActivity : AppCompatActivity() {
                     val json = gson.toJson(it.data)
                     FhirApplication.updateProfile(this, json)
                 } else {
-                    sessionTimeOut()
+                    // sessionTimeOut()
                 }
             }
         }
@@ -296,7 +317,7 @@ class MainActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Session Timeout")
         builder.setMessage("Your session has expired, please login again to proceed")
-
+        builder.setCancelable(false)
         builder.setPositiveButton(getString(R.string.refresh)) { dialog, which ->
             try {
                 FhirApplication.setLoggedIn(this, false)

@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.intellisoft.nndak.databinding.FeedingCuesDialogBinding
 import com.intellisoft.nndak.models.FeedingCuesTips
+
 class FeedingCuesDialog(
     private val proceed: (FeedingCuesTips) -> Unit,
 
-) : DialogFragment() {
+    ) : DialogFragment() {
     private var _binding: FeedingCuesDialogBinding? = null
     private val binding
         get() = _binding!!
@@ -88,6 +89,11 @@ class FeedingCuesDialog(
                 } else {
                     "No"
                 }
+                val contra = if (rbYesContra.isChecked) {
+                    "Yes"
+                } else {
+                    "No"
+                }
 
                 val feeding = FeedingCuesTips(
                     readiness = readiness,
@@ -98,7 +104,8 @@ class FeedingCuesDialog(
                     softening = softening,
                     tenSide = tenSide,
                     threeHours = threeHours,
-                    sixDiapers = sixDiapers
+                    sixDiapers = sixDiapers,
+                    contra = contra
                 )
                 proceed(feeding)
 

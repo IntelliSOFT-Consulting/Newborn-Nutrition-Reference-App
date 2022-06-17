@@ -43,6 +43,7 @@ import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.android.synthetic.main.prescribe_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -120,6 +121,12 @@ class BabyMonitoringFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+
+        binding.apply {
+            lnCurrent.visibility = View.GONE
+            incDetails.lnBody.visibility = View.GONE
+            incDetails.pbLoading.visibility = View.VISIBLE
+        }
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_okay_message)
@@ -146,6 +153,10 @@ class BabyMonitoringFragment : Fragment() {
 
             if (data != null) {
                 binding.apply {
+
+                    incDetails.lnBody.visibility = View.VISIBLE
+                    incDetails.pbLoading.visibility = View.GONE
+
                     val gest = data.dashboard.gestation ?: ""
                     val status = data.status
                     incDetails.tvBabyName.text = data.babyName
@@ -162,6 +173,7 @@ class BabyMonitoringFragment : Fragment() {
                     incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
                     incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
                     incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
+
 
                     val isSepsis = data.dashboard.neonatalSepsis
                     val isAsphyxia = data.dashboard.asphyxia
@@ -196,6 +208,8 @@ class BabyMonitoringFragment : Fragment() {
 
                     careID = pr.resourceId.toString()
                     binding.apply {
+                        lnCurrent.visibility = View.VISIBLE
+
                         incPrescribe.appTodayTotal.text =
                             pr.totalVolume
                         incPrescribe.appRoute.text = pr.route ?: ""
@@ -279,45 +293,48 @@ class BabyMonitoringFragment : Fragment() {
     }
 
     private fun listenToChange(input: TextInputEditText) {
-        input.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(editable: Editable) {
-                try {
-                    if (editable.toString().isNotEmpty()) {
-                        val newValue = editable.toString()
-                        input.removeTextChangedListener(this)
-                        val position: Int = input.selectionEnd
-                        input.setText(newValue)
-                        if (position > (input.text?.length ?: 0)) {
-                            input.text?.let { input.setSelection(it.length) }
+        CoroutineScope(Dispatchers.Default).launch {
+            input.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position);
+                            }
+                            input.addTextChangedListener(this)
+
+                            getTotals()
                         } else {
-                            input.setSelection(position);
+                            input.setText("0")
+                            getTotals()
                         }
-                        input.addTextChangedListener(this)
+                    } catch (e: Exception) {
 
-                        getTotals()
-                    } else {
-                        input.setText("0")
-                        getTotals()
                     }
-                } catch (e: Exception) {
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
 
                 }
-            }
-
-            override fun beforeTextChanged(
-                s: CharSequence, start: Int,
-                count: Int, after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence, start: Int,
-                before: Int, count: Int
-            ) {
-
-            }
-        })
+            })
+        }
     }
 
     private fun getTotals() {
@@ -326,10 +343,14 @@ class BabyMonitoringFragment : Fragment() {
                 val dhm = control.edDhm.text.toString()
                 val ebm = control.edEbm.text.toString()
                 val iv = control.edIv.text.toString()
-                val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat()
-                val def = totalV - total
+                if (dhm.isNotEmpty() || ebm.isNotEmpty() || iv.isNotEmpty()) {
+                    val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat()
+                    val def = totalV - total
 
-                control.edDeficit.setText(def.toString())
+                    control.edDeficit.setText(def.toString())
+                } else {
+                    control.edDeficit.setText("0")
+                }
 
             }
 
@@ -343,14 +364,17 @@ class BabyMonitoringFragment : Fragment() {
         binding.apply {
             if (pr.ivFluids == "N/A") {
                 control.tilIv.visibility = View.GONE
+                control.edIv.setText("0")
                 ivPresent = false
             }
             if (pr.breastMilk == "N/A") {
                 control.tilEbm.visibility = View.GONE
+                control.edEbm.setText("0")
                 ebmPresent = false
             }
             if (pr.donorMilk == "N/A") {
                 control.tilDhm.visibility = View.GONE
+                control.edDhm.setText("0")
                 dhmPresent = false
             }
         }

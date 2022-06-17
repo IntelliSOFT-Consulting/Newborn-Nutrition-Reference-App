@@ -21,19 +21,14 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.LargeValueFormatter
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
-import com.intellisoft.nndak.screens.dashboard.BaseFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
-import timber.log.Timber
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -90,6 +85,12 @@ class BabyLactationFragment : Fragment() {
             )
                 .get(PatientDetailsViewModel::class.java)
 
+        binding.apply {
+            lnParent.visibility = View.GONE
+            lnStatus.visibility = View.GONE
+            loading.visibility = View.VISIBLE
+        }
+
 
         binding.apply {
             breadcrumb.page.text =
@@ -130,7 +131,6 @@ class BabyLactationFragment : Fragment() {
             response.appAction.visibility = View.GONE
 
 
-
             actionProvideSupport.setOnClickListener {
                 findNavController().navigate(BabyLactationFragmentDirections.navigateToFeeding(args.patientId))
             }
@@ -140,6 +140,12 @@ class BabyLactationFragment : Fragment() {
 
             if (data != null) {
                 binding.apply {
+
+                    lnParent.visibility = View.VISIBLE
+                    lnStatus.visibility = View.VISIBLE
+                    loading.visibility = View.GONE
+
+
                     val gest = data.dashboard.gestation ?: ""
                     val sta = data.status
                     val weight = data.birthWeight
@@ -171,6 +177,13 @@ class BabyLactationFragment : Fragment() {
                     incMum.appPmctcStatus.text = data.mother.pmtctStatus
                     incMum.appDeliveryDate.text = data.mother.deliveryDate
                     incMum.appMultiplePregnancy.text = data.mother.multiPregnancy
+                    val mumWell = if (data.mother.motherStatus == "Yes") {
+                        "Well"
+                    } else {
+                        "Unwell"
+                    }
+                    incMum.appMumLocation.text = data.mother.motherLocation
+                    incMum.appMotherStatus.text = mumWell
 
                     response.appIpNumber.text = data.assessment.breastfeedingBaby
                     response.appMotherName.text = data.assessment.breastProblems

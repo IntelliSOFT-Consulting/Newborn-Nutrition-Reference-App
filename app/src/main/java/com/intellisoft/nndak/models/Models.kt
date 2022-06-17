@@ -197,6 +197,7 @@ data class FeedingCuesTips(
     val tenSide: String? = "",
     val threeHours: String? = "",
     val sixDiapers: String? = "",
+    val contra: String? = "",
 ) {
     override fun toString(): String = readiness
 }

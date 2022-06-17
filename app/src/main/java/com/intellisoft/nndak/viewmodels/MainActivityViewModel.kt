@@ -43,6 +43,7 @@ class MainActivityViewModel(application: Application, private val state: SavedSt
   /** Requests periodic sync. */
   @OptIn(ExperimentalCoroutinesApi::class)
   fun poll() {
+
     viewModelScope.launch {
       job.poll(
           PeriodicSyncConfiguration(

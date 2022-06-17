@@ -16,6 +16,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.EBM
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
+import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getFormattedAge
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
@@ -130,16 +131,20 @@ class PatientDetailsViewModel(
         val mum = getMother(patientId)
         val mumName = mum.first.toString()
         val mumIp = mum.second.toString()
+        val babyWell = retrieveCode("71195-2")
+        val asphyxia = retrieveCode("45735-8")
+        val jaundice = retrieveCode("45736-6")
+        val sepsis = retrieveCode("45755-8")
+        val breastProblems = retrieveCode("Breast-Problem")
+        val mumLocation = retrieveCode("Mother-Location")
+        val contra = retrieveCode("Mother-Contraindicated")
+        val breastfeeding = retrieveCode("Baby-BreastFeeding")
+        val mumWell = retrieveCode("Mother-Well")
 
         var birthWeight = ""
         var status = ""
         var gestation = ""
         var apgar = ""
-        var babyWell = ""
-        val asphyxia = retrieveCode("45735-8")
-
-        var jaundice = ""
-        var sepsis = ""
         val gainRate = "Normal"
         var admDate = ""
         var cWeight = ""
@@ -151,7 +156,6 @@ class PatientDetailsViewModel(
         var motherMilk = ""
         var totalFeeds = ""
         var expressions = ""
-        var breastfeeding = ""
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
@@ -211,18 +215,6 @@ class PatientDetailsViewModel(
                     admDate = element.value.substring(0, 10)
                 }
 
-                if (element.code == "71195-2") {
-                    babyWell = element.value
-                }
-                if (element.code == "45755-8") {
-                    sepsis = element.value
-                }
-//                if (element.code == "45735-8") {
-//                    asphyxia = element.value
-//                }
-                if (element.code == "45736-6") {
-                    jaundice = element.value
-                }
                 if (element.code == "9273-4") {
                     apgar = element.value
                 }
@@ -231,9 +223,6 @@ class PatientDetailsViewModel(
                 }
                 if (element.code == "Total-Feeds") {
                     totalFeeds = element.value
-                }
-                if (element.code == "Baby-BreastFeeding") {
-                    breastfeeding = element.value
                 }
                 if (element.code == "11885-1") {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
@@ -292,11 +281,15 @@ class PatientDetailsViewModel(
                 pmtctStatus = pmtct,
                 multiPregnancy = mPreg,
                 deliveryDate = dDate,
+                motherLocation = mumLocation,
+                motherStatus = mumWell
             ),
             assessment = AssessmentItem(
+                breastProblems = breastProblems,
                 breastfeedingBaby = breastfeeding,
                 weights = weights,
-                totalExpressed = total
+                totalExpressed = total,
+                contraindicated = contra
             )
         )
     }
@@ -307,6 +300,7 @@ class PatientDetailsViewModel(
         if (obs.isNotEmpty()) {
             val sort = sortCollected(obs)
             data = sort.last().value.trim()
+            Timber.e("Retrieved  Code ${sort.last().code} Data $data")
         }
         return data
     }
@@ -353,6 +347,7 @@ class PatientDetailsViewModel(
                 filter(Observation.SUBJECT, { value = "Patient/$patientId" })
                 sort(Observation.DATE, Order.DESCENDING)
             }
+            .take(MIN_RESOURCE_COUNT)
             .map {
                 createObservationItem(
                     it,
@@ -368,11 +363,10 @@ class PatientDetailsViewModel(
         val sortedList = data.sortedWith(compareBy { it.effective })
 
         sortedList.forEach {
-            Timber.e("Refined Data::::: ${it.value} Time:::: ${it.effective}")
+            Timber.e("Refined Data::::: ${it.value} Time:::: ${it.effective} ${it.id}")
         }
         return sortedList
     }
-
 
     private fun getFormattedAge(
         dob: String
@@ -743,7 +737,9 @@ class PatientDetailsViewModel(
             // Show nothing if no values available for datetime and value quantity.
             val dateTimeString =
                 if (observation.hasIssued()) {
-                    observation.issued.toString()
+                    refineDateTime(
+                        observation.issued.toString()
+                    )
                 } else {
                     resources.getText(R.string.message_no_datetime).toString()
                 }
@@ -777,6 +773,16 @@ class PatientDetailsViewModel(
                 dateTimeString,
                 valueString,
             )
+        }
+
+        private fun refineDateTime(toString: String): String {
+            val good = try {
+                FormatHelper().getRefinedDate(toString)
+            } catch (e: Exception) {
+                toString
+            }
+
+            return good
         }
 
         /**

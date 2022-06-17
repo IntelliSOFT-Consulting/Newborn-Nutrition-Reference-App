@@ -142,6 +142,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         )
                                             .request.url = "Observation"
                                     }
+                                    val location = if (code == "Yes") {
+                                        "PNU"
+                                    } else {
+                                        "NBU"
+                                    }
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Mother-Location",
+                                            "Location of Mother",
+                                            location
+                                        )
+                                    )
+                                        .request.url = "Observation"
+
                                 }
                                 "Asphyxia" -> {
                                     val code = extractResponseCode(inner, "valueCoding")
@@ -179,6 +193,34 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             qh.codingQuestionnaire(
                                                 "45755-8",
                                                 "Neonatal Sepsis",
+                                                code
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Mother-Well" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
+
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Mother-Well",
+                                                "Mother is Well",
+                                                code
+                                            )
+                                        )
+                                            .request.url = "Observation"
+                                    }
+                                }
+                                "Breast-Problem" -> {
+                                    val code = extractResponseCode(inner, "valueCoding")
+                                    if (code.isNotEmpty()) {
+
+                                        bundle.addEntry().setResource(
+                                            qh.codingQuestionnaire(
+                                                "Breast-Problem",
+                                                "Breast Problems",
                                                 code
                                             )
                                         )
@@ -1834,6 +1876,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             )
                                     )
                                     .request.url = "Observation"
+
                                 bundle.addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
@@ -1843,6 +1886,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                             )
                                     )
+                                    .request.url = "Observation"
+
+                                bundle.addEntry().setResource(
+                                    qh.codingQuestionnaire(
+                                        "Mother-Contraindicated",
+                                        "Mother Contraindicated",
+                                        cues.contra.toString()
+                                    )
+                                )
                                     .request.url = "Observation"
 
                             }
@@ -2064,6 +2116,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                 )
                                     .request.url = "Observation"
+
 
                             }
                         }
