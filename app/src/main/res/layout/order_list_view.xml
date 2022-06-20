@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ln_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5dp"
+    android:orientation="horizontal"
+    android:weightSum="6">
+
+    <TextView
+        android:id="@+id/app_ip_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_ip_number" />
+
+    <TextView
+        android:id="@+id/app_mother_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_mother_name" />
+
+    <TextView
+        android:id="@+id/app_baby_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_baby_name" />
+
+
+    <TextView
+        android:id="@+id/app_baby_age"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:text="@string/app_baby_age" />
+
+    <TextView
+        android:id="@+id/app_dhm_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_dhm_type" />
+
+    <TextView
+        android:id="@+id/app_consent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_consent" />
+
+    <TextView
+        android:id="@+id/app_action"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/app_action" />
+
+    <LinearLayout
+        android:id="@+id/ln_action"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/border_ring_default"
+        android:orientation="horizontal"
+        android:padding="@dimen/_5dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/_10dp"
+            android:layout_height="@dimen/_10dp"
+            android:src="@drawable/baseline_edit_24"
+            app:tint="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/process"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+</LinearLayout>

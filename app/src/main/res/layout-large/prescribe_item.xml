@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="@string/app_today_total"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:id="@+id/app_today_total"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform" />
+
+        <TextView
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="@string/app_route"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:id="@+id/app_route"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="@string/app_three_hourly"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:id="@+id/app_three_hourly"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:text="@string/app_three_hourly_break"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:id="@+id/app_three_hourly_break"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform" />
+    </LinearLayout>
+</LinearLayout>

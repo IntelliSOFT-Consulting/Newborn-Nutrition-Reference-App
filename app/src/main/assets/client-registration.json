@@ -1,0 +1,1463 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Client-Registration",
+      "type": "group",
+      "text": "Enter Mother's Details",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "mha"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "Mother-Name",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "required": true,
+              "linkId": "/Mother-Name",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Mother's Name",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Parity",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "integer",
+              "required": true,
+              "linkId": "/3141-9",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Parity",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Ip-Number",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "required": true,
+              "linkId": "/18688-2",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "IP Number",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "PMTCT",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "55277-8",
+                  "display": "PMTC",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "PMTC",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "required": true,
+              "linkId": "/55277-8",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "display": "Positive"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "Negative"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "Unknown"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Multiple-Pregnancy",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "64708-1",
+                  "display": "Multiple Pregnancy",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Multiple Pregnancy",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "required": true,
+              "linkId": "/Multiple-Pregnancy",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA33-6",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA32-8",
+                    "display": "No"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Multiple-Birth-Type",
+          "type": "group",
+          "enableWhen": [
+            {
+              "question": "/Multiple-Pregnancy",
+              "operator": "=",
+              "answerCoding": {
+                "code": "LA33-6",
+                "display": "Yes"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "Modified_96983-2",
+                  "display": "Multiple Birth Type",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Multiple Birth Type",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "required": true,
+              "linkId": "/96983-2",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA33-6",
+                    "display": "Twins"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA32-8",
+                    "display": "Triplets"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA33-8",
+                    "display": "Quadruplets"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA34-8",
+                    "display": "Quintuplets"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA35-8",
+                    "display": "Sextuplets"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA36-8",
+                    "display": "Sextuplets"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Time-Of-Delivery",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "dateTime",
+              "code": [
+                {
+                  "code": "93857-1",
+                  "display": "Time of Delivery",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/93857-1",
+              "text": "Time of Delivery"
+            }
+          ]
+        },
+        {
+          "linkId": "Delivery-Method",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "72149-8",
+                  "display": "Delivery Method",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/72149-8",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Delivery Method",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA18963-1",
+                    "display": "SVD"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA18964-9",
+                    "display": "Vacuum"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA18967-6",
+                    "display": "Breech"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA18965-6",
+                    "display": "CS"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "CS-Reason",
+          "enableWhen": [
+            {
+              "question": "/72149-8",
+              "operator": "=",
+              "answerCoding": {
+                "code": "LA18965-6",
+                "display": "CS"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "73762-7",
+                  "display": "IF CS, Reason",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/73762-7",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "If CS, Enter Reason",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA20039-6",
+                    "display": "Elective"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA20040-4",
+                    "display": "Emergency"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "Baby-State",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "73762-7",
+                  "display": "Baby's State",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Baby-State",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Baby's State",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA20039-6",
+                    "display": "Alive"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA20040-4",
+                    "display": "Dead"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "VDRL",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "Modified_14904-7",
+                  "display": "VDRL",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/14904-7",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "VDRL",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "display": "Positive"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "Negative"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Date-Of-Birth",
+          "type": "group",
+          "text": "Enter Baby's Details",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "date",
+              "code": [
+                {
+                  "code": "/45394-8",
+                  "display": "Date of Birth",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/45394-8",
+              "text": "Date of Birth"
+            }
+          ]
+        },
+        {
+          "linkId": "Baby-Name",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "45094-4",
+                  "display": "Baby's Name",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/45094-4",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Baby's Name",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Baby-Sex",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "74698-2",
+                  "display": "Sex",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/74698-2",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Baby's Sex",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA2-8",
+                    "display": "Male"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA3-6",
+                    "display": "Female"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Birth-Weight",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "quantity",
+              "code": [
+                {
+                  "code": "8339-4",
+                  "display": "Birth weight",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "[lb_av]"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "kg"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "g"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/8339-4",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Birth Weight (gm)",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Gestation",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "11885-1",
+                  "display": "Gestation",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "wk"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/11885-1",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Gestation (weeks)",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Apgar-Score",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "9273-4",
+                  "display": "Apgar Score",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{score}"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/9273-4",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "APGAR Score",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "BBA",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "16491-3",
+                  "display": "BBA",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "radio-button",
+                        "display": "Radio Button"
+                      }
+                    ],
+                    "text": "Radio button"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                  "valueCode": "horizontal"
+                }
+              ],
+              "required": true,
+              "linkId": "/16491-3",
+              "text": "Was baby Born before arrival to the facility?",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "No"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Head-Circumference",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "33172-8",
+                  "display": "Head Circumference",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "mm"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/33172-8",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Head Circumference (cm)",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Interventions",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "Interventions",
+                  "display": "Interventions",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/60733-3",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Interventions",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Admission-Weight",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "quantity",
+              "code": [
+                {
+                  "code": "29463-7",
+                  "display": "Admission Weight",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "[lb_av]"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "kg"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/29463-7",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Admission weight (gm)",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "Admission-Date",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "dateTime",
+              "code": [
+                {
+                  "code": "52455-3",
+                  "display": "Admission Date",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/52455-3",
+              "text": "Admission Date"
+            }
+          ]
+        },
+        {
+          "linkId": "Doctor-Notes",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "consentGiven"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "52455-3",
+                  "display": "Doctor-Notes",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/Doctor-Notes",
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Doctor's Notes",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

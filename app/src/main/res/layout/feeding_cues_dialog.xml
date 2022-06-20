@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/_15dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dim_green">
+
+            <LinearLayout
+                android:id="@+id/ln_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/action_feeding"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@android:color/white"
+                    app:drawableStartCompat="@drawable/ic_baseline_arrow_back_24" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/action_feeding_explanation"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@android:color/white" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/readiness" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_readiness"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_readiness"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/latch" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_latch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_latch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/steady" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_steady"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_steady"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/audible" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_audible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_audible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chocking" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_chocking"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_chocking"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/softening" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_softening"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_softening"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/side_feed" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_side_feed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_side_feed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/three_hours" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_three_hours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_three_hours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/diapers" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_diapers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_diapers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10dp"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/toddler"
+                        app:tint="@color/colorPrimary" />
+
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mother_contraindicated" />
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_contra"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_contra"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/no" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/dim_green"
+                    android:paddingLeft="@dimen/spacing_mlarge"
+                    android:paddingRight="@dimen/spacing_mlarge"
+                    android:text="@string/click_to_save"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="@dimen/_15dp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

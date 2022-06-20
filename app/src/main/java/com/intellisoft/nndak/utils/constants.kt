@@ -4,6 +4,14 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 
 object Constants {
+
+    const val DEMO_API_SERVER = "https://devnndak.intellisoftkenya.com/api/"
+    const val DEMO_SERVER = "https://devnndak.intellisoftkenya.com/fhir/"
+    const val MAX_RESOURCE_COUNT = 40
+    const val MIN_RESOURCE_COUNT = 10
+    const val SYNC_VALUE = "Pumwani"
+    const val SYNC_PARAM = "address-postalcode"
+    const val ACTIVE = "active"
     const val WELCOME = "welcome"
     const val LOGIN = "login"
     const val SERVER_URL_DEMO = "server_url_demo"
@@ -11,6 +19,11 @@ object Constants {
     const val SERVER_SET = "server_set"
     const val ACCESS_TOKEN = "access_token"
     const val USER_ACCOUNT = "user_account"
+    const val MILK_EXPRESSION = "milk_expression"
+    const val FEEDINGS = "feedings"
+    const val WEIGHTS = "weights"
+    const val STATISTICS = "statistics"
+    const val DHM = "donor"
     const val STROKE_WIDTH = 2f
     const val CORNER_RADIUS = 10f
 
@@ -19,16 +32,5 @@ object Constants {
 
     @ColorInt
     const val STROKE_COLOR = Color.GRAY
-
-    /**
-     * Key Indexes to navigate through the app
-     */
-    const val MATERNITY = "0"
-    const val NEWBORN = "1"
-    const val APGAR_SCORE = "2"
-    const val ASSESS_CHILD = "3"
-    const val CHILD_RAPID_ASSESSMENT = "4"
-    const val NEWBORN_ADMISSION = "5"
-    const val HMB = "6"
 
 }

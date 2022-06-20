@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-    <color name="colorPrimary">#327097</color>
+    <color name="colorPrimary">#37379B</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">@color/colorPrimary</color>
     <color name="colorStatusBar">@color/colorPrimary</color>
@@ -17,11 +17,56 @@
     <color name="buttontext">#50C2C9</color>
     <color name="inactive">#C4C4C4</color>
     <color name="active">#50C2C9</color>
-
+    <color name="dim_black">#514E4E</color>
+    <color name="dim_red">#A8001E</color>
+    <color name="dim_green">#24A047</color>
     <color name="inactive1">#94C4C4C4</color>
 
+    <color name="dialogBackground">#60000000</color>
     <color name="gradient_start">#4CAF50</color>
     <color name="gradient_end">#CDDC39</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="textColor">#ECE5EC</color>
+
+    <color name="light_green_50">#F1F8E9</color>
+    <color name="light_green_100">#DCEDC8</color>
+    <color name="light_green_200">#C5E1A5</color>
+    <color name="light_green_300">#AED581</color>
+    <color name="light_green_400">#9CCC65</color>
+    <color name="light_green_500">#8BC34A</color>
+    <color name="light_green_600">#7CB342</color>
+    <color name="light_green_700">#689F38</color>
+    <color name="light_green_800">#558B2F</color>
+    <color name="light_green_900">#33691E</color>
+    <color name="light_green_A100">#CCFF90</color>
+    <color name="light_green_A200">#B2FF59</color>
+    <color name="light_green_A400">#76FF03</color>
+    <color name="light_green_A700">#64DD17</color>
+
+    <color name="grey_3">#f7f7f7</color>
+    <color name="grey_5">#f2f2f2</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+    <color name="grey_95">#1a1a1a</color>
+    <color name="grey_100_">#0d0d0d</color>
+
+
+    <color name="red_50">#FFEBEE</color>
+    <color name="red_100">#FFCDD2</color>
+    <color name="red_200">#EF9A9A</color>
+    <color name="red_300">#E57373</color>
+    <color name="red_400">#EF5350</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_600">#E53935</color>
+    <color name="red_700">#D32F2F</color>
+    <color name="red_800">#C62828</color>
+    <color name="red_900">#B71C1C</color>
+    <color name="red_A100">#FF8A80</color>
+    <color name="red_A200">#FF5252</color>
+    <color name="red_A400">#FF1744</color>
+    <color name="red_A700">#D50000</color>
 </resources>

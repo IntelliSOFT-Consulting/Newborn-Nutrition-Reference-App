@@ -3,21 +3,189 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.1459832134292566" />
+        <entry key="../../.gradle/caches/transforms-3/193e25b5797b1b86462bfa0a849a26cf/transformed/jetified-data-capture-0.1.0-beta03/res/layout/questionnaire_item_header.xml" value="0.178125" />
+        <entry key="../../Android/Sdk/platforms/android-31/data/res/drawable/ic_popup_sync.xml" value="0.272" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_btn.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_tv.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/border.xml" value="0.339" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/border_ring.xml" value="0.339" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/btn_rounded_green.xml" value="0.339" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/ic_cloud_off.xml" value="0.339" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/ic_show_chart.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/round_basic_button.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/round_corner.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/shape_circle.xml" value="0.332" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_get_started.xml" value="0.14527302363488181" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_login.xml" value="0.13036303630363036" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/activity_main.xml" value="0.2798913043478261" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/add_patient_fragment.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/baby_item.xml" value="0.15" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/baby_list_item_view.xml" value="0.15492321589882566" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/bottom_sheet_assessment.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/bottom_sheet_lactation.xml" value="0.37135416666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/confirmation_dialog.xml" value="0.191006600660066" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/connection_dialog.xml" value="0.191006600660066" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/drawer_header_layout.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/encounter_list_item_view.xml" value="0.25" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_add_prescription.xml" value="0.1677958446251129" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_assessment.xml" value="0.3109375" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_babies.xml" value="0.16" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_baby_assessment.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_baby_dashboard.xml" value="0.13" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_baby_feeds.xml" value="0.13" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_baby_lactation.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_baby_monitoring.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_child.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_child_dashboard.xml" value="0.15492321589882566" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_dashboard.xml" value="0.2798913043478261" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_dhm_orders.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_dhm_stock.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_home.xml" value="0.16" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_maternity.xml" value="0.2703125" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_maternity_dialog.xml" value="0.31302083333333336" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_milk.xml" value="0.34270833333333334" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_new_born.xml" value="0.2740036231884058" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_new_borns.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_observations.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_patient_list.xml" value="0.2798913043478261" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_post_natal.xml" value="0.37083333333333335" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_pregancy.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_pregnancy.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_registration.xml" value="0.14" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/fragment_statistics.xml" value="0.1677958446251129" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/maternity_dialog_fragment.xml" value="0.2798913043478261" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/mother_item.xml" value="0.1673441734417344" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/observation_list_item.xml" value="0.31302083333333336" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/observation_list_view.xml" value="0.31302083333333336" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_detail.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_card_view.xml" value="0.37135416666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_details_header.xml" value="0.2296875" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_list_item_view.xml" value="0.2740036231884058" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/patient_list_view.xml" value="0.31302083333333336" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/prescription_list_item.xml" value="0.13" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/screen_questionnaire.xml" value="0.290234375" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/screener_encounter_fragment.xml" value="0.191006600660066" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/side_menu.xml" value="0.12" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/layout/success_dialog.xml" value="0.191006600660066" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu-v26/dashboard_menu.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/assess_menu.xml" value="0.3546875" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/bottom_navigation.xml" value="0.38697916666666665" />
+        <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/dashboard_menu.xml" value="0.24114583333333334" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/details_options_menu.xml" value="0.37135416666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/maternity.xml" value="0.38697916666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/options_menu.xml" value="0.37135416666666665" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/menu/post_menu.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/drawable/baseline_edit_24.xml" value="0.2455" />
+        <entry key="app/src/main/res/drawable/bg_btn.xml" value="0.2455" />
+        <entry key="app/src/main/res/drawable/bg_round.xml" value="0.2455" />
+        <entry key="app/src/main/res/drawable/bg_tv.xml" value="0.2455" />
+        <entry key="app/src/main/res/drawable/border.xml" value="0.2455" />
+        <entry key="app/src/main/res/drawable/border_ring.xml" value="0.261" />
+        <entry key="app/src/main/res/drawable/border_ring_default.xml" value="0.261" />
+        <entry key="app/src/main/res/drawable/btn_rounded_green.xml" value="0.1545" />
+        <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.272" />
+        <entry key="app/src/main/res/font/poppins.xml" value="0.10598958333333333" />
+        <entry key="app/src/main/res/font/poppins_bold.xml" value="0.10598958333333333" />
+        <entry key="app/src/main/res/font/poppins_light.xml" value="0.10598958333333333" />
+        <entry key="app/src/main/res/font/poppins_medium.xml" value="0.10598958333333333" />
+        <entry key="app/src/main/res/layout-large/baby_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/baby_list_item_view.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/fragment_statistics.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/mother_item.xml" value="0.15260416666666668" />
+        <entry key="app/src/main/res/layout-large/prescribe_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/prescription_list_item.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/statistics.xml" value="0.15833333333333333" />
+        <entry key="app/src/main/res/layout-notnight/baby_list_item_view.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-v26/baby_item.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout-v26/baby_list_item_view.xml" value="0.340625" />
+        <entry key="app/src/main/res/layout/activity_get_started.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.14505208333333333" />
+        <entry key="app/src/main/res/layout/add_patient_fragment.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.12395833333333334" />
+        <entry key="app/src/main/res/layout/baby_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/baby_list_item_view.xml" value="0.17325227963525835" />
+        <entry key="app/src/main/res/layout/bottom_sheet_assessment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/breadcrumb.xml" value="0.2787516032492518" />
+        <entry key="app/src/main/res/layout/chart.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/confirmation_dialog.xml" value="0.14479166666666668" />
+        <entry key="app/src/main/res/layout/connection_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/custom_edittext_layout.xml" value="0.25317028985507245" />
+        <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/empty.xml" value="0.29157759726378796" />
+        <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/feed_item_view.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/feeding.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/feeding_cues_dialog.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_add_prescription.xml" value="0.16744791666666667" />
+        <entry key="app/src/main/res/layout/fragment_assessment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_babies.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_baby_assessment.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/fragment_baby_dashboard.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_feeds.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_lactation.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_baby_monitoring.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/fragment_breast_feeding.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.1296875" />
+        <entry key="app/src/main/res/layout/fragment_cues.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
+        <entry key="app/src/main/res/layout/fragment_dhm_orders.xml" value="0.12644389438943895" />
+        <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />
+        <entry key="app/src/main/res/layout/fragment_dhm_stock.xml" value="0.16848958333333333" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16316006600660066" />
+        <entry key="app/src/main/res/layout/fragment_landing.xml" value="0.11" />
+        <entry key="app/src/main/res/layout/fragment_maternity.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_maternity_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_new_born.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_new_borns.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_observations.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_patient_list.xml" value="0.27717391304347827" />
+        <entry key="app/src/main/res/layout/fragment_pregnancy.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_process_order.xml" value="0.16316006600660066" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.13" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.1153052805280528" />
+        <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/horizontal_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/horizontal_item_three.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/login_app_bar_layout.xml" value="0.16316006600660066" />
+        <entry key="app/src/main/res/layout/mother_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/new_patient_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/observation_list_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/observation_list_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/order_list_view.xml" value="0.15625" />
+        <entry key="app/src/main/res/layout/patient_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_details_card_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_details_header.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_details_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_list_content.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_list_item_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/patient_list_view.xml" value="0.2608187134502924" />
+        <entry key="app/src/main/res/layout/prescribe_item.xml" value="0.16979166666666667" />
+        <entry key="app/src/main/res/layout/prescription.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/prescription_list_item.xml" value="0.1375" />
+        <entry key="app/src/main/res/layout/progress.xml" value="0.1625" />
+        <entry key="app/src/main/res/layout/screen_questionnaire.xml" value="0.1747112211221122" />
+        <entry key="app/src/main/res/layout/screener_encounter_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/side_menu.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/slider_layout.xml" value="0.16316006600660066" />
+        <entry key="app/src/main/res/layout/statistics.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
+        <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
+        <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.15494791666666666" />
+        <entry key="app/src/main/res/menu/hidden_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/list_options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/maternity.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/post_menu.xml" value="0.15390625" />
       </map>
     </option>
   </component>

@@ -4,82 +4,61 @@ import android.content.Context
 import android.os.Build
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.models.DbObservations
+import timber.log.Timber
 import java.lang.Double.parseDouble
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.concurrent.fixedRateTimer
+import java.util.concurrent.TimeUnit
 
 
 class FormatHelper {
 
-    fun getCalculations(dateStr: String): String {
+    fun isSameDay(dateOne: String, dateTwo: String): Boolean {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
-        val tripleData = getDateDetails(dateStr)
-        val month = tripleData.second.toString().toInt()
-        var year = tripleData.third.toString().toInt()
+        Timber.e("Current $dateOne")
+        Timber.e("Value $dateTwo")
 
-        val cal = Calendar.getInstance()
-        val sdf = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
-        val date = sdf.parse(dateStr)
-        cal.time = date
+        val date1 = sdf.parse(dateOne)
+        val date2 = sdf.parse(dateTwo)
 
-        if (month > 3) {
-            cal.add(Calendar.YEAR, 1)
+        if (date1 != null) {
+            if (date1.equals(date2)) {
+                return true
+            }
         }
-
-        cal.add(Calendar.MONTH, -3)
-        cal.add(Calendar.DATE, 7)
-
-        if (month < 4) {
-            cal.add(Calendar.YEAR, 1)
-        }
-
-        val sdf1 = SimpleDateFormat("dd-MMM-yyyy")
-
-        val newDate = cal.time
-
-        return sdf1.format(newDate)
-
-
+        return false
     }
 
-    private fun getDateDetails(dateStr:String):Triple<Int?, Int?, Int?> {
+    fun dateLessThanToday(valueDate: String): Boolean {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val today = getTodayDateNoTime()
 
-        val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
-        } else {
-            return Triple(null, null, null)
+        Timber.e("Current $today")
+        Timber.e("Value $valueDate")
+
+        val date1 = sdf.parse(today)
+        val date2 = sdf.parse(valueDate)
+
+        if (date1 != null) {
+            if (date1.equals(date2) || date1.after(date2)) {
+                return true
+            }
         }
-        val date = LocalDate.parse(dateStr, formatter)
-
-        val day = date.dayOfMonth
-        val month = date.monthValue
-        val year = date.year
-
-        return Triple(day, month, year)
-
-    }
-
-    fun convertDate(valueDate: String): Date {
-
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
-        val currentDate = sdf.parse(valueDate)
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
-        val newDateStr = sdf1.format(currentDate)
-        return sdf1.parse(newDateStr)
+        return false
     }
 
     fun checkDate(birthDate: String, d2: String): Boolean {
 
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
         val currentdate = sdf1.parse(birthDate)
 
-        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val newCurrentDate = sdf2.format(currentdate)
 
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val date1 = sdf.parse(newCurrentDate)
         val date2 = sdf.parse(d2)
 
@@ -91,10 +70,80 @@ class FormatHelper {
 
     }
 
+
     fun getTodayDate(): String {
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val date = Date()
         return formatter.format(date)
+    }
+
+    private fun getTodayDateNoTime(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val date = Date()
+        return sdf.format(date)
+    }
+
+    fun dateOfBirth(date: String): Date? {
+        val destFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        return destFormat.parse(date)
+
+    }
+
+     fun getHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+     fun getHourNoExtension(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+     fun getDayName(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+     fun getMonthName(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("MMM", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+    fun getRefinedDate(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun extractDateString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
     }
 
     fun checkPhoneNo(string: String): Boolean {
@@ -108,63 +157,11 @@ class FormatHelper {
         return isNo
     }
 
-    fun fhirObservations(value: String, value1: String): DbObservations {
-
-        val title: String
-        var dbValue = value
-
-        if (value == "Negative" || value == "Positive" || value == "Unknown") {
-            //HIV
-            title = "HIV Status"
-        } else if (value == "BF" || value == "NGT") {
-            //Method of feeding
-            title = "Method of feeding"
-        } else if (value == "SVD" || value == "Breech" || value == "Vacuum" || value == "Cs") {
-            //Delivery Method
-            title = "Delivery Method"
-        } else if (value == "Alive" || value == "Dead") {
-            //Baby Life State at birth
-            title = "Baby Life at Birth"
-        } else if (value == "Male" || value == "Female") {
-            //Baby Biological sex
-            title = "Baby Biological Sex"
-
-        } else if (value == "YES" || value == "NO") {
-            //Was baby born b4 arrival to facility
-            title = "Was baby born before arrival to facility"
-        } else if (value == "Yes" || value == "No") {
-            title = "Birth of one baby on a single pregnancy"
-
-        } else if (value == "Elective" || value == "Emergency") {
-            title = "Reason for CS"
-
-        } else if (value == "Other" ) {
-            title = "Multiple Pregnancy"
-
-        } else if (value == "Twins" || value == "Triplets" || value == "Quadruplets"
-            || value == "Quintuplets" || value == "Sextuplets" || value == "Septuplets"
-        ) {
-            title = "How many babies on a single pregnancy"
-        } else if (value == "Early Labor" || value == "Active Labor" || value == "Transition") {
-            title = "Labour Stage"
-
-        } else if (value == "None" || value == "Engourged Breasts" || value == "Sore Nipples" || value == "Cracked Nipples" || value == "Bleeding Nipples" || value == "Inverted Nipples" || value == "Flat Nipples") {
-            title = "Breast Problem"
-
-        } else {
-            //Any other
-            title = value
-            dbValue = value1
-        }
-
-        return DbObservations(dbValue, title)
-
-    }
-
     fun saveSharedPreference(
         context: Context,
         sharedKey: String,
-        sharedValue: String){
+        sharedValue: String
+    ) {
 
         val appName = context.getString(R.string.app_name)
         val sharedPreferences = context.getSharedPreferences(appName, Context.MODE_PRIVATE)
@@ -175,7 +172,8 @@ class FormatHelper {
 
     fun retrieveSharedPreference(
         context: Context,
-        sharedKey: String): String? {
+        sharedKey: String
+    ): String? {
 
         val appName = context.getString(R.string.app_name)
 
@@ -184,7 +182,7 @@ class FormatHelper {
 
     }
 
-    fun getSearchQuery(spinnerValue: String, context: Context):String{
+    fun getSearchQuery(spinnerValue: String, context: Context): String {
 
         val birds = context.resources.getStringArray(R.array.birds)
 
@@ -210,4 +208,14 @@ class FormatHelper {
 
     }
 
+    fun formatDate(toString: String): String {
+
+        val sdf1 = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+        return sdf1.format(toString)
+
+    }
+
+
 }
+
+

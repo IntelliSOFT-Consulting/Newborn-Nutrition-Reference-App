@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.dashboard.dhm.ProcessOrderFragment">
+
+    <LinearLayout
+        android:id="@+id/ln_include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_10"
+            android:text="@string/app_review_pres"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimary" />
+
+        <include
+            android:id="@+id/inc_title"
+            layout="@layout/order_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginEnd="@dimen/_10dp" />
+    </LinearLayout>
+
+
+    <include
+        android:id="@+id/inc_details"
+        layout="@layout/order_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ln_include"
+        android:layout_marginStart="@dimen/padding_10"
+        android:layout_marginEnd="@dimen/_10dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/inc_details"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:text="@string/app_dhm_reason" />
+
+        <TextView
+            android:id="@+id/app_dhm_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_10" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:text="@string/app_dhm_volume" />
+
+        <TextView
+            android:id="@+id/app_dhm_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_10"
+            android:layout_marginEnd="@dimen/_10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_10"
+            android:text="@string/app_dispensing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimary" />
+
+        <include
+            android:id="@+id/screen"
+            layout="@layout/screen_questionnaire" />
+    </LinearLayout>
+
+
+</RelativeLayout>

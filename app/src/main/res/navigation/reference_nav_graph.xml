@@ -3,205 +3,228 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reference_nav_graph"
-    app:startDestination="@id/dashboard">
+    app:startDestination="@id/landingFragment">
 
     <fragment
-        android:id="@+id/patient_list"
-        android:name="com.intellisoft.nndak.screens.patients.PatientListFragment"
-        android:label="Patient List"
-        tools:layout="@layout/patient_list_view">
+        android:id="@+id/homeFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.HomeFragment"
+        android:label="@string/home_menu_dashboard"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/navigate_to_product_detail"
-            app:destination="@id/patient_details" />
+            android:id="@+id/navigate_to_orders"
+            app:destination="@id/dhmOrdersFragment" />
         <action
-            android:id="@+id/action_patient_list_to_addPatientFragment"
-            app:destination="@id/addPatientFragment" />
-        <argument
-            android:name="step"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_patient_list_to_screenerEncounterFragment"
-            app:destination="@id/screenerEncounterFragment" />
-        <action
-            android:id="@+id/navigate_to_maternity"
-            app:destination="@id/maternityFragment" />
-        <action
-            android:id="@+id/navigate_to_newborn"
-            app:destination="@id/newBornFragment" />
-        <action
-            android:id="@+id/navigate_to_post_natal"
-            app:destination="@id/postNatalFragment" />
-        <action
-            android:id="@+id/navigate_to_dhm"
-            app:destination="@id/milkFragment" />
-        <action
-            android:id="@+id/navigate_to_assessment"
-            app:destination="@id/assessmentFragment" />
+            android:id="@+id/navigate_to_stock"
+            app:destination="@id/dhmStockFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/babiesFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.BabiesFragment"
+        android:label="@string/home_babies"
+        tools:layout="@layout/fragment_babies">
+        <action
+            android:id="@+id/navigate_to_register_client"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/navigate_to_child_dashboard"
+            app:destination="@id/childDashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.RegistrationFragment"
+        android:label="@string/home_client"
+        tools:layout="@layout/fragment_registration">
 
+        <action
+            android:id="@+id/navigate_to_baby_dashboard"
+            app:destination="@id/childDashboardFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/patient_details"
-        android:name="com.intellisoft.nndak.screens.patients.PatientDetailsFragment"
-        android:label="Patient Details"
-        tools:layout="@layout/patient_detail">
+        android:id="@+id/statisticsFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.StatisticsFragment"
+        android:label="@string/app_statistics"
+        tools:layout="@layout/fragment_statistics">
         <action
-            android:id="@+id/navigate_to_edit_patient"
-            app:destination="@id/editPatientFragment" />
-        <action
-            android:id="@+id/action_patient_details_to_screenEncounterFragment"
-            app:destination="@id/screenerEncounterFragment" />
+            android:id="@+id/navigate_to_register_client"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/childDashboardFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.ChildDashboardFragment"
+        android:label="@string/app_dashboard"
+        tools:layout="@layout/fragment_child_dashboard">
         <argument
             android:name="patient_id"
             app:argType="string" />
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/screenerEncounterFragment"
-        android:name="com.intellisoft.nndak.screens.ScreenerFragment"
-        android:label="Screen Encounter"
-        tools:layout="@layout/screener_encounter_fragment">
-        <argument
-            android:name="patient_id"
-            app:argType="string" />
-        <argument
-            android:name="quastion"
-            app:argType="string" />
-        <argument
-            android:name="title"
-            app:argType="string"
-            app:nullable="true" />
         <action
-            android:id="@+id/navigate_to_self"
-            app:destination="@id/screenerEncounterFragment" />
+            android:id="@+id/navigate_to_baby_dashboard"
+            app:destination="@id/babyDashboardFragment" />
+        <action
+            android:id="@+id/navigate_to_baby_monitoring"
+            app:destination="@id/babyMonitoringFragment" />
+        <action
+            android:id="@+id/navigate_to_baby_lactation"
+            app:destination="@id/babyLactationFragment" />
+        <action
+            android:id="@+id/navigate_to_baby_assessment"
+            app:destination="@id/babyAssessmentFragment" />
+        <action
+            android:id="@+id/navigate_to_baby_feeding"
+            app:destination="@id/babyFeedsFragment" />
+        <action
+            android:id="@+id/navigate_to_babies_panel"
+            app:destination="@id/babiesFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addPatientFragment"
-        android:name="com.intellisoft.nndak.screens.patients.AddPatientFragment"
-        android:label="@string/add_patient"
-        tools:layout="@layout/add_patient_fragment" />
-
-    <fragment
-        android:id="@+id/editPatientFragment"
-        android:name="com.intellisoft.nndak.screens.patients.EditPatientFragment"
-        android:label="Edit Patient"
-        tools:layout="@layout/add_patient_fragment">
-
-        <argument
-            android:name="patient_id"
-            app:argType="string" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/dashboard"
-        android:name="com.intellisoft.nndak.screens.dashboard.DashboardFragment"
-        android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard">
-        <action
-            android:id="@+id/action_dashboard_to_patient_list"
-            app:destination="@id/patient_list" />
-    </fragment>
-    <fragment
-        android:id="@+id/maternityFragment"
-        android:name="com.intellisoft.nndak.screens.maternity.MaternityFragment"
-        android:label="fragment_maternity"
-        tools:layout="@layout/fragment_maternity">
-        <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
-        <argument
-            android:name="patient_id"
-            app:argType="string" />
-        <argument
-            android:name="code"
-            app:argType="string" />
-        <action
-            android:id="@+id/navigate_to_child"
-            app:destination="@id/childFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/newBornFragment"
-        android:name="com.intellisoft.nndak.screens.newborn.NewBornFragment"
-        android:label="fragment_new_born"
-        tools:layout="@layout/fragment_new_born">
-        <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
-        <argument
-            android:name="patient_id"
-            app:argType="string" />
-        <argument
-            android:name="code"
-            app:argType="string" />
-        <action
-            android:id="@+id/navigate_to_child"
-            app:destination="@id/childFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/postNatalFragment"
-        android:name="com.intellisoft.nndak.screens.postnatal.PostNatalFragment"
-        android:label="fragment_post_natal"
-        tools:layout="@layout/fragment_post_natal">
-        <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
+        android:id="@+id/babyDashboardFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.BabyDashboardFragment"
+        android:label="@string/app_dashboard"
+        tools:layout="@layout/fragment_baby_dashboard">
         <argument
             android:name="patient_id"
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/milkFragment"
-        android:name="com.intellisoft.nndak.screens.milk.MilkFragment"
-        android:label="fragment_milk"
-        tools:layout="@layout/fragment_milk">
-        <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
+        android:id="@+id/babyAssessmentFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.BabyAssessmentFragment"
+        android:label="@string/app_assess"
+        tools:layout="@layout/fragment_baby_assessment">
         <argument
             android:name="patient_id"
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/assessmentFragment"
-        android:name="com.intellisoft.nndak.screens.assessments.AssessmentFragment"
-        android:label="fragment_assessment"
-        tools:layout="@layout/fragment_assessment">
+        android:id="@+id/babyFeedsFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.BabyFeedsFragment"
+        android:label="@string/app_feeding"
+        tools:layout="@layout/fragment_baby_feeds">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
         <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
+            android:id="@+id/navigate_to_add_prescription"
+            app:destination="@id/addPrescriptionFragment" />
+        <action
+            android:id="@+id/navigate_to_edit_prescription"
+            app:destination="@id/editPrescriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/babyMonitoringFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.BabyMonitoringFragment"
+        android:label="fragment_baby_monitoring"
+        tools:layout="@layout/fragment_baby_monitoring">
         <argument
             android:name="patient_id"
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/childFragment"
-        android:name="com.intellisoft.nndak.screens.children.ChildFragment"
-        android:label="fragment_child"
-        tools:layout="@layout/fragment_child">
+        android:id="@+id/babyLactationFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.BabyLactationFragment"
+        android:label="@string/app_lactation"
+        tools:layout="@layout/fragment_baby_lactation">
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_feeding"
+            app:destination="@id/breastFeedingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPrescriptionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.AddPrescriptionFragment"
+        android:label="@string/app_prescribe_feed"
+        tools:layout="@layout/fragment_add_prescription">
         <argument
-            android:name="code"
+            android:name="patient_id"
             app:argType="string" />
         <argument
             android:name="title"
             app:argType="string" />
-        <action
-            android:id="@+id/navigate_to_screening"
-            app:destination="@id/screenerEncounterFragment" />
-
-        <action
-            android:id="@+id/navigate_to_edit_patient"
-            app:destination="@id/editChildFragment" />
     </fragment>
     <fragment
-        android:id="@+id/editChildFragment"
-        android:name="com.intellisoft.nndak.screens.children.EditChildFragment"
-        android:label="EditChildFragment">
+        android:id="@+id/editPrescriptionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
+        android:label="EditPrescriptionFragment"
+        tools:layout="@layout/fragment_add_prescription" />
+    <fragment
+        android:id="@+id/dhmOrdersFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.dhm.DhmOrdersFragment"
+        android:label="@string/app_dhm_orders"
+        tools:layout="@layout/fragment_dhm_orders">
+        <action
+            android:id="@+id/navigate_to_add_recipient"
+            app:destination="@id/dhmRecipientFragment" />
+        <action
+            android:id="@+id/navigate_to_processing"
+            app:destination="@id/processOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dhmRecipientFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.dhm.DhmRecipientFragment"
+        android:label="@string/app_add_dhm_recipient"
+        tools:layout="@layout/fragment_dhm_receipient" />
+    <fragment
+        android:id="@+id/dhmStockFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.dhm.DhmStockFragment"
+        android:label="@string/app_dhm_stock"
+        tools:layout="@layout/fragment_dhm_stock" />
+    <fragment
+        android:id="@+id/breastFeedingFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.feeding.BreastFeedingFragment"
+        android:label="@string/app_provide_lactation"
+        tools:layout="@layout/fragment_breast_feeding">
         <argument
             android:name="patient_id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/cuesFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.feeding.CuesFragment"
+        android:label="fragment_cues"
+        tools:layout="@layout/fragment_cues" />
+    <fragment
+        android:id="@+id/processOrderFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.dhm.ProcessOrderFragment"
+        android:label="@string/app_dhm_orders"
+        tools:layout="@layout/fragment_process_order">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="encounter"
+            app:argType="string" />
+        <argument
+            android:name="order"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.intellisoft.nndak.screens.profile.ProfileFragment"
+        android:label="@string/action_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.intellisoft.nndak.screens.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.LandingFragment"
+        android:label="@string/app_dashboard"
+        tools:layout="@layout/fragment_landing">
+        <action
+            android:id="@+id/navigate_to_babies"
+            app:destination="@id/babiesFragment" />
+        <action
+            android:id="@+id/navigate_to_milk"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/navigate_to_registration"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/navigate_to_statistics"
+            app:destination="@id/statisticsFragment" />
     </fragment>
 
 </navigation>

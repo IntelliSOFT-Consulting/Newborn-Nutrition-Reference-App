@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/_50dp"
+    android:clipToPadding="false"
+    android:padding="@dimen/_5dp"
+    tools:context=".screens.dashboard.StatisticsFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@android:color/transparent"
+                    app:queryHint="@string/query_search" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/mySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:entries="@array/sort"
+                        android:spinnerMode="dialog" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/inc_data"
+                layout="@layout/statistics" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:paddingTop="@dimen/_15dp"
+                app:cardCornerRadius="@dimen/_5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_10"
+                        android:text="@string/app_feed_time" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/total_term_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:paddingTop="@dimen/_15dp"
+                app:cardCornerRadius="@dimen/_5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_10"
+                        android:text="@string/app_feed_percentage"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/percentage_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:paddingTop="@dimen/_15dp"
+                app:cardCornerRadius="@dimen/_5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_10"
+                        android:text="@string/app_rate"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="400dp"
+                            android:layout_weight="1.7">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:text="@string/number_of_babies"
+                                android:textColor="@color/dim_red"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintWidth_percent="0.01" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/mortality_chart"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:visibility="visible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/textView"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tv_rate"
+                            android:layout_width="@dimen/_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:text="@string/app_mortality"
+                            android:textColor="@color/dim_red" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:paddingTop="@dimen/_15dp"
+                app:cardCornerRadius="@dimen/_5dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_10"
+                        android:text="@string/app_expressing"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/expressing_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

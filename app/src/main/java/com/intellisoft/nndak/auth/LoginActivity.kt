@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.*
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -16,13 +17,14 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
+import com.intellisoft.nndak.dialogs.ConnectionDialog
 import com.intellisoft.nndak.utils.*
 import org.hl7.fhir.r4.model.Flag
 import timber.log.Timber
 import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
-
+    private lateinit var connectionDialog: ConnectionDialog
     private lateinit var binding: ActivityLoginBinding
     private lateinit var progressBar: ProgressBar
     private lateinit var username: TextInputEditText
@@ -39,6 +41,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun cancel() {
+        connectionDialog.dismiss()
+    }
 
     private fun initViews() {
         username = binding.eMail
@@ -47,36 +52,41 @@ class LoginActivity : AppCompatActivity() {
         progressBar = binding.pbLoading
         hideProgress(progressBar, binding.btnSubmit)
 
-        binding.btnSubmit.setOnClickListener {
+        connectionDialog = ConnectionDialog(this::cancel)
 
-            handleDataCheck()
-        }
-        binding.forgotPass.setOnClickListener {
+        binding.apply {
 
-            val user = username.text.toString().trim()
+            btnSubmit.setOnClickListener {
 
-            if (!validInput(user)) {
-                binding.eMail.error = getString(R.string.enter_email_address)
-                binding.eMail.requestFocus()
-                return@setOnClickListener
+                handleDataCheck()
             }
-            if (!validEmail(user)) {
-                binding.eMail.error = getString(R.string.enter_valid_email_address)
-                binding.eMail.requestFocus()
-                return@setOnClickListener
+            forgotPass.setOnClickListener {
+
+                val user = username.text.toString().trim()
+
+                if (!validInput(user)) {
+                    binding.eMail.error = getString(R.string.enter_email_address)
+                    binding.eMail.requestFocus()
+                    return@setOnClickListener
+                }
+                if (!validEmail(user)) {
+                    binding.eMail.error = getString(R.string.enter_valid_email_address)
+                    binding.eMail.requestFocus()
+                    return@setOnClickListener
+                }
+                if (isNetworkAvailable(this@LoginActivity)) {
+                    processAccountRecovery(user)
+                } else {
+
+                    connectionDialog.show(supportFragmentManager, "Confirm Details")
+                }
             }
-            processAccountRecovery(user)
         }
+
     }
 
 
     private fun handleDataCheck() {
-
-        startActivity(
-            Intent(
-                this@LoginActivity,
-                MainActivity::class.java
-            ))
 
         val user = username.text.toString().trim()
         val pass = password.text.toString().trim()
@@ -91,7 +101,13 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         if (isValidPassword(pass)) {
+
+            if (isNetworkAvailable(this@LoginActivity)){
             validateLogin(user, pass)
+            } else {
+
+                connectionDialog.show(supportFragmentManager, "Confirm Details")
+            }
 
         } else {
             Toast.makeText(this, "Enter your 6 Digit Password", Toast.LENGTH_SHORT).show()
@@ -143,12 +159,14 @@ class LoginActivity : AppCompatActivity() {
                 FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
+                /*     if (it.newUser == true) {*/
                 startActivity(
                     Intent(
                         this@LoginActivity,
                         MainActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
+                /* }*/
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()

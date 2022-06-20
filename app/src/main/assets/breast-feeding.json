@@ -1,0 +1,105 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Baby-Assessment",
+      "type": "group",
+      "text": "",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "mha"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "Milk-Expressed",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "quantity",
+              "code": [
+                {
+                  "code": "Milk-Expressed",
+                  "display": "Milk Expressed",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "ml"
+                  }
+                }
+              ],
+              "required": true,
+              "linkId": "/Milk-9",
+              "text": "Milk Expressed (ml)"
+            }
+          ]
+        },
+        {
+          "linkId": "Time-Expressed",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Observation",
+                "name": "doneStatus"
+              }
+            }
+          ],
+          "item": [
+            {
+              "type": "dateTime",
+              "code": [
+                {
+                  "code": "Time-Expressed",
+                  "display": "Time Expressed",
+                  "system": "http://loinc.org/modified"
+                }
+              ],
+              "required": true,
+              "linkId": "/Time-Expressed",
+              "text": "Time Expressed"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

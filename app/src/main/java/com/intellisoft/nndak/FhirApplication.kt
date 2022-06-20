@@ -5,14 +5,23 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.android.fhir.*
 import com.google.android.fhir.sync.Sync
+import com.intellisoft.nndak.charts.MilkExpression
 import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
+import com.intellisoft.nndak.utils.Constants.ACTIVE
+import com.intellisoft.nndak.utils.Constants.DEMO_API_SERVER
+import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
+import com.intellisoft.nndak.utils.Constants.DHM
+import com.intellisoft.nndak.utils.Constants.FEEDINGS
 import com.intellisoft.nndak.utils.Constants.LOGIN
+import com.intellisoft.nndak.utils.Constants.MILK_EXPRESSION
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
 import com.intellisoft.nndak.utils.Constants.SERVER_URL_DEMO
+import com.intellisoft.nndak.utils.Constants.STATISTICS
 import com.intellisoft.nndak.utils.Constants.USER_ACCOUNT
+import com.intellisoft.nndak.utils.Constants.WEIGHTS
 import com.intellisoft.nndak.utils.Constants.WELCOME
 import timber.log.Timber
 
@@ -64,15 +73,13 @@ class FhirApplication : Application() {
 
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL,
-                "https://devnndak.intellisoftkenya.com/api/"
+                SERVER_URL, DEMO_API_SERVER
             )
         }
 
         fun getHapiServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL_DEMO,
-                "https://hapi.fhir.org/baseR4/"
+                SERVER_URL_DEMO, DEMO_SERVER
             )
         }
 
@@ -110,6 +117,17 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
 
+        fun setDashboardActive(context: Context, b: Boolean) {
+            (context.applicationContext as FhirApplication).editor.putBoolean(ACTIVE, b).commit()
+        }
+
+        fun getDashboardActive(context: Context): Boolean {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+                ACTIVE,
+                false
+            )
+        }
+
         fun updateDetails(context: Context, it: AuthResponse) {
             (context.applicationContext as FhirApplication).editor.putString(ACCESS_TOKEN, it.token)
                 .commit()
@@ -134,15 +152,87 @@ class FhirApplication : Application() {
             )
         }
 
+        fun setPatient(context: Context, state: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Patient", state)
+                .commit()
+        }
+
         fun setCurrent(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("State", state).commit()
+            (context.applicationContext as FhirApplication).editor.putString("State", state)
+                .commit()
         }
 
         fun getCurrent(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "State",""
-                ).toString()
+                "State", ""
+            ).toString()
         }
+
+        fun getPatient(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "Patient", ""
+            ).toString()
+        }
+
+
+        fun updateLocalFeeding(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(MILK_EXPRESSION, it)
+                .commit()
+        }
+
+
+        fun updateFeedings(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(FEEDINGS, it)
+                .commit()
+        }
+
+        fun updateWeights(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(WEIGHTS, it)
+                .commit()
+        }
+
+        fun updateStatistics(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(STATISTICS, it)
+                .commit()
+        }
+
+
+        fun updateDHM(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(DHM, it)
+                .commit()
+        }
+
+        fun getExpressions(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                MILK_EXPRESSION,
+                ""
+            )
+        }
+        fun getFeedings(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                FEEDINGS,
+                ""
+            )
+        }
+        fun getStatistics(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                STATISTICS,
+                ""
+            )
+        }
+        fun getDHM(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                DHM,
+                ""
+            )
+        }
+        fun getWeights(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                WEIGHTS,
+                ""
+            )
+        }
+
 
     }
 }
