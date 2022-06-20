@@ -63,8 +63,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -198,8 +199,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -221,7 +223,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-
+                            android:text="@string/app_zero_mls"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
@@ -247,6 +249,7 @@
                                 android:id="@+id/tv_feed_average"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="@string/app_zero"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                                 android:textColor="@color/dim_green" />
 
@@ -280,6 +283,7 @@
                             android:id="@+id/tv_expression_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@string/app_zero"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:textSize="@dimen/_20sp" />
 

@@ -14,12 +14,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
+import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -162,24 +165,51 @@ class BabyFeedsFragment : Fragment() {
 
         binding.apply {
             actionNewPrescription.setOnClickListener {
-                findNavController().navigate(
-                    BabyFeedsFragmentDirections.navigateToAddPrescription(
-                        args.patientId, "Add Prescription"
+
+                val allowed = validatePermission()
+                if (allowed) {
+                    findNavController().navigate(
+                        BabyFeedsFragmentDirections.navigateToAddPrescription(
+                            args.patientId, "Add Prescription"
+                        )
                     )
-                )
+                } else {
+                    notifyUser()
+                }
             }
             actionUpdatePrescription.setOnClickListener {
 
-                // Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(
-                    BabyFeedsFragmentDirections.navigateToAddPrescription(
-                        args.patientId,
-                        "Edit Prescription"
+                val allowed = validatePermission()
+                if (allowed) {
+                    findNavController().navigate(
+                        BabyFeedsFragmentDirections.navigateToAddPrescription(
+                            args.patientId,
+                            "Edit Prescription"
+                        )
                     )
-                )
+                } else {
+                    notifyUser()
+                }
             }
         }
 
+    }
+
+    private fun notifyUser() {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+            .show()
+    }
+
+    private fun validatePermission(): Boolean {
+
+        val role = (requireActivity() as MainActivity).retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMIN || role == DOCTOR
+        }
+        return false
     }
 
     private fun onPrescriptionItemClick(prescriptionItem: PrescriptionItem) {

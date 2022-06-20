@@ -124,15 +124,29 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
-                        android:minHeight="400dp"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="2dp"
                         app:cardUseCompatPadding="true">
 
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/status_chart"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="400dp" />
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15dp"
+                                android:text="@string/volume_milk"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/status_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp" />
+
+                        </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
 
@@ -180,6 +194,7 @@
                                     <ImageView
                                         android:layout_width="@dimen/_15dp"
                                         android:layout_height="@dimen/_15dp"
+                                        android:contentDescription="@string/rate"
                                         app:srcCompat="@drawable/ic_show_chart"
                                         app:tint="@color/dim_green" />
 
@@ -188,8 +203,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/action_percent"
                                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                        android:textColor="@color/dim_green" />
-
+                                        android:textColor="#2E7D32" />
 
                                 </LinearLayout>
 

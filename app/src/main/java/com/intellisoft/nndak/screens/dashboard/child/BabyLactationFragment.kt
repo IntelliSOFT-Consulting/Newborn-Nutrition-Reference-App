@@ -21,14 +21,24 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.fhir.FhirEngine
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.MilkExpression
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
+import com.intellisoft.nndak.utils.formatTime
+import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
+import com.intellisoft.nndak.utils.isNetworkAvailable
+import com.intellisoft.nndak.utils.loadTime
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -50,6 +60,8 @@ class BabyLactationFragment : Fragment() {
     private var chart: BarChart? = null
     private val binding
         get() = _binding!!
+
+    private val apiService = RestManager()
 
 
     override fun onCreateView(
@@ -84,12 +96,14 @@ class BabyLactationFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
+//        syncLocal()
 
         binding.apply {
             lnParent.visibility = View.GONE
             lnStatus.visibility = View.GONE
             loading.visibility = View.VISIBLE
         }
+
 
 
         binding.apply {
@@ -212,85 +226,117 @@ class BabyLactationFragment : Fragment() {
                         incDetails.appJaundice.visibility = View.GONE
                     }
 
-                    populateBarChart(data.assessment.weights)
-
                 }
             }
         }
-
+        if (isNetworkAvailable(requireContext())) {
+            loadData()
+        } else {
+            syncLocal()
+        }
 
     }
 
-    private fun populateBarChart(values: MutableList<Int>?) {
-        val groupCount = 6
-        val groupSpace = 0.08f
-        val barSpace = 0.03f
-        val barWidth = 0.2f
-
-        val startYear = 2022
-        val endYear: Int = +groupCount
-        val iv: ArrayList<BarEntry> = ArrayList()
-        val ebm: ArrayList<BarEntry> = ArrayList()
-        val dhm: ArrayList<BarEntry> = ArrayList()
-        if (values != null) {
-            if (values.isNotEmpty()) {
-                for ((i, entry) in values.withIndex()) {
-                    val value = values[i].toFloat()
-                    bWeight += 100
-                    iv.add(BarEntry(i.toFloat(), value))
-                    ebm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
-                    dhm.add(BarEntry(i.toFloat(), bWeight.toFloat()))
-                }
-
-                val fluids = BarDataSet(iv, "IV")
-                fluids.setColors(Color.parseColor("#4472C4"))
-                fluids.setDrawValues(false)
-
-                val expressed = BarDataSet(ebm, "EBM")
-                expressed.setColors(Color.parseColor("#ED7D31"))
-                expressed.setDrawValues(false)
-
-                val donor = BarDataSet(dhm, "DHM")
-                donor.setColors(Color.parseColor("#A5A5A5"))
-                donor.setDrawValues(false)
-
-                val data = BarData(fluids, expressed, donor)
-                data.setValueFormatter(LargeValueFormatter())
-
-                binding.statusChart.data = data
-                //setting the x-axis
-                val xAxis: XAxis = binding.statusChart.xAxis
-                //calling methods to hide x-axis gridlines
-                binding.statusChart.axisLeft.setDrawGridLines(false)
-                xAxis.setDrawGridLines(false)
-                xAxis.setDrawAxisLine(false)
-                xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-
-                binding.statusChart.legend.isEnabled = true
-                binding.statusChart.description.isEnabled = false
-                binding.statusChart.animateY(3000, Easing.EaseInSine)
-
-                binding.statusChart.barData.barWidth = barWidth
-                binding.statusChart.xAxis.axisMinimum = startYear.toFloat()
-                binding.statusChart.xAxis.axisMaximum =
-                    startYear + binding.statusChart.barData.getGroupWidth(
-                        groupSpace,
-                        barSpace
-                    ) * groupCount
-                binding.statusChart.groupBars(startYear.toFloat(), groupSpace, barSpace)
-
-
-                val rightAxis: YAxis = binding.statusChart.axisRight
-                rightAxis.setDrawGridLines(false)
-                rightAxis.setDrawZeroLine(false)
-                rightAxis.isGranularityEnabled = false
-                rightAxis.isEnabled = false
-
-                //refresh the chart
-                binding.statusChart.invalidate()
+    private fun loadData() {
+        apiService.loadExpressedMilk(requireContext(), args.patientId) {
+            if (it != null) {
+                val gson = Gson()
+                val json = gson.toJson(it)
+                FhirApplication.updateLocalFeeding(requireContext(), json)
+                populateBarChart(it)
+            } else {
+                syncLocal()
             }
         }
+    }
+
+    private fun syncLocal() {
+        val data = FhirApplication.getExpressions(requireContext())
+        if (data != null) {
+            val gson = Gson()
+
+            Timber.e("Local Sync Dara $data")
+            try {
+                val it: MilkExpression = gson.fromJson(data, MilkExpression::class.java)
+                populateBarChart(it)
+            } catch (e: Exception) {
+                Timber.e("Local Sync Error ${e.localizedMessage}")
+            }
+        }
+    }
+
+
+    private fun populateBarChart(it: MilkExpression) {
+
+        val good: ArrayList<BarEntry> = ArrayList()
+        val better: ArrayList<BarEntry> = ArrayList()
+        val best: ArrayList<BarEntry> = ArrayList()
+
+        val intervals = ArrayList<String>()
+        for ((i, entry) in it.data.withIndex()) {
+            intervals.add(entry.time)
+            if (entry.amount.toFloat() < 30) {
+                good.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            } else if (entry.amount.toFloat() < 99) {
+                better.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            } else {
+                best.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            }
+        }
+
+        val fluids = BarDataSet(good, "")
+        fluids.setColors(Color.parseColor("#da1e27"))
+        fluids.setDrawValues(false)
+
+        val fluids1 = BarDataSet(better, "")
+        fluids1.setColors(Color.parseColor("#0043cd"))
+        fluids1.setDrawValues(false)
+
+        val fluids2 = BarDataSet(best, "")
+        fluids2.setColors(Color.parseColor("#24a047"))
+        fluids2.setDrawValues(false)
+
+        val data = BarData(fluids, fluids1, fluids2)
+        data.setValueFormatter(LargeValueFormatter())
+
+        binding.apply {
+
+            val xAxis: XAxis = statusChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -45f
+            xAxis.mAxisMinimum = 1f
+            xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+
+            statusChart.axisLeft.setDrawGridLines(false)
+            statusChart.legend.isEnabled = true
+
+            //remove description label
+            statusChart.description.isEnabled = false
+            statusChart.isDragEnabled = true
+            statusChart.setScaleEnabled(true)
+            statusChart.description.text = "Age (Days)"
+            //add animation
+            statusChart.animateX(1000, Easing.EaseInSine)
+            statusChart.data = data
+
+            val leftAxis: YAxis = statusChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+
+            val rightAxis: YAxis = statusChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+
+            //refresh
+            statusChart.invalidate()
+
+        }
+
     }
 
 

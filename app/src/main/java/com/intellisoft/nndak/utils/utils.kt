@@ -27,6 +27,7 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.User
+import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
@@ -53,6 +54,35 @@ fun isTablet(ctx: Context): Boolean {
     return ctx.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
+fun formatTime(values: List<LocalDateTime>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val time = FormatHelper().getHourNoExtension(it.toString())
+        days.add(time)
+    }
+    return days
+
+}
+
+fun formatMonths(values: List<LocalDate>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val format = FormatHelper().getMonthName(it.toString())
+        days.add(format)
+    }
+    return days
+}
+
+fun loadTime(values: List<LocalDateTime>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val time = FormatHelper().getHour(it.toString())
+        days.add(time)
+    }
+    return days
+
+}
+
 fun extractUnits(value: String): String {
     val code = value.split("\\.".toRegex()).toTypedArray()
     return code[0]
@@ -66,6 +96,16 @@ fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
         date = date.minusHours(interval.toLong())
     }
     return list.reversed()
+}
+
+fun formatFeedingTime(values: List<LocalDateTime>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val time = FormatHelper().getHour(it.toString())
+        days.add(time)
+    }
+    return days
+
 }
 
 fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {

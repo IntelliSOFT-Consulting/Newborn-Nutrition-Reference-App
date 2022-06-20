@@ -2943,6 +2943,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     }
 
+    fun testSubmit(questionnaireResponse: QuestionnaireResponse) {
+        viewModelScope.launch {
+            val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
+            val subjectReference = Reference("Patient/c6fc7a5f-a74a-494c-907c-85ada7d527ff")
+            val encounterId = generateUuid()
+            if (isRequiredFieldMissing(bundle)) {
+                isResourcesSaved.value = false
+                return@launch
+            }
+            saveResources(bundle, subjectReference, encounterId,"Test Case")
+            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+            isResourcesSaved.value = true
+        }
+
+    }
+
 
 }
 

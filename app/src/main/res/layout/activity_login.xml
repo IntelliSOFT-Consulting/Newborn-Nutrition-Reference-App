@@ -33,7 +33,6 @@
         android:id="@+id/organization_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
         android:text="@string/signin_now"
         android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -44,7 +43,6 @@
         android:id="@+id/client_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
         android:text="@string/app_login"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -118,7 +116,6 @@
             android:layout_marginHorizontal="25dp"
             android:layout_marginVertical="@dimen/padding_16"
             android:backgroundTint="@color/dim_red"
-            android:fontFamily="@font/poppins"
             android:gravity="center_vertical|center_horizontal"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -135,7 +132,6 @@
                 android:id="@+id/forgotPass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
                 android:paddingStart="4dp"
                 android:paddingLeft="4dp"
                 android:text="@string/unable_to_login"
@@ -164,14 +160,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
-                    android:fontFamily="@font/poppins"
                     android:text="@string/login_offline"
                     android:textSize="16sp" />
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </LinearLayout>
 

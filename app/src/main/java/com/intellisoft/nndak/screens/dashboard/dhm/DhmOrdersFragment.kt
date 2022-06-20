@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -263,7 +264,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
 
         } else {
-            accessDenied()
+            Toast.makeText(requireContext(), "Please try again", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -272,11 +273,9 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun accessDenied() {
         SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
             .setTitleText("Access Denied!!")
-            .setContentText("You are not Authorized to Access")
+            .setContentText("You are not Authorized")
             .setCustomImage(R.drawable.smile)
-            .setConfirmClickListener {
-                findNavController().navigateUp()
-            }
+
             .show()
     }
 

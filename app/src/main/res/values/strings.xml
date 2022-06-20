@@ -197,7 +197,8 @@
     <string name="query_search">Search</string>
     <string name="app_feed_time">Time all Babies were given first feeds</string>
     <string name="app_feed_percentage">Percentage feeds of what all infants are feeding on</string>
-    <string name="app_mortality">Mortality Rate</string>
+    <string name="app_rate">Mortality Rate</string>
+    <string name="app_mortality"><![CDATA[Mortality Rate 0% ]]></string>
     <string name="app_expressing">Number of times all mothers are expressing</string>
     <string name="app_baby_name">Baby\'s Name</string>
     <string name="app_mother_name">Mother\'s Name</string>
@@ -345,6 +346,12 @@
     <string name="app_total">Total</string>
     <string name="app_closing_stock">DHM Closing Stock</string>
     <string name="app_closing">Fill this form Daily at Midnight during operations days</string>
+    <string name="volume_milk">Volume of milk expressed in 24 hours</string>
+    <string name="day_time">Time of Day</string>
+    <string name="rate">Rate</string>
+    <string name="app_zero">0</string>
+    <string name="app_zero_mls">0 ml</string>
+    <string name="number_of_babies">Number of Babies</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
@@ -359,3 +366,29 @@
     </string-array>
 
 </resources>
+
+<!--
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.6">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:rotation="-90"
+                                android:text="@string/number_of_babies"
+                                android:textColor="@color/dim_red"
+                                app:layout_constraintHeight_percent="0.3"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/mortality_chart"
+                                android:layout_width="1000dp"
+                                android:visibility="visible"
+                                android:layout_height="400dp"
+                                android:layout_weight="1.6" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    -->

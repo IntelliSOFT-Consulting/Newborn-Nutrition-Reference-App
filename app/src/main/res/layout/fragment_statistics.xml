@@ -49,463 +49,9 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingRight="@dimen/_15dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5dp">
-
-                            <RelativeLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="1dp">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/shape_circle"
-                                    app:tint="@color/colorPrimary" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    android:padding="@dimen/_5dp"
-                                    app:srcCompat="@drawable/toddler"
-                                    app:tint="@color/white" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/_10dp"
-                                android:layout_height="0dp" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tv_total"
-                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAlignment="textEnd"
-                                    android:textSize="@dimen/_35sp" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_babies"
-                            android:textAlignment="textEnd" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_15dp"
-                                android:layout_height="@dimen/_15dp"
-                                app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
-
-
-                        </LinearLayout>
-
-                        <ProgressBar
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="false"
-                            android:max="100"
-                            android:padding="@dimen/_15dp"
-                            android:progress="40" />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingRight="@dimen/_15dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5dp">
-
-                            <RelativeLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="1dp">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/shape_circle"
-                                    app:tint="@color/colorPrimary" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    android:padding="@dimen/_5dp"
-                                    app:srcCompat="@drawable/toddler"
-                                    app:tint="@color/white" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/_10dp"
-                                android:layout_height="0dp" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tv_preterm"
-                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAlignment="textEnd"
-                                    android:textSize="@dimen/_35sp" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/action_preterm"
-                            android:textAlignment="textEnd" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_15dp"
-                                android:layout_height="@dimen/_15dp"
-                                app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
-
-                            <TextView
-                                android:id="@+id/tv_pre_average"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
-
-
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/pb_pre_term"
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="false"
-                            android:max="100"
-                            android:padding="@dimen/_15dp"
-                            android:progress="40" />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingRight="@dimen/_15dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5dp">
-
-                            <RelativeLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="1dp">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/shape_circle"
-                                    app:tint="@color/colorPrimary" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    android:padding="@dimen/_5dp"
-                                    app:srcCompat="@drawable/toddler"
-                                    app:tint="@color/white" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/_10dp"
-                                android:layout_height="0dp" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tv_term"
-                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAlignment="textEnd"
-                                    android:textSize="@dimen/_35sp" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/action_term"
-                            android:textAlignment="textEnd" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_15dp"
-                                android:layout_height="@dimen/_15dp"
-                                app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
-
-                            <TextView
-                                android:id="@+id/tv_term_average"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
-
-
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/pb_term"
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="false"
-                            android:max="100"
-                            android:padding="@dimen/_15dp"
-                            android:progress="40" />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingRight="@dimen/_15dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5dp">
-
-                            <RelativeLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_marginTop="1dp">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/shape_circle"
-                                    app:tint="@color/colorPrimary" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    android:padding="@dimen/_5dp"
-                                    app:srcCompat="@drawable/toddler"
-                                    app:tint="@color/white" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="@dimen/_10dp"
-                                android:layout_height="0dp" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-
-                                    android:text="@string/action_dummy"
-                                    android:textAlignment="textEnd"
-                                    android:textSize="@dimen/_35sp" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/action_average_days"
-                            android:textAlignment="textEnd" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_15dp"
-                                android:layout_height="@dimen/_15dp"
-                                app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/design_default_color_error" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
-                                android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                                android:textColor="@color/design_default_color_error" />
-
-
-                        </LinearLayout>
-
-                        <ProgressBar
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="false"
-                            android:max="100"
-                            android:padding="@dimen/_15dp"
-                            android:progress="40" />
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
+            <include
+                android:id="@+id/inc_data"
+                layout="@layout/statistics" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -531,9 +77,9 @@
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/total_term_chart"
-                        android:layout_gravity="end"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp" />
+                        android:layout_height="300dp"
+                        android:layout_gravity="end" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -585,7 +131,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
-                        android:text="@string/app_mortality"
+                        android:text="@string/app_rate"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
@@ -596,16 +142,40 @@
                         android:orientation="horizontal"
                         android:weightSum="2">
 
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/mortality_chart"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
-                            android:layout_height="300dp"
-                            android:layout_weight="1.5" />
+                            android:layout_height="400dp"
+                            android:layout_weight="1.7">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:text="@string/number_of_babies"
+                                android:textColor="@color/dim_red"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintWidth_percent="0.01" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/mortality_chart"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:visibility="visible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/textView"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
+                            android:id="@+id/tv_rate"
                             android:layout_width="@dimen/_0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
+                            android:layout_weight="0.3"
                             android:text="@string/app_mortality"
                             android:textColor="@color/dim_red" />
                     </LinearLayout>

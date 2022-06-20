@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -17,15 +18,22 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.fhir.FhirEngine
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.DHMData
+import com.intellisoft.nndak.charts.DHMModel
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.models.PieItem
+import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.HMB
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
+import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
+import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 import java.time.LocalDate
 
@@ -69,93 +77,129 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
+        syncLocalData()
 
-        fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientListViewModel =
-            ViewModelProvider(
-                this,
-                PatientListViewModel.PatientListViewModelFactory(
-                    requireActivity().application,
-                    fhirEngine, "0"
-                )
-            )
-                .get(PatientListViewModel::class.java)
-        patientListViewModel.liveDHMDashboard.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-                binding.apply {
-                    tvDhmInfants.text = it.dhmInfants
-                    tvVolumeAvailable.text = it.dhmVolume
-                    tvAverageVolume.text = it.dhmAverageVolume
-                    tvFullyInfants.text = it.dhmFullyInfants
-                    tvAverageLength.text = it.dhmAverageLength
-
-                    populateData()
-
-                }
-            }
-        }
 
         binding.apply {
             actionEnterStock.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.navigateToStock())
+
+                val allowed = validatePermission()
+                if (allowed) {
+                    findNavController().navigate(HomeFragmentDirections.navigateToStock())
+                } else {
+                    accessDenied()
+                }
             }
             actionViewDhm.setOnClickListener {
                 findNavController().navigate(HomeFragmentDirections.navigateToOrders())
             }
         }
+        if (isNetworkAvailable(requireContext())) {
 
-        loadLiveData()
+            loadLiveData()
+        } else {
+            syncLocalData()
+        }
+    }
+
+    private fun validatePermission(): Boolean {
+
+        val role = (requireActivity() as MainActivity).retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMIN || role == DOCTOR || role == HMB
+        }
+        return false
+    }
+
+    private fun accessDenied() {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+
+            .show()
     }
 
     private fun loadLiveData() {
         apiService.loadDonorMilk(requireContext()) {
 
             if (it != null) {
-                Timber.e("Success")
+                val gson = Gson()
+                val json = gson.toJson(it)
+                Timber.e("Local Sync Dara $json")
+                FhirApplication.updateDHM(requireContext(), json)
+                updateUI(it)
             } else {
                 Timber.e("Failed to Load Data")
+                syncLocalData()
+            }
+        }
+    }
+
+    private fun updateUI(it: DHMModel) {
+        binding.apply {
+            tvDhmInfants.text = it.dhmInfants
+            tvVolumeAvailable.text = it.dhmVolume
+            tvAverageVolume.text = it.dhmAverage
+            tvFullyInfants.text = it.fullyReceiving
+            tvAverageLength.text = it.dhmLength
+        }
+
+        populateData(it.data)
+
+    }
+
+    private fun syncLocalData() {
+
+        val data = FhirApplication.getDHM(requireContext())
+        if (data != null) {
+            val gson = Gson()
+            Timber.e("Local Sync Dara $data")
+            try {
+                val it: DHMModel = gson.fromJson(data, DHMModel::class.java)
+                updateUI(it)
+
+            } catch (e: Exception) {
+                Timber.e("Local Sync Error ${e.localizedMessage}")
             }
         }
     }
 
 
-    private fun populateData() {
+    private fun populateData(data: List<DHMData>) {
 
         val values = getPastDaysOnIntervalOf(7, 1)
 
         if (values.isNotEmpty()) {
-            val input = arrayListOf<Int>(4, 7, 9, 3, 4, 7, 5)
             val dayNames = formatDays(values)
             Timber.e("Days $dayNames")
             Timber.e("Values Count ${values.size}")
 
-            val lessFive: ArrayList<Entry> = ArrayList()
-            val lessSeven: ArrayList<Entry> = ArrayList()
-            val moreSeven: ArrayList<Entry> = ArrayList()
+            val preterm: ArrayList<Entry> = ArrayList()
+            val term: ArrayList<Entry> = ArrayList()
+            val total: ArrayList<Entry> = ArrayList()
 
-            for ((i, entry) in input.withIndex()) {
-                val value = input[i].toFloat()
-                lessFive.add(Entry(i.toFloat(), value))
-                lessSeven.add(Entry(i.toFloat(), value + 1))
-                moreSeven.add(Entry(i.toFloat(), value - 2))
+            for ((i, entry) in data.withIndex()) {
+                preterm.add(Entry(i.toFloat(), entry.preterm.toFloat()))
+                term.add(Entry(i.toFloat(), entry.term.toFloat()))
+                total.add(Entry(i.toFloat(), entry.total.toFloat()))
             }
 
-            val lessThanFive = LineDataSet(lessFive, "Preterm DHM")
+            val lessThanFive = LineDataSet(preterm, "Preterm DHM")
             lessThanFive.setColors(Color.parseColor("#F65050"))
             lessThanFive.setDrawCircleHole(false)
             lessThanFive.setDrawValues(false)
             lessThanFive.setDrawCircles(false)
             lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
 
-            val lessThanSeven = LineDataSet(lessSeven, "Term DHM")
+            val lessThanSeven = LineDataSet(term, "Term DHM")
             lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
             lessThanSeven.setDrawCircleHole(false)
             lessThanSeven.setDrawValues(false)
             lessThanSeven.setDrawCircles(false)
             lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
 
-            val moreThanSeven = LineDataSet(moreSeven, "Total DHM")
+            val moreThanSeven = LineDataSet(total, "Total DHM")
             moreThanSeven.setColors(Color.parseColor("#77A9FF"))
             moreThanSeven.setDrawCircleHole(false)
             moreThanSeven.setDrawValues(false)

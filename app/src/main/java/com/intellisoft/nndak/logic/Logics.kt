@@ -22,7 +22,7 @@ class Logics {
          * Roles Access
          */
         const val ADMIN = "ADMINISTRATOR"
-        const val HMB = "ADMINISTRATOR"
+        const val HMB = "HMB Assistant"
         const val DOCTOR = "Doctor"
         const val NURSE = "Nurse"
 

@@ -25,6 +25,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -101,8 +102,10 @@ class DhmStockFragment : Fragment() {
 
     }
 
+
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
+
     }
 
     private fun addQuestionnaireFragment() {
@@ -124,45 +127,45 @@ class DhmStockFragment : Fragment() {
     private fun listenToChange(input: TextInputEditText) {
 
         CoroutineScope(Dispatchers.Default).launch {
-        input.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(editable: Editable) {
-                try {
-                    if (editable.toString().isNotEmpty()) {
-                        val newValue = editable.toString()
-                        input.removeTextChangedListener(this)
-                        val position: Int = input.selectionEnd
-                        input.setText(newValue)
-                        if (position > (input.text?.length ?: 0)) {
-                            input.text?.let { input.setSelection(it.length) }
-                        } else {
-                            input.setSelection(position)
-                        }
-                        input.addTextChangedListener(this)
+            input.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position)
+                            }
+                            input.addTextChangedListener(this)
 
-                        calculateTotals()
-                    } else {
-                        input.setText("0")
-                        calculateTotals()
+                            calculateTotals()
+                        } else {
+                            input.setText("0")
+                            calculateTotals()
+                        }
+                    } catch (e: Exception) {
+
                     }
-                } catch (e: Exception) {
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
 
                 }
-            }
-
-            override fun beforeTextChanged(
-                s: CharSequence, start: Int,
-                count: Int, after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence, start: Int,
-                before: Int, count: Int
-            ) {
-
-            }
-        })
-    }
+            })
+        }
     }
 
     private fun calculateTotals() {
@@ -229,6 +232,7 @@ class DhmStockFragment : Fragment() {
                 (activity as MainActivity).hideDialog()
                 return@observe
             }
+
             (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }

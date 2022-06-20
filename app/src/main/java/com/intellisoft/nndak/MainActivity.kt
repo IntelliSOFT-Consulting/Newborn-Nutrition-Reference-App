@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             menu.lnHome.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.homeFragment)
+                navController.navigate(R.id.landingFragment)
             }
 
             menu.lnStatistics.setOnClickListener {

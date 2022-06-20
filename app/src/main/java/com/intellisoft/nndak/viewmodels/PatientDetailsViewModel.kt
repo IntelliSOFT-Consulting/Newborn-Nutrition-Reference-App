@@ -153,9 +153,7 @@ class PatientDetailsViewModel(
         var pmtct = ""
         var mPreg = ""
         var dDate = ""
-        var motherMilk = ""
-        var totalFeeds = ""
-        var expressions = ""
+        var motherMilk = "0 ml"
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
@@ -184,10 +182,12 @@ class PatientDetailsViewModel(
         if (obs.isNotEmpty()) {
 
             for (element in obs) {
+
                 if (element.code == "Feeding-Frequency") {
                     feeds.add(FeedItem("test", "test", "test", "test", "test", "test"))
                 }
                 if (element.code == "93857-1") {
+                    Timber.e("Delivery Date $dDate")
                     dDate = element.value.substring(0, 10)
                 }
                 if (element.code == "55277-8") {
@@ -221,9 +221,7 @@ class PatientDetailsViewModel(
                 if (element.code == "Breast-Milk") {
                     motherMilk = element.value
                 }
-                if (element.code == "Total-Feeds") {
-                    totalFeeds = element.value
-                }
+
                 if (element.code == "11885-1") {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
                     status = try {
@@ -306,7 +304,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun pullFeeds(): String {
-        var total = "0"
+        var total = "0 mls"
         val obs = observationsPerCode(FEEDS_TAKEN)
         if (obs.isNotEmpty()) {
             val sorted = sortCollected(obs)
@@ -316,7 +314,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun calculateTotalExpressedMilk(): String {
-        var volume = "0"
+        var volume = "0 mls"
 
         val single: MutableList<Int> = mutableListOf()
         val obs = observationsPerCode(EBM)
@@ -326,8 +324,8 @@ class PatientDetailsViewModel(
                 single.add(code[0].toInt())
             }
 
+            volume = single.sum().toString()
         }
-        volume = single.sum().toString()
         return "$volume mls"
     }
 

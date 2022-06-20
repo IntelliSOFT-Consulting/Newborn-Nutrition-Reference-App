@@ -64,7 +64,6 @@
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginVertical="@dimen/padding_16"
                 android:backgroundTint="@color/dim_red"
-                android:fontFamily="@font/poppins"
                 android:gravity="center_vertical|center_horizontal"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"

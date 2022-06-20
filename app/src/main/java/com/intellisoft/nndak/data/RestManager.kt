@@ -5,8 +5,7 @@ import android.util.Log
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.api.AuthInterceptor
 import com.intellisoft.nndak.api.AuthService
-import com.intellisoft.nndak.charts.DHMModel
-import com.intellisoft.nndak.charts.Statistics
+import com.intellisoft.nndak.charts.*
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +24,7 @@ class RestManager {
         if (!::apiService.isInitialized) {
             val retrofit = base?.let {
                 Retrofit.Builder()
-                    .baseUrl(it)
+                   .baseUrl(it) 
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okhttpClient(context))
                     .build()
@@ -139,18 +138,41 @@ class RestManager {
             }
         )
     }
+
     fun loadDonorMilk(context: Context, onResult: (DHMModel?) -> Unit) {
         getService(context).loadDonorMilk().enqueue(
             object : Callback<DHMModel> {
                 override fun onFailure(call: Call<DHMModel>, t: Throwable) {
                     Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
-
                 }
 
                 override fun onResponse(
                     call: Call<DHMModel>,
                     response: Response<DHMModel>
+                ) {
+                    Timber.e("onResponse ${response.body()}")
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+
+    fun loadExpressedMilk(context: Context,ip:String, onResult: (MilkExpression?) -> Unit) {
+        getService(context).loadExpressedMilk(ip).enqueue(
+            object : Callback<MilkExpression> {
+                override fun onFailure(call: Call<MilkExpression>, t: Throwable) {
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<MilkExpression>,
+                    response: Response<MilkExpression>
                 ) {
                     if (response.isSuccessful) {
                         onResult(response.body())
@@ -162,6 +184,47 @@ class RestManager {
         )
     }
 
+    fun loadFeedDistribution(context: Context,ip:String, onResult: (FeedsDistribution?) -> Unit) {
+        getService(context).loadFeedDistribution(ip).enqueue(
+            object : Callback<FeedsDistribution> {
+                override fun onFailure(call: Call<FeedsDistribution>, t: Throwable) {
+                    onResult(null)
+                }
+
+                override fun onResponse(
+                    call: Call<FeedsDistribution>,
+                    response: Response<FeedsDistribution>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+    fun loadWeights(context: Context,ip:String, onResult: (WeightsData?) -> Unit) {
+
+        getService(context).loadWeights(ip).enqueue(
+            object : Callback<WeightsData> {
+                override fun onFailure(call: Call<WeightsData>, t: Throwable) {
+                    onResult(null)
+                }
+
+                override fun onResponse(
+                    call: Call<WeightsData>,
+                    response: Response<WeightsData>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
 
 
 }

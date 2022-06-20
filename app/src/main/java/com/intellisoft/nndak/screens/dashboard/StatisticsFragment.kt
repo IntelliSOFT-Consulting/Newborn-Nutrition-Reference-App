@@ -19,22 +19,23 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.fhir.FhirEngine
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.charts.ChartFormatter
+import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentStatisticsBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
-import com.intellisoft.nndak.utils.getPastMonthsOnIntervalOf
+import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import timber.log.Timber
 import java.time.LocalDate
 import java.util.*
-import kotlin.math.roundToInt
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,6 +59,7 @@ class StatisticsFragment : Fragment() {
     private var totalTerm: Int = 0
     private var totalPreTerm: Int = 0
     private var totalBabies: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,82 +89,301 @@ class StatisticsFragment : Fragment() {
                     fhirEngine, "0"
                 )
             ).get(PatientListViewModel::class.java)
-
-        patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-                totalBabies = it.count()
-                for (count in it) {
-                    if (count.status == "Preterm") {
-                        totalPreTerm++
-                    } else {
-                        totalTerm++
-                    }
-                }
+        syncLocalData()
 
 
-                val prePercentage = (totalPreTerm.toDouble() / totalBabies) * 100
-                val termPercentage = (totalTerm.toDouble() / totalBabies) * 100
-
-                Timber.d("Babies Total $prePercentage")
-
-                binding.apply {
-                    tvTotal.text = totalBabies.toString()
-                    tvPreterm.text = totalPreTerm.toString()
-                    tvTerm.text = totalTerm.toString()
-                    try {
-                        tvPreAverage.text = "${prePercentage.roundToInt()} %"
-                        tvTermAverage.text = "${termPercentage.roundToInt()} %"
-
-                        pbTerm.progress = termPercentage.roundToInt()
-                        pbPreTerm.progress = prePercentage.roundToInt()
-                    } catch (e: Exception) {
-
-                    }
-
-                }
-            }
-
+        if (isNetworkAvailable(requireContext())) {
+            loadLiveData()
+        } else {
+            syncLocalData()
         }
 
-        patientListViewModel.loadFeedingTime()
-        patientListViewModel.liveFeedsTime.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.apply {
-                    firstFeedsChart(it.times)
-                    percentageFeedsChart(it.feeds)
-                }
+    }
 
+    private fun syncLocalData() {
+        val data = FhirApplication.getStatistics(requireContext())
+        if (data != null) {
+            val gson = Gson()
+            Timber.e("Local Sync Dara $data")
+            try {
+                val it: Statistics = gson.fromJson(data, Statistics::class.java)
+                updateUI(it)
+
+            } catch (e: Exception) {
+                Timber.e("Local Sync Error ${e.localizedMessage}")
             }
         }
+    }
+
+    private fun updateUI(it: Statistics) {
         binding.apply {
-
-            mortalityRateChart()
-            expressingTimesChart()
+            incData.tvTotal.text = it.totalBabies
+            incData.tvPreterm.text = it.preterm
+            incData.tvTerm.text = it.totalBabies
+            incData.tvAverage.text = it.averageDays
+            tvRate.text = getString(R.string.app_mortality).replace("0", it.mortalityRate.rate)
         }
-
-        loadLiveData()
-
+        populateFeedingTime(it.firstFeeding)
+        populateFeedsPercentage(it.percentageFeeds)
+        populateMortality(it.mortalityRate.data)
+        populateExpressingTimes(it.expressingTime)
     }
 
     private fun loadLiveData() {
         apiService.loadStatistics(requireContext()) {
-
             if (it != null) {
-                Timber.e("Success")
+                val gson = Gson()
+                val json = gson.toJson(it)
+                Timber.e("Local Sync Dara $json")
+                FhirApplication.updateStatistics(requireContext(), json)
+                updateUI(it)
             } else {
                 Timber.e("Failed to Load Data")
+                syncLocalData()
             }
         }
 
     }
 
-    private fun firstFeedsChart(list: List<PieItem>) {
+    private fun populateExpressingTimes(expressingTime: List<ExpressingTime>) {
+        try {
+
+            val intervals = ArrayList<String>()
+            val lessFive: ArrayList<Entry> = ArrayList()
+            val lessSeven: ArrayList<Entry> = ArrayList()
+            val moreSeven: ArrayList<Entry> = ArrayList()
+
+            for ((i, entry) in expressingTime.withIndex()) {
+                intervals.add(entry.month)
+                lessFive.add(Entry(i.toFloat(), entry.underFive.toFloat()))
+                lessSeven.add(Entry(i.toFloat(), entry.underSeven.toFloat()))
+                moreSeven.add(Entry(i.toFloat(), entry.aboveSeven.toFloat()))
+            }
+
+            val lessThanFive = LineDataSet(lessFive, "5 or Less")
+            lessThanFive.setColors(Color.parseColor("#F65050"))
+            lessThanFive.setDrawCircleHole(false)
+            lessThanFive.setDrawValues(false)
+            lessThanFive.setDrawCircles(false)
+            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val lessThanSeven = LineDataSet(lessSeven, "6-7 times")
+            lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
+            lessThanSeven.setDrawCircleHole(true)
+            lessThanSeven.setDrawValues(false)
+            lessThanSeven.setDrawCircles(true)
+            lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            val moreThanSeven = LineDataSet(moreSeven, "7 or More")
+            moreThanSeven.setColors(Color.parseColor("#77A9FF"))
+            moreThanSeven.setDrawCircleHole(false)
+            moreThanSeven.setDrawValues(false)
+            moreThanSeven.setDrawCircles(false)
+            moreThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            //val data = LineData(lessThanFive)
+            val data = LineData(lessThanFive, lessThanSeven, moreThanSeven)
+            binding.expressingChart.axisLeft.setDrawGridLines(false)
+
+            val xAxis: XAxis = binding.expressingChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.mAxisMinimum = 1f
+            xAxis.labelRotationAngle = -60f
+            xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+            xAxis.setLabelCount(expressingTime.size, true)
+
+            binding.expressingChart.legend.isEnabled = true
+
+            //remove description label
+            binding.expressingChart.description.isEnabled = false
+            binding.expressingChart.isDragEnabled = true
+            binding.expressingChart.setScaleEnabled(false)
+            binding.expressingChart.description.text = "Age (Days)"
+            //add animation
+            binding.expressingChart.animateX(1000, Easing.EaseInSine)
+            binding.expressingChart.data = data
+
+
+            val leftAxis: YAxis = binding.expressingChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+
+
+            val rightAxis: YAxis = binding.expressingChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+            //refresh
+            binding.expressingChart.invalidate()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadTimes(data: List<ExpressingTime>): ArrayList<String> {
+        val days = ArrayList<String>()
+        val sortedList = data.sortedWith(compareBy { it.month })
+        sortedList.forEach {
+            days.add(it.month)
+        }
+        return days
+    }
+
+
+    private fun populateMortality(rates: List<Data>) {
+
+        val values = getPastDaysOnIntervalOf(rates.size, 1)
+
+        if (values.isNotEmpty()) {
+
+            val intervals = ArrayList<String>()
+            val mortality: ArrayList<Entry> = ArrayList()
+            var max = rates.maxOf { it.value }
+            if (max.isNotEmpty()) {
+                if (max.toInt() < 50) {
+                    max += 50
+                } else {
+                    max = 100.toString()
+                }
+            }
+
+            for ((i, entry) in rates.withIndex()) {
+                intervals.add(entry.month)
+                val value = entry.value.replace("[^\\d.]".toRegex(), "")
+                mortality.add(Entry(i.toFloat(), value.toFloat()))
+            }
+
+            val mRate = LineDataSet(mortality, "Mortality Rate")
+            mRate.setColors(Color.parseColor("#F65050"))
+            mRate.fillColor = Color.parseColor("#F65050")
+            //  mRate.fillAlpha = 10
+            mRate.setDrawCircleHole(false)
+            mRate.setDrawValues(false)
+            mRate.setDrawCircles(false)
+            mRate.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+
+            val data = LineData(mRate)
+            binding.mortalityChart.axisLeft.setDrawGridLines(false)
+
+            val xAxis: XAxis = binding.mortalityChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -60f
+            xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+            xAxis.setLabelCount(rates.size, true)
+
+            binding.mortalityChart.legend.isEnabled = true
+
+            //remove description label
+            binding.mortalityChart.description.isEnabled = false
+            binding.mortalityChart.isDragEnabled = true
+            binding.mortalityChart.setScaleEnabled(false)
+            binding.mortalityChart.description.text = "Age (Days)"
+            //add animation
+            binding.mortalityChart.animateX(1000, Easing.EaseInSine)
+            binding.mortalityChart.data = data
+
+            val leftAxis: YAxis = binding.mortalityChart.axisLeft
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+            leftAxis.setLabelCount(5, false)
+            leftAxis.axisMinimum = 0f
+            leftAxis.axisMaximum = 60f
+
+            val rightAxis: YAxis = binding.mortalityChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+            //refresh
+            binding.mortalityChart.invalidate()
+        }
+
+    }
+
+    private fun getMaximum(rates: List<Data>): Float {
+        var min = Int.MAX_VALUE
+        rates.forEach {
+            min = min.coerceAtMost(it.value.toInt())
+
+        }
+        return min.toFloat()
+    }
+
+    private fun populateFeedsPercentage(percentageFeeds: PercentageFeeds) {
+        val pie: MutableList<PieItem> = mutableListOf()
+        pie.add(PieItem(percentageFeeds.dhm, "Donated Human Milk", "#1EAF5F"))
+        pie.add(PieItem(percentageFeeds.breastFeeding, "Breastfeeding", "#F65050"))
+        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
+        pie.add(PieItem(percentageFeeds.ebm, "Expressed Breast Milk", "#6C63FF"))
+        pie.add(PieItem(percentageFeeds.formula, "Formula", "#BA1B22"))
+
         val pieShades: ArrayList<Int> = ArrayList()
         val entries = ArrayList<PieEntry>()
-        for (pie in list) {
-            entries.add(PieEntry(pie.value.toFloat(), pie.label))
-            pieShades.add(Color.parseColor(pie.color))
+        for ((i, entry) in pie.withIndex()) {
+            entries.add(PieEntry(entry.value.toFloat(), entry.label))
+            pieShades.add(Color.parseColor(entry.color))
+        }
+
+        val ourSet = PieDataSet(entries, "")
+        val data = PieData(ourSet)
+
+        ourSet.sliceSpace = 1f
+        ourSet.colors = pieShades
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTextSize(10f)
+
+        binding.apply {
+
+            percentageChart.data = data
+            percentageChart.legend.setDrawInside(false)
+            percentageChart.legend.isEnabled = true
+            if (isTablet(requireContext())) {
+                percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+                percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            } else {
+                percentageChart.legend.orientation = Legend.LegendOrientation.HORIZONTAL
+                percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+
+            }
+            percentageChart.legend.isWordWrapEnabled = true
+            percentageChart.legend.xEntrySpace = 10f
+            percentageChart.legend.yEntrySpace = 10f
+            percentageChart.legend.yOffset = 10f
+            percentageChart.legend.xOffset = 10f
+            percentageChart.extraTopOffset = 15f
+            percentageChart.extraBottomOffset = 15f
+            percentageChart.extraLeftOffset = 0f
+            percentageChart.extraRightOffset = 50f
+            percentageChart.animateY(1400, Easing.EaseInOutQuad)
+            percentageChart.isDrawHoleEnabled = false
+            percentageChart.description.isEnabled = false
+            percentageChart.setDrawEntryLabels(false)
+            percentageChart.invalidate()
+        }
+    }
+
+    private fun populateFeedingTime(firstFeeding: FirstFeeding) {
+        val pie: MutableList<PieItem> = mutableListOf()
+        pie.add(PieItem(firstFeeding.withinOne, "Within 1 Hour", "#008c9b"))
+        pie.add(PieItem(firstFeeding.afterOne, "After 1 Hour", "#ffc600"))
+        pie.add(PieItem(firstFeeding.afterTwo, "After 2 Hours", "#fbb9b9"))
+        pie.add(PieItem(firstFeeding.afterThree, "After 3 Hours", "#6c63ff"))
+
+        val pieShades: ArrayList<Int> = ArrayList()
+        val entries = ArrayList<PieEntry>()
+        for ((i, entry) in pie.withIndex()) {
+            entries.add(PieEntry(entry.value.toFloat(), entry.label))
+            pieShades.add(Color.parseColor(entry.color))
         }
 
         val ourSet = PieDataSet(entries, "")
@@ -182,9 +403,17 @@ class StatisticsFragment : Fragment() {
 
             totalTermChart.legend.setDrawInside(false)
             totalTermChart.legend.isEnabled = true
-            totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-            totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-            totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+
+            if (isTablet(requireContext())) {
+                totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+                totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+            } else {
+                totalTermChart.legend.orientation = Legend.LegendOrientation.HORIZONTAL
+                totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+
+            }
             totalTermChart.legend.isWordWrapEnabled = true
             totalTermChart.legend.xEntrySpace = 10f
             totalTermChart.legend.yEntrySpace = 10f
@@ -203,200 +432,7 @@ class StatisticsFragment : Fragment() {
             //refreshing the chart
             totalTermChart.invalidate()
         }
-
     }
-
-    private fun percentageFeedsChart(list: List<PieItem>) {
-        val pieShades: ArrayList<Int> = ArrayList()
-        val entries = ArrayList<PieEntry>()
-        for (pie in list) {
-            entries.add(PieEntry(pie.value.toFloat(), pie.label))
-            pieShades.add(Color.parseColor(pie.color))
-        }
-
-
-        val ourSet = PieDataSet(entries, "")
-        val data = PieData(ourSet)
-
-        ourSet.sliceSpace = 1f
-        ourSet.colors = pieShades
-        data.setValueTextColor(Color.WHITE)
-        data.setValueTextSize(10f)
-
-        binding.apply {
-
-            percentageChart.data = data
-            percentageChart.legend.setDrawInside(false)
-            percentageChart.legend.isEnabled = true
-            percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
-            percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-            percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-            percentageChart.legend.isWordWrapEnabled = true
-            percentageChart.legend.xEntrySpace = 10f
-            percentageChart.legend.yEntrySpace = 10f
-            percentageChart.legend.yOffset = 10f
-            percentageChart.legend.xOffset = 10f
-            percentageChart.extraTopOffset = 15f
-            percentageChart.extraBottomOffset = 15f
-            percentageChart.extraLeftOffset = 0f
-            percentageChart.extraRightOffset = 50f
-            percentageChart.animateY(1400, Easing.EaseInOutQuad)
-            percentageChart.isDrawHoleEnabled = false
-            percentageChart.description.isEnabled = false
-            percentageChart.setDrawEntryLabels(false)
-            percentageChart.invalidate()
-        }
-
-    }
-
-
-    private fun mortalityRateChart() {
-        val month: Int = c.get(Calendar.MONTH) + 1
-        Timber.e("Which Month $month")
-        val values = getPastMonthsOnIntervalOf(month, 1)
-
-        if (values.isNotEmpty()) {
-            val input = arrayListOf<Int>(4, 7, 9, 4, 7, 5)
-            val dayNames = formatMonths(values)
-            Timber.e("Days $dayNames")
-            Timber.e("Values Count ${values.size}")
-
-            val lessFive: ArrayList<Entry> = ArrayList()
-
-            for ((i, entry) in input.withIndex()) {
-                val value = input[i].toFloat()
-                lessFive.add(Entry(i.toFloat(), value))
-            }
-
-            val lessThanFive = LineDataSet(lessFive, "Mortality Rate")
-            lessThanFive.setColors(Color.parseColor("#F65050"))
-            lessThanFive.setDrawCircleHole(false)
-            lessThanFive.setDrawValues(false)
-            lessThanFive.setDrawCircles(false)
-            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-
-            val data = LineData(lessThanFive)
-            binding.mortalityChart.axisLeft.setDrawGridLines(false)
-
-            val xAxis: XAxis = binding.mortalityChart.xAxis
-            xAxis.setDrawGridLines(false)
-            xAxis.setDrawAxisLine(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.labelRotationAngle = -60f
-            xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
-
-
-            binding.mortalityChart.legend.isEnabled = true
-
-            //remove description label
-            binding.mortalityChart.description.isEnabled = false
-            binding.mortalityChart.isDragEnabled = true
-            binding.mortalityChart.setScaleEnabled(true)
-            binding.mortalityChart.description.text = "Age (Days)"
-            //add animation
-            binding.mortalityChart.animateX(1000, Easing.EaseInSine)
-            binding.mortalityChart.data = data
-
-            val leftAxis: YAxis = binding.mortalityChart.axisLeft
-            leftAxis.axisMinimum = 0f
-            leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = false
-
-
-            val rightAxis: YAxis = binding.mortalityChart.axisRight
-            rightAxis.setDrawGridLines(false)
-            rightAxis.setDrawZeroLine(false)
-            rightAxis.isGranularityEnabled = false
-            rightAxis.isEnabled = false
-            //refresh
-            binding.mortalityChart.invalidate()
-        }
-
-    }
-
-
-    private fun expressingTimesChart() {
-        val month: Int = c.get(Calendar.MONTH) + 1
-        Timber.e("Which Month $month")
-        val values = getPastMonthsOnIntervalOf(month, 1)
-        if (values.isNotEmpty()) {
-            val input = arrayListOf<Int>(4, 7, 9, 3, 4, 7, 5)
-            val dayNames = formatMonths(values)
-            Timber.e("Days $dayNames")
-            Timber.e("Values Count ${values.size}")
-
-            val lessFive: ArrayList<Entry> = ArrayList()
-            val lessSeven: ArrayList<Entry> = ArrayList()
-            val moreSeven: ArrayList<Entry> = ArrayList()
-
-            for ((i, entry) in input.withIndex()) {
-                val value = input[i].toFloat()
-                lessFive.add(Entry(i.toFloat(), value))
-                lessSeven.add(Entry(i.toFloat(), value + 1))
-                moreSeven.add(Entry(i.toFloat(), value - 2))
-            }
-
-            val lessThanFive = LineDataSet(lessFive, "5 or Less")
-            lessThanFive.setColors(Color.parseColor("#F65050"))
-            lessThanFive.setDrawCircleHole(false)
-            lessThanFive.setDrawValues(false)
-            lessThanFive.setDrawCircles(false)
-            lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-            val lessThanSeven = LineDataSet(lessSeven, "6-7 times")
-            lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
-            lessThanSeven.setDrawCircleHole(false)
-            lessThanSeven.setDrawValues(false)
-            lessThanSeven.setDrawCircles(false)
-            lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-            val moreThanSeven = LineDataSet(moreSeven, "7 or More")
-            moreThanSeven.setColors(Color.parseColor("#77A9FF"))
-            moreThanSeven.setDrawCircleHole(false)
-            moreThanSeven.setDrawValues(false)
-            moreThanSeven.setDrawCircles(false)
-            moreThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-            val data = LineData(lessThanFive, lessThanSeven, moreThanSeven)
-            binding.expressingChart.axisLeft.setDrawGridLines(false)
-
-            val xAxis: XAxis = binding.expressingChart.xAxis
-            xAxis.setDrawGridLines(false)
-            xAxis.setDrawAxisLine(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.labelRotationAngle = -60f
-            xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
-
-
-            binding.expressingChart.legend.isEnabled = true
-
-            //remove description label
-            binding.expressingChart.description.isEnabled = false
-            binding.expressingChart.isDragEnabled = true
-            binding.expressingChart.setScaleEnabled(true)
-            binding.expressingChart.description.text = "Age (Days)"
-            //add animation
-            binding.expressingChart.animateX(1000, Easing.EaseInSine)
-            binding.expressingChart.data = data
-
-            val leftAxis: YAxis = binding.expressingChart.axisLeft
-            leftAxis.axisMinimum = 0f
-            leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = false
-
-
-            val rightAxis: YAxis = binding.expressingChart.axisRight
-            rightAxis.setDrawGridLines(false)
-            rightAxis.setDrawZeroLine(false)
-            rightAxis.isGranularityEnabled = false
-            rightAxis.isEnabled = false
-            //refresh
-            binding.expressingChart.invalidate()
-        }
-
-    }
-
 
     private fun formatMonths(values: List<LocalDate>): ArrayList<String> {
         val days = ArrayList<String>()

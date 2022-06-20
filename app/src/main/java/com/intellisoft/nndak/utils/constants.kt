@@ -5,8 +5,8 @@ import androidx.annotation.ColorInt
 
 object Constants {
 
-    const val DEMO_API_SERVER="https://devnndak.intellisoftkenya.com/api/"
-    const val DEMO_SERVER="https://devnndak.intellisoftkenya.com/fhir/"
+    const val DEMO_API_SERVER = "https://devnndak.intellisoftkenya.com/api/"
+    const val DEMO_SERVER = "https://devnndak.intellisoftkenya.com/fhir/"
     const val MAX_RESOURCE_COUNT = 40
     const val MIN_RESOURCE_COUNT = 10
     const val SYNC_VALUE = "Pumwani"
@@ -19,6 +19,11 @@ object Constants {
     const val SERVER_SET = "server_set"
     const val ACCESS_TOKEN = "access_token"
     const val USER_ACCOUNT = "user_account"
+    const val MILK_EXPRESSION = "milk_expression"
+    const val FEEDINGS = "feedings"
+    const val WEIGHTS = "weights"
+    const val STATISTICS = "statistics"
+    const val DHM = "donor"
     const val STROKE_WIDTH = 2f
     const val CORNER_RADIUS = 10f
 
