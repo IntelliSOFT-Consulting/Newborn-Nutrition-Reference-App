@@ -9,15 +9,30 @@ import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.ActualData
+import com.intellisoft.nndak.charts.ExpressionData
+import com.intellisoft.nndak.charts.MilkExpression
+import com.intellisoft.nndak.charts.WeightsData
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
 import com.intellisoft.nndak.logic.Logics.Companion.EBM
+import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSION_TIME
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
+import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
+import com.intellisoft.nndak.logic.Logics.Companion.STOOL
+import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
-import com.intellisoft.nndak.utils.getFormattedAge
+import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
@@ -40,12 +55,105 @@ class PatientDetailsViewModel(
     val liveOrder = MutableLiveData<OrdersItem>()
     val liveFeeds = MutableLiveData<DistributionItem>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
+    val liveFeedingData = MutableLiveData<List<PrescriptionItem>>()
+    val liveWeights = MutableLiveData<WeightsData>()
+    val liveExpressions = MutableLiveData<MilkExpression>()
     val context: Application = application
 
 
     fun feedsDistribution() {
         viewModelScope.launch { liveFeeds.value = getFeedsDataModel() }
     }
+
+    fun activeBabyWeights() {
+        viewModelScope.launch { liveWeights.value = getWeightsDataModel() }
+    }
+
+    fun getExpressions() {
+        viewModelScope.launch { liveExpressions.value = getExpressionDataModel() }
+    }
+
+    private suspend fun getExpressionDataModel(): MilkExpression {
+
+        val expressions: MutableList<ExpressionData> = mutableListOf()
+        val intervals = getPastHoursOnIntervalOf(8, 3)
+        intervals.forEach {
+            val milk = getHourlyExpressions(it.toString())
+            expressions.add(milk)
+        }
+        return MilkExpression(totalFeed = "100", varianceAmount = "5", data = expressions)
+    }
+
+    private suspend fun getHourlyExpressions(time: String): ExpressionData {
+        var quantity = 0f
+        val expressions = observationsPerCode(EXPRESSION_TIME)
+        val sorted = sortCollected(expressions)
+        sorted.forEach {
+            val actualTime = FormatHelper().getDateHourZone(it.value.trim())
+
+            val currentTime = FormatHelper().getDateHour(time)
+            val maxThree = FormatHelper().getHourRange(currentTime)
+
+            val isWithinRange = FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
+            if (isWithinRange) {
+                val amounts = observationsPerCodeEncounter(EXPRESSED_MILK, it.encounterId)
+                amounts.forEach { data ->
+                    Timber.e("Total Amount ${data.quantity}")
+                    val qty = data.quantity.toFloat()
+                    quantity += qty
+                }
+            }
+            Timber.e("Start $currentTime End $maxThree Expression $actualTime Within $isWithinRange")
+        }
+        val refinedTime = FormatHelper().getHour(time)
+
+        return ExpressionData(time = refinedTime, amount = quantity.toString())
+
+    }
+
+    private suspend fun getWeightsDataModel(): WeightsData {
+        val patient = getPatient()
+        val weight = pullWeights()
+        val data = arrayListOf<ActualData>()
+        var dayOfLife = ""
+        patient.let {
+            dayOfLife = getFormattedAge(it.dob)
+
+        }
+
+        if (weight.isNotEmpty()) {
+
+            val daysString = getPastDaysOnIntervalOf(dayOfLife.toInt(), 1)
+            for ((i, entry) in daysString.withIndex()) {
+                val sorted = sortCollected(weight)
+                val value = extractDailyMeasure(entry, sorted)
+                // val day =FormatHelper().getSimpleDate(entry.toString())
+                Timber.e("DayOfLife Date $entry Values $value ")
+            }
+        }
+
+        return WeightsData("200 kg", data = data)
+
+    }
+
+    private fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
+//        var value = "0 gm"
+
+        sorted.forEach {
+            val day = FormatHelper().getSimpleDate(it.effective)
+            Timber.e("Day $day  ${it.value}")
+            /* if (day == entry.toString()) {
+                 value = it.value
+                 Timber.e("Simple $day Value ${it.value}")
+             } else {
+                 value = "0 gm"
+             }*/
+        }
+        return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.value
+            ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.value
+            ?: "0 gm"
+    }
+
 
     private fun getFeedsDataModel(): DistributionItem {
         val intervals = getPastHoursOnIntervalOf(8, 3)
@@ -61,10 +169,12 @@ class PatientDetailsViewModel(
     }
 
     private fun loadFeed(time: String): FeedItem {
+        val iv = (13 until 50).random().toString()
+        val ebm = (13 until 50).random().toString()
+        val dhm = (13 until 50).random().toString()
 
-        return FeedItem(volume = "200")
+        return FeedItem(volume = iv, route = ebm, frequency = dhm)
     }
-
 
     fun getMumChild() {
 
@@ -329,8 +439,37 @@ class PatientDetailsViewModel(
         return "$volume mls"
     }
 
-    private suspend fun observationsPerCode(key: String): List<ObservationItem> {
+    private suspend fun observationsPerCodeEncounter(
+        key: String,
+        encounterId: String
+    ): List<ObservationItem> {
+        val obs: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.CODE,
+                    {
+                        value = of(Coding().apply {
+                            system = "http://snomed.info/sct"
+                            code = key
+                        })
+                    })
+                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                filter(Observation.ENCOUNTER, { value = encounterId })
+                sort(Observation.DATE, Order.DESCENDING)
+            }
+            .take(MIN_RESOURCE_COUNT)
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { obs.addAll(it) }
+        return obs
+    }
 
+    private suspend fun observationsPerCode(key: String): List<ObservationItem> {
         val obs: MutableList<ObservationItem> = mutableListOf()
         fhirEngine
             .search<Observation> {
@@ -412,9 +551,28 @@ class PatientDetailsViewModel(
         }
     }
 
+    fun getFeedingInstances(careId: String) {
+        viewModelScope.launch {
+            liveFeedingData.value = getFeedingInstancesDataModel(context, careId)
+        }
+    }
+
+    private suspend fun getFeedingInstancesDataModel(
+        context: Application,
+        careId: String
+    ): List<PrescriptionItem> {
+        val data: MutableList<PrescriptionItem> = mutableListOf()
+        val pres = fetchCarePlans(careId)
+        Timber.e("Care Provide ${pres.size}")
+        pres.forEach { item ->
+            data.add(feedsTaken(item))
+        }
+        return data
+    }
+
     private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem> {
         val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
-        val pres = fetchCarePlans()
+        val pres = fetchActiveCarePlans()
         Timber.e("Care Provide ${pres.size}")
         pres.forEach { item ->
             prescriptions.add(prescription(item))
@@ -438,7 +596,7 @@ class PatientDetailsViewModel(
 
     }
 
-    private suspend fun fetchCarePlans(): List<CareItem> {
+    private suspend fun fetchActiveCarePlans(): List<CareItem> {
         val cares: MutableList<CareItem> = mutableListOf()
         fhirEngine
             .search<CarePlan> {
@@ -459,9 +617,73 @@ class PatientDetailsViewModel(
         return cares
     }
 
+    private suspend fun fetchCarePlans(careId: String): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                filter(CarePlan.PART_OF, { value = "CarePlan/$careId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { cares.addAll(it) }
+        return cares
+    }
+
+    private suspend fun feedsTaken(care: CareItem): PrescriptionItem {
+        val date = try {
+            FormatHelper().extractDateString(care.created)
+        } catch (e: Exception) {
+            care.created
+        }
+        val time = try {
+            FormatHelper().extractTimeString(care.created)
+        } catch (e: Exception) {
+            care.created
+        }
+        val observations = getReferencedObservations(care.encounterId)
+        val taken = observations.firstOrNull()
+        return PrescriptionItem(
+            id = care.resourceId,
+            resourceId = care.resourceId,
+            date = date,
+            time = time,
+            totalVolume = extractValue(observations, FEEDS_TAKEN),
+            route = extractValue(observations, DIAPER_CHANGED),
+            ivFluids = extractValue(observations, IV_VOLUME),
+            breastMilk = extractValue(observations, EBM_VOLUME),
+            donorMilk = extractValue(observations, DHM_VOLUME),
+            consent = extractValue(observations, FEEDS_DEFICIT),
+            dhmReason = extractValue(observations, ADJUST_PRESCRIPTION),
+            supplements = extractValue(observations, VOMIT),
+            consentDate = extractValue(observations, STOOL),
+            additionalFeeds = extractValue(observations, REMARKS),
+//            consentDate = consentDate,
+//            feed = feeds,
+//            feedsGiven = givenFeeds,
+//            expressions = expressions.toString()
+
+        )
+    }
+
+    private fun extractValue(observations: List<ObservationItem>, code: String): String {
+        val value = observations.find { it.code == code }?.value
+        return value.toString()
+    }
+
     // private suspend fun prescription(encounterItem: EncounterItem): PrescriptionItem {
     private suspend fun prescription(care: CareItem): PrescriptionItem {
+        Timber.e("Encounter Item ${care.encounterId}")
         val observations = getReferencedObservations(care.encounterId)
+        Timber.e("Encounter Item $observations")
 
         val feeds: MutableList<FeedItem> = mutableListOf()
         var date = ""
@@ -543,7 +765,7 @@ class PatientDetailsViewModel(
         feeds.add(FeedItem())
 
         return PrescriptionItem(
-            id = care.resourceId,
+            id = care.encounterId,
             resourceId = care.resourceId,
             date = date,
             time = time,
@@ -692,37 +914,6 @@ class PatientDetailsViewModel(
 
     companion object {
         /**
-         * Creates RelatedPersonItem objects with displayable values from the Fhir RelatedPerson objects.
-         */
-        fun createRelatedPersonItem(
-            relation: Patient,
-            resources: Resources
-        ): RelatedPersonItem {
-            val gender = relation.gender ?: "Unknown"
-            var dob = relation.birthDate ?: ""
-            var name: String? = null
-            var yea: String? = null
-
-            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            if (dob.toString().isNotEmpty()) {
-                yea = formatter.format(dob)
-                dob = getFormattedAge(yea.toString(), resources)
-            }
-            name =
-                if (relation.hasName()) relation.name[0].nameAsSingleString else relation.logicalId.substring(
-                    0,
-                    8
-                )
-
-            return RelatedPersonItem(
-                relation.logicalId,
-                name.toString(),
-                gender.toString(),
-                dob.toString()
-            )
-        }
-
-        /**
          * Creates ObservationItem objects with displayable values from the Fhir Observation objects.
          */
         fun createObservationItem(
@@ -769,7 +960,9 @@ class PatientDetailsViewModel(
                 observation.logicalId,
                 observationCode,
                 dateTimeString,
+                "$value",
                 valueString,
+                observation.encounter.reference
             )
         }
 
@@ -792,11 +985,17 @@ class PatientDetailsViewModel(
         ): CareItem {
             val status = care.status
             Timber.e("Care Status:::: $status")
+            var date = if (care.hasCreated()) {
+                care.created.toString()
+            } else {
+                resources.getString(R.string.message_no_datetime)
+            }
 
             return CareItem(
                 care.logicalId,
                 care.subject.reference,
-                care.encounter.reference, care.status.toString()
+                care.encounter.reference,
+                care.status.toString(), date
             )
         }
 

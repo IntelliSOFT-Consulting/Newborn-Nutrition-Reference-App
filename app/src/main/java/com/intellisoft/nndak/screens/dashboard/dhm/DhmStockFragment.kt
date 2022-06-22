@@ -12,6 +12,7 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -51,10 +52,10 @@ class DhmStockFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var pa: String
     private lateinit var upa: String
+    private lateinit var type: String
     private lateinit var totalDhm: String
     private val binding
         get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +65,6 @@ class DhmStockFragment : Fragment() {
         _binding = FragmentDhmStockBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,6 +84,17 @@ class DhmStockFragment : Fragment() {
             listenToChange(edPasteurized)
             listenToChange(edUnpasteurized)
             disableEditing(edTotal)
+
+            appType.setOnClickListener {
+                PopupMenu(requireContext(), appType).apply {
+                    menuInflater.inflate(R.menu.menu_in_transaction, menu)
+                    setOnMenuItemClickListener { item ->
+                        appType.setText(item.title)
+                        true
+                    }
+                    show()
+                }
+            }
 
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -209,7 +220,7 @@ class DhmStockFragment : Fragment() {
             viewModel.updateStock(
                 questionnaireFragment.getQuestionnaireResponse(),
                 pa,
-                upa,
+                upa,type,
                 totalDhm
             )
         }
@@ -242,7 +253,10 @@ class DhmStockFragment : Fragment() {
     private fun onSubmitAction() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
-        if (TextUtils.isEmpty(pa) || pa == "0" || TextUtils.isEmpty(upa) || upa == "0") {
+          type = binding.appType.text.toString()
+        if (TextUtils.isEmpty(pa) || pa == "0"
+            || TextUtils.isEmpty(upa) || upa == "0" || TextUtils.isEmpty(type)
+        ) {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.inputs_missing),

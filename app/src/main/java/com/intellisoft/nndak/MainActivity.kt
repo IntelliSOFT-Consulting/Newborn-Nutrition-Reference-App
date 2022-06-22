@@ -66,23 +66,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.dashboard_menu, menu)
-        return true
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-
-            R.id.menu_profile -> {
-                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
-                return true
-            }
-            else -> false
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.dashboard_menu, menu)
+//        return true
+//    }
+//
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//
+//            R.id.menu_profile -> {
+//                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
+//                return true
+//            }
+//            else -> false
+//        }
+//    }
 
     fun retrieveUser(isRole: Boolean): String {
 

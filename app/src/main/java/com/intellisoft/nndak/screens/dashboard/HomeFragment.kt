@@ -32,6 +32,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
 import com.intellisoft.nndak.logic.Logics.Companion.HMB
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.isNetworkAvailable
+import com.intellisoft.nndak.utils.isTablet
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
@@ -76,9 +77,8 @@ class HomeFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-
+        checkCurrentDevice()
         syncLocalData()
-
 
         binding.apply {
             actionEnterStock.setOnClickListener {
@@ -102,6 +102,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun checkCurrentDevice() {
+        if (isTablet(requireContext())) {
+            binding.textView1.visibility = View.VISIBLE
+        }
+    }
+
     private fun validatePermission(): Boolean {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
@@ -116,7 +122,6 @@ class HomeFragment : Fragment() {
             .setTitleText("Access Denied!!")
             .setContentText("You are not Authorized")
             .setCustomImage(R.drawable.smile)
-
             .show()
     }
 
@@ -127,8 +132,11 @@ class HomeFragment : Fragment() {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Timber.e("Local Sync Dara $json")
-                FhirApplication.updateDHM(requireContext(), json)
-                updateUI(it)
+                try {
+                    FhirApplication.updateDHM(requireContext(), json)
+                    updateUI(it)
+                } catch (e: Exception) {
+                }
             } else {
                 Timber.e("Failed to Load Data")
                 syncLocalData()
@@ -137,12 +145,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(it: DHMModel) {
+
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
             tvVolumeAvailable.text = it.dhmVolume
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength
+
         }
 
         populateData(it.data)

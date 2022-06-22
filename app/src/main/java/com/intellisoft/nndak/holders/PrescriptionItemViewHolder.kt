@@ -40,6 +40,7 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
         this.appDhmReason.text = patientItem.dhmReason
         this.appAdditionalFeeds.text = patientItem.additionalFeeds
         this.appFeedingSupplements.text = patientItem.supplements
+        this.itemView.setOnClickListener { onItemClicked(patientItem) }
 
 
     }

@@ -189,7 +189,7 @@ class BabyAssessmentFragment : Fragment() {
                 context.newJsonParser()
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
-            viewModel.completeAssessment(
+            viewModel.testAssessment(
                 questionnaireFragment.getQuestionnaireResponse(), args.patientId
             )
         }
@@ -269,6 +269,7 @@ class BabyAssessmentFragment : Fragment() {
         requireArguments().putString(
             QUESTIONNAIRE_FILE_PATH_KEY,
             "baby-assessment.json"
+//            "hey.json"
         )
     }
 

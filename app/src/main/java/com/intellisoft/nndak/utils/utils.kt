@@ -64,6 +64,16 @@ fun formatTime(values: List<LocalDateTime>): ArrayList<String> {
 
 }
 
+fun formatDate(values: List<LocalDate>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val format = FormatHelper().getRefinedDate(it.toString())
+        days.add(format)
+    }
+    return days
+}
+
+
 fun formatMonths(values: List<LocalDate>): ArrayList<String> {
     val days = ArrayList<String>()
     values.forEach {

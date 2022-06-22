@@ -3,15 +3,13 @@ package com.intellisoft.nndak.screens.dashboard.child
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.fhir.FhirEngine
@@ -37,6 +35,7 @@ class ChildDashboardFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private var _binding: FragmentChildDashboardBinding? = null
+    var editMenuItem: MenuItem? = null
     private val binding
         get() = _binding!!
 
@@ -87,7 +86,7 @@ class ChildDashboardFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
 
             if (it != null) {
-
+                editMenuItem?.isEnabled = true
                 binding.apply {
                     incDetails.lnBody.visibility = View.VISIBLE
                     incDetails.pbLoading.visibility = View.GONE
@@ -158,6 +157,26 @@ class ChildDashboardFragment : Fragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.details_options_menu, menu)
+        editMenuItem = menu.findItem(R.id.menu_patient_edit)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                (requireActivity() as MainActivity).openNavigationDrawer()
+                true
+            }
+            R.id.menu_patient_edit -> {
+                findNavController()
+                    .navigate(ChildDashboardFragmentDirections.navigateToEditBaby(args.patientId))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun onBackPressed() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabiesPanel())
@@ -170,14 +189,4 @@ class ChildDashboardFragment : Fragment() {
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                (requireActivity() as MainActivity).openNavigationDrawer()
-                true
-            }
-            else -> false
-        }
-    }
 }

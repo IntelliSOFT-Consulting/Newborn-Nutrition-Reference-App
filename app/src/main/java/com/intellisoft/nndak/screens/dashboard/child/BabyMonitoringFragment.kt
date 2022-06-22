@@ -36,6 +36,7 @@ import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -109,7 +110,7 @@ class BabyMonitoringFragment : Fragment() {
             addQuestionnaireFragment()
         }
 
-
+        //  promptQues()
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -292,6 +293,11 @@ class BabyMonitoringFragment : Fragment() {
 
     }
 
+    private fun promptQues() {
+        exit = false
+        handleShowCues()
+    }
+
     private fun listenToChange(input: TextInputEditText) {
 
         CoroutineScope(Dispatchers.Default).launch {
@@ -383,13 +389,13 @@ class BabyMonitoringFragment : Fragment() {
     private fun generateFeedsBreakDown(pr: PrescriptionItem): String {
         val sb = StringBuilder()
         if (pr.ivFluids != "N/A") {
-            sb.append("IV- ${pr.ivFluids}\n")
+            sb.append("IV- ${calculateFeeds(pr.ivFluids.toString())}\n")
         }
         if (pr.breastMilk != "N/A") {
-            sb.append("EBM- ${pr.breastMilk}\n")
+            sb.append("EBM- ${calculateFeeds(pr.breastMilk.toString())}\n")
         }
         if (pr.donorMilk != "N/A") {
-            sb.append("DHM- ${pr.donorMilk}\n")
+            sb.append("DHM- ${calculateFeeds(pr.donorMilk.toString())}\n")
         }
         return sb.toString()
     }
@@ -430,13 +436,11 @@ class BabyMonitoringFragment : Fragment() {
             (activity as MainActivity).hideDialog()
             successDialog.show(childFragmentManager, "Success Details")
         }
-
-
     }
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = QuestionnaireFragment()
+            val fragment = CustomQuestionnaireFragment() //QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

@@ -5,7 +5,8 @@ import androidx.annotation.ColorInt
 
 object Constants {
 
-    const val DEMO_API_SERVER = "https://devnndak.intellisoftkenya.com/api/"
+//    const val DEMO_API_SERVER = "https://devnndak.intellisoftkenya.com/api/"
+    const val DEMO_API_SERVER = "http://192.168.0.11:8181/api/"
     const val DEMO_SERVER = "https://devnndak.intellisoftkenya.com/fhir/"
     const val MAX_RESOURCE_COUNT = 40
     const val MIN_RESOURCE_COUNT = 10

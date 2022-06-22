@@ -395,12 +395,10 @@
                     app:tint="@color/dim_red" />
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/app_baby_dashboard"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -462,12 +460,10 @@
                     app:tint="@color/dim_red" />
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/app_assess"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -531,12 +527,10 @@
                     app:tint="@color/dim_red" />
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/app_prescribe_feed"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -597,12 +591,10 @@
                     app:tint="@color/dim_red" />
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/app_feeding"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -665,12 +657,10 @@
                     app:tint="@color/dim_red" />
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/app_lactation_support"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

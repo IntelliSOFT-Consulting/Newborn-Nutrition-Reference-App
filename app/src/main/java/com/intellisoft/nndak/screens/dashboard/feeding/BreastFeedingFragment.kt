@@ -86,6 +86,8 @@ class BreastFeedingFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+        promptQues()
+
         binding.apply {
 
             actionMilkExpression.setOnClickListener {
@@ -133,6 +135,11 @@ class BreastFeedingFragment : Fragment() {
             this::proceedClick, resources.getString(R.string.app_okay_saved),false
         )
 
+    }
+
+    private fun promptQues() {
+        exit = false
+        handleShowCues()
     }
 
     private fun completeMilkExpression(effectiveExpression: String, expressedSufficient: String) {

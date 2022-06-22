@@ -3,14 +3,11 @@ package com.intellisoft.nndak.helper_class
 import android.content.Context
 import android.os.Build
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.models.DbObservations
 import timber.log.Timber
 import java.lang.Double.parseDouble
+import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class FormatHelper {
@@ -89,7 +86,7 @@ class FormatHelper {
 
     }
 
-     fun getHour(date: String): String {
+    fun getHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
 
@@ -98,7 +95,60 @@ class FormatHelper {
 
     }
 
-     fun getHourNoExtension(date: String): String {
+    fun getDateHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun getHourRange(date: String): String {
+
+        val calendar = Calendar.getInstance()
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+        val date: Date = destFormat.parse(date)
+        calendar.time = date
+        calendar.add(Calendar.HOUR, -3)
+        return destFormat.format(calendar.time)
+
+    }
+
+
+    fun getDateHourZone(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun isWithinRange(systemTime: String, startTime: String, endTime: String): Boolean {
+        try {
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a")
+
+            val starttime = simpleDateFormat.parse(startTime)
+            val endtime = simpleDateFormat.parse(endTime)
+
+            //current time
+            val current_time = simpleDateFormat.parse(systemTime)
+            return if (current_time.after(endtime) && current_time.before(starttime)) {
+                println("Yes")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+
+        }
+        return false
+    }
+
+    fun getHourNoExtension(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh", Locale.ENGLISH)
 
@@ -107,7 +157,7 @@ class FormatHelper {
 
     }
 
-     fun getDayName(date: String): String {
+    fun getDayName(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
@@ -117,7 +167,7 @@ class FormatHelper {
 
     }
 
-     fun getMonthName(date: String): String {
+    fun getMonthName(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("MMM", Locale.ENGLISH)
@@ -126,6 +176,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun getRefinedDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
@@ -136,10 +187,30 @@ class FormatHelper {
 
     }
 
+    fun getSimpleDate(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
     fun extractDateString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun extractTimeString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()

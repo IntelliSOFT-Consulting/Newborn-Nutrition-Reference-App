@@ -158,6 +158,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
@@ -259,6 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -359,6 +361,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/action_percent"
+                        android:visibility="gone"
                         android:textAlignment="center"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                         android:textColor="@color/success_stroke_color" />
@@ -449,6 +452,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
@@ -549,6 +553,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -595,11 +600,33 @@
                     android:text="@string/app_total_term"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/total_term_chart"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:padding="@dimen/_5dp" />
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="-90"
+                        android:text="@string/dhm_volume"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintHeight_percent="0.01"
+                        app:layout_constraintWidth_percent="0.1" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/total_term_chart"
+                        android:layout_width="0dp"
+                        android:layout_height="400dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView1"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -229,11 +229,17 @@ class BabyLactationFragment : Fragment() {
                 }
             }
         }
-        if (isNetworkAvailable(requireContext())) {
-            loadData()
-        } else {
-            syncLocal()
+        patientDetailsViewModel.getExpressions()
+        patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) {
+            if (it != null) {
+                populateBarChart(it)
+            }
         }
+        /* if (isNetworkAvailable(requireContext())) {
+             loadData()
+         } else {
+             syncLocal()
+         }*/
 
     }
 
@@ -242,8 +248,12 @@ class BabyLactationFragment : Fragment() {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                FhirApplication.updateLocalFeeding(requireContext(), json)
-                populateBarChart(it)
+                try {
+                    FhirApplication.updateLocalFeeding(requireContext(), json)
+                    populateBarChart(it)
+                } catch (e: Exception) {
+
+                }
             } else {
                 syncLocal()
             }

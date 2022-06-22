@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.screens.dashboard.prescription
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +45,7 @@ class BabyFeedsFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyFeedsFragmentArgs by navArgs()
+    private lateinit var careId: String
     private val binding
         get() = _binding!!
 
@@ -158,7 +161,11 @@ class BabyFeedsFragment : Fragment() {
             Timber.d("Prescriptions has " + it.count() + " records")
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
+                val value = it.first().id.toString()
+                careId = value.drop(10)
+                Timber.d("Encounter Found $careId ")
             }
+
             binding.pbLoadingTwo.visibility = View.GONE
             adapter.submitList(it)
         }
@@ -182,9 +189,8 @@ class BabyFeedsFragment : Fragment() {
                 val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(
-                        BabyFeedsFragmentDirections.navigateToAddPrescription(
-                            args.patientId,
-                            "Edit Prescription"
+                        BabyFeedsFragmentDirections.navigateToEditPrescription(
+                            args.patientId, careId
                         )
                     )
                 } else {
@@ -212,7 +218,12 @@ class BabyFeedsFragment : Fragment() {
         return false
     }
 
-    private fun onPrescriptionItemClick(prescriptionItem: PrescriptionItem) {
+    private fun onPrescriptionItemClick(item: PrescriptionItem) {
+        startActivity(
+            Intent(requireContext(), HistoryActivity::class.java)
+                .putExtra("careId", item.resourceId)
+                .putExtra("patientId", args.patientId)
+        )
 
     }
 

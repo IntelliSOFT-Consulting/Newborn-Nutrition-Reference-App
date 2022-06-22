@@ -352,6 +352,20 @@
     <string name="app_zero">0</string>
     <string name="app_zero_mls">0 ml</string>
     <string name="number_of_babies">Number of Babies</string>
+    <string name="number_of_mothers">Number of mothers</string>
+    <string name="dhm_volume">Volume of DHM</string>
+    <string name="remarks">Feeding Remarks</string>
+    <string name="changer">Change Prescription</string>
+    <string name="total_taken">Total Taken</string>
+    <string name="tv_vomit">Vomit</string>
+    <string name="stool">Stool</string>
+    <string name="diaper">Diaper Changed</string>
+    <string name="monitoring"><![CDATA[Feeding & Monitoring]]></string>
+    <string name="edit_baby">Edit Baby</string>
+    <string name="action_start">From Date</string>
+    <string name="action_to">To Date</string>
+    <string name="menu_preterm">Preterm DHM</string>
+    <string name="menu_term">Term DHM</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Patient Name</item>
@@ -367,7 +381,7 @@
 
 </resources>
 
-<!--
+    <!--
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -391,4 +405,4 @@
                                 android:layout_weight="1.6" />
                         </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--    -->
+    <!--    -->

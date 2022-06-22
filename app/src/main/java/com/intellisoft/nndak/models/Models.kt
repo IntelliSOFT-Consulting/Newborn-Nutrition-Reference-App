@@ -46,7 +46,9 @@ data class ObservationItem(
     val id: String,
     val code: String,
     val effective: String,
-    val value: String
+    val quantity: String,
+    val value: String,
+    val encounterId: String
 ) {
     override fun toString(): String = code
 }
@@ -79,23 +81,6 @@ data class NutritionItem(
     override fun toString(): String = id
 }
 
-
-data class DbObservations(
-    val value: String,
-    val title: String
-)
-
-data class ApGar(
-    val score: String,
-    val message: String,
-    val isSafe: Boolean
-)
-
-data class Steps(
-    val fistIn: String?,
-    val lastIn: String?,
-    val secondButton: Boolean?
-)
 
 data class OrdersItem(
     val id: String,
@@ -278,6 +263,7 @@ data class CareItem(
     val patientId: String,
     val encounterId: String,
     val status: String,
+    val created: String,
 ) {
     override fun toString(): String = resourceId
 }

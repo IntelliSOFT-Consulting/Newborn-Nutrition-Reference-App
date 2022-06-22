@@ -1,5 +1,8 @@
 package com.intellisoft.nndak.screens.dashboard
 
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -19,9 +22,9 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
@@ -33,7 +36,9 @@ import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.PieItem
 import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
+import kotlinx.android.synthetic.main.fragment_landing.view.*
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
@@ -59,6 +64,11 @@ class StatisticsFragment : Fragment() {
     private var totalTerm: Int = 0
     private var totalPreTerm: Int = 0
     private var totalBabies: Int = 0
+    private lateinit var mCalendar: Calendar
+    private lateinit var mSdf: SimpleDateFormat
+    private lateinit var dateSetListener: OnDateSetListener
+    private lateinit var startDate: String
+    private lateinit var endDate: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,6 +100,9 @@ class StatisticsFragment : Fragment() {
                 )
             ).get(PatientListViewModel::class.java)
         syncLocalData()
+        checkCurrentDevice()
+        updateDateSelection()
+
 
 
         if (isNetworkAvailable(requireContext())) {
@@ -97,7 +110,51 @@ class StatisticsFragment : Fragment() {
         } else {
             syncLocalData()
         }
+    }
 
+    private fun updateDateSelection() {
+        val current = SimpleDateFormat("dd/MM/yyyy").format(System.currentTimeMillis())
+        startDate = current
+        endDate = current
+
+        binding.apply {
+            btnStart.text = "From $current"
+            btnEnd.text = "To $current"
+            btnStart.setOnClickListener {
+                showPopUp(btnStart, "From ")
+
+            }
+            btnEnd.setOnClickListener {
+                showPopUp(btnEnd, "End ")
+            }
+        }
+
+    }
+
+    private fun showPopUp(btnEnd: MaterialButton, label: String) {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { view, myear, mmonth, mdayOfMonth ->
+                btnEnd.text = "$label $mdayOfMonth/$mmonth/$myear"
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.datePicker.maxDate = Date().time
+        datePickerDialog.show()
+    }
+
+
+    private fun checkCurrentDevice() {
+        if (isTablet(requireContext())) {
+            binding.textView.visibility = View.VISIBLE
+            binding.textView1.visibility = View.VISIBLE
+        }
     }
 
     private fun syncLocalData() {
@@ -115,32 +172,58 @@ class StatisticsFragment : Fragment() {
         }
     }
 
-    private fun updateUI(it: Statistics) {
-        binding.apply {
-            incData.tvTotal.text = it.totalBabies
-            incData.tvPreterm.text = it.preterm
-            incData.tvTerm.text = it.totalBabies
-            incData.tvAverage.text = it.averageDays
-            tvRate.text = getString(R.string.app_mortality).replace("0", it.mortalityRate.rate)
+    private fun checkIfFragmentAttached(operation: Context.() -> Unit) {
+        if (isAdded && context != null) {
+            operation(requireContext())
         }
-        populateFeedingTime(it.firstFeeding)
-        populateFeedsPercentage(it.percentageFeeds)
-        populateMortality(it.mortalityRate.data)
-        populateExpressingTimes(it.expressingTime)
+    }
+
+    private fun updateUI(it: Statistics) {
+        checkIfFragmentAttached {
+            binding.apply {
+                incData.tvTotal.text = it.totalBabies
+                incData.tvPreterm.text = it.preterm
+                incData.tvTerm.text = it.term
+                incData.tvAverage.text = it.averageDays
+                tvRate.text = getString(R.string.app_mortality).replace("0", it.mortalityRate.rate)
+
+                /**
+                 * Calculate the Rates
+                 **/
+
+                val prePercentage = (it.preterm.toDouble() / it.totalBabies.toDouble()) * 100
+                val termPercentage = (it.term.toDouble() / it.totalBabies.toDouble()) * 100
+                incData.tvPreAverage.text = prePercentage.toString()
+                incData.tvTermAverage.text = termPercentage.toString()
+
+                incData.pbTerm.progress = termPercentage.toInt()
+                incData.pbPreTerm.progress = prePercentage.toInt()
+            }
+            populateFeedingTime(it.firstFeeding)
+            populateFeedsPercentage(it.percentageFeeds)
+            populateMortality(it.mortalityRate.data)
+            populateExpressingTimes(it.expressingTime)
+        }
     }
 
     private fun loadLiveData() {
+
         apiService.loadStatistics(requireContext()) {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Timber.e("Local Sync Dara $json")
-                FhirApplication.updateStatistics(requireContext(), json)
-                updateUI(it)
+                try {
+                    FhirApplication.updateStatistics(requireContext(), json)
+                    updateUI(it)
+                } catch (e: Exception) {
+
+                }
             } else {
                 Timber.e("Failed to Load Data")
                 syncLocalData()
             }
+
         }
 
     }
@@ -258,7 +341,7 @@ class StatisticsFragment : Fragment() {
                 mortality.add(Entry(i.toFloat(), value.toFloat()))
             }
 
-            val mRate = LineDataSet(mortality, "Mortality Rate")
+            val mRate = LineDataSet(mortality, "")
             mRate.setColors(Color.parseColor("#F65050"))
             mRate.fillColor = Color.parseColor("#F65050")
             //  mRate.fillAlpha = 10
@@ -279,7 +362,7 @@ class StatisticsFragment : Fragment() {
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
             xAxis.setLabelCount(rates.size, true)
 
-            binding.mortalityChart.legend.isEnabled = true
+            binding.mortalityChart.legend.isEnabled = false
 
             //remove description label
             binding.mortalityChart.description.isEnabled = false

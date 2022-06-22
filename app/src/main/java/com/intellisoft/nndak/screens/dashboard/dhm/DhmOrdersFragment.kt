@@ -44,6 +44,7 @@ import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import timber.log.Timber
 
 
@@ -94,6 +95,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
             val adapter = OrdersAdapter(this::onOrderClick)
             recyclerView.adapter = adapter
+
             recyclerView.addItemDecoration(
 
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {

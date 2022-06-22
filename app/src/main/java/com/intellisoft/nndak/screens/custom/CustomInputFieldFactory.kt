@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.FOCUS_DOWN
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.NumberPicker
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.fhir.datacapture.validation.ValidationResult
 import com.google.android.fhir.datacapture.validation.getSingleStringValidationMessage
@@ -18,6 +19,39 @@ import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.R
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.StringType
+
+object CustomNumberPickerFactory : QuestionnaireItemViewHolderFactory(R.layout.custom_layout) {
+    override fun getQuestionnaireItemViewHolderDelegate(): QuestionnaireItemViewHolderDelegate =
+        object : QuestionnaireItemViewHolderDelegate {
+            private lateinit var numberPicker: NumberPicker
+            override lateinit var questionnaireItemViewItem: QuestionnaireItemViewItem
+
+            override fun init(itemView: View) {
+                /**
+                 * Call the [QuestionnaireItemViewHolderDelegate.onAnswerChanged] function when the widget
+                 * is interacted with and answer is changed by user input
+                 */
+                numberPicker = itemView.findViewById(R.id.number_picker)
+            }
+
+            override fun bind(questionnaireItemViewItem: QuestionnaireItemViewItem) {
+                numberPicker.minValue = 1
+                numberPicker.maxValue = 100
+            }
+
+            override fun displayValidationResult(validationResult: ValidationResult) {
+                // Custom validation message
+            }
+
+            override fun setReadOnly(isReadOnly: Boolean) {
+                numberPicker.isEnabled = !isReadOnly
+            }
+        }
+
+    const val WIDGET_EXTENSION = "http://dummy-widget-type-extension"
+    const val WIDGET_TYPE = "number-picker"
+}
+/*
 
 object CustomInputFieldFactory :
     QuestionnaireItemViewHolderFactory(R.layout.custom_edittext_layout) {
@@ -95,4 +129,4 @@ object CustomInputFieldFactory :
 
     const val WIDGET_EXTENSION = "http://dummy-widget-type-extension"
     const val WIDGET_TYPE = "number-picker"
-}
+}*/

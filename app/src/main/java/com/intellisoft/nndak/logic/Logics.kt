@@ -37,6 +37,17 @@ class Logics {
         const val CURRENT_WEIGHT = "3141-9"
         const val EBM = "226790003"
         const val FEEDS_TAKEN = "Total-Taken"
+        const val DIAPER_CHANGED = "Diaper-Changed"
+        const val DHM_VOLUME = "DHM-Volume"
+        const val IV_VOLUME = "IV-Volume"
+        const val EBM_VOLUME = "EBM-Volume"
+        const val STOOL = "Stool"
+        const val ADJUST_PRESCRIPTION = "Adjust-Prescription"
+        const val FEEDS_DEFICIT = "Feeds-Deficit"
+        const val VOMIT = "Vomit"
+        const val REMARKS = "Additional-Notes"
+        const val EXPRESSED_MILK = "226790003"
+        const val EXPRESSION_TIME = "Time-Expressed"
 
         /**
          * 104-9 Code

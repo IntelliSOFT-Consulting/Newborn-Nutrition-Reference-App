@@ -75,6 +75,9 @@
         <action
             android:id="@+id/navigate_to_babies_panel"
             app:destination="@id/babiesFragment" />
+        <action
+            android:id="@+id/navigate_to_edit_baby"
+            app:destination="@id/editBabyFragment" />
     </fragment>
     <fragment
         android:id="@+id/babyDashboardFragment"
@@ -112,7 +115,7 @@
     <fragment
         android:id="@+id/babyMonitoringFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.child.BabyMonitoringFragment"
-        android:label="fragment_baby_monitoring"
+        android:label="@string/monitoring"
         tools:layout="@layout/fragment_baby_monitoring">
         <argument
             android:name="patient_id"
@@ -146,7 +149,16 @@
         android:id="@+id/editPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
         android:label="EditPrescriptionFragment"
-        tools:layout="@layout/fragment_add_prescription" />
+        tools:layout="@layout/fragment_add_prescription">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
+        <argument
+            android:name="encounter_id"
+            app:argType="string" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/dhmOrdersFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.dhm.DhmOrdersFragment"
@@ -225,6 +237,15 @@
         <action
             android:id="@+id/navigate_to_statistics"
             app:destination="@id/statisticsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editBabyFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.child.EditBabyFragment"
+        android:label="@string/edit_baby"
+        tools:layout="@layout/fragment_edit_baby">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
     </fragment>
 
 </navigation>

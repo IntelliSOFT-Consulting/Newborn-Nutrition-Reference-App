@@ -22,6 +22,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +75,7 @@ class RegistrationFragment : Fragment() {
             resources.getString(R.string.app_confirm_message)
         )
         successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered),false
+            this::proceedClick, resources.getString(R.string.app_client_registered), false
         )
         patientId = generateUuid()
 
@@ -133,11 +134,12 @@ class RegistrationFragment : Fragment() {
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "client-registration.json")
+//        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "gtable.json")
     }
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = QuestionnaireFragment()
+            val fragment =QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

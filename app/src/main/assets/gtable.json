@@ -1,0 +1,821 @@
+{
+  "status": "draft",
+  "resourceType": "Questionnaire",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire|2.7"
+    ],
+    "tag": [
+      {
+        "code": "lformsVersion: 29.2.1"
+      }
+    ]
+  },
+  "item": [
+    {
+      "type": "group",
+      "code": [
+        {
+          "code": "48798-3",
+          "display": "First trimester maternal screen panel - Serum or Plasma",
+          "system": "http://loinc.org"
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "gtable",
+                "display": "Group Table"
+              }
+            ],
+            "text": "Group Table"
+          }
+        }
+      ],
+      "required": false,
+      "linkId": "/48798-3",
+      "text": "First trimester maternal screen panel - Serum or Plasma",
+      "item": [
+        {
+          "type": "group",
+          "code": [
+            {
+              "code": "49087-0",
+              "display": "Mat scn clin predictors Pnl Patient",
+              "system": "http://loinc.org"
+            }
+          ],
+          "required": false,
+          "linkId": "/49087-0",
+          "text": "Mat scn clin predictors Pnl Patient",
+          "item": [
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "30525-0",
+                  "display": "Age",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "a"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/30525-0",
+              "text": "Age"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "43993-5",
+                  "display": "Age at delivery",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "a"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/43993-5",
+              "text": "Age at delivery"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "11778-8",
+                  "display": "Deliv date Clin est",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/11778-8",
+              "text": "Deliv date Clin est",
+              "item": [
+                {
+                  "text": "Delivery date for patient selected by practitioner using all pertinent information.",
+                  "type": "display",
+                  "linkId": "/49087-0/11778-8-help",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "text": "Help-Button",
+                        "coding": [
+                          {
+                            "code": "help",
+                            "display": "Help-Button",
+                            "system": "http://hl7.org/fhir/questionnaire-item-control"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "11977-6",
+                  "display": "Parity",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{#}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/11977-6",
+              "text": "Parity",
+              "item": [
+                {
+                  "text": "Total number of times the uterus has been emptied of viable offspring.",
+                  "type": "display",
+                  "linkId": "/49087-0/11977-6-help",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "text": "Help-Button",
+                        "coding": [
+                          {
+                            "code": "help",
+                            "display": "Help-Button",
+                            "system": "http://hl7.org/fhir/questionnaire-item-control"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "11996-6",
+                  "display": "Pregnancies",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{#}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/11996-6",
+              "text": "Pregnancies",
+              "item": [
+                {
+                  "text": "Total number of times the patient has been pregnant including the present pregnancy",
+                  "type": "display",
+                  "linkId": "/49087-0/11996-6-help",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "text": "Help-Button",
+                        "coding": [
+                          {
+                            "code": "help",
+                            "display": "Help-Button",
+                            "system": "http://hl7.org/fhir/questionnaire-item-control"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "21484-1",
+                  "display": "Mother's race",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/21484-1",
+              "text": "Mother's race",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA6155-1",
+                    "display": "American Indian or Alaska Native"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA6156-9",
+                    "display": "Asian"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA10610-6",
+                    "display": "Black or African American"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA10611-4",
+                    "display": "Native Hawaiian or Other Pacific Islander"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA4457-3",
+                    "display": "White"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA4489-6",
+                    "display": "Unknown"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "21112-8",
+                  "display": "Birth date",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{mm/dd/yyyy}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/21112-8",
+              "text": "Birth date"
+            },
+            {
+              "type": "quantity",
+              "code": [
+                {
+                  "code": "29463-7",
+                  "display": "Weight",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "kilograms"
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+                  "valueCoding": {
+                    "display": "pounds"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/29463-7",
+              "text": "Weight"
+            },
+            {
+              "type": "choice",
+              "code": [
+                {
+                  "code": "32624-9",
+                  "display": "Race",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "drop-down",
+                        "display": "Drop down"
+                      }
+                    ],
+                    "text": "Drop down"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/32624-9",
+              "text": "Race",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA6155-1",
+                    "display": "American Indian or Alaska Native"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA6156-9",
+                    "display": "Asian"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA10610-6",
+                    "display": "Black or African American"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA10611-4",
+                    "display": "Native Hawaiian or Other Pacific Islander"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA4457-3",
+                    "display": "White"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA4489-6",
+                    "display": "Unknown"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "18185-9",
+                  "display": "GA",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "wk"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/18185-9",
+              "text": "GA"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "21299-3",
+                  "display": "GA method",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/21299-3",
+              "text": "GA method"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "11878-6",
+                  "display": "# Fetuses US",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{#}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/11878-6",
+              "text": "# Fetuses US"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "8665-2",
+                  "display": "LMP Start date",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{date}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/8665-2",
+              "text": "LMP Start date"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "34970-4",
+                  "display": "US Date",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/34970-4",
+              "text": "US Date"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "33248-6",
+                  "display": "Diabetes status Patient",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/33248-6",
+              "text": "Diabetes status Patient"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "44877-9",
+                  "display": "IDDM Patient Ql",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/44877-9",
+              "text": "IDDM Patient Ql"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "49053-2",
+                  "display": "Hx of NTD Narr",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/49053-2",
+              "text": "Hx of NTD Narr"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "68327-6",
+                  "display": "Egg donor age",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "a"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/68327-6",
+              "text": "Egg donor age"
+            },
+            {
+              "type": "string",
+              "code": [
+                {
+                  "code": "68328-4",
+                  "display": "Prev fetus defect",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "required": false,
+              "linkId": "/49087-0/68328-4",
+              "text": "Prev fetus defect"
+            },
+            {
+              "text": "Information provided to the laboratory when maternal screen tests are ordered. These observations assist in the risk calculations for fetal abnormalities such as Open Neural Tube Defects, Trisomy 21 (Down's Syndrome) and Trisomy 18 (Edward's syndrome).",
+              "type": "display",
+              "linkId": "/49087-0-help",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "text": "Help-Button",
+                    "coding": [
+                      {
+                        "code": "help",
+                        "display": "Help-Button",
+                        "system": "http://hl7.org/fhir/questionnaire-item-control"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "19080-1",
+              "display": "HCG SerPl-aCnc",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "m[IU]/mL"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/19080-1",
+          "text": "HCG SerPl-aCnc"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "20465-1",
+              "display": "HCG MoM SerPl",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{M.o.M}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/20465-1",
+          "text": "HCG MoM SerPl"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "32166-1",
+              "display": "HCG adj MoM SerPl",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{M.o.M}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/32166-1",
+          "text": "HCG adj MoM SerPl"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "48407-1",
+              "display": "PAPP-A SerPl-mCnc",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "ng/mL"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/48407-1",
+          "text": "PAPP-A SerPl-mCnc"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "32123-2",
+              "display": "PAPP-A MoM SerPl",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{M.o.M}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/32123-2",
+          "text": "PAPP-A MoM SerPl"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "43995-0",
+              "display": "Ts 21 risk Fetus",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{risk}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/43995-0",
+          "text": "Ts 21 risk Fetus"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "49090-4",
+              "display": "Fet Ts 21 risk from Mat age",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{risk}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/49090-4",
+          "text": "Fet Ts 21 risk from Mat age"
+        },
+        {
+          "type": "string",
+          "code": [
+            {
+              "code": "49583-8",
+              "display": "Ts 21 risk CtO Fetus",
+              "system": "http://loinc.org"
+            }
+          ],
+          "required": false,
+          "linkId": "/49583-8",
+          "text": "Ts 21 risk CtO Fetus"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "43994-3",
+              "display": "Ts 18 risk Fetus",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{risk}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/43994-3",
+          "text": "Ts 18 risk Fetus"
+        },
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "47223-3",
+              "display": "Fet Ts 18 risk from Mat age",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "valueCoding": {
+                "display": "{risk}"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/47223-3",
+          "text": "Fet Ts 18 risk from Mat age"
+        },
+        {
+          "type": "string",
+          "code": [
+            {
+              "code": "49582-0",
+              "display": "Ts 18 risk CtO Fetus",
+              "system": "http://loinc.org"
+            }
+          ],
+          "required": false,
+          "linkId": "/49582-0",
+          "text": "Ts 18 risk CtO Fetus"
+        },
+        {
+          "text": "First trimester screening test is performed between 11-13 weeks of gestation to screen for pregnancies with increased risks for Down Syndrome or trisomy 18. Three marker levels and maternal age are used in the calculation of such risks. Two of thee markers are biochemical (PAPP-A and HCG total) and the third is an ultrasound measurement of the fetal nuchal translucency (NT).",
+          "type": "display",
+          "linkId": "/48798-3-help",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "text": "Help-Button",
+                "coding": [
+                  {
+                    "code": "help",
+                    "display": "Help-Button",
+                    "system": "http://hl7.org/fhir/questionnaire-item-control"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

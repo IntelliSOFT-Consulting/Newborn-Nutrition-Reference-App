@@ -89,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="end"
+                    android:visibility="invisible"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -113,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
+                    android:visibility="invisible"
                     android:padding="@dimen/_15dp"
                     android:progress="40" />
             </LinearLayout>
@@ -204,7 +206,7 @@
                         android:layout_width="@dimen/_15dp"
                         android:layout_height="@dimen/_15dp"
                         app:srcCompat="@drawable/ic_show_chart"
-                        app:tint="@color/design_default_color_error" />
+                        app:tint="@color/dim_green" />
 
                     <TextView
                         android:id="@+id/tv_pre_average"
@@ -212,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/design_default_color_error" />
+                        android:textColor="@color/dim_green" />
 
 
                 </LinearLayout>
@@ -323,14 +325,14 @@
                         android:layout_width="@dimen/_15dp"
                         android:layout_height="@dimen/_15dp"
                         app:srcCompat="@drawable/ic_show_chart"
-                        app:tint="@color/design_default_color_error" />
+                        app:tint="@color/dim_green" />
 
                     <TextView
                         android:id="@+id/tv_term_average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/design_default_color_error" />
+                        android:textColor="@color/dim_green" />
 
 
                 </LinearLayout>
@@ -427,6 +429,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="end"
+                    android:visibility="invisible"
                     android:orientation="horizontal">
 
                     <ImageView
