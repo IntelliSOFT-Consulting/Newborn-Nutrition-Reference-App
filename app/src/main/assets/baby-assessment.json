@@ -19,136 +19,78 @@
   ],
   "item": [
     {
-      "linkId": "Baby-Assessment",
+      "linkId": "Assessment-Date",
       "type": "group",
-      "text": "",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "mha"
+            "name": "doneStatus"
           }
         }
       ],
       "item": [
         {
-          "linkId": "Assessment-Date",
-          "type": "group",
-          "extension": [
+          "type": "dateTime",
+          "code": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
+              "code": "50786-3",
+              "display": "Assessment Date Time",
+              "system": "http://loinc.org/modified"
             }
           ],
-          "item": [
-            {
-              "type": "dateTime",
-              "code": [
-                {
-                  "code": "50786-3",
-                  "display": "Assessment Date Time",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/50786-3",
-              "text": "Assessment Date Time"
-            }
-          ]
-        },
+          "required": true,
+          "linkId": "/50786-3",
+          "text": "Assessment Date Time"
+        }
+      ]
+    },
+    {
+      "linkId": "Current-Weight",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Current-Weight",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
-            }
-          ],
-          "item": [
-            {
-              "type": "quantity",
-              "code": [
-                {
-                  "code": "3141-9",
-                  "display": "Current Weight",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-                  "valueCoding": {
-                    "display": "[lb_av]"
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-                  "valueCoding": {
-                    "display": "kg"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/3141-9",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Current Weight (gm)",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
         {
-          "linkId": "Baby-Well",
-          "type": "group",
+          "type": "quantity",
+          "code": [
+            {
+              "code": "3141-9",
+              "display": "Current Weight",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
               }
             }
           ],
+          "required": true,
+          "linkId": "/3141-9",
           "item": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "71195-2",
-                  "display": "Baby is Well",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
+              "linkId": "4.1",
+              "text": "Current Weight (gm)",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -156,98 +98,64 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/71195-2",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Baby is Well",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ],
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                      "valueDecimal": 0
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6568-5",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    },
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                      "valueDecimal": 1
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA13863-8",
-                    "display": "No"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Baby-Well",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Asphyxia",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "71195-2",
+              "display": "Baby is Well",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
+          "required": true,
+          "linkId": "/71195-2",
           "item": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "45735-8",
-                  "display": "Asphyxia",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
+              "linkId": "4.1",
+              "text": "Baby is Well",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -255,90 +163,98 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/45735-8",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Asphyxia",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ],
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA32-8",
-                    "display": "No"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA33-6",
-                    "display": "Yes"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
+          ],
+          "answerOption": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                  "valueDecimal": 0
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6568-5",
+                "display": "Yes"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                  "valueDecimal": 1
+                }
+              ],
+              "valueCoding": {
+                "code": "LA13863-8",
+                "display": "No"
+              }
+            }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Asphyxia",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Jaundice",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "45735-8",
+              "display": "Asphyxia",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
+          "required": true,
+          "linkId": "/45735-8",
           "item": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "45736-6",
-                  "display": "Jaundice",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
+              "linkId": "4.1",
+              "text": "Asphyxia",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -346,90 +262,90 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/45736-6",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Jaundice",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ],
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA32-8",
-                    "display": "No"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA33-6",
-                    "display": "Yes"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
+          ],
+          "answerOption": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA32-8",
+                "display": "No"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA33-6",
+                "display": "Yes"
+              }
+            }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Jaundice",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Neonatal-Sepsis",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "45736-6",
+              "display": "Jaundice",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
+          "required": true,
+          "linkId": "/45736-6",
           "item": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "45755-8",
-                  "display": "Neonatal Sepsis",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
+              "linkId": "4.1",
+              "text": "Jaundice",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -437,90 +353,90 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/45755-8",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Neonatal Sepsis",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ],
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA32-8",
-                    "display": "No"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA33-6",
-                    "display": "Yes"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
+          ],
+          "answerOption": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA32-8",
+                "display": "No"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA33-6",
+                "display": "Yes"
+              }
+            }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Neonatal-Sepsis",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Breast-Problem",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "45755-8",
+              "display": "Neonatal Sepsis",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
+          "required": true,
+          "linkId": "/45755-8",
           "item": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "Breast-Problem",
-                  "display": "Does mother have any breast problems?",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
+              "linkId": "4.1",
+              "text": "Neonatal Sepsis",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -528,94 +444,240 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/Breast-Problem",
-              "text": "Does mother have any breast problems?",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "None",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Engorged Breasts",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Sore Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Cracked Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Bleeding Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Inverted Nipples",
-                    "system": "http://snomed.info/sct"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "Breast Problems",
-                    "display": "Flat Nipples",
-                    "system": "http://snomed.info/sct"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
+          ],
+          "answerOption": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA32-8",
+                "display": "No"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA33-6",
+                "display": "Yes"
+              }
+            }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Breast-Problem",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Mother-Well",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Breast-Problem",
+              "display": "Does mother have any breast problems?",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
-          "item": [
+          "required": true,
+          "linkId": "/Breast-Problem",
+          "text": "Does mother have any breast problems?",
+          "answerOption": [
             {
-              "type": "choice",
-              "code": [
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "None",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Engorged Breasts",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Sore Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Cracked Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Bleeding Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Inverted Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast Problems",
+                "display": "Flat Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Mother-Well",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Mother-Well",
+              "display": "Is the Mother Well?",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Mother-Well",
+          "text": "Is the Mother Well?",
+          "answerOption": [
+            {
+              "extension": [
                 {
-                  "code": "Mother-Well",
-                  "display": "Is the Mother Well?",
-                  "system": "http://loinc.org/modified"
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
                 }
               ],
+              "valueCoding": {
+                "code": "PB6133-8",
+                "display": "Yes"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "PB6128-8",
+                "display": "No"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Other-Conditions",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "string",
+          "code": [
+            {
+              "code": "45766-6",
+              "display": "Other Conditions",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "required": true,
+          "linkId": "/457736-6",
+          "item": [
+            {
+              "linkId": "4.1",
+              "text": "Other Conditions",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -623,199 +685,226 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/Mother-Well",
-              "text": "Is the Mother Well?",
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "PB6133-8",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "PB6128-8",
-                    "display": "No"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Baby-Fed",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Other-Conditions",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "46556-7",
+              "display": "Has baby been fed within 1 Hour after Birth?",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
-          "item": [
+          "required": true,
+          "linkId": "/46556-7",
+          "text": "Has baby been fed within 1 Hour after Birth?",
+          "answerOption": [
             {
-              "type": "string",
-              "code": [
-                {
-                  "code": "45766-6",
-                  "display": "Other Conditions",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/457736-6",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Other Conditions",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "Baby-Fed",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
-            }
-          ],
-          "item": [
-            {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "46556-7",
-                  "display": "Has baby been fed within 1 Hour after Birth?",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
                 }
               ],
-              "required": true,
-              "linkId": "/46556-7",
-              "text": "Has baby been fed within 1 Hour after Birth?",
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6133-8",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6128-8",
-                    "display": "No"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "Fed-After",
-          "type": "group",
-          "enableWhen": [
+              "valueCoding": {
+                "code": "LA6133-8",
+                "display": "Yes"
+              }
+            },
             {
-              "question": "/46556-7",
-              "operator": "=",
-              "answerCoding": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
                 "code": "LA6128-8",
                 "display": "No"
               }
             }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Fed-After",
+      "type": "group",
+      "enableWhen": [
+        {
+          "question": "/46556-7",
+          "operator": "=",
+          "answerCoding": {
+            "code": "LA6128-8",
+            "display": "No"
+          }
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "4658856-7",
+              "display": "If not, when was baby's first feed?",
+              "system": "http://loinc.org/modified"
+            }
           ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
-          "item": [
+          "required": true,
+          "linkId": "/46556-70",
+          "text": "If not, when was baby's first feed?",
+          "answerOption": [
             {
-              "type": "choice",
-              "code": [
+              "extension": [
                 {
-                  "code": "4658856-7",
-                  "display": "If not, when was baby's first feed?",
-                  "system": "http://loinc.org/modified"
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
                 }
               ],
+              "valueCoding": {
+                "code": "LA6133-8",
+                "display": "After 1 Hour"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6128-8",
+                "display": "After 2 Hours"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6128-8",
+                "display": "After 3 Hours"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Feed-Type",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "46557-5",
+              "display": "Type of feed",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/46557-5",
+          "item": [
+            {
+              "linkId": "4.1",
+              "text": "Type of Feed",
+              "type": "display",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -823,237 +912,131 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
                     ],
-                    "text": "Drop down"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/46556-70",
-              "text": "If not, when was baby's first feed?",
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6133-8",
-                    "display": "After 1 Hour"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6128-8",
-                    "display": "After 2 Hours"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6128-8",
-                    "display": "After 3 Hours"
+                    "text": "Flyover"
                   }
                 }
               ]
             }
-          ]
-        },
-        {
-          "linkId": "Feed-Type",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
-            }
           ],
-          "item": [
+          "answerOption": [
             {
-              "type": "choice",
-              "code": [
-                {
-                  "code": "46557-5",
-                  "display": "Type of feed",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
                 }
               ],
-              "required": true,
-              "linkId": "/46557-5",
-              "item": [
-                {
-                  "linkId": "4.1",
-                  "text": "Type of Feed",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
-                      }
-                    }
-                  ]
-                }
-              ],
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6133-8",
-                    "display": "Breast Feed"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6128-8",
-                    "display": "EBM"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "2"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6414-2",
-                    "display": "Term Formula"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "3"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6142-9",
-                    "display": "Pre-Term Formula"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "4"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6422-5",
-                    "display": "Term DHM"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "5"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6423-3",
-                    "display": "Pre-Term DHM"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "6"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LA6723-3",
-                    "display": "IV Fluid and Additives"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "Additional-Notes",
-          "type": "group",
-          "extension": [
+              "valueCoding": {
+                "code": "LA6133-8",
+                "display": "Breast Feed"
+              }
+            },
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6128-8",
+                "display": "EBM"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "2"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6414-2",
+                "display": "Term Formula"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "3"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6142-9",
+                "display": "Pre-Term Formula"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "4"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6422-5",
+                "display": "Term DHM"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "5"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6423-3",
+                "display": "Pre-Term DHM"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "6"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA6723-3",
+                "display": "IV Fluid and Additives"
               }
             }
-          ],
-          "item": [
-            {
-              "type": "string",
-              "code": [
-                {
-                  "code": "Additional-Notes",
-                  "display": "Additional-Notes",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/Additional-Notes",
-              "text": "Additional Notes and Remarks"
-            }
           ]
+        }
+      ]
+    },
+    {
+      "linkId": "Additional-Notes",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "string",
+          "code": [
+            {
+              "code": "Additional-Notes",
+              "display": "Additional-Notes",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "required": true,
+          "linkId": "/Additional-Notes",
+          "text": "Additional Notes and Remarks"
         }
       ]
     }

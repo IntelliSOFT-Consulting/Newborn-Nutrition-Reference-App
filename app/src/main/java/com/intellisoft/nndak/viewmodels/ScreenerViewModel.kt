@@ -35,6 +35,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
 import java.util.*
 
 const val TAG = "ScreenerViewModel"
@@ -162,10 +163,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
-                        val item = common.getJSONObject(i)
-                        val parent = item.getJSONArray("item")
-                        for (k in 0 until parent.length()) {
-                            val inner = parent.getJSONObject(k)
+                            val inner = common.getJSONObject(i)
                             val childChild = inner.getString("linkId")
                             Timber.e("Child $inner")
                             when (childChild) {
@@ -379,7 +377,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     }
                                 }
                             }
-                        }
+
 
                     }
 
@@ -583,6 +581,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             "Baby-State" -> {
                                 val state = extractResponseCode(inner, "valueCoding")
                                 if (state.isNotEmpty()) {
+
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
                                             "Baby-State",
@@ -2001,7 +2000,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      * Extract Observations, Patient Data
                      */
                     val qh = QuestionnaireHelper()
-
+                    var dateTime = ""
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
@@ -2043,15 +2042,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             if (childChild == "Time-Expressed") {
-                                val volume = extractResponse(inner, "valueDateTime")
-                                Timber.e("Time: $volume")
-                                if (volume.isNotEmpty()) {
+                                dateTime = extractResponse(inner, "valueDateTime")
+                                Timber.e("Date Collected $dateTime")
+                                if (dateTime.isNotEmpty()) {
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
                                             "Time-Expressed",
                                             "Time Expressed",
-                                            volume
+                                            dateTime
                                         )
                                     )
                                         .request.url = "Observation"
@@ -2060,24 +2059,37 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         }
 
                     }
-                    val value = retrieveUser(false)
+                    if (dateTime.isNotEmpty()) {
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Completed By",
-                                value,
-                                value
-                            )
-                        )
-                        .request.url = "Observation"
+                        val refineTime =
+                            FormatHelper().dateLessThanToday(dateTime.substring(0, 10))
 
-                    val encounterId = generateUuid()
-                    val subjectReference = Reference("Patient/$patientId")
-                    title = "Milk Expression"
-                    saveResources(bundle, subjectReference, encounterId, title)
-                    generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                    isResourcesSaved.postValue(true)
+                        if (refineTime) {
+                            val value = retrieveUser(false)
+
+                            bundle.addEntry()
+                                .setResource(
+                                    qh.codingQuestionnaire(
+                                        "Completed By",
+                                        value,
+                                        value
+                                    )
+                                )
+                                .request.url = "Observation"
+
+                            val encounterId = generateUuid()
+                            val subjectReference = Reference("Patient/$patientId")
+                            title = "Milk Expression"
+                            saveResources(bundle, subjectReference, encounterId, title)
+                            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                            isResourcesSaved.postValue(true)
+                        } else {
+                            isResourcesSaved.postValue(false)
+                        }
+                    } else {
+                        Timber.e("Time of Expression Empty ")
+                        isResourcesSaved.postValue(false)
+                    }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
@@ -2833,7 +2845,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireResponse: QuestionnaireResponse,
         patientId: String,
         orderId: String,
-        encounterId: String
+        encounterId: String,
+        dhmType: String
     ) {
         viewModelScope.launch {
             val bundle =
@@ -2844,7 +2857,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
-
+            var type = ""
             CoroutineScope(Dispatchers.IO).launch {
                 try {
 
@@ -2853,91 +2866,96 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
-                        val item = common.getJSONObject(i)
-                        val parent = item.getJSONArray("item")
-                        for (k in 0 until parent.length()) {
-                            val inner = parent.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $parent")
-                            when (childChild) {
+                        val inner = common.getJSONObject(i)
+                        val childChild = inner.getString("linkId")
+                        Timber.e("Child $common")
+                        when (childChild) {
 
-                                "Volume" -> {
-                                    val volume =
-                                        extractResponseQuantity(inner, "valueQuantity")
-                                    if (volume.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "Volume-Dispensed",
-                                                "Volume Dispensed",
-                                                "Volume Dispensed",
-                                                volume, "mls"
-                                            )
+                            "Volume" -> {
+                                val volume =
+                                    extractResponseQuantity(inner, "valueQuantity")
+                                if (volume.isNotEmpty()) {
+                                    bundle.addEntry().setResource(
+                                        qh.quantityQuestionnaire(
+                                            "Volume-Dispensed",
+                                            "Volume Dispensed",
+                                            "Volume Dispensed",
+                                            volume, "mls"
                                         )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "DHM-Type" -> {
-                                    val type = extractResponseCode(inner, "valueCoding")
-                                    if (type.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "DHM-Type",
-                                                "DHM Type",
-                                                type
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "Additional-Notes" -> {
-                                    val type = extractResponse(inner, "valueString")
-                                    if (type.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Additional-Notes",
-                                                "Additional Notes and Remarks",
-                                                type,
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-
-
-                                else -> {
-                                    println("Items skipped...")
+                                    )
+                                        .request.url = "Observation"
                                 }
                             }
+                            "DHM-Type" -> {
+                                type = extractResponseCode(inner, "valueCoding")
 
+                                if (type.isNotEmpty()) {
+
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "DHM-Type",
+                                            "DHM Type",
+                                            type
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+                            "Additional-Notes" -> {
+                                val notes = extractResponse(inner, "valueString")
+                                if (notes.isNotEmpty()) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            "Additional-Notes",
+                                            "Additional Notes and Remarks",
+                                            notes,
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+                            }
+                            else -> {
+                                println("Items skipped...")
+                            }
                         }
+
                     }
-                    val value = retrieveUser(false)
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Completed By",
-                                value,
-                                value
-                            )
-                        )
-                        .request.url = "Observation"
-                    val subjectReference = Reference("Patient/$patientId")
-                    val encounterReference = Reference("Encounter/$encounterId")
-                    title = "DHM Dispensing"
+                    if (type.isNotEmpty()) {
+                        if (dhmType.trim() == type.trim()) {
+                            val value = retrieveUser(false)
 
-                    val order = NutritionOrder()
-                    order.id = orderId
-                    order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
-                    order.patient = subjectReference
-                    order.encounter = encounterReference
-                    saveResourceToDatabase(order)
-                    saveResources(bundle, subjectReference, encounterId, title)
-                    isResourcesSaved.postValue(true)
+                            bundle.addEntry()
+                                .setResource(
+                                    qh.codingQuestionnaire(
+                                        "Completed By",
+                                        value,
+                                        value
+                                    )
+                                )
+                                .request.url = "Observation"
+                            val subjectReference = Reference("Patient/$patientId")
+                            val encounterReference = Reference("Encounter/$encounterId")
+                            title = "DHM Dispensing"
+
+                            val order = NutritionOrder()
+                            order.id = orderId
+                            order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
+                            order.patient = subjectReference
+                            order.encounter = encounterReference
+                            saveResourceToDatabase(order)
+                            saveResources(bundle, subjectReference, encounterId, title)
+                            customMessage.postValue(MessageItem(true, "Success"))
+                        } else {
+                            customMessage.postValue(MessageItem(false, "Please check the DHM Type"))
+                        }
+                    } else {
+                        customMessage.postValue(MessageItem(false, "Please check Input fields"))
+                    }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(MessageItem(false, "Please check Input fields"))
                     return@launch
 
                 }

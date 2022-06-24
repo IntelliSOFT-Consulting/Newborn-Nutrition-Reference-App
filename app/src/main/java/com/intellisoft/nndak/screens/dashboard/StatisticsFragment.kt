@@ -41,6 +41,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import kotlin.math.roundToInt
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -191,8 +192,8 @@ class StatisticsFragment : Fragment() {
                  * Calculate the Rates
                  **/
 
-                val prePercentage = (it.preterm.toDouble() / it.totalBabies.toDouble()) * 100
-                val termPercentage = (it.term.toDouble() / it.totalBabies.toDouble()) * 100
+                val prePercentage =((it.preterm.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
+                val termPercentage = ((it.term.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
                 incData.tvPreAverage.text = prePercentage.toString()
                 incData.tvTermAverage.text = termPercentage.toString()
 

@@ -120,7 +120,11 @@ class FormatHelper {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
 
-        val convertedDate = sourceFormat.parse(date)
+        val convertedDate = try {
+            sourceFormat.parse(date)
+        } catch (e: Exception) {
+            sourceFormat.parse(sourceFormat.format(Date()))
+        }
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
@@ -143,6 +147,31 @@ class FormatHelper {
             }
         } catch (e: ParseException) {
             e.printStackTrace()
+
+        }
+        return false
+    }
+
+    fun allowedDate(incoming: String): Boolean {
+
+        try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val dest = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val currentDate = dest.format(Date())
+            val incomingString = sdf.format(incoming.substring(0, 19))
+            val startTime = dest.parse(currentDate)
+            val endTime = dest.parse(incomingString)
+
+            return if (startTime.after(endTime)) {
+                println("Yes")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            Timber.e("Exception Formatter ${e.localizedMessage}")
 
         }
         return false

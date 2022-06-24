@@ -327,7 +327,7 @@ class BabyDashboardFragment : Fragment() {
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.labelRotationAngle = -45f
-            xAxis.mAxisMinimum = 1f
+            xAxis.mAxisMinimum = 0f
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
             // xAxis.setLabelCount(it.data.size, true)
 

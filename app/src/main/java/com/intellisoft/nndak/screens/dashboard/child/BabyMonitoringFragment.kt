@@ -23,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -31,7 +32,6 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBabyMonitoringBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.FeedingCuesTips
@@ -44,7 +44,6 @@ import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.android.synthetic.main.prescribe_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -67,8 +66,6 @@ class BabyMonitoringFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var feedingCues: TipsDialog
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
-    private lateinit var errorDialog: SuccessDialog
     private var totalV: Float = 0.0f
     private lateinit var careID: String
     private lateinit var deficit: String
@@ -132,13 +129,6 @@ class BabyMonitoringFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved), false
-        )
-        errorDialog = SuccessDialog(
-            this::exitBack, resources.getString(R.string.no_active), true
-        )
-
 
         binding.apply {
             breadcrumb.page.text =
@@ -224,7 +214,14 @@ class BabyMonitoringFragment : Fragment() {
                     }
                 } else {
                     exit = true
-                    errorDialog.show(childFragmentManager, "Confirm Action")
+                    SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                        .setTitleText("Error")
+                        .setContentText(resources.getString(R.string.no_active))
+                        .setCustomImage(R.drawable.smile)
+                        .setConfirmClickListener {
+                            exitBack()
+                        }
+                        .show()
                 }
             }
         }
@@ -434,7 +431,18 @@ class BabyMonitoringFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+          val dialog=  SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener {sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        exitBack()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
     }
 
@@ -547,13 +555,11 @@ class BabyMonitoringFragment : Fragment() {
     }
 
     private fun exitBack() {
-        errorDialog.dismiss()
         findNavController().navigateUp()
 
     }
 
     private fun proceedClick() {
-        successDialog.dismiss()
         if (exit) {
             findNavController().navigateUp()
         }

@@ -173,7 +173,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideDialog() {
-        progressDialog.dialog.dismiss()
+        if (progressDialog.dialog.isShowing) {
+            progressDialog.dialog.dismiss()
+        }
     }
 
     override fun onBackPressed() {

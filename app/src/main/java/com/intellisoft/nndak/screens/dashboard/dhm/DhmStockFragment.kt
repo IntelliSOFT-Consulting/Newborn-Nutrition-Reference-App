@@ -19,20 +19,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.hl7.fhir.r4.model.ServiceRequest
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,7 +45,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class DhmStockFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentDhmStockBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var pa: String
@@ -107,9 +104,7 @@ class DhmStockFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved), false
-        )
+
 
     }
 
@@ -226,10 +221,6 @@ class DhmStockFragment : Fragment() {
         }
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        findNavController().navigateUp()
-    }
 
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
@@ -245,7 +236,18 @@ class DhmStockFragment : Fragment() {
             }
 
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+          val dialog=  SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener {sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
 
     }

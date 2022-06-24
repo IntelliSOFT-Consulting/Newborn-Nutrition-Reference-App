@@ -77,11 +77,13 @@ class PatientDetailsViewModel(
 
         val expressions: MutableList<ExpressionData> = mutableListOf()
         val intervals = getPastHoursOnIntervalOf(8, 3)
+        var totalFeed = 0f
         intervals.forEach {
             val milk = getHourlyExpressions(it.toString())
+            totalFeed += milk.amount.toFloat()
             expressions.add(milk)
         }
-        return MilkExpression(totalFeed = "100", varianceAmount = "5", data = expressions)
+        return MilkExpression(totalFeed = "$totalFeed", varianceAmount = "5", data = expressions)
     }
 
     private suspend fun getHourlyExpressions(time: String): ExpressionData {
@@ -89,21 +91,23 @@ class PatientDetailsViewModel(
         val expressions = observationsPerCode(EXPRESSION_TIME)
         val sorted = sortCollected(expressions)
         sorted.forEach {
-            val actualTime = FormatHelper().getDateHourZone(it.value.trim())
+            try {
+                val actualTime = FormatHelper().getDateHourZone(it.value.trim())
 
-            val currentTime = FormatHelper().getDateHour(time)
-            val maxThree = FormatHelper().getHourRange(currentTime)
+                val currentTime = FormatHelper().getDateHour(time)
+                val maxThree = FormatHelper().getHourRange(currentTime)
 
-            val isWithinRange = FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
-            if (isWithinRange) {
-                val amounts = observationsPerCodeEncounter(EXPRESSED_MILK, it.encounterId)
-                amounts.forEach { data ->
-                    Timber.e("Total Amount ${data.quantity}")
-                    val qty = data.quantity.toFloat()
-                    quantity += qty
+                val isWithinRange = FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
+                if (isWithinRange) {
+                    val amounts = observationsPerCodeEncounter(EXPRESSED_MILK, it.encounterId)
+                    amounts.forEach { data ->
+                        val qty = data.quantity.toFloat()
+                        quantity += qty
+                    }
                 }
+            } catch (e: Exception) {
+
             }
-            Timber.e("Start $currentTime End $maxThree Expression $actualTime Within $isWithinRange")
         }
         val refinedTime = FormatHelper().getHour(time)
 
@@ -161,14 +165,16 @@ class PatientDetailsViewModel(
         val feeds: MutableList<FeedItem> = mutableListOf()
         intervals.forEach {
             val time = FormatHelper().getHour(it.toString())
+            val dayTime = FormatHelper().getDateHour(it.toString())
             times.add(time)
-            feeds.add(loadFeed(time))
+            feeds.add(loadFeed(dayTime))
         }
 
         return DistributionItem(time = times, feed = feeds)
     }
 
     private fun loadFeed(time: String): FeedItem {
+        Timber.e("Feeding Time $time")
         val iv = (13 until 50).random().toString()
         val ebm = (13 until 50).random().toString()
         val dhm = (13 until 50).random().toString()

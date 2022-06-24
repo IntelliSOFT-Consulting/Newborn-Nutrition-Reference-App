@@ -16,13 +16,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.FeedingCuesDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +43,6 @@ private const val ARG_PARAM2 = "param2"
 class BreastFeedingFragment : Fragment() {
     private lateinit var feedingCues: FeedingCuesDialog
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private lateinit var breastFeeding: String
     private lateinit var efficientFeeding: String
     private var exit: Boolean = true
@@ -131,9 +130,7 @@ class BreastFeedingFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved),false
-        )
+
 
     }
 
@@ -226,12 +223,6 @@ class BreastFeedingFragment : Fragment() {
 
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        if (exit) {
-            findNavController().navigateUp()
-        }
-    }
 
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
@@ -246,7 +237,23 @@ class BreastFeedingFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        if (exit) {
+                            try {
+                                findNavController().navigateUp()
+                            } catch (e: Exception) {
+                            }
+                        }
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
 
     }

@@ -202,7 +202,7 @@ class BabyLactationFragment : Fragment() {
                     response.appIpNumber.text = data.assessment.breastfeedingBaby
                     response.appMotherName.text = data.assessment.breastProblems
                     response.appBabyName.text = data.assessment.contraindicated
-                    tvTotalExpressed.text = data.assessment.totalExpressed
+//                    tvTotalExpressed.text = data.assessment.totalExpressed
 
                     val isSepsis = data.dashboard.neonatalSepsis
                     val isAsphyxia = data.dashboard.asphyxia
@@ -230,9 +230,13 @@ class BabyLactationFragment : Fragment() {
             }
         }
         patientDetailsViewModel.getExpressions()
-        patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) {
-            if (it != null) {
-                populateBarChart(it)
+        patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
+            if (expression != null) {
+                populateBarChart(expression)
+                binding.apply {
+
+                    tvTotalExpressed.text = expression.totalFeed
+                }
             }
         }
         /* if (isNetworkAvailable(requireContext())) {
