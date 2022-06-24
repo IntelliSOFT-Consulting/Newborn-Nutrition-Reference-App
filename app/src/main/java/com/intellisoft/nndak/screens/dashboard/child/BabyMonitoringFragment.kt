@@ -214,14 +214,19 @@ class BabyMonitoringFragment : Fragment() {
                     }
                 } else {
                     exit = true
-                    SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                        .setTitleText("Error")
-                        .setContentText(resources.getString(R.string.no_active))
-                        .setCustomImage(R.drawable.smile)
-                        .setConfirmClickListener {
-                            exitBack()
-                        }
-                        .show()
+                    val dialog =
+                        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                            .setTitleText("Error")
+                            .setContentText(resources.getString(R.string.no_active))
+                            .setCustomImage(R.drawable.smile)
+                            .setConfirmClickListener { sDialog ->
+                                run {
+                                    sDialog.dismiss()
+                                    exitBack()
+                                }
+                            }
+                    dialog.setCancelable(false)
+                    dialog.show()
                 }
             }
         }
@@ -431,11 +436,11 @@ class BabyMonitoringFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-          val dialog=  SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                 .setTitleText("Success")
                 .setContentText(resources.getString(R.string.app_okay_saved))
                 .setCustomImage(R.drawable.smile)
-                .setConfirmClickListener {sDialog ->
+                .setConfirmClickListener { sDialog ->
                     run {
                         sDialog.dismiss()
                         exitBack()
@@ -555,7 +560,10 @@ class BabyMonitoringFragment : Fragment() {
     }
 
     private fun exitBack() {
-        findNavController().navigateUp()
+        try {
+            findNavController().navigateUp()
+        } catch (e: Exception) {
+        }
 
     }
 

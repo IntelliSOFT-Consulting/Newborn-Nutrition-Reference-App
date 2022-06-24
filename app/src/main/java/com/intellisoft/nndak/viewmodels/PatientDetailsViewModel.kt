@@ -127,7 +127,7 @@ class PatientDetailsViewModel(
 
         if (weight.isNotEmpty()) {
 
-            val daysString = getPastDaysOnIntervalOf(dayOfLife.toInt(), 1)
+            val daysString = getPastDaysOnIntervalOf(dayOfLife.toInt() + 1, 1)
             for ((i, entry) in daysString.withIndex()) {
                 val sorted = sortCollected(weight)
                 val value = extractDailyMeasure(entry, sorted)
@@ -159,7 +159,7 @@ class PatientDetailsViewModel(
     }
 
 
-    private fun getFeedsDataModel(): DistributionItem {
+    private suspend fun getFeedsDataModel(): DistributionItem {
         val intervals = getPastHoursOnIntervalOf(8, 3)
         val times: MutableList<String> = mutableListOf()
         val feeds: MutableList<FeedItem> = mutableListOf()
@@ -173,11 +173,50 @@ class PatientDetailsViewModel(
         return DistributionItem(time = times, feed = feeds)
     }
 
-    private fun loadFeed(time: String): FeedItem {
-        Timber.e("Feeding Time $time")
-        val iv = (13 until 50).random().toString()
-        val ebm = (13 until 50).random().toString()
-        val dhm = (13 until 50).random().toString()
+    private suspend fun loadFeed(currentTime: String): FeedItem {
+
+        var iv = "0"
+        var ebm = "0"
+        var dhm = "0"
+        val carePlans = getCompletedCarePlans()
+        if (carePlans.isNotEmpty()) {
+            carePlans.forEach {
+                val actualTime = FormatHelper().getRefinedDatePmAm(it.created)
+                Timber.e("Completed Actual ${it.created}")
+                try {
+                    val maxThree = FormatHelper().getHourRange(currentTime)
+                    val isWithinRange =
+                        FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
+                    if (isWithinRange) {
+                        var iVs = observationsPerCodeEncounter(
+                            IV_VOLUME,
+                            it.encounterId
+                        )
+                        iVs.forEach {
+
+                        }
+
+                        ebm = observationsPerCodeEncounter(
+                            EBM_VOLUME,
+                            it.encounterId
+                        ).firstOrNull()?.quantity ?: "0"
+                        dhm = observationsPerCodeEncounter(
+                            DHM_VOLUME,
+                            it.encounterId
+                        ).firstOrNull()?.quantity ?: "0"
+
+                    }
+                    Timber.e("Cheza $isWithinRange")
+                } catch (e: Exception) {
+                    Timber.e("Cheza Exception ${e.localizedMessage}")
+                }
+
+            }
+        } else {
+            iv = "0"
+            ebm = "0"
+            dhm = "0"
+        }
 
         return FeedItem(volume = iv, route = ebm, frequency = dhm)
     }
@@ -471,6 +510,7 @@ class PatientDetailsViewModel(
                     getApplication<Application>().resources
                 )
             }
+
             .let { obs.addAll(it) }
         return obs
     }
@@ -601,6 +641,28 @@ class PatientDetailsViewModel(
         return prescriptions
 
     }
+
+    private suspend fun getCompletedCarePlans(): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == CarePlan.CarePlanStatus.COMPLETED.toString() }
+            .let { cares.addAll(it) }
+        return cares
+    }
+
 
     private suspend fun fetchActiveCarePlans(): List<CareItem> {
         val cares: MutableList<CareItem> = mutableListOf()

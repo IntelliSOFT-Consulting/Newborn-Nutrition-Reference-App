@@ -104,6 +104,21 @@ class FormatHelper {
 
     }
 
+    fun getRefinedDatePmAm(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun generateDate(date: String): Date? {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        return sourceFormat.parse(date)
+    }
+
     fun getHourRange(date: String): String {
 
         val calendar = Calendar.getInstance()
@@ -139,7 +154,7 @@ class FormatHelper {
             //current time
             val current_time = simpleDateFormat.parse(systemTime)
             return if (current_time.after(endtime) && current_time.before(starttime)) {
-                println("Yes")
+                println("Yes it Matches ")
                 true
             } else {
                 println("No")

@@ -8,6 +8,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/add_patient_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_100dp" />
 
 </FrameLayout>

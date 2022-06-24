@@ -283,16 +283,19 @@ class BabyDashboardFragment : Fragment() {
             val ebm: ArrayList<BarEntry> = ArrayList()
             val dhm: ArrayList<BarEntry> = ArrayList()
 
+
             for ((i, entry) in values.feed.withIndex()) {
-                val value = values.feed[i].volume?.toFloat()
-                val route = values.feed[i].route?.toFloat()
-                val frequency = values.feed[i].frequency?.toFloat()
+
+                val value = entry.volume?.toFloat()
+                val route = entry.route?.toFloat()
+                val frequency = entry.frequency?.toFloat()
                 if (value != null && route != null && frequency != null) {
-                    iv.add(BarEntry(i.toFloat(), value))
+                    iv.add(BarEntry(i.toFloat() , value))
                     ebm.add(BarEntry(i.toFloat(), route))
                     dhm.add(BarEntry(i.toFloat(), frequency))
                 }
             }
+            Timber.e("Days ${intervals.size}")
 
             /*   val iv: ArrayList<BarEntry> = ArrayList()
                val ebm: ArrayList<BarEntry> = ArrayList()
@@ -321,6 +324,7 @@ class BabyDashboardFragment : Fragment() {
 
             val data = BarData(fluids, expressed, donor)
             data.setValueFormatter(LargeValueFormatter())
+            feedsChart.data = data
 
             val xAxis: XAxis = feedsChart.xAxis
             xAxis.setDrawGridLines(false)
@@ -329,7 +333,8 @@ class BabyDashboardFragment : Fragment() {
             xAxis.labelRotationAngle = -45f
             xAxis.mAxisMinimum = 0f
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-            // xAxis.setLabelCount(it.data.size, true)
+            xAxis.setLabelCount(8, true)
+            xAxis.setCenterAxisLabels(true)
 
             feedsChart.axisLeft.setDrawGridLines(false)
             feedsChart.legend.isEnabled = true
@@ -341,16 +346,16 @@ class BabyDashboardFragment : Fragment() {
             feedsChart.description.text = "Age (Days)"
             //add animation
             feedsChart.animateX(1000, Easing.EaseInSine)
-            feedsChart.data = data
+
 
             val leftAxis: YAxis = feedsChart.axisLeft
             leftAxis.axisMinimum = 0f
             leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = false
+            leftAxis.isGranularityEnabled = true
 
             feedsChart.barData.barWidth = barWidth
             feedsChart.xAxis.axisMaximum =
-                0 + feedsChart.barData.getGroupWidth(
+                0f + feedsChart.barData.getGroupWidth(
                     groupSpace,
                     barSpace
                 ) * groupCount
