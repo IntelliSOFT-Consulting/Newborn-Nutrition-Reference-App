@@ -47,9 +47,32 @@ class FormatHelper {
         return false
     }
 
+
+    fun dateTimeLessThanNow(date: String): Boolean {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val today = getTodayDate()
+
+        val convertedDate = sdf.parse(date)
+        Timber.e("Current $today")
+        Timber.e("Value $convertedDate")
+
+        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val cool=convertedDate?.let { sdf2.format(it) }.toString()
+
+        val date1 = sdf2.parse(today)
+        val date2 = sdf2.parse(cool)
+
+        if (date1 != null) {
+            if (date1.equals(date2) || date1.after(date2)) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun checkDate(birthDate: String, d2: String): Boolean {
 
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+        val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val currentdate = sdf1.parse(birthDate)
 
         val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)

@@ -385,7 +385,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      * Handle date validation assessDate
                      */
                     Timber.e("Assessment Date $assessDate")
-                    val validDate = FormatHelper().dateLessThanToday(assessDate.substring(0, 10))
+                    val validDate = FormatHelper().dateTimeLessThanNow(assessDate)
                     if (validDate) {
                         val encounterId = generateUuid()
                         val subjectReference = Reference("Patient/$patientId")
@@ -2062,7 +2062,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (dateTime.isNotEmpty()) {
 
                         val refineTime =
-                            FormatHelper().dateLessThanToday(dateTime.substring(0, 10))
+                            FormatHelper().dateTimeLessThanNow(dateTime)
 
                         if (refineTime) {
                             val value = retrieveUser(false)
@@ -2487,20 +2487,24 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val basedOnReference = Reference("CarePlan/$careID")
                     title = FEEDING_MONITORING
                     if (assessDate.isNotEmpty()) {
-                        Timber.e("Assessment Date $assessDate")
-                        val care = CarePlan()
-                        care.encounter = encounterReference
-                        care.subject = subjectReference
-                        care.status = CarePlan.CarePlanStatus.COMPLETED
-                        care.title = title
-                        care.intent = CarePlan.CarePlanIntent.ORDER
-                        care.created = FormatHelper().generateDate(assessDate)
-                        care.addPartOf(basedOnReference)
-                        saveResourceToDatabase(care)
+                        val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
+                        if (lessThanNow) {
+                            val care = CarePlan()
+                            care.encounter = encounterReference
+                            care.subject = subjectReference
+                            care.status = CarePlan.CarePlanStatus.COMPLETED
+                            care.title = title
+                            care.intent = CarePlan.CarePlanIntent.ORDER
+                            care.created = FormatHelper().generateDate(assessDate)
+                            care.addPartOf(basedOnReference)
+                            saveResourceToDatabase(care)
 
-                        saveResources(bundle, subjectReference, encounterId, title)
-                        generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                        isResourcesSaved.postValue(true)
+                            saveResources(bundle, subjectReference, encounterId, title)
+                            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+                            isResourcesSaved.postValue(true)
+                        }else{
+                            isResourcesSaved.postValue(false)
+                        }
                     }
 
                 } catch (e: Exception) {

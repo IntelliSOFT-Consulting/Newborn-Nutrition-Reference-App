@@ -22,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -334,8 +335,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun showToast(message: String, boolean: Boolean) {
+        //  Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val type = if (boolean) {
+            SmartyToast.SAVED
+        } else {
+            SmartyToast.UPDATE
+        }
+        SmartyToast.makeText(
+            this,
+            message,
+            SmartyToast.LENGTH_SHORT, type
+        ).show()
     }
 
 
@@ -345,17 +356,20 @@ class MainActivity : AppCompatActivity() {
             viewModel.pollState.collect {
                 Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
-                    is State.Started -> showToast("Sync: started")
-                    is State.InProgress -> showToast("Sync: in progress with ${it.resourceType?.name}")
+                    is State.Started -> showToast("Sync: started", true)
+                    is State.InProgress -> showToast(
+                        "Sync: in progress with ${it.resourceType?.name}",
+                        false
+                    )
                     is State.Finished -> {
-                        showToast("Sync: succeeded at ${it.result.timestamp}")
+                        showToast("Sync: succeeded at ${it.result.timestamp}", true)
                         viewModel.updateLastSyncTimestamp()
                     }
                     is State.Failed -> {
-                        showToast("Sync: failed at ${it.result.timestamp}")
+                        showToast("Sync: failed at ${it.result.timestamp}", false)
                         viewModel.updateLastSyncTimestamp()
                     }
-                    else -> showToast("Sync: unknown state.")
+                    else -> showToast("Sync: unknown state.", false)
                 }
             }
         }

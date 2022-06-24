@@ -212,7 +212,6 @@ data class PrescriptionItem(
 
 
 data class DistributionItem(
-    val time: List<String>,
     val feed: List<FeedItem>
 )
 

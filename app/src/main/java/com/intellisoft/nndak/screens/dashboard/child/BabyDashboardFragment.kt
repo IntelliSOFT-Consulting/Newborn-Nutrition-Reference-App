@@ -262,79 +262,57 @@ class BabyDashboardFragment : Fragment() {
         }
     }
 
-//    private fun populateBarChart(it: FeedsDistribution) {
+    private fun barGraph(it: DistributionItem) {
+        val groupCount = 8
+        val groupSpace = 0.5f
+        val barSpace = 0.05f
+        val barWidth = 0.1f
+        val iv: ArrayList<BarEntry> = ArrayList()
+        val ebm: ArrayList<BarEntry> = ArrayList()
+        val dhm: ArrayList<BarEntry> = ArrayList()
 
-    private fun barGraph(values: DistributionItem) {
-        binding.apply {
-
-            val groupCount = 8
-            val groupSpace = 0.06f
-            val barSpace = 0.04f
-            val barWidth = 0.2f
-
-            /**
-             * Dummy Demo
-             */
-            val hours = getPastHoursOnIntervalOf(8, 3)
-
-            val intervals = formatFeedingTime(hours)
-            Timber.e("Days $intervals")
-            val iv: ArrayList<BarEntry> = ArrayList()
-            val ebm: ArrayList<BarEntry> = ArrayList()
-            val dhm: ArrayList<BarEntry> = ArrayList()
-
-
-            for ((i, entry) in values.feed.withIndex()) {
-
-                val value = entry.volume?.toFloat()
-                val route = entry.route?.toFloat()
-                val frequency = entry.frequency?.toFloat()
-                if (value != null && route != null && frequency != null) {
-                    iv.add(BarEntry(i.toFloat() , value))
-                    ebm.add(BarEntry(i.toFloat(), route))
-                    dhm.add(BarEntry(i.toFloat(), frequency))
-                }
+        val intervals = ArrayList<String>()
+        for ((i, entry) in it.feed.withIndex()) {
+            intervals.add(entry.resourceId.toString())
+            val value = entry.volume?.toFloat()
+            val route = entry.route?.toFloat()
+            val frequency = entry.frequency?.toFloat()
+            if (value != null && route != null && frequency != null) {
+                iv.add(BarEntry(i.toFloat(), value))
+                ebm.add(BarEntry(i.toFloat(), route))
+                dhm.add(BarEntry(i.toFloat(), frequency))
             }
-            Timber.e("Days ${intervals.size}")
 
-            /*   val iv: ArrayList<BarEntry> = ArrayList()
-               val ebm: ArrayList<BarEntry> = ArrayList()
-               val dhm: ArrayList<BarEntry> = ArrayList()
+            Timber.e(
+                "Data Source\n\nTime: ${entry.resourceId}" +
+                        "\nIV $value\nEBM $route\nDHM $frequency"
+            )
+        }
 
-               val intervals = ArrayList<String>()
-               for ((i, entry) in it.data.withIndex()) {
-                   intervals.add(entry.time)
-                   iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
-                   ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
-                   dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
+        val fluids = BarDataSet(iv, "IV")
+        fluids.setColors(Color.parseColor("#4472C4"))
+        fluids.setDrawValues(false)
 
-               }*/
+        val expressed = BarDataSet(ebm, "EBM")
+        expressed.setColors(Color.parseColor("#ED7D31"))
+        expressed.setDrawValues(false)
 
-            val fluids = BarDataSet(iv, "IV")
-            fluids.setColors(Color.parseColor("#4472C4"))
-            fluids.setDrawValues(false)
+        val donor = BarDataSet(dhm, "DHM")
+        donor.setColors(Color.parseColor("#A5A5A5"))
+        donor.setDrawValues(false)
 
-            val expressed = BarDataSet(ebm, "EBM")
-            expressed.setColors(Color.parseColor("#ED7D31"))
-            expressed.setDrawValues(false)
+        val data = BarData(fluids, expressed, donor)
+        data.setValueFormatter(LargeValueFormatter())
 
-            val donor = BarDataSet(dhm, "DHM")
-            donor.setColors(Color.parseColor("#A5A5A5"))
-            donor.setDrawValues(false)
-
-            val data = BarData(fluids, expressed, donor)
-            data.setValueFormatter(LargeValueFormatter())
+        binding.apply {
             feedsChart.data = data
-
             val xAxis: XAxis = feedsChart.xAxis
             xAxis.setDrawGridLines(false)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.labelRotationAngle = -45f
-            xAxis.mAxisMinimum = 0f
+            xAxis.mAxisMinimum = 1f
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-            xAxis.setLabelCount(8, true)
-            xAxis.setCenterAxisLabels(true)
 
             feedsChart.axisLeft.setDrawGridLines(false)
             feedsChart.legend.isEnabled = true
@@ -346,20 +324,12 @@ class BabyDashboardFragment : Fragment() {
             feedsChart.description.text = "Age (Days)"
             //add animation
             feedsChart.animateX(1000, Easing.EaseInSine)
-
+            feedsChart.data = data
 
             val leftAxis: YAxis = feedsChart.axisLeft
             leftAxis.axisMinimum = 0f
             leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = true
-
-            feedsChart.barData.barWidth = barWidth
-            feedsChart.xAxis.axisMaximum =
-                0f + feedsChart.barData.getGroupWidth(
-                    groupSpace,
-                    barSpace
-                ) * groupCount
-            feedsChart.groupBars(0f, groupSpace, barSpace)
+            leftAxis.isGranularityEnabled = false
 
             val rightAxis: YAxis = feedsChart.axisRight
             rightAxis.setDrawGridLines(false)
@@ -367,10 +337,19 @@ class BabyDashboardFragment : Fragment() {
             rightAxis.isGranularityEnabled = false
             rightAxis.isEnabled = false
 
+
+            feedsChart.barData.barWidth = barWidth
+//          feedsChart.xAxis.axisMaximum =
+//                0f + feedsChart.barData.getGroupWidth(
+//                    groupSpace,
+//                    barSpace
+//                ) * groupCount
+            feedsChart.groupBars(0f, groupSpace, barSpace)
+
             //refresh
             feedsChart.invalidate()
-        }
 
+        }
 
     }
 
@@ -379,7 +358,6 @@ class BabyDashboardFragment : Fragment() {
         val gson = Gson()
         val data = FhirApplication.getFeedings(requireContext())
         if (data != null) {
-
             try {
                 val it: FeedsDistribution = gson.fromJson(data, FeedsDistribution::class.java)
                 //  populateBarChart(it)

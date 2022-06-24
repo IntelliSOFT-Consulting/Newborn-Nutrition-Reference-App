@@ -21,7 +21,7 @@
     <color name="dim_red">#A8001E</color>
     <color name="dim_green">#24A047</color>
     <color name="inactive1">#94C4C4C4</color>
-
+    <color name="grey_50">#F8F9FA</color>
     <color name="dialogBackground">#60000000</color>
     <color name="gradient_start">#4CAF50</color>
     <color name="gradient_end">#CDDC39</color>

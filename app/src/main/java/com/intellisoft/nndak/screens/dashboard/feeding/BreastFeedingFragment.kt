@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -227,12 +228,11 @@ class BreastFeedingFragment : Fragment() {
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
             if (!it) {
-                Toast.makeText(
+                SmartyToast.makeText(
                     requireContext(),
                     getString(R.string.inputs_missing),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                    SmartyToast.LENGTH_SHORT, SmartyToast.ERROR
+                ).show()
                 (activity as MainActivity).hideDialog()
                 return@observe
             }

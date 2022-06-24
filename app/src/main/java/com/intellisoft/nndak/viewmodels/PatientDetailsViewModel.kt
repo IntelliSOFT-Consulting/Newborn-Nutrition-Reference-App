@@ -37,8 +37,8 @@ import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Period
 import java.util.*
 
@@ -161,49 +161,54 @@ class PatientDetailsViewModel(
 
     private suspend fun getFeedsDataModel(): DistributionItem {
         val intervals = getPastHoursOnIntervalOf(8, 3)
-        val times: MutableList<String> = mutableListOf()
         val feeds: MutableList<FeedItem> = mutableListOf()
         intervals.forEach {
-            val time = FormatHelper().getHour(it.toString())
-            val dayTime = FormatHelper().getDateHour(it.toString())
-            times.add(time)
-            feeds.add(loadFeed(dayTime))
+            feeds.add(loadFeed(it))
         }
 
-        return DistributionItem(time = times, feed = feeds)
+        return DistributionItem(feed = feeds)
     }
 
-    private suspend fun loadFeed(currentTime: String): FeedItem {
+    private suspend fun loadFeed(it: LocalDateTime): FeedItem {
 
-        var iv = "0"
-        var ebm = "0"
-        var dhm = "0"
+        var iv = 0f
+        var ebm = 0f
+        var dhm = 0f
+        val hour = FormatHelper().getHour(it.toString())
         val carePlans = getCompletedCarePlans()
         if (carePlans.isNotEmpty()) {
-            carePlans.forEach {
-                val actualTime = FormatHelper().getRefinedDatePmAm(it.created)
-                Timber.e("Completed Actual ${it.created}")
+            carePlans.forEach { item ->
+                val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
+                val currentTime = FormatHelper().getDateHour(it.toString())
                 try {
                     val maxThree = FormatHelper().getHourRange(currentTime)
                     val isWithinRange =
                         FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
                     if (isWithinRange) {
-                        var iVs = observationsPerCodeEncounter(
+
+                        val iVs = observationsPerCodeEncounter(
                             IV_VOLUME,
-                            it.encounterId
+                            item.encounterId
                         )
                         iVs.forEach {
-
+                            iv += it.quantity.toFloat()
                         }
 
-                        ebm = observationsPerCodeEncounter(
+                        val eBms = observationsPerCodeEncounter(
                             EBM_VOLUME,
-                            it.encounterId
-                        ).firstOrNull()?.quantity ?: "0"
-                        dhm = observationsPerCodeEncounter(
+                            item.encounterId
+                        )
+
+                        eBms.forEach {
+                            ebm += it.quantity.toFloat()
+                        }
+                        val dhmS = observationsPerCodeEncounter(
                             DHM_VOLUME,
-                            it.encounterId
-                        ).firstOrNull()?.quantity ?: "0"
+                            item.encounterId
+                        )
+                        dhmS.forEach {
+                            dhm += it.quantity.toFloat()
+                        }
 
                     }
                     Timber.e("Cheza $isWithinRange")
@@ -213,12 +218,13 @@ class PatientDetailsViewModel(
 
             }
         } else {
-            iv = "0"
-            ebm = "0"
-            dhm = "0"
+            iv = 0f
+            ebm = 0f
+            dhm = 0f
+
         }
 
-        return FeedItem(volume = iv, route = ebm, frequency = dhm)
+        return FeedItem(resourceId = hour, volume = iv.toString(), route = ebm.toString(), frequency = dhm.toString())
     }
 
     fun getMumChild() {
