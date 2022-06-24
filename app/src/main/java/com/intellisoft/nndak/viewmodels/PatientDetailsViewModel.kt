@@ -94,7 +94,7 @@ class PatientDetailsViewModel(
             try {
                 val actualTime = FormatHelper().getDateHourZone(it.value.trim())
 
-                val currentTime = FormatHelper().getDateHour(time)
+                val currentTime = FormatHelper().getRoundedDateHour(time)
                 val maxThree = FormatHelper().getHourRange(currentTime)
 
                 val isWithinRange = FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
@@ -109,7 +109,7 @@ class PatientDetailsViewModel(
 
             }
         }
-        val refinedTime = FormatHelper().getHour(time)
+        val refinedTime = FormatHelper().getRoundedHour(time)
 
         return ExpressionData(time = refinedTime, amount = quantity.toString())
 
@@ -174,12 +174,12 @@ class PatientDetailsViewModel(
         var iv = 0f
         var ebm = 0f
         var dhm = 0f
-        val hour = FormatHelper().getHour(it.toString())
+        val hour = FormatHelper().getRoundedHour(it.toString())
         val carePlans = getCompletedCarePlans()
         if (carePlans.isNotEmpty()) {
             carePlans.forEach { item ->
                 val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
-                val currentTime = FormatHelper().getDateHour(it.toString())
+                val currentTime = FormatHelper().getRoundedDateHour(it.toString())
                 try {
                     val maxThree = FormatHelper().getHourRange(currentTime)
                     val isWithinRange =

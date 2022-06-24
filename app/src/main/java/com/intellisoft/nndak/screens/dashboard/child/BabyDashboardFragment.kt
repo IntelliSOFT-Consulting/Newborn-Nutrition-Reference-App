@@ -266,7 +266,7 @@ class BabyDashboardFragment : Fragment() {
         val groupCount = 8
         val groupSpace = 0.5f
         val barSpace = 0.05f
-        val barWidth = 0.1f
+        val barWidth = 0.2f
         val iv: ArrayList<BarEntry> = ArrayList()
         val ebm: ArrayList<BarEntry> = ArrayList()
         val dhm: ArrayList<BarEntry> = ArrayList()
