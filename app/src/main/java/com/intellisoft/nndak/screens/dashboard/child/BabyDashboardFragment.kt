@@ -179,20 +179,21 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.feedsDistribution()
         patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
             if (it != null) {
+                binding.tvTotalVolume.text = it.totalFeed
                 barGraph(it)
             }
         }
         patientDetailsViewModel.activeBabyWeights()
         patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
             if (it != null) {
-
+                populateLineChart(it)
             }
         }
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     binding.apply {
-                        tvTotalVolume.text = it.first().feedsGiven
+//                        tvTotalVolume.text = it.first().feedsGiven
                         tvExpressionNumber.text = it.first().expressions
 
                         /**
@@ -262,31 +263,25 @@ class BabyDashboardFragment : Fragment() {
         }
     }
 
-    private fun barGraph(it: DistributionItem) {
+    private fun barGraph(it: FeedsDistribution) {
+
+        Timber.e("Found Feeding ${it.data}")
         val groupCount = 8
-        val groupSpace = 0.5f
+        val groupSpace = 0.15f
         val barSpace = 0.05f
-        val barWidth = 0.2f
+        val barWidth = 0.25f
         val iv: ArrayList<BarEntry> = ArrayList()
         val ebm: ArrayList<BarEntry> = ArrayList()
         val dhm: ArrayList<BarEntry> = ArrayList()
 
         val intervals = ArrayList<String>()
-        for ((i, entry) in it.feed.withIndex()) {
-            intervals.add(entry.resourceId.toString())
-            val value = entry.volume?.toFloat()
-            val route = entry.route?.toFloat()
-            val frequency = entry.frequency?.toFloat()
-            if (value != null && route != null && frequency != null) {
-                iv.add(BarEntry(i.toFloat(), value))
-                ebm.add(BarEntry(i.toFloat(), route))
-                dhm.add(BarEntry(i.toFloat(), frequency))
-            }
+        for ((i, entry) in it.data.withIndex()) {
+            intervals.add(entry.time)
+            iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
+            ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
+            dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
 
-            Timber.e(
-                "Data Source\n\nTime: ${entry.resourceId}" +
-                        "\nIV $value\nEBM $route\nDHM $frequency"
-            )
+
         }
 
         val fluids = BarDataSet(iv, "IV")
@@ -311,7 +306,9 @@ class BabyDashboardFragment : Fragment() {
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.labelRotationAngle = -45f
-            xAxis.mAxisMinimum = 1f
+            xAxis.mAxisMinimum = 0f
+//            xAxis.setCenterAxisLabels(true)
+
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
 
             feedsChart.axisLeft.setDrawGridLines(false)
@@ -339,12 +336,12 @@ class BabyDashboardFragment : Fragment() {
 
 
             feedsChart.barData.barWidth = barWidth
-//          feedsChart.xAxis.axisMaximum =
-//                0f + feedsChart.barData.getGroupWidth(
-//                    groupSpace,
-//                    barSpace
-//                ) * groupCount
-            feedsChart.groupBars(0f, groupSpace, barSpace)
+             feedsChart.xAxis.axisMaximum =
+                 0f + feedsChart.barData.getGroupWidth(
+                     groupSpace,
+                     barSpace
+                 ) * groupCount
+            feedsChart.groupBars(-1f, groupSpace, barSpace)
 
             //refresh
             feedsChart.invalidate()

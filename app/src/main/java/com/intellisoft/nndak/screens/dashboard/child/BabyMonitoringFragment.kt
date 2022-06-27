@@ -14,6 +14,7 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TintInfo
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -193,42 +194,41 @@ class BabyMonitoringFragment : Fragment() {
             }
         }
 
-        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                if (it.isNotEmpty()) {
-                    val pr = it[0]
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) { data ->
+            if (data.isNotEmpty()) {
+                val it = data.first()
+                careID = it.resourceId.toString()
+                binding.apply {
+                    lnCurrent.visibility = View.VISIBLE
 
-                    careID = pr.resourceId.toString()
-                    binding.apply {
-                        lnCurrent.visibility = View.VISIBLE
+                    incPrescribe.appTodayTotal.text =
+                        it.totalVolume
+                    incPrescribe.appRoute.text = it.route ?: ""
+                    val threeHourly = calculateFeeds(it.totalVolume ?: "0")
+                    incPrescribe.appThreeHourly.text = threeHourly
+                    val breakDown = generateFeedsBreakDown(it)
+                    incPrescribe.appThreeHourlyBreak.text = breakDown
+                    Timber.e("Shida iko wapi ${it.ebm}")
 
-                        incPrescribe.appTodayTotal.text =
-                            pr.totalVolume
-                        incPrescribe.appRoute.text = pr.route ?: ""
-                        val threeHourly = calculateFeeds(pr.totalVolume ?: "0")
-                        incPrescribe.appThreeHourly.text = threeHourly
-                        val breakDown = generateFeedsBreakDown(pr)
-                        incPrescribe.appThreeHourlyBreak.text = breakDown
+                    regulateViews(it)
 
-                        regulateViews(pr)
-
-                    }
-                } else {
-                    exit = true
-                    val dialog =
-                        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                            .setTitleText("Error")
-                            .setContentText(resources.getString(R.string.no_active))
-                            .setCustomImage(R.drawable.smile)
-                            .setConfirmClickListener { sDialog ->
-                                run {
-                                    sDialog.dismiss()
-                                    exitBack()
-                                }
-                            }
-                    dialog.setCancelable(false)
-                    dialog.show()
                 }
+
+            } else {
+                exit = true
+                val dialog =
+                    SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                        .setTitleText("Error")
+                        .setContentText(resources.getString(R.string.no_active))
+                        .setCustomImage(R.drawable.smile)
+                        .setConfirmClickListener { sDialog ->
+                            run {
+                                sDialog.dismiss()
+                                exitBack()
+                            }
+                        }
+                dialog.setCancelable(false)
+                dialog.show()
             }
         }
         listenToChange(binding.control.edDhm)
@@ -241,8 +241,8 @@ class BabyMonitoringFragment : Fragment() {
             btnSubmit.setOnClickListener {
 
                 val ivVolume = control.edIv.text.toString()
-                val dhmVolume = control.edIv.text.toString()
-                val ebmVolume = control.edIv.text.toString()
+                val dhmVolume = control.edDhm.text.toString()
+                val ebmVolume = control.edEbm.text.toString()
                 deficit = control.edDeficit.text.toString()
 
                 if (ivPresent) {
@@ -376,7 +376,7 @@ class BabyMonitoringFragment : Fragment() {
                 control.edIv.setText("0")
                 ivPresent = false
             }
-            if (pr.breastMilk == "N/A") {
+            if (pr.ebm == "N/A") {
                 control.tilEbm.visibility = View.GONE
                 control.edEbm.setText("0")
                 ebmPresent = false
@@ -394,8 +394,8 @@ class BabyMonitoringFragment : Fragment() {
         if (pr.ivFluids != "N/A") {
             sb.append("IV- ${calculateFeeds(pr.ivFluids.toString())}\n")
         }
-        if (pr.breastMilk != "N/A") {
-            sb.append("EBM- ${calculateFeeds(pr.breastMilk.toString())}\n")
+        if (pr.ebm != "N/A") {
+            sb.append("EBM- ${calculateFeeds(pr.ebm.toString())}\n")
         }
         if (pr.donorMilk != "N/A") {
             sb.append("DHM- ${calculateFeeds(pr.donorMilk.toString())}\n")

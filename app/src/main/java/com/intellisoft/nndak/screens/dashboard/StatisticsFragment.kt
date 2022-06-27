@@ -119,14 +119,14 @@ class StatisticsFragment : Fragment() {
         endDate = current
 
         binding.apply {
-            btnStart.text = "From $current"
-            btnEnd.text = "To $current"
+            btnStart.text = "From"
+            btnEnd.text = "To"
             btnStart.setOnClickListener {
                 showPopUp(btnStart, "From ")
 
             }
             btnEnd.setOnClickListener {
-                showPopUp(btnEnd, "End ")
+                showPopUp(btnEnd, "To ")
             }
         }
 
@@ -140,7 +140,7 @@ class StatisticsFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { view, myear, mmonth, mdayOfMonth ->
-                btnEnd.text = "$label $mdayOfMonth/$mmonth/$myear"
+                btnEnd.text = "$label"
             },
             year,
             month,

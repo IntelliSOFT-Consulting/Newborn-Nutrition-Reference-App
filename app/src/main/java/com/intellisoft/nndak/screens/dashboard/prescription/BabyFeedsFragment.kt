@@ -162,12 +162,12 @@ class BabyFeedsFragment : Fragment() {
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
                 val value = it.first().id.toString()
-                careId = value.drop(10)
+                careId = value
                 Timber.d("Encounter Found $careId ")
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
-            adapter.submitList(it)
+            adapter.submitList(it.subList(0,1))
         }
 
         binding.apply {

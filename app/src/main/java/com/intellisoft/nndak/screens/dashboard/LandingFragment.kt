@@ -6,9 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.LandingAdapter
 import com.intellisoft.nndak.databinding.FragmentLandingBinding
+import com.intellisoft.nndak.viewmodels.LayoutListViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +27,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class LandingFragment : Fragment() {
     private var _binding: FragmentLandingBinding? = null
+    private val viewModel: LayoutListViewModel by viewModels()
     private val binding
         get() = _binding!!
 
@@ -44,22 +50,40 @@ class LandingFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        binding.apply {
-            cntBaby.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToBabies())
+//        setUpLayoutsRecyclerView()
+             binding.apply {
+                 cntBaby.setOnClickListener {
+                     findNavController().navigate(LandingFragmentDirections.navigateToBabies())
 
-            }
-            cntRegister.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
-            }
-            cntMilk.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToMilk())
-            }
-            cntStatistics.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
-            }
-        }
+                 }
+                 cntRegister.setOnClickListener {
+                     findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
+                 }
+                 cntMilk.setOnClickListener {
+                     findNavController().navigate(LandingFragmentDirections.navigateToMilk())
+                 }
+                 cntStatistics.setOnClickListener {
+                     findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
+                 }
+             }
     }
+
+   /* private fun setUpLayoutsRecyclerView() {
+        val adapter =
+            LandingAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+        val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
+    }*/
+
+  /*  private fun onItemClick(layout: LayoutListViewModel.Layout) {
+        // TODO Remove check when all layout questionnaire json are updated.
+        // https://github.com/google/android-fhir/issues/1079
+        if (layout.questionnaireFileName.isEmpty()) {
+            return
+        }
+        launchQuestionnaireFragment(layout)
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

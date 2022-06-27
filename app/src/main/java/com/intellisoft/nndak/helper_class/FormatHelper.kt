@@ -95,6 +95,21 @@ class FormatHelper {
         val date = Date()
         return formatter.format(date)
     }
+    fun extractDateOnly(date :String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
+
+    fun extractTimeOnly(date :String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
 
     private fun getTodayDateNoTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -179,8 +194,17 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+    fun getRefinedDatePmAmEncounter(date: String): String {
 
-    fun generateDate(date: String): Date? {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun generateDate(date: String): Date {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         return sourceFormat.parse(date)
     }
@@ -216,10 +240,32 @@ class FormatHelper {
 
             val starttime = simpleDateFormat.parse(startTime)
             val endtime = simpleDateFormat.parse(endTime)
-
-            //current time
             val current_time = simpleDateFormat.parse(systemTime)
+
+
             return if (current_time.after(endtime) && current_time.before(starttime)) {
+                println("Yes it Matches ")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+
+        }
+        return false
+    }
+    fun startCurrentEnd(min: String, actual: String, max: String): Boolean {
+        try {
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a")
+
+            val starttime = simpleDateFormat.parse(min)
+            val endtime = simpleDateFormat.parse(max)
+            val current_time = simpleDateFormat.parse(actual)
+
+
+            return if (current_time.after(starttime) && current_time.before(endtime)) {
                 println("Yes it Matches ")
                 true
             } else {
@@ -309,7 +355,7 @@ class FormatHelper {
 
     fun extractDateString(date: String): String {
 
-        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
@@ -319,7 +365,7 @@ class FormatHelper {
 
     fun extractTimeString(date: String): String {
 
-        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)

@@ -28,11 +28,13 @@
                     android:id="@+id/tv_reference"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5dp"
+
                     android:background="@drawable/bg_tv"
-                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="7dp"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -42,90 +44,84 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="10dp"
-                    android:fontFamily="sans-serif-light"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="@dimen/_5dp"
+
+                    android:textAppearance="?attr/textAppearanceBody2" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="@dimen/_5dp"
                 android:weightSum="4">
 
                 <TextView
                     android:id="@+id/tvh_iv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/app_iv_fluids"
-                    android:textStyle="bold" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:id="@+id/tvh_dhm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/app_dhm_volume"
-                    android:textStyle="bold" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:id="@+id/tvh_ebm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/ebm"
-                    android:textStyle="bold" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/deficit"
-                    android:textStyle="bold" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="@dimen/_5dp"
                 android:weightSum="4">
 
                 <TextView
                     android:id="@+id/app_iv_fluids"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/tv_dhm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/app_ebm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/deficit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
             </LinearLayout>
 
             <View
@@ -144,31 +140,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/total_taken"
-                    android:textStyle="normal" />
+
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/changer"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/remarks"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
             </LinearLayout>
 
@@ -176,32 +171,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
                     android:id="@+id/total_taken"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/changer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/remarks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
             </LinearLayout>
 
@@ -209,32 +201,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/diaper"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/stool"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:text="@string/tv_vomit"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
             </LinearLayout>
 
@@ -242,32 +231,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
                     android:id="@+id/tv_diaper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/tv_stool"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
                 <TextView
                     android:id="@+id/tv_vomit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:textStyle="normal" />
+                    android:textAppearance="?attr/textAppearanceBody2"  />
 
             </LinearLayout>
 

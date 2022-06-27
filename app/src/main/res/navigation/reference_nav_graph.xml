@@ -149,7 +149,7 @@
         android:id="@+id/editPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
         android:label="EditPrescriptionFragment"
-        tools:layout="@layout/fragment_add_prescription">
+        tools:layout="@layout/update_prescription">
         <argument
             android:name="patient_id"
             app:argType="string" />

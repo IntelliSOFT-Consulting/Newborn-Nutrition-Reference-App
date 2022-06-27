@@ -33,7 +33,7 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
         this.appRoute.text = patientItem.route
         this.appFrequency.text = patientItem.frequency
         this.appIvFluids.text = patientItem.ivFluids
-        this.appBreastMilk.text = patientItem.breastMilk
+        this.appBreastMilk.text = patientItem.ebm
         this.appDhm.text = patientItem.donorMilk
         this.appConsent.text = patientItem.consent
         this.appConsentDate.text = patientItem.consentDate

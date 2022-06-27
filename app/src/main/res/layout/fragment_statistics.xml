@@ -80,7 +80,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_percentage"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"  />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/percentage_chart"

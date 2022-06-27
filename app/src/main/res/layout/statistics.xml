@@ -78,6 +78,7 @@
 
                 <TextView
 
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/total_babies"
@@ -189,6 +190,7 @@
 
                 <TextView
 
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_preterm"
@@ -212,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/dim_green" />
 
 
@@ -308,6 +310,7 @@
 
                 <TextView
 
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_term"
@@ -330,7 +333,7 @@
                         android:id="@+id/tv_term_average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/dim_green" />
 
 
@@ -418,6 +421,7 @@
 
                 <TextView
 
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_average_days"
@@ -442,7 +446,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/action_percent"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/design_default_color_error" />
 
 

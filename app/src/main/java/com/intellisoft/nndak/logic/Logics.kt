@@ -38,9 +38,36 @@ class Logics {
         const val EBM = "226790003"
         const val FEEDS_TAKEN = "Total-Taken"
         const val DIAPER_CHANGED = "Diaper-Changed"
+        const val ASSESSMENT_DATE = "50786-3"
+
+        const val BREAST_MILK = "Breast-Milk"
+        const val BREAST_FREQUENCY = "Breast-Feed-Frequency"
+
+        const val FORMULA_VOLUME = "Formula-Volume"
+        const val FORMULA_FREQUENCY = "Formula-Frequency"
+        const val FORMULA_ROUTE = "Formula-Route"
+        const val FORMULA_TYPE = "Formula-Type"
+
+
         const val DHM_VOLUME = "DHM-Volume"
-        const val IV_VOLUME = "IV-Volume"
+        const val DHM_FREQUENCY = "DHM-Frequency"
+        const val DHM_ROUTE = "DHM-Route"
+
+        const val DHM_TYPE = "DHM-Type"
+        const val DHM_CONSENT = "Consent-Given"
+        const val DHM_REASON = "DHM-Reason"
+
+        const val IV_VOLUME = "IV-Fluid-Volume"
+        const val IV_FREQUENCY = "IV-Fluid-Frequency"
+        const val IV_ROUTE = "IV-Fluid-Route"
+
         const val EBM_VOLUME = "EBM-Volume"
+        const val EBM_FREQUENCY = "EBM-Feeding-Frequency"
+        const val EBM_ROUTE = "EBM-Feeding-Route"
+
+        const val ADDITIONAL_FEEDS = "Additional-Feeds"
+        const val FEEDING_SUPPLEMENTS = "Supplements-Feeding"
+
         const val STOOL = "Stool"
         const val ADJUST_PRESCRIPTION = "Adjust-Prescription"
         const val FEEDS_DEFICIT = "Feeds-Deficit"
@@ -48,6 +75,17 @@ class Logics {
         const val REMARKS = "Additional-Notes"
         const val EXPRESSED_MILK = "226790003"
         const val EXPRESSION_TIME = "Time-Expressed"
+        const val BABY_WELL = "71195-2"
+        const val ASPHYXIA = "45735-8"
+        const val JAUNDICE = "45736-6"
+        const val SEPSIS = "45755-8"
+        const val BREAST_PROBLEM = "Breast-Problem"
+        const val MUM_LOCATION = "Mother-Location"
+        const val MUM_CONTRA = "Mother-Contraindicated"
+        const val BABY_BREASTFEEDING = "Baby-BreastFeeding"
+        const val MUM_WELL = "Mother-Well"
+        const val FLUID_VOLUME = "IV-Volume"
+
 
         /**
          * 104-9 Code

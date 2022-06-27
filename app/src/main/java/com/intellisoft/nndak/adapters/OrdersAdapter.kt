@@ -36,5 +36,6 @@ class OrdersAdapter(
     override fun onBindViewHolder(holder: OrdersItemViewHolder, position: Int) {
         val item = currentList[position]
         holder.bindTo(item, onItemClicked)
+
     }
 }

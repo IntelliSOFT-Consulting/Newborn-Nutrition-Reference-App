@@ -66,7 +66,7 @@
 
                         <TextView
                             android:id="@+id/tv_total"
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAlignment="textEnd"
@@ -78,19 +78,20 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/total_babies"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceBody2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="end"
-                    android:visibility="invisible"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:layout_width="@dimen/_15dp"
@@ -114,9 +115,9 @@
                     android:layout_height="wrap_content"
                     android:indeterminate="false"
                     android:max="100"
-                    android:visibility="invisible"
                     android:padding="@dimen/_15dp"
-                    android:progress="40" />
+                    android:progress="40"
+                    android:visibility="invisible" />
             </LinearLayout>
 
 
@@ -177,7 +178,7 @@
 
                         <TextView
                             android:id="@+id/tv_preterm"
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAlignment="textEnd"
@@ -189,7 +190,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_preterm"
@@ -213,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/dim_green" />
 
 
@@ -296,7 +297,7 @@
 
                         <TextView
                             android:id="@+id/tv_term"
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAlignment="textEnd"
@@ -308,7 +309,8 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
+
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_term"
@@ -331,7 +333,7 @@
                         android:id="@+id/tv_term_average"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/dim_green" />
 
 
@@ -406,7 +408,7 @@
 
                         <TextView
                             android:id="@+id/tv_average"
-                            style="@android:style/TextAppearance.DeviceDefault.Medium"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAlignment="textEnd"
@@ -418,7 +420,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@android:style/TextAppearance.DeviceDefault.Medium"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/action_average_days"
@@ -429,8 +431,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="end"
-                    android:visibility="invisible"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:layout_width="@dimen/_15dp"
@@ -443,7 +445,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/action_percent"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/design_default_color_error" />
 
 

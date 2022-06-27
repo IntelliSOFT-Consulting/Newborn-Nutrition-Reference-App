@@ -10,6 +10,7 @@ import timber.log.Timber
 
 class OrdersItemViewHolder(binding: OrderListViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
+    private val lnParent: LinearLayout = binding.lnParent
     private val appBabyName: TextView = binding.appBabyName
     private val appMotherName: TextView = binding.appMotherName
     private val appIpNumber: TextView = binding.appIpNumber

@@ -66,7 +66,9 @@ data class EncounterItem(
     val id: String,
     val code: String,
     val effective: String,
-    val value: String
+    val value: String,
+    val status: String,
+    val partOf: String
 ) {
     override fun toString(): String = code
 }
@@ -96,6 +98,7 @@ data class OrdersItem(
     val dhmType: String? = "",
     val consentGiven: String? = "",
     val dhmReason: String? = "",
+    val code: String? = "",
 )
 
 /**
@@ -197,6 +200,7 @@ data class PrescriptionItem(
     val frequency: String? = "",
     val ivFluids: String? = "",
     val breastMilk: String? = "",
+    val ebm: String? = "",
     val donorMilk: String? = "",
     val consent: String? = "",
     val consentDate: String? = "",
@@ -205,6 +209,8 @@ data class PrescriptionItem(
     val supplements: String? = "",
     val expressions: String? = "",
     val feedsGiven: String? = "",
+    val cWeight: String? = "",
+    val formula: String? = "",
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
@@ -235,13 +241,27 @@ data class MessageItem(
     override fun toString(): String = message
 }
 
+data class Prescription(
+    val currentWeight: String,
+    val totalFeeds: String,
+    val supplements: String,
+    val additional: String,
+    val data: List<FeedItem>
+)
+
 data class FeedItem(
     val id: String? = "",
+    val idAlt: String? = "",
     val resourceId: String? = "",
     val type: String? = "",
     val route: String? = "",
+    val typeAlt: String? = "",
+    val routeAlt: String? = "",
     val volume: String? = "",
-    val frequency: String? = ""
+    val frequency: String? = "",
+    val frequencyAlt: String? = "",
+    val logicalId: String? = "",
+    val specific: String? = ""
 ) {
     override fun toString(): String = type.toString()
 }

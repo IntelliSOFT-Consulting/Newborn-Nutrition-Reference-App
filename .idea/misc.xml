@@ -158,8 +158,10 @@
         <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.13" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.1153052805280528" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/frequency.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/horizontal_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/horizontal_item_three.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_landing.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/landing.xml" value="0.22146739130434784" />
         <entry key="app/src/main/res/layout/login_app_bar_layout.xml" value="0.16316006600660066" />
         <entry key="app/src/main/res/layout/mother_item.xml" value="0.25" />
@@ -178,6 +180,8 @@
         <entry key="app/src/main/res/layout/prescription.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/prescription_list_item.xml" value="0.1375" />
         <entry key="app/src/main/res/layout/progress.xml" value="0.1625" />
+        <entry key="app/src/main/res/layout/reason.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/routes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/screen_questionnaire.xml" value="0.1747112211221122" />
         <entry key="app/src/main/res/layout/screener_encounter_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/side_menu.xml" value="0.22" />
@@ -185,6 +189,8 @@
         <entry key="app/src/main/res/layout/statistics.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/update_prescription.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
         <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
@@ -193,9 +199,14 @@
         <entry key="app/src/main/res/menu/hidden_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/list_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/maternity.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/menu_consent.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/menu_formula.xml" value="0.15963541666666667" />
+        <entry key="app/src/main/res/menu/menu_frequency.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/menu_in_transaction.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/menu_supp.xml" value="0.15963541666666667" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/post_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/route.xml" value="0.17760416666666667" />
       </map>
     </option>
   </component>

@@ -462,14 +462,14 @@ class PatientListViewModel(
 
             }
             .let { mother.addAll(it) }
-        Timber.e("Baby Id ${baby.resourceId}")
+
         val obs = getObservations(baby.resourceId)
         var birthWeight = ""
         var status = ""
 
         if (obs.isNotEmpty()) {
             for (element in obs) {
-                Timber.e("Baby Observations Found ${obs.size}")
+
                 if (element.code == "8339-4") {
                     birthWeight = element.value
                 }
