@@ -33,9 +33,9 @@ import com.intellisoft.nndak.adapters.OrdersAdapter
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
-import com.intellisoft.nndak.logic.Logics.Companion.HMB
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.models.OrdersItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
@@ -255,7 +255,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun onOrderClick(order: OrdersItem) {
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            if (role == ADMIN || role == DOCTOR || role == HMB) {
+            if (role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT) {
                 findNavController().navigate(
                     DhmOrdersFragmentDirections.navigateToProcessing(
                         order.patientId, order.encounterId, order.resourceId

@@ -13,6 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_ip_number" />
 
     <TextView
@@ -20,6 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_mother_name" />
 
     <TextView
@@ -27,6 +29,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_baby_name" />
 
 
@@ -35,6 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:visibility="gone"
         android:text="@string/app_baby_age" />
 
@@ -43,6 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_dhm_type" />
 
     <TextView
@@ -50,6 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_consent" />
 
     <TextView
@@ -57,6 +63,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:text="@string/app_action" />
 
     <LinearLayout

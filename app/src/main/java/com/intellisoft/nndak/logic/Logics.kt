@@ -21,10 +21,14 @@ class Logics {
         /**
          * Roles Access
          */
-        const val ADMIN = "ADMINISTRATOR"
-        const val HMB = "HMB Assistant"
+        const val ADMINISTRATOR = "ADMINISTRATORzz"
+        const val HMB_ASSISTANT = "HMB Assistant"
         const val DOCTOR = "Doctor"
         const val NURSE = "Nurse"
+        const val NEONATOLOGIST = "Neonatologist"
+        const val PEDIATRICIAN = "Pediatrician"
+        const val HEAD_OF_DEPARTMENT = "Head of Department"
+        const val NUTRITION_OFFICER = "Nutrition Officer"
 
         /**
          * Prescriptions
@@ -85,6 +89,13 @@ class Logics {
         const val BABY_BREASTFEEDING = "Baby-BreastFeeding"
         const val MUM_WELL = "Mother-Well"
         const val FLUID_VOLUME = "IV-Volume"
+
+        /**
+         * Stock Data
+         */
+        const val PASTEURIZED = "7258-7"
+        const val UNPASTEURIZED = "20738-1"
+        const val STOCK_TYPE = "96741-4"
 
 
         /**

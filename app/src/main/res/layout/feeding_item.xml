@@ -17,6 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:padding="@dimen/_5dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -34,7 +35,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="7dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -46,14 +47,13 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="@dimen/_5dp"
 
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="4">
 
                 <TextView
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/app_iv_fluids"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:id="@+id/tvh_dhm"
@@ -78,21 +78,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/ebm"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/deficit"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="4">
 
                 <TextView
@@ -140,7 +139,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
@@ -149,21 +147,21 @@
                     android:layout_weight="1"
                     android:text="@string/total_taken"
 
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/changer"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/remarks"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
             </LinearLayout>
 
@@ -171,7 +169,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
@@ -201,7 +198,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView
@@ -209,21 +205,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/diaper"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/stool"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/tv_vomit"
-                    android:textAppearance="?attr/textAppearanceBody2" />
+                    android:textAppearance="?attr/textAppearanceSubtitle1" />
 
             </LinearLayout>
 
@@ -231,7 +227,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/_5dp"
                 android:weightSum="3">
 
                 <TextView

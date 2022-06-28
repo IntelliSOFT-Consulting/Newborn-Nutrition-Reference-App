@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,6 +33,9 @@ import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
+import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -67,23 +72,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.dashboard_menu, menu)
-//        return true
-//    }
-//
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//
-//            R.id.menu_profile -> {
-//                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
-//                return true
-//            }
-//            else -> false
-//        }
-//    }
+    private fun dhmAllowed(): Boolean {
+
+        val role = retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT
+        }
+        return false
+    }
 
     fun retrieveUser(isRole: Boolean): String {
 
@@ -105,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         binding.apply {
+            val allowed = dhmAllowed()
             menu.lnHome.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
@@ -130,17 +127,25 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmOrders.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
+                if (allowed) {
                 navController.navigate(R.id.dhmOrdersFragment)
+                } else {
+                    accessDenied()
+                }
             }
             menu.lnDhmStock.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                val bundle =
-                    bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
-                findNavController(R.id.nav_host_fragment).navigate(
-                    R.id.dhmStockFragment,
-                    bundle
-                )
+                if (allowed) {
+                    val bundle =
+                        bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
+                    findNavController(R.id.nav_host_fragment).navigate(
+                        R.id.dhmStockFragment,
+                        bundle
+                    )
+                } else {
+                    accessDenied()
+                }
 
             }
             menu.btnCloseFilter.setOnClickListener {
@@ -166,6 +171,14 @@ class MainActivity : AppCompatActivity() {
                 viewModel.poll()
             }
         }
+    }
+
+    private fun accessDenied() {
+        SweetAlertDialog(this@MainActivity, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+            .show()
     }
 
     fun displayDialog() {

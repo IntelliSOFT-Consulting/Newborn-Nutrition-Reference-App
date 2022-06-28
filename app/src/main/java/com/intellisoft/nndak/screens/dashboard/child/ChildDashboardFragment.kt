@@ -12,11 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentChildDashboardBinding
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.utils.dimOption
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -108,6 +110,7 @@ class ChildDashboardFragment : Fragment() {
 
         binding.apply {
             val isActive = FhirApplication.getDashboardActive(requireContext())
+            val allowed = validatePermission()
             if (!isActive) {
                 lnBabyDashboard.isEnabled = false
                 lnBabyFeeding.isEnabled = false
@@ -140,11 +143,15 @@ class ChildDashboardFragment : Fragment() {
                 )
             }
             lnBabyMonitoring.setOnClickListener {
-                findNavController().navigate(
-                    ChildDashboardFragmentDirections.navigateToBabyMonitoring(
-                        args.patientId
+                if (allowed) {
+                    findNavController().navigate(
+                        ChildDashboardFragmentDirections.navigateToBabyMonitoring(
+                            args.patientId
+                        )
                     )
-                )
+                } else {
+                    accessDenied()
+                }
             }
             lnBabyLactation.setOnClickListener {
                 findNavController().navigate(
@@ -155,6 +162,23 @@ class ChildDashboardFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun validatePermission(): Boolean {
+
+        val role = (requireActivity() as MainActivity).retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role != HMB_ASSISTANT
+        }
+        return false
+    }
+
+    private fun accessDenied() {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+            .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

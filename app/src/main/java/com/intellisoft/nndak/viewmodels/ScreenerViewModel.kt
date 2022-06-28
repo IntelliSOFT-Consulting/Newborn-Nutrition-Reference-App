@@ -38,6 +38,7 @@ import timber.log.Timber
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 const val TAG = "ScreenerViewModel"
 
@@ -516,7 +517,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     val bType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "55277-8",
+                                            "45371-2",
                                             "Multiple Birth Type",
                                             bType
                                         )
@@ -1839,7 +1840,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     fun feedingCues(
         questionnaireResponse: QuestionnaireResponse,
-        cues: FeedingCuesTips,
+        cues: ArrayList<CodingObservation>,
         patientId: String
     ) {
         viewModelScope.launch {
@@ -1855,107 +1856,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Feeding-Readiness",
-                                cues.readiness, cues.readiness,
+                    cues.forEach {
+                        bundle.addEntry()
+                            .setResource(
+                                qh.codingQuestionnaire(
+                                    it.code,
+                                    it.display,
+                                    it.value
 
                                 )
-                        )
-                        .request.url = "Observation"
+                            )
+                            .request.url = "Observation"
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Latch",
-                                cues.latch, cues.latch,
-
-                                )
-                        )
-                        .request.url = "Observation"
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Steady Suck",
-                                cues.steady, cues.steady,
-
-                                )
-                        )
-                        .request.url = "Observation"
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Audible-Swallow",
-                                cues.audible, cues.audible,
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Chocking",
-                                cues.chocking, cues.chocking,
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Breast-Softening",
-                                cues.softening.toString(),
-                                cues.softening.toString(),
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "10-Minutes-Side",
-                                cues.tenSide.toString(),
-                                cues.tenSide.toString(),
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "2-3-Hours",
-                                cues.threeHours.toString(),
-                                cues.threeHours.toString(),
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "6-8-Wet-Diapers",
-                                cues.sixDiapers.toString(),
-                                cues.sixDiapers.toString(),
-
-                                )
-                        )
-                        .request.url = "Observation"
-
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Mother-Contraindicated",
-                            "Mother Contraindicated",
-                            cues.contra.toString()
-                        )
-                    )
-                        .request.url = "Observation"
-
+                    }
                     val value = retrieveUser(false)
 
                     bundle.addEntry()
@@ -2984,11 +2897,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     fun updateStock(
         questionnaireResponse: QuestionnaireResponse,
-        pa: String,
-        upa: String,
-        type: String,
-        totalDhm: String
-    ) {
+        stockList: ArrayList<CodingObservation>,
+
+        ) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -3002,52 +2913,31 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val qh = QuestionnaireHelper()
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.quantityQuestionnaire(
-                                "Pasteurized",
-                                "Pasteurized",
-                                "Pasteurized",
-                                pa,
-                                "mls"
-                            )
-                        )
-                        .request.url = "Observation"
+                    stockList.forEach {
+                        bundle.addEntry()
+                            .setResource(
+                                qh.codingQuestionnaire(
+                                    it.code,
+                                    it.display,
+                                    it.value
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.quantityQuestionnaire(
-                                "Un-Pasteurized",
-                                "Un Pasteurized",
-                                "Un Pasteurized",
-                                upa,
-                                "mls"
+                                )
                             )
-                        )
-                        .request.url = "Observation"
+                            .request.url = "Observation"
 
-                    bundle.addEntry()
-                        .setResource(
-                            qh.quantityQuestionnaire(
-                                "Total-Stock",
-                                "Total Stock",
-                                "Total Stock",
-                                totalDhm,
-                                "mls"
-                            )
-                        )
-                        .request.url = "Observation"
+                    }
 
+                    val value = retrieveUser(false)
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
-                                "DHM-Stock-Type",
-                                "DHM Stock Type",
-                                type,
-
-                                )
+                                "Completed By",
+                                value,
+                                value
+                            )
                         )
                         .request.url = "Observation"
+
                     emptyObservations(bundle, generateUuid(), DHM_STOCK)
                     isResourcesSaved.postValue(true)
 

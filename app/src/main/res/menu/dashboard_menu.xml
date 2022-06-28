@@ -16,7 +16,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_profile"
-        android:icon="@drawable/mask"
+        android:icon="@drawable/profile"
         android:title="@string/app_profile"
         app:showAsAction="ifRoom" />
 </menu>

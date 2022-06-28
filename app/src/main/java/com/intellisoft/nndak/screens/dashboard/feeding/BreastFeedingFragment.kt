@@ -3,7 +3,6 @@ package com.intellisoft.nndak.screens.dashboard.feeding
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
@@ -24,6 +23,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.FeedingCuesDialog
+import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +52,7 @@ class BreastFeedingFragment : Fragment() {
     private var _binding: FragmentBreastFeedingBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private val args: BreastFeedingFragmentArgs by navArgs()
+    private val feedingCuesList = ArrayList<CodingObservation>()
     private val binding
         get() = _binding!!
 
@@ -197,15 +198,29 @@ class BreastFeedingFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
+            val readiness =
+                CodingObservation("Feeding-Readiness", "Feeding Readiness", cues.readiness)
+            val latch = CodingObservation("Latch", "Latch", cues.latch)
+            val steady = CodingObservation("Steady-Suck", "Steady Suck", cues.steady)
+            val audible = CodingObservation("Audible-Swallow", "Audible Swallow", cues.audible)
+            val chocking = CodingObservation("Chocking", "Chocking", cues.chocking)
+            val softening =
+                CodingObservation("Breast-Softening", "Breast Softening", cues.softening.toString())
+            val tenSide =
+                CodingObservation("10-Minutes-Side", "10 Minutes per Side", cues.tenSide.toString())
+            val threeHours = CodingObservation("2-3-Hours", "2-3 Hours", cues.threeHours.toString())
+            val sixDiapers =
+                CodingObservation("6-8-Wet-Diapers", "6-8 Wet Diapers", cues.sixDiapers.toString())
+            val contra = CodingObservation(
+                "Mother-Contraindicated",
+                "MotherContraindicated",
+                cues.contra.toString()
+            )
+            feedingCuesList.addAll(listOf(readiness, latch,steady,audible,chocking,softening,tenSide,threeHours,sixDiapers,contra))
 
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
             viewModel.feedingCues(
                 questionnaireFragment.getQuestionnaireResponse(),
-                cues,
+                feedingCuesList,
                 args.patientId
             )
         }

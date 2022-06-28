@@ -16,21 +16,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_today_total"
+
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_today_total"
             android:layout_width="match_parent"
+
+            android:textAppearance="?attr/textAppearanceBody2"
             android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_route"
+
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_route"
+
+            android:textAppearance="?attr/textAppearanceBody2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -45,11 +53,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_three_hourly"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_three_hourly"
             android:layout_width="match_parent"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -62,12 +72,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:text="@string/app_three_hourly_break"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/app_three_hourly_break"
             android:layout_width="match_parent"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

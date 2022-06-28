@@ -27,9 +27,9 @@ import com.intellisoft.nndak.charts.DHMModel
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
-import com.intellisoft.nndak.logic.Logics.Companion.HMB
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.utils.isTablet
@@ -81,9 +81,10 @@ class HomeFragment : Fragment() {
         syncLocalData()
 
         binding.apply {
+
+            val allowed = validatePermission()
             actionEnterStock.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(HomeFragmentDirections.navigateToStock())
                 } else {
@@ -91,7 +92,11 @@ class HomeFragment : Fragment() {
                 }
             }
             actionViewDhm.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.navigateToOrders())
+                if (allowed) {
+                    findNavController().navigate(HomeFragmentDirections.navigateToOrders())
+                } else {
+                    accessDenied()
+                }
             }
         }
         if (isNetworkAvailable(requireContext())) {
@@ -112,7 +117,7 @@ class HomeFragment : Fragment() {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            return role == ADMIN || role == DOCTOR || role == HMB
+            return role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT
         }
         return false
     }
@@ -271,7 +276,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.hidden_menu, menu)
+        inflater.inflate(R.menu.dashboard_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

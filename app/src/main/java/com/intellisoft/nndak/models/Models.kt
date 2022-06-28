@@ -25,6 +25,12 @@ data class PatientItem(
 
 }
 
+data class CodingObservation(
+    val code: String,
+    val display:String,
+    val value: String,
+)
+
 data class BasicThree(
     val lmp: String,
     val edd: String,
@@ -193,6 +199,7 @@ data class FeedingCuesTips(
 data class PrescriptionItem(
     val id: String? = "",
     val resourceId: String? = "",
+    val hour: String? = "",
     val date: String? = "",
     val time: String? = "",
     val totalVolume: String? = "",

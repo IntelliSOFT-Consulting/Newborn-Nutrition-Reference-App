@@ -321,7 +321,7 @@
     <string name="app_review_pres">Review Prescription Details</string>
     <string name="mother_breastfeeding_baby">Mother Breastfeeding Baby?</string>
     <string name="breast_problems">Breast Problems</string>
-    <string name="mother_contraindicated">Is mother contraindicated for Infant?</string>
+    <string name="mother_contraindicated">Is mother\'s milk contraindicated for Infant?</string>
     <string name="app_total_expressed">Total Milk Expressed</string>
     <string name="middle_lorem_ipsum">Online Sync</string>
     <string name="settings">Settings</string>
@@ -392,10 +392,10 @@
     <string name="menu_pre_term">Preterm Formula</string>
     <string-array name="birds">
         <item>Filter By:</item>
-        <item>Patient Name</item>
+        <item>Baby\'s Name</item>
         <item>National Id</item>
         <item>Phone Number</item>
-        <item>Mother DoB</item>
+        <item>Mother IP</item>
     </string-array>
     <string-array name="sort">
         <item>Sort By:</item>

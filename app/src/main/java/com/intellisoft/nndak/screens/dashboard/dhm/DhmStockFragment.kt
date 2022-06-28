@@ -26,6 +26,10 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.logic.Logics.Companion.PASTEURIZED
+import com.intellisoft.nndak.logic.Logics.Companion.STOCK_TYPE
+import com.intellisoft.nndak.logic.Logics.Companion.UNPASTEURIZED
+import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +55,7 @@ class DhmStockFragment : Fragment() {
     private lateinit var upa: String
     private lateinit var type: String
     private lateinit var totalDhm: String
+    val stockList = ArrayList<CodingObservation>()
     private val binding
         get() = _binding!!
 
@@ -212,11 +217,29 @@ class DhmStockFragment : Fragment() {
                     .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
             Timber.e("Questionnaire  $questionnaire")
 
+            val pasteurized = CodingObservation(
+                PASTEURIZED,
+                "Pasteurized",
+                pa
+            )
+
+            val unpasteurized = CodingObservation(
+                UNPASTEURIZED,
+                "Un-Pasteurized",
+                upa
+            )
+
+            val milkType = CodingObservation(
+                STOCK_TYPE,
+                "DHM-Stock-Type",
+                type
+            )
+
+            stockList.addAll(listOf(pasteurized, unpasteurized, milkType))
+
             viewModel.updateStock(
                 questionnaireFragment.getQuestionnaireResponse(),
-                pa,
-                upa,type,
-                totalDhm
+                stockList
             )
         }
     }
@@ -236,11 +259,11 @@ class DhmStockFragment : Fragment() {
             }
 
             (activity as MainActivity).hideDialog()
-          val dialog=  SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                 .setTitleText("Success")
                 .setContentText(resources.getString(R.string.app_okay_saved))
                 .setCustomImage(R.drawable.smile)
-                .setConfirmClickListener {sDialog ->
+                .setConfirmClickListener { sDialog ->
                     run {
                         sDialog.dismiss()
                         findNavController().navigateUp()
@@ -255,7 +278,7 @@ class DhmStockFragment : Fragment() {
     private fun onSubmitAction() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
-          type = binding.appType.text.toString()
+        type = binding.appType.text.toString()
         if (TextUtils.isEmpty(pa) || pa == "0"
             || TextUtils.isEmpty(upa) || upa == "0" || TextUtils.isEmpty(type)
         ) {

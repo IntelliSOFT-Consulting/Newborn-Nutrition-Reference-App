@@ -1,15 +1,16 @@
 package com.intellisoft.nndak.screens.dashboard
 
+import android.os.Build
 import android.os.Bundle
+import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.LandingAdapter
 import com.intellisoft.nndak.databinding.FragmentLandingBinding
@@ -66,6 +67,24 @@ class LandingFragment : Fragment() {
                      findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
                  }
              }
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                (requireActivity() as MainActivity).openNavigationDrawer()
+                true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            else -> false
+        }
     }
 
    /* private fun setUpLayoutsRecyclerView() {

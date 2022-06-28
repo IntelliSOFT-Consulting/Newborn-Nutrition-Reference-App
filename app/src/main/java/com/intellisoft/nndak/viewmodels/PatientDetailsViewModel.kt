@@ -190,6 +190,15 @@ class PatientDetailsViewModel(
         val intervals = getPastHoursOnIntervalOf(8, 3)
         val feeds: MutableList<FeedsData> = mutableListOf()
         var totalFeed = 0f
+        var i = 0
+        val exp = getPatientEncounters()
+        if (exp.isNotEmpty()) {
+            for (ex in exp) {
+                if (ex.code == "Milk Expression") {
+                    i++
+                }
+            }
+        }
         intervals.forEach {
             feeds.add(loadFeed(it))
         }
@@ -200,7 +209,7 @@ class PatientDetailsViewModel(
 
         return FeedsDistribution(
             totalFeed = "$totalFeed mls",
-            varianceAmount = "100",
+            varianceAmount = "$i",
             data = feeds
         )
     }
@@ -346,6 +355,7 @@ class PatientDetailsViewModel(
         val mum = getMother(patientId)
         val mumName = mum.first.toString()
         val mumIp = mum.second.toString()
+
         val babyWell = retrieveCode(BABY_WELL)
         val asphyxia = retrieveCode(ASPHYXIA)
         val jaundice = retrieveCode(JAUNDICE)
@@ -427,9 +437,9 @@ class PatientDetailsViewModel(
                     birthWeight = element.value
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
                     birthWeight = if (code[0].toInt() < 2500) {
-                        "$birthWeight (gm)-Low"
+                        "$birthWeight -Low"
                     } else {
-                        "$birthWeight (gm)-Normal"
+                        "$birthWeight -Normal"
                     }
                 }
                 if (element.code == "52455-3") {
@@ -481,6 +491,7 @@ class PatientDetailsViewModel(
             birthWeight,
             status,
             gainRate,
+
             dashboard = BabyDashboard(
                 gestation = gestation,
                 apgarScore = apgar,
@@ -492,7 +503,7 @@ class PatientDetailsViewModel(
                 dayOfLife = dayOfLife,
                 dateOfAdm = admDate,
                 cWeight = cWeight,
-                motherMilk = motherMilk
+                motherMilk = motherMilk,
             ),
             mother = MotherDashboard(
                 parity = parity,
@@ -501,7 +512,7 @@ class PatientDetailsViewModel(
                 multiPregnancy = mPreg,
                 deliveryDate = dDate,
                 motherLocation = mumLocation,
-                motherStatus = mumWell
+                motherStatus = mumWell,
             ),
             assessment = AssessmentItem(
                 breastProblems = breastProblems,
@@ -676,14 +687,6 @@ class PatientDetailsViewModel(
         return sortedList
     }
 
-    private fun sortCarePlans(data: List<CareItem>): List<CareItem> {
-
-        val sortedList = data.sortedWith(compareBy { it.created })
-        sortedList.forEach {
-            Timber.e("Refined Care Plans::::: ${it.resourceId} Time:::: ${it.created} ${it.encounterId}")
-        }
-        return sortedList
-    }
 
     private fun getFormattedAge(
         dob: String
@@ -743,7 +746,7 @@ class PatientDetailsViewModel(
     ): List<PrescriptionItem> {
         val data: MutableList<PrescriptionItem> = mutableListOf()
         val pres = fetchCarePlans(careId)
-        Timber.e("Care Provide ${pres.size}")
+
 
         pres.forEach { item ->
             data.add(feedsTaken(item))
@@ -768,7 +771,7 @@ class PatientDetailsViewModel(
         fhirEngine
             .search<Encounter> {
                 filter(
-                    CarePlan.SUBJECT,
+                    Encounter.SUBJECT,
                     { value = "Patient/$patientId" })
                 sort(Encounter.DATE, Order.DESCENDING)
             }
@@ -789,25 +792,9 @@ class PatientDetailsViewModel(
     }
 
 
-    //    private suspend fun fetchActiveCarePlans(): List<CareItem> {
     private suspend fun fetchActiveCarePlans(): List<EncounterItem> {
         val cares: MutableList<EncounterItem> = mutableListOf()
-        /*   fhirEngine
-               .search<CarePlan> {
-                   filter(
-                       CarePlan.SUBJECT,
-                       { value = "Patient/$patientId" })
-                   sort(CarePlan.DATE, Order.DESCENDING)
-               }
-               .take(MAX_RESOURCE_COUNT)
-               .map {
-                   createCarePlanItem(
-                       it,
-                       getApplication<Application>().resources
-                   )
-               }
-               .filter { it.status == CarePlan.CarePlanStatus.ACTIVE.toString() }
-               .let { cares.addAll(it) }*/
+
         fhirEngine
             .search<Encounter> {
                 filter(
@@ -837,7 +824,7 @@ class PatientDetailsViewModel(
                     Encounter.SUBJECT,
                     { value = "Patient/$patientId" })
                 filter(Encounter.BASED_ON, { value = "Encounter/$careId" })
-                sort(CarePlan.DATE, Order.DESCENDING)
+                sort(Encounter.DATE, Order.DESCENDING)
             }
             .take(MAX_RESOURCE_COUNT)
             .map {
@@ -859,7 +846,7 @@ class PatientDetailsViewModel(
     private suspend fun feedsTaken(care: EncounterItem): PrescriptionItem {
 
         val observations = getReferencedObservations(care.partOf)
-        val hour=extractValue(observations,ASSESSMENT_DATE)
+        val hour = extractValue(observations, ASSESSMENT_DATE)
         val date = try {
             FormatHelper().extractDateString(hour)
         } catch (e: Exception) {
@@ -874,6 +861,7 @@ class PatientDetailsViewModel(
         return PrescriptionItem(
             id = care.id,
             resourceId = care.id,
+            hour = hour,
             date = date,
             time = time,
             totalVolume = extractValue(observations, FEEDS_TAKEN),

@@ -23,8 +23,10 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.NEONATOLOGIST
+import com.intellisoft.nndak.logic.Logics.Companion.PEDIATRICIAN
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -164,16 +166,18 @@ class BabyFeedsFragment : Fragment() {
                 val value = it.first().id.toString()
                 careId = value
                 Timber.d("Encounter Found $careId ")
+                adapter.submitList(it.subList(0, 1))
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
-            adapter.submitList(it.subList(0,1))
+
         }
 
         binding.apply {
+
+            val allowed = validatePermission()
             actionNewPrescription.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(
                         BabyFeedsFragmentDirections.navigateToAddPrescription(
@@ -186,7 +190,6 @@ class BabyFeedsFragment : Fragment() {
             }
             actionUpdatePrescription.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(
                         BabyFeedsFragmentDirections.navigateToEditPrescription(
@@ -213,7 +216,7 @@ class BabyFeedsFragment : Fragment() {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            return role == ADMIN || role == DOCTOR
+            return role == ADMINISTRATOR || role == DOCTOR || role == NEONATOLOGIST || role == PEDIATRICIAN
         }
         return false
     }

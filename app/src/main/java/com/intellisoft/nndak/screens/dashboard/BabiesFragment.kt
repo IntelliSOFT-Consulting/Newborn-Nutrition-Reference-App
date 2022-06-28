@@ -148,6 +148,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         } else {
 
                             patientListViewModel.searchPatientsByName(newText)
+                            binding.imgEmpty.visibility=View.GONE
 
 //                            Toast.makeText(
 //                                requireContext(),
@@ -216,7 +217,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.hidden_menu, menu)
+        inflater.inflate(R.menu.dashboard_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

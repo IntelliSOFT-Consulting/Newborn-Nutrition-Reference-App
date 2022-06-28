@@ -164,7 +164,7 @@
         <entry key="app/src/main/res/layout/item_landing.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/landing.xml" value="0.22146739130434784" />
         <entry key="app/src/main/res/layout/login_app_bar_layout.xml" value="0.16316006600660066" />
-        <entry key="app/src/main/res/layout/mother_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/mother_item.xml" value="0.14" />
         <entry key="app/src/main/res/layout/new_patient_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/observation_list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/observation_list_view.xml" value="0.1" />

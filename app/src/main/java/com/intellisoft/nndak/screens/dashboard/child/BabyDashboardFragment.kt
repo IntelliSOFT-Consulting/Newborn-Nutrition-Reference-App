@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -180,6 +177,7 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.tvTotalVolume.text = it.totalFeed
+                binding.tvExpressionNumber.text = it.varianceAmount
                 barGraph(it)
             }
         }
@@ -336,11 +334,11 @@ class BabyDashboardFragment : Fragment() {
 
 
             feedsChart.barData.barWidth = barWidth
-             feedsChart.xAxis.axisMaximum =
-                 0f + feedsChart.barData.getGroupWidth(
-                     groupSpace,
-                     barSpace
-                 ) * groupCount
+            feedsChart.xAxis.axisMaximum =
+                0f + feedsChart.barData.getGroupWidth(
+                    groupSpace,
+                    barSpace
+                ) * groupCount
             feedsChart.groupBars(-1f, groupSpace, barSpace)
 
             //refresh
@@ -390,6 +388,7 @@ class BabyDashboardFragment : Fragment() {
         actual.setDrawCircleHole(false)
         actual.setDrawValues(false)
         actual.setDrawCircles(true)
+        actual.circleRadius=5f
         actual.mode = LineDataSet.Mode.CUBIC_BEZIER
         actual.lineWidth = 5f
 
@@ -446,12 +445,20 @@ class BabyDashboardFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
             }
             else -> false
         }
