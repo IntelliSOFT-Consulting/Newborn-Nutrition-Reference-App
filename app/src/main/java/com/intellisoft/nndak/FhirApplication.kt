@@ -68,7 +68,6 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).fhirEngine
 
 
-
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL, DEMO_API_SERVER
@@ -147,9 +146,27 @@ class FhirApplication : Application() {
         }
 
 
+        fun mumContra(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Contra", it)
+                .commit()
+        }
+
+
         fun updateFeedings(context: Context, it: String) {
             (context.applicationContext as FhirApplication).editor.putString(FEEDINGS, it)
                 .commit()
+        }
+
+
+        fun updateSyncTime(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Sync", it)
+                .commit()
+        }
+        fun getSyncTime(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "Sync",
+                ""
+            )
         }
 
         fun updateWeights(context: Context, it: String) {
@@ -174,24 +191,28 @@ class FhirApplication : Application() {
                 ""
             )
         }
+
         fun getFeedings(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 FEEDINGS,
                 ""
             )
         }
+
         fun getStatistics(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 STATISTICS,
                 ""
             )
         }
+
         fun getDHM(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 DHM,
                 ""
             )
         }
+
         fun getWeights(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 WEIGHTS,

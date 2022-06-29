@@ -27,7 +27,8 @@
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationLoadingProgressBar" />
+        app:layout_constraintTop_toBottomOf="@id/locationLoadingProgressBar"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/organization_name"
@@ -69,9 +70,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:hint="@string/action_username"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintTextColor="@color/colorPrimary">
+            android:hint="@string/action_username" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eMail"
@@ -92,16 +91,13 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:hint="@string/action_password"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintTextColor="@color/colorPrimary"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword"
-                android:textColorHint="#757575"
+                android:inputType="textPassword"
                 android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -189,5 +185,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

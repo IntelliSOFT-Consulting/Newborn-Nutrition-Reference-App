@@ -224,10 +224,12 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // hide the soft keyboard when the navigation drawer is shown on the screen.
-                searchView.clearFocus()
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
             }
             else -> false
         }

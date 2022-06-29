@@ -56,8 +56,15 @@
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/growth_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="@dimen/_10dp" />
+                        android:layout_height="300dp"/>
+
+                    <TextView
+                        style="?attr/textAppearanceBody2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_age"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:textAlignment="center" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -125,8 +132,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_compared_weight"
                             android:textAlignment="center"
-                            android:visibility="gone"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -235,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_daily_feeds"
 
-                            android:textAppearance="?attr/textAppearanceBody2"  />
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -267,8 +274,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_compared_prescribed"
                             android:textAlignment="center"
-                            android:visibility="gone"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -301,7 +308,7 @@
                             android:text="@string/app_expressions"
                             android:textAlignment="center"
 
-                            android:textAppearance="?attr/textAppearanceBody2"  />
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

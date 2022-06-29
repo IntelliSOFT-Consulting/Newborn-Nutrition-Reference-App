@@ -151,7 +151,7 @@ class EditPrescriptionFragment : Fragment() {
     }
 
     private fun updateUI(it: PrescriptionItem) {
-        Timber.e("Update Pres ${it.id}")
+        Timber.e("Update Pres ${it.cWeight}")
         binding.apply {
 
             eWeight.setText(it.cWeight.toString())
@@ -398,15 +398,9 @@ class EditPrescriptionFragment : Fragment() {
         confirmationDialog.dismiss()
         (activity as MainActivity).displayDialog()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        val questionnaireFragment =
+            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+        try {
 
             val data = Prescription(
                 currentWeight = currentWeight.toDouble().toString(),
@@ -418,6 +412,14 @@ class EditPrescriptionFragment : Fragment() {
             viewModel.updatePrescription(
                 questionnaireFragment.getQuestionnaireResponse(), args.patientId, data
             )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.inputs_missing),
+                Toast.LENGTH_SHORT
+            ).show()
+
         }
     }
 
@@ -512,7 +514,10 @@ class EditPrescriptionFragment : Fragment() {
             binding.apply {
                 if (cbBreast.isChecked) {
                     val vol = bfVolume.volume.text.toString()
-                    val freq = bfFreq.appFrequency.text
+                    val freq = bfFreq.appFrequency.text.toString()
+                    if (checkEmptyData(vol) || checkEmptyData(freq)) {
+                        return@apply
+                    }
                     feedsList.add(
                         FeedItem(
                             resourceId = BREAST_MILK,
@@ -524,8 +529,11 @@ class EditPrescriptionFragment : Fragment() {
                 }
                 if (cbEbm.isChecked) {
                     val vol = ebmVolume.volume.text.toString()
-                    val freq = ebmFreq.appFrequency.text
-                    val rou = ebmRoute.appType.text
+                    val freq = ebmFreq.appFrequency.text.toString()
+                    val rou = ebmRoute.appType.text.toString()
+                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
+                        return@apply
+                    }
                     feedsList.add(
                         FeedItem(
                             resourceId = EBM_VOLUME,
@@ -539,8 +547,11 @@ class EditPrescriptionFragment : Fragment() {
                 }
                 if (cbFluid.isChecked) {
                     val vol = ivVolume.volume.text.toString()
-                    val freq = ivFreq.appFrequency.text
-                    val rou = ivRoute.appType.text
+                    val freq = ivFreq.appFrequency.text.toString()
+                    val rou = ivRoute.appType.text.toString()
+                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
+                        return@apply
+                    }
                     feedsList.add(
                         FeedItem(
                             resourceId = IV_VOLUME,
@@ -554,9 +565,16 @@ class EditPrescriptionFragment : Fragment() {
                 }
                 if (cbFormula.isChecked) {
                     val vol = formulaVolume.volume.text.toString()
-                    val freq = formulaFreq.appFrequency.text
-                    val rou = formulaRoute.appType.text
-                    val typ = formulaType.appFrequency.text
+                    val freq = formulaFreq.appFrequency.text.toString()
+                    val rou = formulaRoute.appType.text.toString()
+                    val typ = formulaType.appFrequency.text.toString()
+
+                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou) || checkEmptyData(
+                            typ
+                        )
+                    ) {
+                        return@apply
+                    }
                     feedsList.add(
                         FeedItem(
                             resourceId = FORMULA_VOLUME,
@@ -572,10 +590,17 @@ class EditPrescriptionFragment : Fragment() {
                 }
                 if (cbDhm.isChecked) {
                     val vol = dhmVolume.volume.text.toString()
-                    val freq = dhmFreq.appFrequency.text
-                    val rou = dhmRoute.appType.text
-                    val typ = dhmType.appFrequency.text
-                    val con = dhmConsent.appFrequency.text
+                    val freq = dhmFreq.appFrequency.text.toString()
+                    val rou = dhmRoute.appType.text.toString()
+                    val typ = dhmType.appFrequency.text.toString()
+                    val con = dhmConsent.appFrequency.text.toString()
+
+                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou) || checkEmptyData(
+                            typ
+                        ) || checkEmptyData(con)
+                    ) {
+                        return@apply
+                    }
                     val sig = if (con.toString().trim() == "Yes") {
                         "Signed"
                     } else {
@@ -600,17 +625,31 @@ class EditPrescriptionFragment : Fragment() {
                         )
                     )
                 }
-            }
-            Timber.e("Feed List $feedsList")
 
-            confirmationDialog.show(childFragmentManager, "Confirm Details")
+                confirmationDialog.show(childFragmentManager, "Confirm Details")
+            }
+
         } else {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.inputs_missing),
                 Toast.LENGTH_SHORT
             ).show()
+
         }
+
+    }
+
+    private fun checkEmptyData(vol: String): Boolean {
+        if (vol.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.inputs_missing),
+                Toast.LENGTH_SHORT
+            ).show()
+            return true
+        }
+        return false
 
     }
 

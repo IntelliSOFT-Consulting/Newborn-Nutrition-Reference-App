@@ -189,6 +189,9 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+        <argument
+            android:name="contra"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/cuesFragment"

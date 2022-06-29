@@ -24,6 +24,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
+import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
@@ -44,7 +45,6 @@ import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
-import com.intellisoft.nndak.logic.Logics.Companion.FLUID_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
@@ -61,9 +61,11 @@ import com.intellisoft.nndak.logic.Logics.Companion.MUM_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.PARITY
 import com.intellisoft.nndak.logic.Logics.Companion.PMTCT
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
+import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
 import com.intellisoft.nndak.logic.Logics.Companion.SEPSIS
 import com.intellisoft.nndak.logic.Logics.Companion.STOOL
+import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
@@ -810,7 +812,6 @@ class PatientDetailsViewModel(
     ): List<PrescriptionItem> {
         val data: MutableList<PrescriptionItem> = mutableListOf()
         val pres = fetchCarePlans(careId)
-        Timber.e("Care Provide ${pres.size}")
         pres.forEach { item ->
             data.add(feedsTaken(item))
         }
@@ -1046,7 +1047,7 @@ class PatientDetailsViewModel(
         val feeds: MutableList<FeedItem> = mutableListOf()
         var date = "N/A"
         var time = "N/A"
-        val total = extractQuantity(observations, "Total-Feeds")
+        val total = extractQuantity(observations, TOTAL_FEEDS)
         var iv = "N/A"
         var bm = "N/A"
         var dhm = "N/A"
@@ -1061,7 +1062,7 @@ class PatientDetailsViewModel(
         var bFreq = ""
         val givenFeeds = pullFeeds()
         val cWeight =
-            observationsCodePerEncounter(
+            observationsCodePerEncounterCare(
                 CURRENT_WEIGHT,
                 care.encounterId
             ).firstOrNull()?.quantity
@@ -1082,7 +1083,7 @@ class PatientDetailsViewModel(
         val frequency = StringBuilder()
         if (observations.isNotEmpty()) {
 
-            val breastMilk = observationsCodePerEncounter(
+            val breastMilk = observationsCodePerEncounterCare(
                 BREAST_MILK,
                 care.encounterId
             ).firstOrNull()?.value
@@ -1098,7 +1099,7 @@ class PatientDetailsViewModel(
                     )
                 )
             }
-            val form = observationsCodePerEncounter(
+            val form = observationsCodePerEncounterCare(
                 FORMULA_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
@@ -1118,7 +1119,7 @@ class PatientDetailsViewModel(
                     )
                 )
             }
-            val expressed = observationsCodePerEncounter(
+            val expressed = observationsCodePerEncounterCare(
                 EBM_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
@@ -1136,7 +1137,7 @@ class PatientDetailsViewModel(
                     )
                 )
             }
-            val donor = observationsCodePerEncounter(
+            val donor = observationsCodePerEncounterCare(
                 DHM_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
@@ -1158,7 +1159,7 @@ class PatientDetailsViewModel(
                     )
                 )
             }
-            val fl = observationsCodePerEncounter(
+            val fl = observationsCodePerEncounterCare(
                 IV_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
@@ -1177,57 +1178,54 @@ class PatientDetailsViewModel(
                 )
             }
             for (element in observations) {
-                Timber.e("Codes ${element.code}")
-                if (element.code == "Prescription-Date") {
-                    date = FormatHelper().extractDateOnly(element.value)
-                    time = FormatHelper().extractTimeOnly(element.value)
-                }
+                when (element.code) {
+                    PRESCRIPTION_DATE -> {
+                        date = FormatHelper().extractDateOnly(element.value)
+                        time = FormatHelper().extractTimeOnly(element.value)
+                    }
+                    DHM_FREQUENCY -> {
+                        frequency.append("DHM - ${element.value}\n")
+                    }
+                    EBM_FREQUENCY -> {
+                        frequency.append("EBM - ${element.value}\n")
+                    }
+                    IV_FREQUENCY -> {
+                        frequency.append("IV - ${element.value}\n")
+                    }
+                    EBM_ROUTE -> {
+                        routes.append("EBM - ${element.value}\n")
+                    }
+                    IV_ROUTE -> {
+                        routes.append("IV - ${element.value}\n")
+                    }
+                    DHM_ROUTE -> {
 
-                if (element.code == "DHM-Frequency") {
-                    frequency.append("DHM - ${element.value}\n")
-                }
-
-                if (element.code == "EBM-Feeding-Frequency") {
-                    frequency.append("EBM - ${element.value}\n")
-                }
-                if (element.code == "IV-Fluid-Frequency") {
-                    frequency.append("IV - ${element.value}\n")
-                }
-                if (element.code == "EBM-Feeding-Route") {
-                    routes.append("EBM - ${element.value}\n")
-                }
-
-                if (element.code == "IV-Fluid-Route") {
-                    routes.append("IV - ${element.value}\n")
-                }
-                if (element.code == "DHM-Route") {
-
-                    routes.append("DHM- ${element.value}\n")
-                }
-                if (element.code == "IV-Fluid-Volume") {
-                    iv = element.value
-                }
-                if (element.code == "Breast-Milk") {
-                    bm = element.value
-                }
-                if (element.code == "DHM-Volume") {
-                    dhm = element.value
-                }
-                if (element.code == "EBM-Volume") {
-                    ebm = element.value
-                }
-
-                if (element.code == "Formula-Volume") {
-                    formula = element.value
-                }
-                if (element.code == FEEDING_SUPPLEMENTS) {
-                    supplements = element.value
-                }
-                if (element.code == ADDITIONAL_FEEDS) {
-                    additional = element.value
-                }
-                if (element.code == "Consent-Date") {
-                    consentDate = element.value
+                        routes.append("DHM- ${element.value}\n")
+                    }
+                    IV_VOLUME -> {
+                        iv = element.value
+                    }
+                    BREAST_MILK -> {
+                        bm = element.value
+                    }
+                    DHM_VOLUME -> {
+                        dhm = element.value
+                    }
+                    EBM_VOLUME -> {
+                        ebm = element.value
+                    }
+                    FORMULA_VOLUME -> {
+                        formula = element.value
+                    }
+                    FEEDING_SUPPLEMENTS -> {
+                        supplements = element.value
+                    }
+                    ADDITIONAL_FEEDS -> {
+                        additional = element.value
+                    }
+                    CONSENT_DATE -> {
+                        consentDate = element.value
+                    }
                 }
             }
         }

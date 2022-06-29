@@ -292,7 +292,7 @@
               "valueExpression": {
                 "language": "text/fhirpath",
                 "expression": "Patient.deceasedDateTime",
-                "name": "patientBirthDate"
+                "name": "patientDeceasedDateTime"
               }
             }
           ],

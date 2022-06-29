@@ -1372,7 +1372,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     )
                                         .request.url = "Observation"
                                 }
-
                             }
 
                             else -> {
@@ -1416,7 +1415,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             no.dateTime = Date()
                             no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
                             saveResourceToDatabase(no)
-
                         }
                     }
 
@@ -1474,7 +1472,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 saveResourceToDatabase(e)
             }
         }
-
     }
 
     private suspend fun updatePreviousPrescriptions(patientId: String) {
@@ -2419,8 +2416,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             care.created = FormatHelper().generateDate(assessDate)
                             care.addPartOf(basedOnReference)
                             saveResourceToDatabase(care)
-
-                            saveResourceToDatabase(care)
+                            
                             saveResources(bundle, subjectReference, encounterId, title)
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                             isResourcesSaved.postValue(true)
@@ -2983,7 +2979,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val subjectReference = Reference("Patient/$patientId")
-                    updateFeedingPrescriptions(patientId)
+                    updatePreviousPrescriptions(patientId)
                     val qh = QuestionnaireHelper()
                     val date = FormatHelper().getTodayDate()
                     if (data.data.isNotEmpty()) {
@@ -3054,7 +3050,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     }
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
-                            "3141-9",
+                          CURRENT_WEIGHT,
                             "Current Weight",
                             "Current Weight",
                             data.currentWeight, "gm"
@@ -3063,7 +3059,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         .request.url = "Observation"
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
-                            "Total-Feeds",
+                            TOTAL_FEEDS,
                             "Total Feeds",
                             "Total Feeds",
                             data.totalFeeds, "mls"
@@ -3076,7 +3072,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
-                                "Completed By",
+                               COMPLETED_BY,
                                 value,
                                 value
                             )
@@ -3085,7 +3081,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     bundle.addEntry().setResource(
                         qh.codingQuestionnaire(
-                            "Prescription-Date",
+                            PRESCRIPTION_DATE,
                             "Prescription Date",
                             date
                         )
@@ -3093,14 +3089,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         .request.url = "Observation"
                     bundle.addEntry().setResource(
                         qh.codingQuestionnaire(
-                            "Supplements-Feeding",
+                            FEEDING_SUPPLEMENTS,
                             "Supplements Considered", data.supplements
                         )
                     )
                         .request.url = "Observation"
                     bundle.addEntry().setResource(
                         qh.codingQuestionnaire(
-                            "Additional-Feeds",
+                            ADDITIONAL_FEEDS,
                             "Feeding Supplements", data.additional
                         )
                     )
@@ -3113,7 +3109,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     if (data.data.isNotEmpty()) {
                         val dhm = data.data.find { it.resourceId == DHM_VOLUME }?.volume
-                        Timber.e("DHM Found $dhm")
+
                         if (dhm != null) {
                             val no = NutritionOrder()
                             no.id = generateUuid()

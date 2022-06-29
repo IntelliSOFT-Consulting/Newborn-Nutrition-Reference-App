@@ -60,7 +60,7 @@ class BabyLactationFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyLactationFragmentArgs by navArgs()
     private var bWeight: Int = 0
-    private var chart: BarChart? = null
+    private var contra: String = "No"
     private val binding
         get() = _binding!!
 
@@ -153,7 +153,7 @@ class BabyLactationFragment : Fragment() {
                 if (allowed) {
                     findNavController().navigate(
                         BabyLactationFragmentDirections.navigateToFeeding(
-                            args.patientId
+                            args.patientId,contra
                         )
                     )
                 } else {
@@ -214,7 +214,7 @@ class BabyLactationFragment : Fragment() {
                     response.appIpNumber.text = data.assessment.breastfeedingBaby
                     response.appMotherName.text = data.assessment.breastProblems
                     response.appBabyName.text = data.assessment.contraindicated
-//                    tvTotalExpressed.text = data.assessment.totalExpressed
+                    contra = data.assessment.contraindicated.toString()
 
                     val isSepsis = data.dashboard.neonatalSepsis
                     val isAsphyxia = data.dashboard.asphyxia

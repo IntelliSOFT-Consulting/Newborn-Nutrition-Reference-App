@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
@@ -19,10 +20,13 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.FragmentProfileBinding
+import com.intellisoft.nndak.viewmodels.MainActivityViewModel
+import timber.log.Timber
 
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
+    private val viewModel: MainActivityViewModel by viewModels()
     private val binding
         get() = _binding!!
 
@@ -45,7 +49,7 @@ class ProfileFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-
+        observeLastSyncTime()
         loadAccountDetails()
 
         binding.apply {
@@ -55,6 +59,17 @@ class ProfileFragment : Fragment() {
         }
 
 
+    }
+
+    private fun observeLastSyncTime() {
+        try {
+            val time = FhirApplication.getSyncTime(requireContext())
+            binding.apply {
+                tvSync.text = time
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun confirmLogout() {

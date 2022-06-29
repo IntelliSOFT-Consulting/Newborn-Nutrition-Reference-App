@@ -378,12 +378,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeLastSyncTime() {
-        /*  viewModel.lastSyncTimestampLiveData.observe(
-              this
-          ) {
-              binding.navigationView.getHeaderView(0)
-                  .findViewById<TextView>(R.id.last_sync_tv).text = it
-          }*/
+        viewModel.lastSyncTimestampLiveData.observe(
+            this
+        ) {
+            FhirApplication.updateSyncTime(this@MainActivity, it)
+        }
     }
 
     fun navigate(resource: Int) {

@@ -26,22 +26,22 @@
                 android:padding="@dimen/_5dp">
 
                 <TextView
+                    style="?attr/textAppearanceSubtitle1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/action_feeding_tips"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     android:textColor="@android:color/white"
                     app:drawableStartCompat="@drawable/ic_baseline_arrow_back_24" />
 
                 <TextView
+                    style="?attr/textAppearanceBody2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/action_feeding_tips_explanation"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@android:color/white" />
 
 
@@ -80,6 +80,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/stimulate" />
@@ -128,6 +129,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/proper" />
@@ -161,6 +163,7 @@
                     android:orientation="horizontal"
                     android:padding="@dimen/_10dp"
                     android:weightSum="2">
+
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="0dp"
                         android:layout_height="50dp"
@@ -175,6 +178,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/early_latch" />
@@ -223,6 +227,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/manual" />
@@ -271,6 +276,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/awakens" />

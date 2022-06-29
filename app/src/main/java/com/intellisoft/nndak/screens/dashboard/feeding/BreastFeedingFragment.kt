@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentBreastFeedingBinding
@@ -26,6 +27,7 @@ import com.intellisoft.nndak.dialogs.FeedingCuesDialog
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,6 +89,8 @@ class BreastFeedingFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+        checkMothersStatus(args.contra)
+
         promptQues()
 
         binding.apply {
@@ -134,6 +138,19 @@ class BreastFeedingFragment : Fragment() {
         )
 
 
+    }
+
+    private fun checkMothersStatus(status: String) {
+        binding.apply {
+            if (status == "Yes") {
+                lnContra.visibility = View.VISIBLE
+                actionMilkExpression.isEnabled = false
+            } else {
+                lnContra.visibility = View.GONE
+                actionMilkExpression.isEnabled = true
+            }
+            FhirApplication.mumContra(requireContext(), status)
+        }
     }
 
     private fun promptQues() {
@@ -194,61 +211,54 @@ class BreastFeedingFragment : Fragment() {
         feedingCues.dismiss()
         (activity as MainActivity).displayDialog()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val readiness =
-                CodingObservation("Feeding-Readiness", "Feeding Readiness", cues.readiness)
-            val latch = CodingObservation("Latch", "Latch", cues.latch)
-            val steady = CodingObservation("Steady-Suck", "Steady Suck", cues.steady)
-            val audible = CodingObservation("Audible-Swallow", "Audible Swallow", cues.audible)
-            val chocking = CodingObservation("Chocking", "Chocking", cues.chocking)
-            val softening =
-                CodingObservation("Breast-Softening", "Breast Softening", cues.softening.toString())
-            val tenSide =
-                CodingObservation("10-Minutes-Side", "10 Minutes per Side", cues.tenSide.toString())
-            val threeHours = CodingObservation("2-3-Hours", "2-3 Hours", cues.threeHours.toString())
-            val sixDiapers =
-                CodingObservation("6-8-Wet-Diapers", "6-8 Wet Diapers", cues.sixDiapers.toString())
-            val contra = CodingObservation(
-                "Mother-Contraindicated",
-                "MotherContraindicated",
-                cues.contra.toString()
-            )
-            feedingCuesList.addAll(
-                listOf(
-                    readiness,
-                    latch,
-                    steady,
-                    audible,
-                    chocking,
-                    softening,
-                    tenSide,
-                    threeHours,
-                    sixDiapers,
-                    contra
-                )
-            )
-
-            viewModel.feedingCues(
-                questionnaireFragment.getQuestionnaireResponse(),
-                feedingCuesList,
-                args.patientId
-            )
-        }
-    }
-
-    private fun okClick() {
-        confirmationDialog.dismiss()
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-        val context = FhirContext.forR4()
+        val readiness =
+            CodingObservation("Feeding-Readiness", "Feeding Readiness", cues.readiness)
+        val latch = CodingObservation("Latch", "Latch", cues.latch)
+        val steady = CodingObservation("Steady-Suck", "Steady Suck", cues.steady)
+        val audible = CodingObservation("Audible-Swallow", "Audible Swallow", cues.audible)
+        val chocking = CodingObservation("Chocking", "Chocking", cues.chocking)
+        val softening =
+            CodingObservation("Breast-Softening", "Breast Softening", cues.softening.toString())
+        val tenSide =
+            CodingObservation("10-Minutes-Side", "10 Minutes per Side", cues.tenSide.toString())
+        val threeHours = CodingObservation("2-3-Hours", "2-3 Hours", cues.threeHours.toString())
+        val sixDiapers =
+            CodingObservation("6-8-Wet-Diapers", "6-8 Wet Diapers", cues.sixDiapers.toString())
+        val contra = CodingObservation(
+            "Mother-Contraindicated",
+            "MotherContraindicated",
+            cues.contra.toString()
+        )
+        updateArgs(contra)
+        feedingCuesList.addAll(
+            listOf(
+                readiness,
+                latch,
+                steady,
+                audible,
+                chocking,
+                softening,
+                tenSide,
+                threeHours,
+                sixDiapers,
+                contra
+            )
+        )
 
-        val questionnaire =
-            context.newJsonParser()
-                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        viewModel.feedingCues(
+            questionnaireFragment.getQuestionnaireResponse(),
+            feedingCuesList,
+            args.patientId
+        )
+
+    }
+
+
+    private fun okClick() {
+        confirmationDialog.dismiss()
 
     }
 
@@ -288,6 +298,15 @@ class BreastFeedingFragment : Fragment() {
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "breast-feeding.json")
+    }
+
+    private fun updateArgs(contra: CodingObservation) {
+        if (contra.value == "Yes") {
+            exit = true
+        } else {
+            checkMothersStatus(contra.value)
+        }
+
     }
 
     private fun addQuestionnaireFragment() {

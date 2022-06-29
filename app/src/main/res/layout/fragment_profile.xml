@@ -38,16 +38,16 @@
 
                 <TextView
                     android:id="@+id/tv_name"
+                    style="?attr/textAppearanceBody2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="?attr/textAppearanceBody2"
                     android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/tv_email"
+                    style="?attr/textAppearanceBody2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="?attr/textAppearanceBody2"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
@@ -70,21 +70,22 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
                 android:padding="3dp"
-                android:src="@drawable/ic_baseline_account_box_24" />
+                android:src="@drawable/ic_baseline_account_box_24"
+                app:tint="@color/colorPrimary" />
 
             <TextView
+                style="?attr/textAppearanceBody2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:text="@string/action_role"
-                style="?attr/textAppearanceBody2"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_role"
-                android:layout_width="0dp"
                 style="?attr/textAppearanceBody2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
@@ -116,21 +117,22 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
                 android:padding="3dp"
-                android:src="@drawable/ic_baseline_calendar_today_24" />
+                android:src="@drawable/ic_baseline_calendar_today_24"
+                app:tint="@color/colorPrimary" />
 
             <TextView
+                style="?attr/textAppearanceBody2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:text="@string/action_member"
-                style="?attr/textAppearanceBody2"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_since"
-                android:layout_width="0dp"
                 style="?attr/textAppearanceBody2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
@@ -144,6 +146,7 @@
                 android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height=".3dp"
@@ -161,21 +164,22 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
                 android:padding="3dp"
-                android:src="@drawable/ic_baseline_calendar_today_24" />
+                android:src="@android:drawable/stat_notify_sync"
+                app:tint="@color/colorPrimary" />
 
             <TextView
+                style="?attr/textAppearanceBody2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:text="@string/update"
-                style="?attr/textAppearanceBody2"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_sync"
-                android:layout_width="0dp"
                 style="?attr/textAppearanceBody2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
@@ -225,8 +229,7 @@
                     android:layout_height="20sp"
                     android:layout_marginStart="7dp"
                     android:rotation="180"
-                    android:src="@drawable/ic_baseline_arrow_right_alt_24"
-                  />
+                    android:src="@drawable/ic_baseline_arrow_right_alt_24" />
 
             </RelativeLayout>
 
@@ -234,7 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/log_out"  />
+                android:text="@string/log_out" />
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

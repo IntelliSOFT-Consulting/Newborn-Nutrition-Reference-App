@@ -94,7 +94,7 @@ class Logics {
         const val MUM_WELL = "Mother-Well"
         const val FLUID_VOLUME = "IV-Volume"
         const val COMPLETED_BY = "Completed By"
-        const val PRESCRIPTION_DATE = "Prescription Date"
+        const val PRESCRIPTION_DATE = "82765-9"
 
         /**
          * Registration Details
@@ -106,7 +106,7 @@ class Logics {
         const val DELIVERY_METHOD = "72149-8"
         const val MULTIPLE_PREGNANCY = "64708-1"
         const val MULTIPLE_BIRTH_TYPE = "45371-2"
-        const val ADMISSION_DATE = "52455"
+        const val ADMISSION_DATE = "52455-3"
         const val APGAR_SCORE = "9273-4"
         const val GESTATION = "11885-1"
         const val CS_REASON = "73762-7"

@@ -65,6 +65,7 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
                 patient.name[0].hasGiven() &&
                 patient.name[0].hasFamily() &&
                 patient.hasBirthDate()
+                && patient.hasActive()
 
             ) {
                 /*   if (patient.hasDeceased()) {
