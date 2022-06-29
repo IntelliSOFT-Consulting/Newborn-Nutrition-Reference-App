@@ -10,6 +10,7 @@ import com.google.android.fhir.get
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.screens.dashboard.child.EditBabyFragment
+import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
@@ -66,21 +67,23 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
                 patient.hasBirthDate()
 
             ) {
-             /*   if (patient.hasDeceased()) {
+                /*   if (patient.hasDeceased()) {
 
-                    val dateDate = patient.deceased.dateTimeValue()
-                    Timber.e("Date Date $dateDate")
-                    val todayDate = FormatHelper().getTodayDate()
-                    val isDateValid = FormatHelper().checkDate(dateDate.toString(), todayDate)
-                    if (!isDateValid) {
+                       val dateDate = patient.deceased.dateTimeValue()
+                       Timber.e("Date Date $dateDate")
+                       val todayDate = FormatHelper().getTodayDate()
+                       val isDateValid = FormatHelper().checkDate(dateDate.toString(), todayDate)
+                       if (!isDateValid) {
 
-                        isPatientSaved.value = false
+                           isPatientSaved.value = false
 
-                    }*/
-                    patient.id = patientId
-                    fhirEngine.update(patient)
-                    isPatientSaved.value = true
-                    return@launch
+                       }*/
+                patient.id = patientId
+                patient.addressFirstRep.postalCode = SYNC_VALUE
+                patient.active = false
+                fhirEngine.update(patient)
+                isPatientSaved.value = true
+                return@launch
 
 
             }

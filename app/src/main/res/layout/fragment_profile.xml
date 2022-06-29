@@ -40,13 +40,14 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    style="?attr/textAppearanceBody2"
                     android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/tv_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="?attr/textAppearanceBody2"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
@@ -77,11 +78,13 @@
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:text="@string/action_role"
+                style="?attr/textAppearanceBody2"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_role"
                 android:layout_width="0dp"
+                style="?attr/textAppearanceBody2"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
@@ -121,11 +124,58 @@
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:text="@string/action_member"
+                style="?attr/textAppearanceBody2"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_since"
                 android:layout_width="0dp"
+                style="?attr/textAppearanceBody2"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="5dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height=".3dp"
+            android:layout_marginTop="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:padding="3dp"
+                android:src="@drawable/ic_baseline_calendar_today_24" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:text="@string/update"
+                style="?attr/textAppearanceBody2"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_sync"
+                android:layout_width="0dp"
+                style="?attr/textAppearanceBody2"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"

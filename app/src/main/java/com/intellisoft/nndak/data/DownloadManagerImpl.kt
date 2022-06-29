@@ -15,7 +15,7 @@ import timber.log.Timber
 class DownloadManagerImpl : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
     private val urls =
-        LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE", "NutritionOrder"))
+        LinkedList(listOf("Patient?$SYNC_PARAM=$SYNC_VALUE", "CarePlan", "NutritionOrder"))
 
 
     override suspend fun getNextRequestUrl(context: SyncDownloadContext): String? {
@@ -66,13 +66,13 @@ class DownloadManagerImpl : DownloadWorkManager {
                     val patientUrl = "$DEMO_SERVER$patient/\$everything"
                     urls.add(patientUrl)
                 }
-                /*  if (type == "CarePlan") {
+                if (type == "CarePlan") {
 
-                      val no = entry.resource as CarePlan
-                      val patient = no.encounter.reference
-                      val patientUrl = "$DEMO_SERVER$patient/\$everything"
-                      urls.add(patientUrl)
-                  }*/
+                    val no = entry.resource as CarePlan
+                    val patient = no.encounter.reference
+                    val patientUrl = "$DEMO_SERVER$patient/\$everything"
+                    urls.add(patientUrl)
+                }
 
             }
             val nextUrl =
@@ -111,7 +111,7 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     // https://hl7.org/fhir/operation-patient-everything.html
     if (!downloadUrl.contains("\$everything")) {
         downloadUrl =
-            if (downloadUrl.contains("NutritionOrder")) {
+            if (downloadUrl.contains("NutritionOrder") || downloadUrl.contains("CarePlan")) {
                 downloadUrl
             } else {
                 "$downloadUrl&_lastUpdated=gt$lastUpdated"

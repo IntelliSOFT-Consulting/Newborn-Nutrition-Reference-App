@@ -49,7 +49,7 @@ class FhirApplication : Application() {
             FhirEngineConfiguration(
                 enableEncryptionIfSupported = true,
                 DatabaseErrorStrategy.RECREATE_AT_OPEN,
-                getHapiServerURL(this)?.let { ServerConfiguration(it) }
+                ServerConfiguration(DEMO_SERVER)
             )
         )
         Sync.oneTimeSync<FhirPeriodicSyncWorker>(this)
@@ -67,19 +67,11 @@ class FhirApplication : Application() {
         fun fhirEngine(context: Context) =
             (context.applicationContext as FhirApplication).fhirEngine
 
-        fun getSharedPreferences(context: Context): SharedPreferences {
-            return (context.applicationContext as FhirApplication).sharedPreferences
-        }
+
 
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL, DEMO_API_SERVER
-            )
-        }
-
-        fun getHapiServerURL(context: Context): String? {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL_DEMO, DEMO_SERVER
             )
         }
 
@@ -104,10 +96,6 @@ class FhirApplication : Application() {
             )
         }
 
-        fun setServerDetails(context: Context, b: Boolean, url: String, demo: String) {
-            (context.applicationContext as FhirApplication).editor.putBoolean(SERVER_SET, b)
-                .putString(SERVER_URL, url).putString(SERVER_URL_DEMO, demo).commit()
-        }
 
         fun setWelcomed(context: Context, b: Boolean) {
             (context.applicationContext as FhirApplication).editor.putBoolean(WELCOME, b).commit()
@@ -150,28 +138,6 @@ class FhirApplication : Application() {
                 USER_ACCOUNT,
                 ""
             )
-        }
-
-        fun setPatient(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("Patient", state)
-                .commit()
-        }
-
-        fun setCurrent(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("State", state)
-                .commit()
-        }
-
-        fun getCurrent(context: Context): String {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "State", ""
-            ).toString()
-        }
-
-        fun getPatient(context: Context): String {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "Patient", ""
-            ).toString()
         }
 
 

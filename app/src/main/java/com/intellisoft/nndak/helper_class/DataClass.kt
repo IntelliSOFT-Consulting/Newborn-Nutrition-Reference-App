@@ -1,7 +1,7 @@
 package com.intellisoft.nndak.helper_class
 
 enum class DbMotherKey {
-    NATIONALID, FHIRID, PATIENT_NAME, PHONE_NUMBER, MOTHER_DOB
+     BABY_NAME,MOTHER_IP
 }
 
 data class DbMotherInfo(

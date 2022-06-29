@@ -139,7 +139,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
 
-                    if (filterData == DbMotherKey.PATIENT_NAME.name) {
+                    if (filterData == DbMotherKey.BABY_NAME.name) {
                         patientListViewModel.searchPatientsByName(newText)
                     } else {
 
@@ -161,7 +161,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                             patientListViewModel.searchPatientsByName(newText)
 
                         }
-
 
                     }
 

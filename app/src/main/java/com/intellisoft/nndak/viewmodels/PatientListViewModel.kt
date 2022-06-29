@@ -7,6 +7,7 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
 import com.intellisoft.nndak.logic.Translations.Companion.feedTypes
 import com.intellisoft.nndak.logic.Translations.Companion.feedingTimes
 import com.intellisoft.nndak.models.*
@@ -207,12 +208,17 @@ class PatientListViewModel(
                 .search<NutritionOrder> {
                     sort(NutritionOrder.DATETIME, Order.ASCENDING)
                     from = 0
+                    /*  filter(NutritionOrder.STATUS, value = {
+                          NutritionOrder.NutritionOrderStatus.ACTIVE)}*/
                 }
                 .map {
-                    loadOrders(it, createNutritionItem(it, getApplication<Application>().resources))
+                    loadOrders(
+                        it,
+                        createNutritionItem(it, getApplication<Application>().resources)
+                    )
 
                 }
-                .filter { it.status == "ACTIVE" }
+                .filter { it.status.trim() == NutritionOrder.NutritionOrderStatus.ACTIVE.toString() }
                 .let {
 
                     orders.addAll(it)
@@ -235,7 +241,10 @@ class PatientListViewModel(
                 from = 0
             }
             .map {
-                loadOrdersOld(it, createEncounterItem(it, getApplication<Application>().resources))
+                loadOrdersOld(
+                    it,
+                    createEncounterItem(it, getApplication<Application>().resources)
+                )
 
             }
             .filter { it.description == "DHM Recipient" }
@@ -421,8 +430,6 @@ class PatientListViewModel(
                             value = nameQuery
                         }
                     )
-
-
                 }
                 filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
@@ -587,7 +594,7 @@ class PatientListViewModel(
 
     private suspend fun extractPerHour(key: String): String {
         var i = 0
-        val feedingTimes = countFeedingIntervals("Fed-After")
+        val feedingTimes = countFeedingIntervals(FED_AFTER)
         feedingTimes.forEach {
             if (key == it.value.trim()) {
                 i++

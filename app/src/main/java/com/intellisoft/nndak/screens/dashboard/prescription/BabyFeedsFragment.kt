@@ -4,11 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -99,7 +96,6 @@ class BabyFeedsFragment : Fragment() {
 
         }
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
             if (data != null) {
@@ -159,6 +155,7 @@ class BabyFeedsFragment : Fragment() {
         val adapter = PrescriptionAdapter(this::onPrescriptionItemClick)
         recyclerView.adapter = adapter
 
+        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             Timber.d("Prescriptions has " + it.count() + " records")
             if (it.isNotEmpty()) {
@@ -235,12 +232,20 @@ class BabyFeedsFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
             }
             else -> false
         }

@@ -3,6 +3,7 @@ package com.intellisoft.nndak.screens.dashboard.feeding
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
@@ -16,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -216,7 +216,20 @@ class BreastFeedingFragment : Fragment() {
                 "MotherContraindicated",
                 cues.contra.toString()
             )
-            feedingCuesList.addAll(listOf(readiness, latch,steady,audible,chocking,softening,tenSide,threeHours,sixDiapers,contra))
+            feedingCuesList.addAll(
+                listOf(
+                    readiness,
+                    latch,
+                    steady,
+                    audible,
+                    chocking,
+                    softening,
+                    tenSide,
+                    threeHours,
+                    sixDiapers,
+                    contra
+                )
+            )
 
             viewModel.feedingCues(
                 questionnaireFragment.getQuestionnaireResponse(),
@@ -243,10 +256,10 @@ class BreastFeedingFragment : Fragment() {
     private fun observeResourcesSaveAction() {
         viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
             if (!it) {
-                SmartyToast.makeText(
+                Toast.makeText(
                     requireContext(),
                     getString(R.string.inputs_missing),
-                    SmartyToast.LENGTH_SHORT, SmartyToast.ERROR
+                    Toast.LENGTH_SHORT
                 ).show()
                 (activity as MainActivity).hideDialog()
                 return@observe

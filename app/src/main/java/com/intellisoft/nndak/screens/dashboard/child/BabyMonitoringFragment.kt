@@ -25,7 +25,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -511,12 +510,6 @@ class BabyMonitoringFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
             viewModel.babyMonitoringCues(
                 questionnaireFragment.getQuestionnaireResponse(), cues, args.patientId
             )
@@ -531,13 +524,6 @@ class BabyMonitoringFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
-
             if (feedsList.isNotEmpty()) {
 
                 viewModel.babyMonitoring(
@@ -551,10 +537,10 @@ class BabyMonitoringFragment : Fragment() {
 
             } else {
 
-                SmartyToast.makeText(
+              Toast.makeText(
                     requireContext(),
                     getString(R.string.inputs_missing),
-                    SmartyToast.LENGTH_SHORT, SmartyToast.ERROR
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
         }

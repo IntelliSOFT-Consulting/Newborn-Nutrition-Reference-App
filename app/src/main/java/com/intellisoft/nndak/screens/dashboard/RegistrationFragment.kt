@@ -86,12 +86,6 @@ class RegistrationFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
             patientId = generateUuid()
             viewModel.clientRegistration(
                 questionnaireFragment.getQuestionnaireResponse(), patientId
@@ -99,16 +93,6 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    /*  private fun proceedClick() {
-
-          viewModel.makeComplete()
-          FhirApplication.setDashboardActive(requireContext(), false)
-          findNavController().navigate(
-              RegistrationFragmentDirections.navigateToBabyDashboard(
-                  patientId
-              )
-          )
-      }*/
 
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) { it ->

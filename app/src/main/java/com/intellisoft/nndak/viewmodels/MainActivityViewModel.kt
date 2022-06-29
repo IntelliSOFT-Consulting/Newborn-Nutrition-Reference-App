@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /** View model for [MainActivity]. */
 class MainActivityViewModel(application: Application, private val state: SavedStateHandle) :
@@ -50,11 +51,11 @@ class MainActivityViewModel(application: Application, private val state: SavedSt
                         repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
                     ),
                     FhirPeriodicSyncWorker::class.java
-                )
-                    .collect { _pollState.emit(it) }
+                ).collect { _pollState.emit(it) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            Timber.e("Hello")
         }
     }
 

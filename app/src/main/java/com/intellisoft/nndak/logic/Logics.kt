@@ -21,7 +21,7 @@ class Logics {
         /**
          * Roles Access
          */
-        const val ADMINISTRATOR = "ADMINISTRATORzz"
+        const val ADMINISTRATOR = "ADMINISTRATOR"
         const val HMB_ASSISTANT = "HMB Assistant"
         const val DOCTOR = "Doctor"
         const val NURSE = "Nurse"
@@ -33,8 +33,10 @@ class Logics {
         /**
          * Prescriptions
          */
+        const val DONOR = "Donor"
         const val PRESCRIPTION = "Feeds Prescription"
         const val BABY_ASSESSMENT = "Baby Assessment"
+        const val DHM_DISPENSING = "DHM Dispensing"
         const val DHM_STOCK = "DHM Stock"
         const val FEEDING_MONITORING = "Feeding and Monitoring"
         const val ADMISSION_WEIGHT = "29463-7"
@@ -43,7 +45,7 @@ class Logics {
         const val FEEDS_TAKEN = "Total-Taken"
         const val DIAPER_CHANGED = "Diaper-Changed"
         const val ASSESSMENT_DATE = "50786-3"
-
+        const val VOLUME_DISPENSED = "Volume-Dispensed"
         const val BREAST_MILK = "Breast-Milk"
         const val BREAST_FREQUENCY = "Breast-Feed-Frequency"
 
@@ -60,6 +62,7 @@ class Logics {
         const val DHM_TYPE = "DHM-Type"
         const val DHM_CONSENT = "Consent-Given"
         const val DHM_REASON = "DHM-Reason"
+        const val CONSENT_DATE = "Consent-Date"
 
         const val IV_VOLUME = "IV-Fluid-Volume"
         const val IV_FREQUENCY = "IV-Fluid-Frequency"
@@ -76,6 +79,7 @@ class Logics {
         const val ADJUST_PRESCRIPTION = "Adjust-Prescription"
         const val FEEDS_DEFICIT = "Feeds-Deficit"
         const val VOMIT = "Vomit"
+        const val TOTAL_FEEDS = "Total-Feeds"
         const val REMARKS = "Additional-Notes"
         const val EXPRESSED_MILK = "226790003"
         const val EXPRESSION_TIME = "Time-Expressed"
@@ -89,6 +93,28 @@ class Logics {
         const val BABY_BREASTFEEDING = "Baby-BreastFeeding"
         const val MUM_WELL = "Mother-Well"
         const val FLUID_VOLUME = "IV-Volume"
+        const val COMPLETED_BY = "Completed By"
+        const val PRESCRIPTION_DATE = "Prescription Date"
+
+        /**
+         * Registration Details
+         */
+        const val DELIVERY_DATE = "93857-1"
+        const val BIRTH_WEIGHT = "8339-4"
+        const val PMTCT = "55277-8"
+        const val PARITY = "45394-4"
+        const val DELIVERY_METHOD = "72149-8"
+        const val MULTIPLE_PREGNANCY = "64708-1"
+        const val MULTIPLE_BIRTH_TYPE = "45371-2"
+        const val ADMISSION_DATE = "52455"
+        const val APGAR_SCORE = "9273-4"
+        const val GESTATION = "11885-1"
+        const val CS_REASON = "73762-7"
+        const val VDRL = "14904-7"
+        const val BBA = "16491-3"
+        const val HEAD_CIRCUMFERENCE = "33172-8"
+        const val INTERVENTIONS = "52508-9"
+        const val FED_AFTER = "55420-4"
 
         /**
          * Stock Data

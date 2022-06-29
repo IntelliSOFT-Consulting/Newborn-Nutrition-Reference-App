@@ -353,6 +353,26 @@ class FormatHelper {
 
     }
 
+    fun extractCareDateString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+    fun extractCareTimeString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+
     fun extractDateString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
@@ -415,21 +435,15 @@ class FormatHelper {
 
         val queryParam = when (spinnerValue) {
             birds[0].toString() -> {
-                DbMotherKey.PATIENT_NAME.name
+                DbMotherKey.BABY_NAME.name
             }
             birds[1].toString() -> {
-                DbMotherKey.PATIENT_NAME.name
+                DbMotherKey.BABY_NAME.name
             }
             birds[2].toString() -> {
-                DbMotherKey.NATIONALID.name
+                DbMotherKey.MOTHER_IP.name
             }
-            birds[3].toString() -> {
-                DbMotherKey.PHONE_NUMBER.name
-            }
-            birds[4].toString() -> {
-                DbMotherKey.MOTHER_DOB.name
-            }
-            else -> DbMotherKey.PATIENT_NAME.name
+            else -> DbMotherKey.MOTHER_IP.name
         }
         return queryParam
 

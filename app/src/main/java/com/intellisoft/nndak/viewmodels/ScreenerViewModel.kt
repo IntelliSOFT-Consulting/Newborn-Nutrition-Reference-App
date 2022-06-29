@@ -15,16 +15,69 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
+import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
+import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.APGAR_SCORE
+import com.intellisoft.nndak.logic.Logics.Companion.ASSESSMENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
+import com.intellisoft.nndak.logic.Logics.Companion.BBA
+import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
+import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.COMPLETED_BY
+import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.CS_REASON
+import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_DISPENSING
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_FREQUENCY
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_STOCK
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
+import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
+import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
+import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
+import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
+import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
+import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
+import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
+import com.intellisoft.nndak.logic.Logics.Companion.HEAD_CIRCUMFERENCE
+import com.intellisoft.nndak.logic.Logics.Companion.INTERVENTIONS
+import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
+import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
+import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.MULTIPLE_BIRTH_TYPE
+import com.intellisoft.nndak.logic.Logics.Companion.MULTIPLE_PREGNANCY
+import com.intellisoft.nndak.logic.Logics.Companion.PARITY
+import com.intellisoft.nndak.logic.Logics.Companion.PMTCT
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
+import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
+import com.intellisoft.nndak.logic.Logics.Companion.STOOL
+import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
+import com.intellisoft.nndak.logic.Logics.Companion.VDRL
+import com.intellisoft.nndak.logic.Logics.Companion.VOLUME_DISPENSED
+import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.intellisoft.nndak.utils.Constants
+import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
+import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createCarePlanItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -327,7 +380,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                         bundle.addEntry().setResource(
                                             qh.codingQuestionnaire(
-                                                "Fed-After",
+                                                FED_AFTER,
                                                 "Fed After",
                                                 "Within 1 Hour"
                                             )
@@ -356,7 +409,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Fed-After",
+                                            FED_AFTER,
                                             "Fed After",
                                             code
                                         )
@@ -467,10 +520,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "45394-4",
+                                            PARITY,
                                             "Parity",
                                             "Parity",
-                                            parity, "times"
+                                            parity.toDouble().toString(), "times"
                                         )
                                     )
                                         .request.url = "Observation"
@@ -491,7 +544,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (pmtct.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "55277-8",
+                                            PMTCT,
                                             "PMTCT",
                                             pmtct
                                         )
@@ -504,7 +557,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (mPeg.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "64708-1",
+                                            MULTIPLE_PREGNANCY,
                                             "Multiple Pregnancy",
                                             mPeg
                                         )
@@ -517,7 +570,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     val bType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "45371-2",
+                                            MULTIPLE_BIRTH_TYPE,
                                             "Multiple Birth Type",
                                             bType
                                         )
@@ -530,7 +583,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (deliveryDate.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "93857-1",
+                                            DELIVERY_DATE,
                                             "Time of Delivery",
                                             deliveryDate
                                         )
@@ -542,7 +595,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 dType = extractResponseCode(inner, "valueCoding")
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "72149-8",
+                                        DELIVERY_METHOD,
                                         "Delivery Method",
                                         dType
                                     )
@@ -554,7 +607,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     dType = extractResponseCode(inner, "valueCoding")
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "73762-7",
+                                            CS_REASON,
                                             "CS Reason",
                                             dType
                                         )
@@ -566,7 +619,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 val bType = extractResponseCode(inner, "valueCoding")
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "14904-7",
+                                        VDRL,
                                         "VDRL",
                                         bType
                                     )
@@ -619,7 +672,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "8339-4",
+                                            BIRTH_WEIGHT,
                                             "Birth Weight",
                                             "Birth Weight",
                                             bType,
@@ -635,7 +688,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "11885-1",
+                                            GESTATION,
                                             "Gestation",
                                             "Gestation",
                                             bType, "wks"
@@ -649,7 +702,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "9273-4",
+                                            APGAR_SCORE,
                                             "Apgar Score",
                                             "Apgar Score",
                                             bType, "score"
@@ -663,7 +716,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "16491-3",
+                                            BBA,
                                             "BBA",
                                             bType
                                         )
@@ -676,7 +729,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "33172-8",
+                                            HEAD_CIRCUMFERENCE,
                                             "Head Circumference",
                                             "Head Circumference",
                                             bType, "cm"
@@ -690,7 +743,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "52508-9",
+                                            INTERVENTIONS,
                                             "Interventions",
                                             bType
                                         )
@@ -704,7 +757,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     if (bType.isNotEmpty()) {
                                         bundle.addEntry().setResource(
                                             qh.quantityQuestionnaire(
-                                                "29463-7",
+                                                ADMISSION_WEIGHT,
                                                 "Admission Weight",
                                                 "Admission Weight",
                                                 bType,
@@ -721,7 +774,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (admissionDate.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "52455-3",
+                                            ADMISSION_DATE,
                                             "Admission Date",
                                             admissionDate
                                         )
@@ -734,7 +787,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Notes",
+                                            REMARKS,
                                             "Additional Notes",
                                             bType
                                         )
@@ -772,7 +825,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             bundle.addEntry()
                                 .setResource(
                                     qh.codingQuestionnaire(
-                                        "Completed By",
+                                        COMPLETED_BY,
                                         value,
                                         value
                                     )
@@ -847,7 +900,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      */
 
                     val subjectReference = Reference("Patient/$patientId")
-                    updateFeedingPrescriptions(patientId)
+                    updatePreviousPrescriptions(patientId)
                     val qh = QuestionnaireHelper()
 
                     val date = FormatHelper().getTodayDate()
@@ -865,7 +918,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (value.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "3141-9",
+                                            CURRENT_WEIGHT,
                                             "Current Weight",
                                             "Current Weight",
                                             value, "gm"
@@ -882,7 +935,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "Total-Feeds",
+                                            TOTAL_FEEDS,
                                             "Total Feeds",
                                             "Total Feeds",
                                             value, "mls"
@@ -915,7 +968,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                    "Breast-Milk",
+                                                  BREAST_MILK,
                                                     "Breast Milk", "Breast Milk",
                                                     value, "mls"
                                                 )
@@ -934,7 +987,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Breast-Feed-Frequency",
+                                                    BREAST_FREQUENCY,
                                                     "Breast Feed Frequency", value,
                                                 )
                                             )
@@ -955,7 +1008,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "EBM-Feeding-Route",
+                                                    EBM_ROUTE,
                                                     "EBM Feeding Route", value,
                                                 )
                                             )
@@ -974,7 +1027,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                    "EBM-Volume",
+                                                    EBM_VOLUME,
                                                     "EBM Volume", "EBM Volume", value, "mls"
                                                 )
                                             )
@@ -993,7 +1046,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "EBM-Feeding-Frequency",
+                                                    EBM_FREQUENCY,
                                                     "EBM Feeding Frequency", value
                                                 )
                                             )
@@ -1013,7 +1066,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Formula-Type",
+                                                    FORMULA_TYPE,
                                                     "Formula Type", value
                                                 )
                                             )
@@ -1031,7 +1084,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Formula-Route",
+                                                    FORMULA_ROUTE,
                                                     "Formula Route", value
                                                 )
                                             )
@@ -1049,7 +1102,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                    "Formula-Volume",
+                                                    FORMULA_VOLUME,
                                                     "Formula Volume",
                                                     "Formula Volume",
                                                     value,
@@ -1070,7 +1123,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Formula-Frequency",
+                                                    FORMULA_FREQUENCY,
                                                     "Formula Frequency", value
                                                 )
                                             )
@@ -1091,7 +1144,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "DHM-Type",
+                                                    DHM_TYPE,
                                                     "DHM Type", value
                                                 )
                                             )
@@ -1109,7 +1162,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "DHM-Route",
+                                                    DHM_ROUTE,
                                                     "DHM Route", value
                                                 )
                                             )
@@ -1127,7 +1180,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                    "DHM-Volume",
+                                                    DHM_VOLUME,
                                                     "DHM Volume", "DHM Volume", value, "mls"
                                                 )
                                             )
@@ -1145,7 +1198,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "DHM-Frequency",
+                                                    DHM_FREQUENCY,
                                                     "DHM Frequency", value,
                                                 )
                                             )
@@ -1168,7 +1221,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             }
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Consent-Given",
+                                                    DHM_CONSENT,
                                                     "Consent Given", consent,
                                                 )
                                             )
@@ -1186,7 +1239,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "Consent-Date",
+                                                    CONSENT_DATE,
                                                     "Consent Date", value,
                                                 )
                                             )
@@ -1204,7 +1257,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "DHM-Reason",
+                                                    DHM_REASON,
                                                     "DHM Reasons", value,
                                                 )
                                             )
@@ -1224,7 +1277,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "IV-Fluid-Route",
+                                                    IV_ROUTE,
                                                     "IV Fluid Route", value,
                                                 )
                                             )
@@ -1242,7 +1295,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                    "IV-Fluid-Volume",
+                                                    IV_VOLUME,
                                                     "IV Fluid Volume",
                                                     "IV-Fluid-Volume",
                                                     value,
@@ -1263,7 +1316,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
-                                                    "IV-Fluid-Frequency",
+                                                    IV_FREQUENCY,
                                                     "IV-Fluid-Frequency", value
                                                 )
                                             )
@@ -1280,7 +1333,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     dhm = value
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Feeds",
+                                            ADDITIONAL_FEEDS,
                                             "Feeding Supplements", value
                                         )
                                     )
@@ -1297,7 +1350,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                         bundle.addEntry().setResource(
                                             qh.codingQuestionnaire(
-                                                "Supplements-Feeding",
+                                                FEEDING_SUPPLEMENTS,
                                                 "Supplements Considered", value
                                             )
                                         )
@@ -1313,7 +1366,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Notes",
+                                            REMARKS,
                                             "Additional Notes and Remarks", value
                                         )
                                     )
@@ -1334,7 +1387,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
-                                "Completed By",
+                                COMPLETED_BY,
                                 value,
                                 value
                             )
@@ -1343,7 +1396,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     bundle.addEntry().setResource(
                         qh.codingQuestionnaire(
-                            "Prescription-Date",
+                            PRESCRIPTION_DATE,
                             "Prescription Date",
                             date
                         )
@@ -1363,17 +1416,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             no.dateTime = Date()
                             no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
                             saveResourceToDatabase(no)
+
                         }
                     }
 
-                    /*   val care = CarePlan()
-                       care.encounter = encounterReference
-                       care.subject = subjectReference
-                       care.status = CarePlan.CarePlanStatus.ACTIVE
-                       care.title = title
-                       care.intent = CarePlan.CarePlanIntent.ORDER
-                       care.created = Date()
-                       saveResourceToDatabase(care)*/
+                    val care = CarePlan()
+                    care.encounter = encounterReference
+                    care.subject = subjectReference
+                    care.status = CarePlan.CarePlanStatus.ACTIVE
+                    care.title = title
+                    care.intent = CarePlan.CarePlanIntent.ORDER
+                    care.created = Date()
+                    saveResourceToDatabase(care)
 
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
@@ -1398,7 +1452,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     { value = "Patient/$patientId" })
                 sort(Encounter.DATE, Order.DESCENDING)
             }
-            .take(Constants.MAX_RESOURCE_COUNT)
+            .take(MAX_RESOURCE_COUNT)
             .map {
                 PatientDetailsViewModel.createEncounterItem(
                     it,
@@ -1433,9 +1487,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     { value = "Patient/$patientId" })
                 sort(CarePlan.DATE, Order.DESCENDING)
             }
-            .take(Constants.MAX_RESOURCE_COUNT)
+            .take(MAX_RESOURCE_COUNT)
             .map {
-                PatientDetailsViewModel.createCarePlanItem(
+                createCarePlanItem(
                     it,
                     getApplication<Application>().resources
                 )
@@ -2157,7 +2211,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
-                            "Total-Taken",
+                            FEEDS_TAKEN,
                             "Total Feeds Taken",
                             "Total Feeds Taken",
                             taken.toString(), "mls"
@@ -2167,7 +2221,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
-                            "Feeds-Deficit",
+                            FEEDS_DEFICIT,
                             "Feeds Deficit",
                             "Feeds Deficit",
                             deficit, "mls"
@@ -2182,7 +2236,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 bundle.addEntry().setResource(
                                     qh.quantityQuestionnaire(
-                                        "IV-Volume",
+                                        IV_VOLUME,
                                         "IV Volume",
                                         "IV Volume",
                                         it.volume.toString(),
@@ -2195,7 +2249,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 bundle.addEntry().setResource(
                                     qh.quantityQuestionnaire(
-                                        "DHM-Volume",
+                                        DHM_VOLUME,
                                         "DHM Volume",
                                         "DHM Volume",
                                         it.volume.toString(), "mls"
@@ -2207,7 +2261,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 bundle.addEntry().setResource(
                                     qh.quantityQuestionnaire(
-                                        "EBM-Volume",
+                                        EBM_VOLUME,
                                         "EBM Volume",
                                         "EBM Volume",
                                         it.volume.toString(), "mls"
@@ -2225,15 +2279,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
-                        val childChild = inner.getString("linkId")
-                        Timber.e("Child $common")
-                        when (childChild) {
+                        when (inner.getString("linkId")) {
                             "Current-Weight" -> {
                                 val code = extractResponseQuantity(inner, "valueQuantity")
                                 if (code.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "3141-9",
+                                            CURRENT_WEIGHT,
                                             "Current Weight",
                                             "Current Weight",
                                             code,
@@ -2250,58 +2302,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "50786-3",
+                                            ASSESSMENT_DATE,
                                             "Assessment Date",
                                             assessDate
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
-                            "Feeding-IV" -> {
-                                val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
-                                if (value.isNotEmpty()) {
-
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            "IV-Volume",
-                                            "IV Volume",
-                                            "IV Volume",
-                                            value,
-                                            "ml"
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
-                            "DHM-Volume" -> {
-                                val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
-                                if (value.isNotEmpty()) {
-
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            "DHM-Volume",
-                                            "DHM Volume",
-                                            "DHM Volume",
-                                            value, "ml"
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
-                            "EBM-Volume" -> {
-                                val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
-                                if (value.isNotEmpty()) {
-
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            "EBM-Volume",
-                                            "EBM Volume",
-                                            "EBM Volume",
-                                            value, "ml"
                                         )
                                     )
                                         .request.url = "Observation"
@@ -2313,7 +2316,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Vomit",
+                                            VOMIT,
                                             "Vomit",
                                             value
                                         )
@@ -2327,7 +2330,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Stool",
+                                            STOOL,
                                             "Stool",
                                             value
                                         )
@@ -2342,7 +2345,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "Diaper-Changed",
+                                            DIAPER_CHANGED,
                                             "Diaper Changed",
                                             "Diaper Changed",
                                             value, "pcs"
@@ -2357,7 +2360,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Adjust-Prescription",
+                                            ADJUST_PRESCRIPTION,
                                             "Adjust-Prescription",
                                             value
                                         )
@@ -2373,7 +2376,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Notes",
+                                            REMARKS,
                                             "Additional Notes and Remarks", value
                                         )
                                     )
@@ -2392,7 +2395,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
-                                "Completed By",
+                                COMPLETED_BY,
                                 value,
                                 value
                             )
@@ -2402,20 +2405,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
                     val encounterReference = Reference("Encounter/$encounterId")
-                    val basedOnReference = Reference("Encounter/$careID")
+                    val basedOnReference = Reference("CarePlan/$careID")
                     title = FEEDING_MONITORING
                     if (assessDate.isNotEmpty()) {
                         val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
                         if (lessThanNow) {
-                            val date = FormatHelper().generateDate(assessDate)
-                            val id = generateUuid()
-                            val care = Encounter()
-                            care.id = id
+                            val care = CarePlan()
+                            care.encounter = encounterReference
                             care.subject = subjectReference
-                            care.status = Encounter.EncounterStatus.FINISHED
-                            care.reasonCodeFirstRep.text = FEEDING_MONITORING
-                            care.partOf = encounterReference
-                            care.addBasedOn(basedOnReference)
+                            care.status = CarePlan.CarePlanStatus.COMPLETED
+                            care.title = title
+                            care.intent = CarePlan.CarePlanIntent.ORDER
+                            care.created = FormatHelper().generateDate(assessDate)
+                            care.addPartOf(basedOnReference)
+                            saveResourceToDatabase(care)
 
                             saveResourceToDatabase(care)
                             saveResources(bundle, subjectReference, encounterId, title)
@@ -2793,9 +2796,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
-                        val childChild = inner.getString("linkId")
-                        Timber.e("Child $common")
-                        when (childChild) {
+                        when (inner.getString("linkId")) {
 
                             "Volume" -> {
                                 val volume =
@@ -2803,7 +2804,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (volume.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "Volume-Dispensed",
+                                            VOLUME_DISPENSED,
                                             "Volume Dispensed",
                                             "Volume Dispensed",
                                             volume, "mls"
@@ -2819,7 +2820,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "DHM-Type",
+                                            DHM_TYPE,
                                             "DHM Type",
                                             type
                                         )
@@ -2832,7 +2833,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (notes.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Notes",
+                                            REMARKS,
                                             "Additional Notes and Remarks",
                                             notes,
                                         )
@@ -2854,7 +2855,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             bundle.addEntry()
                                 .setResource(
                                     qh.codingQuestionnaire(
-                                        "Completed By",
+                                       COMPLETED_BY,
                                         value,
                                         value
                                     )
@@ -2862,7 +2863,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 .request.url = "Observation"
                             val subjectReference = Reference("Patient/$patientId")
                             val encounterReference = Reference("Encounter/$encounterId")
-                            title = "DHM Dispensing"
+                            title = DHM_DISPENSING
 
                             val order = NutritionOrder()
                             order.id = orderId
@@ -3124,16 +3125,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             saveResourceToDatabase(no)
                         }
                     }
-
-                    /*   val care = CarePlan()
-                       care.encounter = encounterReference
-                       care.subject = subjectReference
-                       care.status = CarePlan.CarePlanStatus.ACTIVE
-                       care.title = title
-                       care.intent = CarePlan.CarePlanIntent.ORDER
-                       care.created = Date()
-                       saveResourceToDatabase(care)*/
-
+                    val care = CarePlan()
+                    care.encounter = encounterReference
+                    care.subject = subjectReference
+                    care.status = CarePlan.CarePlanStatus.ACTIVE
+                    care.title = title
+                    care.intent = CarePlan.CarePlanIntent.ORDER
+                    care.created = Date()
+                    saveResourceToDatabase(care)
                     saveResources(bundle, subjectReference, encounterId, title)
                     isResourcesSaved.postValue(true)
 

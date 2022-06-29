@@ -24,7 +24,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.developers.smartytoast.SmartyToast
 import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
                 if (allowed) {
-                navController.navigate(R.id.dhmOrdersFragment)
+                    navController.navigate(R.id.dhmOrdersFragment)
                 } else {
                     accessDenied()
                 }
@@ -168,6 +167,7 @@ class MainActivity : AppCompatActivity() {
             }
             menu.lnSync.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
+                Timber.e("Sync Start")
                 viewModel.poll()
             }
         }
@@ -348,41 +348,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showToast(message: String, boolean: Boolean) {
-        //  Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        val type = if (boolean) {
-            SmartyToast.SAVED
-        } else {
-            SmartyToast.UPDATE
-        }
-        SmartyToast.makeText(
-            this,
-            message,
-            SmartyToast.LENGTH_SHORT, type
-        ).show()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeSyncState() {
         lifecycleScope.launch {
             viewModel.pollState.collect {
                 Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
-                    is State.Started -> showToast("Sync: started", true)
+                    is State.Started -> showToast("Sync: started")
                     is State.InProgress -> showToast(
-                        "Sync: in progress with ${it.resourceType?.name}",
-                        false
+                        "Sync: in progress with ${it.resourceType?.name}"
                     )
                     is State.Finished -> {
-                        showToast("Sync: succeeded at ${it.result.timestamp}", true)
+                        showToast("Sync: succeeded at ${it.result.timestamp}")
                         viewModel.updateLastSyncTimestamp()
                     }
                     is State.Failed -> {
-                        showToast("Sync: failed at ${it.result.timestamp}", false)
+                        showToast("Sync: failed at ${it.result.timestamp}")
                         viewModel.updateLastSyncTimestamp()
                     }
-                    else -> showToast("Sync: unknown state.", false)
+                    else -> showToast("Sync: unknown state.")
                 }
             }
         }

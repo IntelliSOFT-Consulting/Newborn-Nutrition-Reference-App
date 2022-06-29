@@ -13,15 +13,20 @@ import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
+import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.APGAR_SCORE
 import com.intellisoft.nndak.logic.Logics.Companion.ASPHYXIA
 import com.intellisoft.nndak.logic.Logics.Companion.ASSESSMENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_BREASTFEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
+import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
@@ -44,13 +49,17 @@ import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
 import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.JAUNDICE
+import com.intellisoft.nndak.logic.Logics.Companion.MULTIPLE_PREGNANCY
 import com.intellisoft.nndak.logic.Logics.Companion.MUM_CONTRA
 import com.intellisoft.nndak.logic.Logics.Companion.MUM_LOCATION
 import com.intellisoft.nndak.logic.Logics.Companion.MUM_WELL
+import com.intellisoft.nndak.logic.Logics.Companion.PARITY
+import com.intellisoft.nndak.logic.Logics.Companion.PMTCT
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
 import com.intellisoft.nndak.logic.Logics.Companion.SEPSIS
@@ -226,53 +235,44 @@ class PatientDetailsViewModel(
             carePlans.forEach { item ->
 
                 try {
-                    val feedingTime = observationsPerCodeEncounter(ASSESSMENT_DATE, item.partOf)
 
-                    feedingTime.forEach { time ->
-                        val actualTime = FormatHelper().getRefinedDatePmAmEncounter(time.value)
-                        val currentTime = FormatHelper().getRoundedDateHour(it.toString())
-                        val maxThree = FormatHelper().getHourRange(currentTime)
-                        val within =
-                            FormatHelper().startCurrentEnd(maxThree, actualTime, currentTime)
-                        if (within) {
-                            val iVs = observationsPerCodeEncounter(
-                                FLUID_VOLUME,
-                                item.partOf
-                            )
-                            Timber.e("IV Fluids ${iVs.size}")
-                            iVs.forEach { ob ->
-                                iv += ob.quantity.toFloat()
-                            }
+                    val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
+                    val currentTime = FormatHelper().getRoundedDateHour(it.toString())
+                    val maxThree = FormatHelper().getHourRange(currentTime)
+                    val isWithinRange =
+                        FormatHelper().startCurrentEnd(maxThree, actualTime, currentTime)
+                    if (isWithinRange) {
 
-                            /**
-                             * Expressed
-                             */
-
-                            val eBms = observationsPerCodeEncounter(
-                                EBM_VOLUME,
-                                item.partOf
-                            )
-
-                            eBms.forEach { ob ->
-                                ebm += ob.quantity.toFloat()
-                            }
-                            /**
-                             * DHM
-                             */
-                            val dhmS = observationsPerCodeEncounter(
-                                DHM_VOLUME,
-                                item.partOf
-                            )
-                            dhmS.forEach { ob ->
-                                dhm += ob.quantity.toFloat()
-                            }
-
+                        val iVs = observationsPerCodeEncounter(
+                            IV_VOLUME,
+                            item.encounterId
+                        )
+                        iVs.forEach {
+                            iv += it.quantity.toFloat()
                         }
-                    }
 
+                        val eBms = observationsPerCodeEncounter(
+                            EBM_VOLUME,
+                            item.encounterId
+                        )
+
+                        eBms.forEach {
+                            ebm += it.quantity.toFloat()
+                        }
+                        val dhmS = observationsPerCodeEncounter(
+                            DHM_VOLUME,
+                            item.encounterId
+                        )
+                        dhmS.forEach {
+                            dhm += it.quantity.toFloat()
+                        }
+
+                    }
+                    Timber.e("Cheza $isWithinRange")
                 } catch (e: Exception) {
                     Timber.e("Cheza Exception ${e.localizedMessage}")
                 }
+
 
             }
         } else {
@@ -287,6 +287,69 @@ class PatientDetailsViewModel(
             ivVolume = iv.toString(),
             ebmVolume = ebm.toString(),
             dhmVolume = dhm.toString()
+        )
+    }
+
+    private suspend fun loadFeedCare(it: LocalDateTime): FeedItem {
+
+        var iv = 0f
+        var ebm = 0f
+        var dhm = 0f
+        val hour = FormatHelper().getRoundedHour(it.toString())
+        val carePlans = getCompletedCarePlans()
+        if (carePlans.isNotEmpty()) {
+            carePlans.forEach { item ->
+                val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
+                val currentTime = FormatHelper().getRoundedDateHour(it.toString())
+                try {
+                    val maxThree = FormatHelper().getHourRange(currentTime)
+                    val isWithinRange =
+                        FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
+                    if (isWithinRange) {
+
+                        val iVs = observationsPerCodeEncounter(
+                            IV_VOLUME,
+                            item.encounterId
+                        )
+                        iVs.forEach {
+                            iv += it.quantity.toFloat()
+                        }
+
+                        val eBms = observationsPerCodeEncounter(
+                            EBM_VOLUME,
+                            item.encounterId
+                        )
+
+                        eBms.forEach {
+                            ebm += it.quantity.toFloat()
+                        }
+                        val dhmS = observationsPerCodeEncounter(
+                            DHM_VOLUME,
+                            item.encounterId
+                        )
+                        dhmS.forEach {
+                            dhm += it.quantity.toFloat()
+                        }
+
+                    }
+                    Timber.e("Cheza $isWithinRange")
+                } catch (e: Exception) {
+                    Timber.e("Cheza Exception ${e.localizedMessage}")
+                }
+
+            }
+        } else {
+            iv = 0f
+            ebm = 0f
+            dhm = 0f
+
+        }
+
+        return FeedItem(
+            resourceId = hour,
+            volume = iv.toString(),
+            route = ebm.toString(),
+            frequency = dhm.toString()
         )
     }
 
@@ -365,6 +428,7 @@ class PatientDetailsViewModel(
         val contra = retrieveCode(MUM_CONTRA)
         val breastfeeding = retrieveCode(BABY_BREASTFEEDING)
         val mumWell = retrieveCode(MUM_WELL)
+        var dDate = retrieveCode(DELIVERY_DATE)
 
 
         var birthWeight = ""
@@ -378,7 +442,6 @@ class PatientDetailsViewModel(
         var parity = ""
         var pmtct = ""
         var mPreg = ""
-        var dDate = ""
         var motherMilk = "0 ml"
         val exp = getPatientEncounters()
         var i: Int = 0
@@ -393,80 +456,72 @@ class PatientDetailsViewModel(
         val obs = getObservations()
 
         val sample = pullWeights()
-        val weights: MutableList<Int> = mutableListOf()
 
         val refined = sortCollected(sample)
 
         if (refined.isNotEmpty()) {
             cWeight = refined.last().value
-            for (element in refined) {
-                try {
-                    val code = element.value.split("\\.".toRegex()).toTypedArray()
-                    weights.add(code[0].toInt())
-                } catch (e: Exception) {
-                    val data = element.quantity
-                    weights.add(data.toInt())
-                }
-            }
+
         }
 
         if (obs.isNotEmpty()) {
-
             for (element in obs) {
-
-                if (element.code == "Feeding-Frequency") {
-                    feeds.add(FeedItem("test", "test", "test", "test", "test", "test"))
-                }
-                if (element.code == "93857-1") {
-                    Timber.e("Delivery Date $dDate")
-                    dDate = element.value.substring(0, 10)
-                }
-                if (element.code == "55277-8") {
-                    pmtct = element.value
-                }
-                if (element.code == "64708-1") {
-                    mPreg = element.value
-                }
-                if (element.code == "72149-8") {
-                    dMethod = element.value
-                }
-                if (element.code == "45394-4") {
-                    parity = "P${element.value}"
-                }
-                if (element.code == "8339-4") {
-                    birthWeight = element.value
-                    val code = element.value.split("\\.".toRegex()).toTypedArray()
-                    birthWeight = if (code[0].toInt() < 2500) {
-                        "$birthWeight -Low"
-                    } else {
-                        "$birthWeight -Normal"
+                when (element.code) {
+                    PMTCT -> {
+                        pmtct = element.value
                     }
-                }
-                if (element.code == "52455-3") {
-                    admDate = element.value.substring(0, 10)
-                }
-
-                if (element.code == "9273-4") {
-                    apgar = element.value
-                }
-                if (element.code == "Breast-Milk") {
-                    motherMilk = element.value
-                }
-
-                if (element.code == "11885-1") {
-                    val code = element.value.split("\\.".toRegex()).toTypedArray()
-                    status = try {
-                        if (code[0].toInt() < 37) {
-                            "Preterm"
+                    MULTIPLE_PREGNANCY -> {
+                        mPreg = element.value
+                    }
+                    DELIVERY_METHOD -> {
+                        dMethod = element.value
+                    }
+                    PARITY -> {
+                        parity = "P${element.value}"
+                    }
+                    BIRTH_WEIGHT -> {
+                        birthWeight = element.value
+                        val code = element.value.split("\\.".toRegex()).toTypedArray()
+                        birthWeight = if (code[0].toInt() < 2500) {
+                            "$birthWeight -Low"
                         } else {
-                            "Term"
+                            "$birthWeight -Normal"
                         }
-                    } catch (e: Exception) {
-                        "Preterm"
                     }
-                    gestation = element.value
+                    ADMISSION_DATE -> {
+                        admDate =
+                            try {
+                                FormatHelper().extractDateString(element.value)
+                            } catch (e: Exception) {
+                                element.value.substring(0, 10)
+                            }
+                    }
+                    APGAR_SCORE -> {
+                        apgar = element.value
+                    }
+                    BREAST_MILK -> {
+                        motherMilk = element.value
+                    }
+                    GESTATION -> {
+                        val code = element.value.split("\\.".toRegex()).toTypedArray()
+                        status = try {
+                            if (code[0].toInt() < 37) {
+                                "Preterm"
+                            } else {
+                                "Term"
+                            }
+                        } catch (e: Exception) {
+                            "Preterm"
+                        }
+                        gestation = element.value
+                    }
                 }
             }
+        }
+        dDate = try {
+            FormatHelper().extractDateString(dDate)
+        } catch (e: Exception) {
+            dDate.substring(0, 10)
         }
         val total = calculateTotalExpressedMilk()
 
@@ -517,7 +572,6 @@ class PatientDetailsViewModel(
             assessment = AssessmentItem(
                 breastProblems = breastProblems,
                 breastfeedingBaby = breastfeeding,
-                weights = weights,
                 totalExpressed = total,
                 contraindicated = contra
             )
@@ -730,7 +784,7 @@ class PatientDetailsViewModel(
 
     fun getCurrentPrescriptions() {
         viewModelScope.launch {
-            livePrescriptionsData.value = getCurrentPrescriptionsDataModel(context)
+            livePrescriptionsData.value = getActivePrescriptionsDataModel(context)
         }
     }
 
@@ -740,14 +794,23 @@ class PatientDetailsViewModel(
         }
     }
 
+    private suspend fun getActivePrescriptionsDataModel(context: Application): List<PrescriptionItem> {
+        val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
+        val pres = fetchActiveCarePlans()
+        pres.forEach { item ->
+            prescriptions.add(prescription(item))
+        }
+        return prescriptions
+
+    }
+
     private suspend fun getFeedingInstancesDataModel(
         context: Application,
         careId: String
     ): List<PrescriptionItem> {
         val data: MutableList<PrescriptionItem> = mutableListOf()
         val pres = fetchCarePlans(careId)
-
-
+        Timber.e("Care Provide ${pres.size}")
         pres.forEach { item ->
             data.add(feedsTaken(item))
         }
@@ -758,15 +821,56 @@ class PatientDetailsViewModel(
         val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
         val pres = fetchActiveCarePlans()
         pres.forEach { item ->
-            prescriptions.add(prescription(item))
+            // prescriptions.add(prescription(item))
         }
 
         return prescriptions
 
     }
 
+    private suspend fun fetchActiveCarePlans(): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == CarePlan.CarePlanStatus.ACTIVE.toString() }
+            .let { cares.addAll(it) }
+        return cares
+    }
 
-    private suspend fun getCompletedCarePlans(): List<EncounterItem> {
+    private suspend fun getCompletedCarePlans(): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == CarePlan.CarePlanStatus.COMPLETED.toString() }
+            .let { cares.addAll(it) }
+        return cares
+    }
+
+    private suspend fun getCompletedCarePlansEncounter(): List<EncounterItem> {
         val cares: MutableList<EncounterItem> = mutableListOf()
         fhirEngine
             .search<Encounter> {
@@ -792,7 +896,7 @@ class PatientDetailsViewModel(
     }
 
 
-    private suspend fun fetchActiveCarePlans(): List<EncounterItem> {
+    private suspend fun fetchActiveCareEncounters(): List<EncounterItem> {
         val cares: MutableList<EncounterItem> = mutableListOf()
 
         fhirEngine
@@ -816,7 +920,7 @@ class PatientDetailsViewModel(
     }
 
 
-    private suspend fun fetchCarePlans(careId: String): List<EncounterItem> {
+    private suspend fun fetchCarePlansEncounter(careId: String): List<EncounterItem> {
         val cares: MutableList<EncounterItem> = mutableListOf()
         fhirEngine
             .search<Encounter> {
@@ -839,11 +943,58 @@ class PatientDetailsViewModel(
         return cares
     }
 
-    private fun directRelation(createEncounterItem: EncounterItem): List<EncounterItem> {
-        TODO("Not yet implemented")
+    private suspend fun fetchCarePlans(careId: String): List<CareItem> {
+        val cares: MutableList<CareItem> = mutableListOf()
+        fhirEngine
+            .search<CarePlan> {
+                filter(
+                    CarePlan.SUBJECT,
+                    { value = "Patient/$patientId" })
+                filter(CarePlan.PART_OF, { value = "CarePlan/$careId" })
+                sort(CarePlan.DATE, Order.DESCENDING)
+            }
+            .take(MAX_RESOURCE_COUNT)
+            .map {
+                createCarePlanItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { cares.addAll(it) }
+        return cares
     }
 
-    private suspend fun feedsTaken(care: EncounterItem): PrescriptionItem {
+    private suspend fun feedsTaken(care: CareItem): PrescriptionItem {
+        val date = try {
+            FormatHelper().extractCareDateString(care.created)
+        } catch (e: Exception) {
+            care.created
+        }
+        val time = try {
+            FormatHelper().extractCareTimeString(care.created)
+        } catch (e: Exception) {
+            care.created
+        }
+        val observations = getReferencedObservations(care.encounterId)
+        return PrescriptionItem(
+            id = care.resourceId,
+            resourceId = care.resourceId,
+            date = date,
+            time = time,
+            totalVolume = extractValue(observations, FEEDS_TAKEN),
+            route = extractValue(observations, DIAPER_CHANGED),
+            ivFluids = extractValue(observations, IV_VOLUME),
+            breastMilk = extractValue(observations, EBM_VOLUME),
+            donorMilk = extractValue(observations, DHM_VOLUME),
+            consent = extractValue(observations, FEEDS_DEFICIT),
+            dhmReason = extractValue(observations, ADJUST_PRESCRIPTION),
+            supplements = extractValue(observations, VOMIT),
+            consentDate = extractValue(observations, STOOL),
+            additionalFeeds = extractValue(observations, REMARKS),
+        )
+    }
+
+    private suspend fun feedsTakenEncounter(care: EncounterItem): PrescriptionItem {
 
         val observations = getReferencedObservations(care.partOf)
         val hour = extractValue(observations, ASSESSMENT_DATE)
@@ -888,18 +1039,17 @@ class PatientDetailsViewModel(
         return value.toString()
     }
 
-    private suspend fun prescription(care: EncounterItem): PrescriptionItem {
-//    private suspend fun prescription(care: CareItem): PrescriptionItem {
-        Timber.e("Encounter ID ${care.id}")
-//        val observations = getReferencedObservations(care.id) //With Care plan
-        val observations = getReferencedObservationsEncounter(care.id)
+    //    private suspend fun prescription(care: EncounterItem): PrescriptionItem {
+    private suspend fun prescription(care: CareItem): PrescriptionItem {
+        val observations = getReferencedObservations(care.encounterId)
+        Timber.e("Encounter Prescription ${care.encounterId}")
         val feeds: MutableList<FeedItem> = mutableListOf()
         var date = "N/A"
         var time = "N/A"
         val total = extractQuantity(observations, "Total-Feeds")
         var iv = "N/A"
         var bm = "N/A"
-        var dhm = "N/A"//extractQuantity(observations, "DHM-Volume")
+        var dhm = "N/A"
         var ebm = "N/A"
         var consent = "N/A"
         var formula = "N/A"
@@ -911,7 +1061,10 @@ class PatientDetailsViewModel(
         var bFreq = ""
         val givenFeeds = pullFeeds()
         val cWeight =
-            observationsCodePerEncounter(CURRENT_WEIGHT, care.id).firstOrNull()?.quantity
+            observationsCodePerEncounter(
+                CURRENT_WEIGHT,
+                care.encounterId
+            ).firstOrNull()?.quantity
 
         Timber.e("Encounter ID $cWeight")
         /**
@@ -931,7 +1084,7 @@ class PatientDetailsViewModel(
 
             val breastMilk = observationsCodePerEncounter(
                 BREAST_MILK,
-                care.id
+                care.encounterId
             ).firstOrNull()?.value
             if (breastMilk != null) {
                 val bmVolume = extractQuantity(observations, BREAST_MILK)
@@ -947,7 +1100,7 @@ class PatientDetailsViewModel(
             }
             val form = observationsCodePerEncounter(
                 FORMULA_VOLUME,
-                care.id
+                care.encounterId
             ).firstOrNull()?.value
             if (form != null) {
                 val fVolume = extractQuantity(observations, FORMULA_VOLUME)
@@ -967,7 +1120,7 @@ class PatientDetailsViewModel(
             }
             val expressed = observationsCodePerEncounter(
                 EBM_VOLUME,
-                care.id
+                care.encounterId
             ).firstOrNull()?.value
             if (expressed != null) {
                 val fVolume = extractQuantity(observations, EBM_VOLUME)
@@ -985,7 +1138,7 @@ class PatientDetailsViewModel(
             }
             val donor = observationsCodePerEncounter(
                 DHM_VOLUME,
-                care.id
+                care.encounterId
             ).firstOrNull()?.value
             if (donor != null) {
                 val fVolume = extractQuantity(observations, DHM_VOLUME)
@@ -1007,7 +1160,7 @@ class PatientDetailsViewModel(
             }
             val fl = observationsCodePerEncounter(
                 IV_VOLUME,
-                care.id
+                care.encounterId
             ).firstOrNull()?.value
             if (fl != null) {
                 val fVolume = extractQuantity(observations, IV_VOLUME)
@@ -1079,8 +1232,8 @@ class PatientDetailsViewModel(
             }
         }
         return PrescriptionItem(
-            id = care.id,
-            resourceId = care.id,
+            id = care.resourceId,
+            resourceId = care.encounterId,
             date = date,
             time = time,
             totalVolume = total,
@@ -1216,18 +1369,16 @@ class PatientDetailsViewModel(
         if (observations.isNotEmpty()) {
             for (element in observations) {
 
-                Timber.e("Option:::: ${element.code} ${element.value}")
-
-                if (element.code == "Consent-Given") {
+                if (element.code == DHM_CONSENT) {
                     consent = element.value
                 }
-                if (element.code == "DHM-Type") {
+                if (element.code == DHM_TYPE) {
                     dhm = element.value
                 }
-                if (element.code == "DHM-Volume") {
+                if (element.code == DHM_VOLUME) {
                     dhmVolume = element.value
                 }
-                if (element.code == "DHM-Reason") {
+                if (element.code == DHM_REASON) {
                     reason = element.value
                 }
             }
@@ -1370,6 +1521,7 @@ class PatientDetailsViewModel(
             resources: Resources
         ): NutritionItem {
             val status = order.status ?: ""
+            Timber.e("Status $status")
             return NutritionItem(
                 order.logicalId,
                 order.patient.reference,

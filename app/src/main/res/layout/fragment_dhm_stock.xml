@@ -15,13 +15,13 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        style="?attr/textAppearanceSubtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/app_closing_stock" />
 
     <TextView
-        style="@android:style/TextAppearance.DeviceDefault.Small"
+        style="?attr/textAppearanceBody2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15dp"

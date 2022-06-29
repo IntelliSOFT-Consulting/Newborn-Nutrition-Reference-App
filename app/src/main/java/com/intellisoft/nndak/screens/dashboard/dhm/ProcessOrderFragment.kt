@@ -161,13 +161,6 @@ class ProcessOrderFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire Type $dhmType  $questionnaire")
-
             viewModel.dispensingDetails(
                 questionnaireFragment.getQuestionnaireResponse(),
                 args.patientId, args.order, args.encounter, dhmType
