@@ -34,6 +34,9 @@ class Logics {
          * Prescriptions
          */
         const val DONOR = "Donor"
+        const val EFFECTIVE_EXPRESSION = "Effective-Expression"
+        const val EXPRESSIONS = "Milk Expression"
+        const val SUFFICIENT_EXPRESSION = "Sufficient-Expression"
         const val PRESCRIPTION = "Feeds Prescription"
         const val BABY_ASSESSMENT = "Baby Assessment"
         const val DHM_DISPENSING = "DHM Dispensing"
@@ -53,7 +56,6 @@ class Logics {
         const val FORMULA_FREQUENCY = "Formula-Frequency"
         const val FORMULA_ROUTE = "Formula-Route"
         const val FORMULA_TYPE = "Formula-Type"
-
 
         const val DHM_VOLUME = "DHM-Volume"
         const val DHM_FREQUENCY = "DHM-Frequency"

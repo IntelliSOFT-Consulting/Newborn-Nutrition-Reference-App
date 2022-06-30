@@ -169,7 +169,6 @@ class PatientDetailsViewModel(
             for ((i, entry) in daysString.withIndex()) {
                 val sorted = sortCollected(weight)
                 val value = extractDailyMeasure(entry, sorted)
-                Timber.e("DayOfLife Date $entry Values $value Day $i")
                 data.add(ActualData(day = i.toString(), actual = value, projected = value))
             }
         }
@@ -744,6 +743,12 @@ class PatientDetailsViewModel(
     }
 
 
+    private fun sortCollectedCare(data: List<CareItem>): List<CareItem> {
+
+        return data.sortedWith(compareBy { it.created })
+    }
+
+
     private fun getFormattedAge(
         dob: String
     ): String {
@@ -810,24 +815,25 @@ class PatientDetailsViewModel(
         context: Application,
         careId: String
     ): List<PrescriptionItem> {
+        /*  val data: MutableList<PrescriptionItem> = mutableListOf()
+          val pres = fetchCarePlans(careId)
+          val sort = sortCollectedCare(pres)
+          sort.forEach { item ->
+              data.add(feedsTaken(item))
+          }
+          return data.reversed()*/
+
         val data: MutableList<PrescriptionItem> = mutableListOf()
-        val pres = fetchCarePlans(careId)
+        val pres = fetchCarePlansEncounter(careId)
         pres.forEach { item ->
-            data.add(feedsTaken(item))
+            val prop = feedsTakenEncounter(item)
+            if (prop.hour.toString() != "--") {
+                data.add(feedsTakenEncounter(item))
+            }
         }
-        return data
+        return data.reversed()
     }
 
-    private suspend fun getCurrentPrescriptionsDataModel(context: Application): List<PrescriptionItem> {
-        val prescriptions: MutableList<PrescriptionItem> = mutableListOf()
-        val pres = fetchActiveCarePlans()
-        pres.forEach { item ->
-            // prescriptions.add(prescription(item))
-        }
-
-        return prescriptions
-
-    }
 
     private suspend fun fetchActiveCarePlans(): List<CareItem> {
         val cares: MutableList<CareItem> = mutableListOf()
@@ -928,7 +934,7 @@ class PatientDetailsViewModel(
                 filter(
                     Encounter.SUBJECT,
                     { value = "Patient/$patientId" })
-                filter(Encounter.BASED_ON, { value = "Encounter/$careId" })
+                filter(Encounter.PART_OF, { value = careId })
                 sort(Encounter.DATE, Order.DESCENDING)
             }
             .take(MAX_RESOURCE_COUNT)
@@ -996,8 +1002,9 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun feedsTakenEncounter(care: EncounterItem): PrescriptionItem {
-
-        val observations = getReferencedObservations(care.partOf)
+        Timber.e("Encounter Part Of ${care.id}")
+        val observations = getReferencedObservationsEncounter(care.id)
+        Timber.e("Encounter Part Observations ${observations.size}")
         val hour = extractValue(observations, ASSESSMENT_DATE)
         val date = try {
             FormatHelper().extractDateString(hour)
@@ -1031,27 +1038,20 @@ class PatientDetailsViewModel(
     }
 
     private fun extractValue(observations: List<ObservationItem>, code: String): String {
-        val value = observations.find { it.code == code }?.value
-        return value.toString()
+        return observations.find { it.code == code }?.value ?: "--"
     }
 
     private fun extractQuantity(observations: List<ObservationItem>, code: String): String {
-        val value = observations.find { it.code == code }?.quantity
-        return value.toString()
+        return observations.find { it.code == code }?.quantity ?: "0"
     }
 
     //    private suspend fun prescription(care: EncounterItem): PrescriptionItem {
     private suspend fun prescription(care: CareItem): PrescriptionItem {
         val observations = getReferencedObservations(care.encounterId)
         val feeds: MutableList<FeedItem> = mutableListOf()
-
         val relatedFeeds = fetchCarePlans(care.encounterId)
-        relatedFeeds.forEach {
-            val obs = getReferencedObservations(care.encounterId)
-            val total = extractQuantity(obs, FEEDS_DEFICIT)
-            Timber.e("Total Feeds $total")
 
-        }
+
         var date = "N/A"
         var time = "N/A"
         val total = extractQuantity(observations, TOTAL_FEEDS)
@@ -1074,7 +1074,15 @@ class PatientDetailsViewModel(
                 care.encounterId
             ).firstOrNull()?.quantity
 
-        Timber.e("Encounter ID $cWeight")
+        val def = if (relatedFeeds.isNotEmpty()) {
+            val recentFeed = relatedFeeds.last().encounterId
+            val obs = getReferencedObservations(recentFeed)
+            extractQuantity(obs, FEEDS_DEFICIT)
+
+        } else {
+            total
+        }
+
         /**
          * Expressions Count
          */
@@ -1261,7 +1269,7 @@ class PatientDetailsViewModel(
             feedsGiven = givenFeeds,
             expressions = expressions.toString(),
             cWeight = cWeight,
-            formula = formula
+            formula = formula, deficit = def
         )
     }
 
@@ -1530,7 +1538,7 @@ class PatientDetailsViewModel(
             resources: Resources
         ): NutritionItem {
             val status = order.status ?: ""
-            Timber.e("Status $status")
+
             return NutritionItem(
                 order.logicalId,
                 order.patient.reference,

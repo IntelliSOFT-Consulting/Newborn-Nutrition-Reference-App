@@ -68,19 +68,11 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
                 && patient.hasActive()
 
             ) {
-                /*   if (patient.hasDeceased()) {
 
-                       val dateDate = patient.deceased.dateTimeValue()
-                       Timber.e("Date Date $dateDate")
-                       val todayDate = FormatHelper().getTodayDate()
-                       val isDateValid = FormatHelper().checkDate(dateDate.toString(), todayDate)
-                       if (!isDateValid) {
-
-                           isPatientSaved.value = false
-
-                       }*/
+                if (!patient.hasDeceased()) {
+                    patient.addressFirstRep.postalCode = SYNC_VALUE
+                }
                 patient.id = patientId
-                patient.addressFirstRep.postalCode = SYNC_VALUE
                 patient.active = false
                 fhirEngine.update(patient)
                 isPatientSaved.value = true

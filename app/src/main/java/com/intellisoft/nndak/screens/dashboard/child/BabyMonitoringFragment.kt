@@ -70,6 +70,7 @@ class BabyMonitoringFragment : Fragment() {
     private var totalV: Float = 0.0f
     private lateinit var careID: String
     private lateinit var deficit: String
+    private lateinit var availableFeed: String
     private var ivPresent: Boolean = true
     private var dhmPresent: Boolean = true
     private var ebmPresent: Boolean = true
@@ -118,8 +119,7 @@ class BabyMonitoringFragment : Fragment() {
                     fhirEngine,
                     args.patientId
                 )
-            )
-                .get(PatientDetailsViewModel::class.java)
+            ).get(PatientDetailsViewModel::class.java)
 
         binding.apply {
             lnCurrent.visibility = View.GONE
@@ -197,10 +197,10 @@ class BabyMonitoringFragment : Fragment() {
             if (data.isNotEmpty()) {
                 val it = data.first()
                 careID = it.resourceId.toString()
-                Timber.e("Care Plans Related History $careID")
+                Timber.e("Encounter Feeding $careID")
                 binding.apply {
                     lnCurrent.visibility = View.VISIBLE
-
+                    availableFeed = it.deficit.toString()
                     incPrescribe.appTodayTotal.text =
                         it.totalVolume
                     incPrescribe.appRoute.text = it.route ?: ""
@@ -208,7 +208,6 @@ class BabyMonitoringFragment : Fragment() {
                     incPrescribe.appThreeHourly.text = threeHourly
                     val breakDown = generateFeedsBreakDown(it)
                     incPrescribe.appThreeHourlyBreak.text = breakDown
-                    Timber.e("Shida iko wapi ${it.ebm}")
 
                     regulateViews(it)
 
@@ -247,7 +246,12 @@ class BabyMonitoringFragment : Fragment() {
 
                 if (ivPresent) {
                     if (ivVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "IV", volume = ivVolume.toDouble().toString()))
+                        feedsList.add(
+                            FeedItem(
+                                type = "IV",
+                                volume = ivVolume.toDouble().toString()
+                            )
+                        )
                     } else {
 
                         Toast.makeText(
@@ -260,7 +264,12 @@ class BabyMonitoringFragment : Fragment() {
                 }
                 if (dhmPresent) {
                     if (dhmVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "DHM", volume = dhmVolume.toDouble().toString()))
+                        feedsList.add(
+                            FeedItem(
+                                type = "DHM",
+                                volume = dhmVolume.toDouble().toString()
+                            )
+                        )
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -274,7 +283,12 @@ class BabyMonitoringFragment : Fragment() {
                 }
                 if (ebmPresent) {
                     if (ebmVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "EBM", volume = ebmVolume.toDouble().toString()))
+                        feedsList.add(
+                            FeedItem(
+                                type = "EBM",
+                                volume = ebmVolume.toDouble().toString()
+                            )
+                        )
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -357,7 +371,7 @@ class BabyMonitoringFragment : Fragment() {
                 val iv = control.edIv.text.toString()
                 if (dhm.isNotEmpty() || ebm.isNotEmpty() || iv.isNotEmpty()) {
                     val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat()
-                    val def = totalV - total
+                    val def = availableFeed.toDouble() - total
 
                     control.edDeficit.setText(def.toString())
                 } else {

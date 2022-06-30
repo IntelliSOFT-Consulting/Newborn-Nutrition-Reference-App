@@ -208,8 +208,7 @@ class PatientListViewModel(
                 .search<NutritionOrder> {
                     sort(NutritionOrder.DATETIME, Order.ASCENDING)
                     from = 0
-                    /*  filter(NutritionOrder.STATUS, value = {
-                          NutritionOrder.NutritionOrderStatus.ACTIVE)}*/
+
                 }
                 .map {
                     loadOrders(
@@ -569,6 +568,7 @@ class PatientListViewModel(
 
     private fun filterCity(search: Search, location: String) {
         search.filter(Patient.ADDRESS_POSTALCODE, { value = SYNC_VALUE })
+
     }
 
 

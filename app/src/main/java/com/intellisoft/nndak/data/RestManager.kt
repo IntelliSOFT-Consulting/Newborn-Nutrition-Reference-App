@@ -225,6 +225,29 @@ class RestManager {
             }
         )
     }
+    fun loadHistory(context: Context,careId:String, patientId:String, onResult: (WeightsData?) -> Unit) {
+
+     /*   getService(context).loadHistory(careId,patientId).enqueue(
+            object : Callback<WeightsData> {
+                override fun onFailure(call: Call<WeightsData>, t: Throwable) {
+                    onResult(null)
+                }
+
+                override fun onResponse(
+                    call: Call<WeightsData>,
+                    response: Response<WeightsData>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )*/
+    }
+
+
 
 
 }

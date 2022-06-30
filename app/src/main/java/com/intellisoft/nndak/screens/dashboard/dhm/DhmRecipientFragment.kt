@@ -87,20 +87,6 @@ class DhmRecipientFragment : Fragment() {
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        (activity as MainActivity).displayDialog()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
-            viewModel.addDhmRecipient(questionnaireFragment.getQuestionnaireResponse())
-        }
 
     }
 

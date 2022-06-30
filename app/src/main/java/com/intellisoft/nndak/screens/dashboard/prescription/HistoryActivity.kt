@@ -10,6 +10,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.FeedingAdapter
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityHistoryBinding
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -22,7 +23,7 @@ class HistoryActivity : AppCompatActivity() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private lateinit var careId: String
     private lateinit var patientId: String
-
+    private val apiService = RestManager()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
@@ -61,6 +62,18 @@ class HistoryActivity : AppCompatActivity() {
 
             binding.pbLoadingTwo.visibility = View.GONE
             adapter.submitList(it)
+        }
+        loadHistory()
+    }
+
+    private fun loadHistory() {
+        apiService.loadHistory(this@HistoryActivity,careId,patientId) {
+            if (it != null) {
+
+            } else {
+
+            }
+
         }
     }
 

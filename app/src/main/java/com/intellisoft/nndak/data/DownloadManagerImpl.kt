@@ -68,9 +68,10 @@ class DownloadManagerImpl : DownloadWorkManager {
                 }
                 if (type == "CarePlan") {
                     val no = entry.resource as CarePlan
-                    val patient = no.encounter.reference
-                    val patientUrl = "$DEMO_SERVER$patient/\$everything"
-                    urls.add(patientUrl)
+                    val care = no.encounter.reference
+                    val encounterUrl = "$DEMO_SERVER$care/\$everything"
+                    urls.add(encounterUrl)
+
                 }
 
             }

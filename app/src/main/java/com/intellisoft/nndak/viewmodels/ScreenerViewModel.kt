@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.common.datatype.asStringValue
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.fhir.get
 import com.google.android.fhir.logicalId
@@ -47,7 +48,10 @@ import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.EFFECTIVE_EXPRESSION
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSION_TIME
 import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
@@ -77,6 +81,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
 import com.intellisoft.nndak.logic.Logics.Companion.SEPSIS
 import com.intellisoft.nndak.logic.Logics.Companion.STOOL
+import com.intellisoft.nndak.logic.Logics.Companion.SUFFICIENT_EXPRESSION
 import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.VDRL
 import com.intellisoft.nndak.logic.Logics.Companion.VOLUME_DISPENSED
@@ -646,6 +651,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             "Baby-State" -> {
                                 val state = extractResponseCode(inner, "valueCoding")
                                 if (state.isNotEmpty()) {
+                                    /*   if (state == "Yes") {
+                                           baby.deceased="false"
+                                       } else {
+                                           baby.setDeceased()
+                                       }*/
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
@@ -977,7 +987,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         if (value.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
-                                                  BREAST_MILK,
+                                                    BREAST_MILK,
                                                     "Breast Milk", "Breast Milk",
                                                     value, "mls"
                                                 )
@@ -1619,6 +1629,48 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    private suspend fun saveFeedingResources(
+        bundle: Bundle,
+        subjectReference: Reference,
+        basedOnReference: Reference,
+        encounterId: String,
+        reason: String,
+    ) {
+
+        val encounterReference = Reference("Encounter/$encounterId")
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        resource.issued = Date()
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Condition -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Encounter -> {
+                    resource.subject = subjectReference
+                    resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
+                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
+                    resource.status = Encounter.EncounterStatus.INPROGRESS
+                    resource.partOf = basedOnReference
+                    saveResourceToDatabase(resource)
+                }
+
+            }
+        }
+    }
+
     private suspend fun emptyObservations(
         bundle: Bundle, encounterId: String,
         reason: String,
@@ -2005,7 +2057,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     .request.url = "Observation"
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "Effective-Expression",
+                                        EFFECTIVE_EXPRESSION,
                                         "Effective Expression",
                                         effectiveExpression
                                     )
@@ -2013,7 +2065,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     .request.url = "Observation"
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "Sufficient-Expression",
+                                        SUFFICIENT_EXPRESSION,
                                         "Sufficient Expression",
                                         expressedSufficient
                                     )
@@ -2023,12 +2075,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         }
                         if (childChild == "Time-Expressed") {
                             dateTime = extractResponse(inner, "valueDateTime")
-                            Timber.e("Date Collected $dateTime")
+
                             if (dateTime.isNotEmpty()) {
 
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "Time-Expressed",
+                                        EXPRESSION_TIME,
                                         "Time Expressed",
                                         dateTime
                                     )
@@ -2049,7 +2101,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             bundle.addEntry()
                                 .setResource(
                                     qh.codingQuestionnaire(
-                                        "Completed By",
+                                        COMPLETED_BY,
                                         value,
                                         value
                                     )
@@ -2058,7 +2110,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                             val encounterId = generateUuid()
                             val subjectReference = Reference("Patient/$patientId")
-                            title = "Milk Expression"
+                            title = EXPRESSIONS
                             saveResources(bundle, subjectReference, encounterId, title)
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                             isResourcesSaved.postValue(true)
@@ -2104,60 +2156,47 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                      */
                     val qh = QuestionnaireHelper()
 
-                    val json = JSONObject(questionnaire)
-                    val common = json.getJSONArray("item")
-                    for (i in 0 until common.length()) {
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            "Proper-Positioning",
+                            "Proper Positioning",
+                            cues.latch
+                        )
+                    )
+                        .request.url = "Observation"
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            "Stimulated-Nipples",
+                            "Stimulated Nipples",
+                            cues.readiness
+                        )
+                    )
+                        .request.url = "Observation"
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            "Early-Latching",
+                            "Early Latching",
+                            cues.steady
+                        )
+                    )
+                        .request.url = "Observation"
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            "Manual-Drops",
+                            "Manual Drops",
+                            cues.audible
+                        )
+                    )
+                        .request.url = "Observation"
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            "Baby-Awakens",
+                            "Baby Awakens",
+                            cues.chocking
+                        )
+                    )
+                        .request.url = "Observation"
 
-                        val inner = common.getJSONObject(i)
-                        val childChild = inner.getString("linkId")
-                        Timber.e("Child $inner")
-                        if (childChild == "Assessment-Date") {
-                            bundle.addEntry().setResource(
-                                qh.codingQuestionnaire(
-                                    "Proper-Positioning",
-                                    "Proper Positioning",
-                                    cues.latch
-                                )
-                            )
-                                .request.url = "Observation"
-                            bundle.addEntry().setResource(
-                                qh.codingQuestionnaire(
-                                    "Stimulated-Nipples",
-                                    "Stimulated Nipples",
-                                    cues.readiness
-                                )
-                            )
-                                .request.url = "Observation"
-                            bundle.addEntry().setResource(
-                                qh.codingQuestionnaire(
-                                    "Early-Latching",
-                                    "Early Latching",
-                                    cues.steady
-                                )
-                            )
-                                .request.url = "Observation"
-                            bundle.addEntry().setResource(
-                                qh.codingQuestionnaire(
-                                    "Manual-Drops",
-                                    "Manual Drops",
-                                    cues.audible
-                                )
-                            )
-                                .request.url = "Observation"
-                            bundle.addEntry().setResource(
-                                qh.codingQuestionnaire(
-                                    "Baby-Awakens",
-                                    "Baby Awakens",
-                                    cues.chocking
-                                )
-                            )
-                                .request.url = "Observation"
-
-
-                        }
-
-
-                    }
 
                     val value = retrieveUser(false)
 
@@ -2411,23 +2450,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
-                    val encounterReference = Reference("Encounter/$encounterId")
-                    val basedOnReference = Reference("CarePlan/$careID")
+                    /*  val encounterReference = Reference("Encounter/$encounterId")*/
+                    val basedOnReference = Reference("$careID")
                     title = FEEDING_MONITORING
                     if (assessDate.isNotEmpty()) {
                         val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
                         if (lessThanNow) {
-                            val care = CarePlan()
-                            care.encounter = encounterReference
-                            care.subject = subjectReference
-                            care.status = CarePlan.CarePlanStatus.COMPLETED
-                            care.title = title
-                            care.intent = CarePlan.CarePlanIntent.ORDER
-                            care.created = FormatHelper().generateDate(assessDate)
-                            care.addPartOf(basedOnReference)
-                            saveResourceToDatabase(care)
+                            /* val care = CarePlan()
+                             care.encounter = encounterReference
+                             care.subject = subjectReference
+                             care.status = CarePlan.CarePlanStatus.COMPLETED
+                             care.title = title
+                             care.intent = CarePlan.CarePlanIntent.ORDER
+                             care.created = FormatHelper().generateDate(assessDate)
+                             care.addPartOf(basedOnReference)
+                             saveResourceToDatabase(care)*/
 
-                            saveResources(bundle, subjectReference, encounterId, title)
+                            saveFeedingResources(
+                                bundle,
+                                subjectReference,
+                                basedOnReference,
+                                encounterId,
+                                title
+                            )
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                             isResourcesSaved.postValue(true)
                         } else {
@@ -2444,232 +2489,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun addDhmRecipient(questionnaireResponse: QuestionnaireResponse) {
-        viewModelScope.launch {
-            val bundle =
-                ResourceMapper.extract(
-                    questionnaireResource,
-                    questionnaireResponse
-                )
-            val context = FhirContext.forR4()
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.postValue(false)
-                        return@launch
-                    }
-
-                    /**
-                     * Retrieve Mother Using the Provided ID
-                     */
-
-
-                    val qh = QuestionnaireHelper()
-
-                    val json = JSONObject(questionnaire)
-                    val common = json.getJSONArray("item")
-                    for (i in 0 until common.length()) {
-                        val item = common.getJSONObject(i)
-                        val parent = item.getJSONArray("item")
-                        for (k in 0 until parent.length()) {
-                            val inner = parent.getJSONObject(k)
-                            val childChild = inner.getString("linkId")
-                            Timber.e("Child $parent")
-                            when (childChild) {
-                                "IP-Number" -> {
-                                    patientIp = extractResponse(inner, "valueString")
-                                    if (patientIp.isNotEmpty()) {
-
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "IP-Number",
-                                                "IP Number",
-                                                patientIp,
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "Mother-Name" -> {
-                                    val value = extractResponse(inner, "valueString")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Mother-Name",
-                                                "Mother's Name",
-                                                value
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "Baby-Name" -> {
-                                    val value = extractResponse(inner, "valueString")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Baby-Name",
-                                                "Baby Name",
-                                                value
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "DHM-Type" -> {
-                                    val value = extractResponseCode(inner, "valueCoding")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "DHM-Type",
-                                                "DHM Type",
-                                                value,
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-                                "Breast-Milk" -> {
-                                    val value =
-                                        extractResponseQuantity(inner, "valueQuantity")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.quantityQuestionnaire(
-                                                "Breast-Milk",
-                                                "Breast Milk",
-                                                "Breast-Milk",
-                                                value, "mls"
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-                                }
-
-                                "Consent-Given" -> {
-
-                                    given = extractResponseCode(inner, "valueCoding")
-                                    if (given.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "Consent-Given",
-                                                "Consent Given",
-                                                given,
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-
-                                }
-                                "Consent-Date" -> {
-                                    if (given == "Yes") {
-
-                                        val value = extractResponse(inner, "valueDate")
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    "Consent-Date",
-                                                    "Consent Date",
-                                                    value,
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-
-                                "DHM-Reason" -> {
-
-                                    val value = extractResponse(inner, "valueString")
-                                    if (value.isNotEmpty()) {
-                                        bundle.addEntry().setResource(
-                                            qh.codingQuestionnaire(
-                                                "DHM-Reason",
-                                                "DHM Reason",
-                                                value,
-                                            )
-                                        )
-                                            .request.url = "Observation"
-                                    }
-
-                                }
-
-                                else -> {
-                                    println("Items skipped...")
-                                }
-                            }
-                        }
-
-                    }
-
-                    /**
-                     * Search Mother using the provided Ip Number
-                     * If mother's records found, proceed to get the child
-                     */
-                    val value = retrieveUser(false)
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Completed By",
-                                value,
-                                value
-                            )
-                        )
-                        .request.url = "Observation"
-
-                    collectRelatedData(patientIp, bundle)
-                    isResourcesSaved.postValue(true)
-
-                } catch (e: Exception) {
-                    Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
-                    return@launch
-
-                }
-            }
-        }
-    }
-
-    private suspend fun collectRelatedData(patientIp: String, bundle: Bundle) {
-        val mother = getPatient(patientIp)
-        /**
-         * Using mother's details, search the baby & Extract the id section only
-         */
-        Timber.e("Mother::: ${mother.reference}")
-        val babyIp = mother.reference.toString().drop(8)
-        Timber.e("Baby::: $babyIp")
-        val baby = getPatient(babyIp)
-
-        val encounterId = generateUuid()
-        title = "DHM Recipient"
-
-        val subjectReference = Reference("Patient/$babyIp")
-        subjectReference.display = baby.name
-
-        val encounterReference = Reference("Encounter/$encounterId")
-        encounterReference.display = title
-
-        /*  val no = NutritionOrder()
-          no.id = generateUuid()
-          no.patient = subjectReference
-          no.encounter = encounterReference
-          no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
-          no.dateTime = Date()
-          no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
-
-          fhirEngine.create(no)*/
-
-        saveResources(bundle, subjectReference, encounterId, title)
-
-    }
-
-    private suspend fun getPatient(patientId: String): PatientItem {
-        val patient = fhirEngine.load(Patient::class.java, patientId)
-        return patient.toPatientItem(0)
-    }
 
     fun addDhmStock(questionnaireResponse: QuestionnaireResponse) {
         viewModelScope.launch {
@@ -2861,7 +2680,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             bundle.addEntry()
                                 .setResource(
                                     qh.codingQuestionnaire(
-                                       COMPLETED_BY,
+                                        COMPLETED_BY,
                                         value,
                                         value
                                     )
@@ -2870,13 +2689,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val subjectReference = Reference("Patient/$patientId")
                             val encounterReference = Reference("Encounter/$encounterId")
                             title = DHM_DISPENSING
-
-                            val order = NutritionOrder()
-                            order.id = orderId
-                            order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
-                            order.patient = subjectReference
-                            order.encounter = encounterReference
-                            saveResourceToDatabase(order)
+                            updateNutrition(orderId)
 
                             saveResources(bundle, subjectReference, encounterId, title)
                             customMessage.postValue(MessageItem(true, "Success"))
@@ -2896,6 +2709,28 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             }
         }
+    }
+
+    private suspend fun updateNutrition(orderId: String) {
+        try {
+            val order = fhirEngine.load(NutritionOrder::class.java, orderId)
+            val no = NutritionOrder()
+            no.patient = order.patient
+            no.status = NutritionOrder.NutritionOrderStatus.COMPLETED
+            no.encounter = order.encounter
+            no.id = order.logicalId
+            saveResourceToDatabase(no)
+        } catch (e: Exception) {
+            Timber.e("Order Exception ${e.localizedMessage}")
+        }
+
+
+        /*    val order = NutritionOrder()
+            order.id = orderId
+            order.status = NutritionOrder.NutritionOrderStatus.COMPLETED
+            order.patient = subjectReference
+            order.encounter = encounterReference
+            saveResourceToDatabase(order)*/
     }
 
     fun makeComplete() {
@@ -3060,7 +2895,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     }
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
-                          CURRENT_WEIGHT,
+                            CURRENT_WEIGHT,
                             "Current Weight",
                             "Current Weight",
                             data.currentWeight, "gm"
@@ -3082,7 +2917,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     bundle.addEntry()
                         .setResource(
                             qh.codingQuestionnaire(
-                               COMPLETED_BY,
+                                COMPLETED_BY,
                                 value,
                                 value
                             )

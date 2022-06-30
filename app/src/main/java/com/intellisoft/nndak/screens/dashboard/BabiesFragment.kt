@@ -51,6 +51,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
     private var _binding: FragmentBabiesBinding? = null
+    lateinit var adapterList: BabyItemAdapter
+    private val mumBabyList = ArrayList<MotherBabyItem>()
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -89,18 +91,23 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     )
                 ).get(PatientListViewModel::class.java)
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = BabyItemAdapter(this::onPatientItemClicked)
-            recyclerView.adapter = adapter
+
+            adapterList = BabyItemAdapter(mumBabyList, this::onPatientItemClicked)
+            recyclerView.adapter = adapterList
+            adapterList.submitList(mumBabyList)
 
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
-                if (it.isEmpty()) {
+                if (it.isNotEmpty()) {
+
+                    mumBabyList.addAll(it)
+                    binding.pbLoading.visibility = View.GONE
+//                adapter.submitList(mumBabyList)
+                } else {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
                     }
                 }
-                binding.pbLoading.visibility = View.GONE
-                adapter.submitList(it)
             }
 
         } catch (e: Exception) {
@@ -127,8 +134,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
-                    if (filterData == DbMotherKey.BABY_NAME.name) {
+                    adapterList.filter.filter(newText)
+                  /*  if (filterData == DbMotherKey.BABY_NAME.name) {
                         patientListViewModel.searchPatientsByName(newText)
                     } else {
 
@@ -148,25 +155,26 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         } else {
 
                             patientListViewModel.searchPatientsByName(newText)
-                            binding.imgEmpty.visibility=View.GONE
+                            binding.imgEmpty.visibility = View.GONE*/
 
 //                            Toast.makeText(
 //                                requireContext(),
 //                                "We could not find the patient.",
 //                                Toast.LENGTH_SHORT
 //                            ).show()
-                        }
+                        /*}*/
 
 
-                    }
+                   /* }*/
 
 
-                    return true
+                    return false
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    patientListViewModel.searchPatientsByName(query)
-                    return true
+//                    patientListViewModel.searchPatientsByName(query)
+                    adapterList.filter.filter(query)
+                    return false
                 }
             }
         )
@@ -219,6 +227,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
