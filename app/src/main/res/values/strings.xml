@@ -393,6 +393,7 @@
     <string name="menu_pre_term">Preterm Formula</string>
     <string name="update">Last Update</string>
     <string name="app_age">Age (days)</string>
+    <string name="there_are_no_update">There are no Updates </string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Baby\'s Name</item>

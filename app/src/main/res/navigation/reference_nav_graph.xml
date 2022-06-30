@@ -250,5 +250,10 @@
             android:name="patient_id"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.intellisoft.nndak.screens.settings.NotificationFragment"
+        android:label="@string/menu_notification"
+        tools:layout="@layout/fragment_notification" />
 
 </navigation>

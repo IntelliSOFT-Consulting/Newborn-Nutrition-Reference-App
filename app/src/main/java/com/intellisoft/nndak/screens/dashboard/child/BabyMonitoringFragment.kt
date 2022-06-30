@@ -248,12 +248,13 @@ class BabyMonitoringFragment : Fragment() {
                     if (ivVolume.isNotEmpty()) {
                         feedsList.add(FeedItem(type = "IV", volume = ivVolume))
                     } else {
+
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.inputs_missing),
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
+                        return@setOnClickListener
                     }
                 }
                 if (dhmPresent) {
@@ -266,6 +267,8 @@ class BabyMonitoringFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         )
                             .show()
+                        return@setOnClickListener
+
                     }
                 }
                 if (ebmPresent) {
@@ -276,8 +279,8 @@ class BabyMonitoringFragment : Fragment() {
                             requireContext(),
                             getString(R.string.inputs_missing),
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
+                        return@setOnClickListener
                     }
                 }
 
@@ -537,7 +540,7 @@ class BabyMonitoringFragment : Fragment() {
 
             } else {
 
-              Toast.makeText(
+                Toast.makeText(
                     requireContext(),
                     getString(R.string.inputs_missing),
                     Toast.LENGTH_SHORT,

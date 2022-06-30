@@ -83,6 +83,10 @@ class LandingFragment : Fragment() {
                 (requireActivity() as MainActivity).navigate(R.id.profileFragment)
                 return true
             }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
+                return true
+            }
             else -> false
         }
     }

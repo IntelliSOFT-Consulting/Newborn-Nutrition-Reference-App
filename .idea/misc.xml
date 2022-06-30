@@ -150,6 +150,7 @@
         <entry key="app/src/main/res/layout/fragment_maternity_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_new_born.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_new_borns.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_notification.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/fragment_observations.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_patient_list.xml" value="0.27717391304347827" />
         <entry key="app/src/main/res/layout/fragment_pregnancy.xml" value="0.1" />
