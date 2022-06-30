@@ -142,12 +142,12 @@ class FormatHelper {
         calendar[Calendar.MILLISECOND] = 0
         calendar[Calendar.SECOND] = 0
         val minutes = calendar[Calendar.MINUTE]
-
+/*
         if (minutes < 30) {
             calendar[Calendar.MINUTE] = 0
         } else {
             calendar[Calendar.MINUTE] = 30
-        }
+        }*/
         val time = calendar.time
         return time.let { destFormat.format(it) }.toString()
 
@@ -174,11 +174,11 @@ class FormatHelper {
         calendar[Calendar.SECOND] = 0
         val minutes = calendar[Calendar.MINUTE]
 
-        if (minutes < 30) {
-            calendar[Calendar.MINUTE] = 0
-        } else {
-            calendar[Calendar.MINUTE] = 30
-        }
+//        if (minutes < 30) {
+//            calendar[Calendar.MINUTE] = 0
+//        } else {
+//            calendar[Calendar.MINUTE] = 30
+//        }
         val time = calendar.time
         return time.let { destFormat.format(it) }.toString()
 

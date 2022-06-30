@@ -82,6 +82,7 @@ class Logics {
         const val TOTAL_FEEDS = "Total-Feeds"
         const val REMARKS = "Additional-Notes"
         const val EXPRESSED_MILK = "226790003"
+//        const val EXPRESSION_TIME = "80482-3"
         const val EXPRESSION_TIME = "Time-Expressed"
         const val BABY_WELL = "71195-2"
         const val ASPHYXIA = "45735-8"
@@ -95,6 +96,7 @@ class Logics {
         const val FLUID_VOLUME = "IV-Volume"
         const val COMPLETED_BY = "Completed By"
         const val PRESCRIPTION_DATE = "82765-9"
+        const val OTHER_CONDITIONS = "457736-6"
 
         /**
          * Registration Details
@@ -114,7 +116,9 @@ class Logics {
         const val BBA = "16491-3"
         const val HEAD_CIRCUMFERENCE = "33172-8"
         const val INTERVENTIONS = "52508-9"
-        const val FED_AFTER = "55420-4"
+        const val FED_AFTER = "Fed-After"
+        const val FEED_TYPE = "46557-5"
+        const val WITHIN_ONE = "46556-7"
 
         /**
          * Stock Data

@@ -162,7 +162,7 @@ class BabyFeedsFragment : Fragment() {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
                 val value = it.first().id.toString()
                 careId = value
-                Timber.d("Encounter Found ${it.first().cWeight} ")
+                Timber.d("Encounter Found $careId")
                 adapter.submitList(it.subList(0, 1))
             }
 

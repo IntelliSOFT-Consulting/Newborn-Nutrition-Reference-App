@@ -67,7 +67,6 @@ class DownloadManagerImpl : DownloadWorkManager {
                     urls.add(patientUrl)
                 }
                 if (type == "CarePlan") {
-
                     val no = entry.resource as CarePlan
                     val patient = no.encounter.reference
                     val patientUrl = "$DEMO_SERVER$patient/\$everything"

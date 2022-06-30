@@ -14,6 +14,7 @@ import com.intellisoft.nndak.databinding.ActivityHistoryBinding
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 class HistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHistoryBinding
@@ -35,6 +36,7 @@ class HistoryActivity : AppCompatActivity() {
         patientId = intent.getStringExtra("patientId").toString()
         careId = intent.getStringExtra("careId").toString()
 
+        Timber.d("Encounter Found History $careId")
         fhirEngine = FhirApplication.fhirEngine(this)
         patientDetailsViewModel =
             ViewModelProvider(

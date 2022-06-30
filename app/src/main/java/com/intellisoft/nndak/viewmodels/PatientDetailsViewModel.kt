@@ -1043,8 +1043,15 @@ class PatientDetailsViewModel(
     //    private suspend fun prescription(care: EncounterItem): PrescriptionItem {
     private suspend fun prescription(care: CareItem): PrescriptionItem {
         val observations = getReferencedObservations(care.encounterId)
-        Timber.e("Encounter Prescription ${care.encounterId}")
         val feeds: MutableList<FeedItem> = mutableListOf()
+
+        val relatedFeeds = fetchCarePlans(care.encounterId)
+        relatedFeeds.forEach {
+            val obs = getReferencedObservations(care.encounterId)
+            val total = extractQuantity(obs, FEEDS_DEFICIT)
+            Timber.e("Total Feeds $total")
+
+        }
         var date = "N/A"
         var time = "N/A"
         val total = extractQuantity(observations, TOTAL_FEEDS)
@@ -1141,6 +1148,8 @@ class PatientDetailsViewModel(
                 DHM_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
+
+
             if (donor != null) {
                 val fVolume = extractQuantity(observations, DHM_VOLUME)
                 val fFrequency = extractValue(observations, DHM_FREQUENCY)
@@ -1163,6 +1172,8 @@ class PatientDetailsViewModel(
                 IV_VOLUME,
                 care.encounterId
             ).firstOrNull()?.value
+
+
             if (fl != null) {
                 val fVolume = extractQuantity(observations, IV_VOLUME)
                 val fFrequency = extractValue(observations, IV_FREQUENCY)

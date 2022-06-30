@@ -20,12 +20,15 @@ import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.APGAR_SCORE
+import com.intellisoft.nndak.logic.Logics.Companion.ASPHYXIA
 import com.intellisoft.nndak.logic.Logics.Companion.ASSESSMENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
+import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BBA
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.COMPLETED_BY
 import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.CS_REASON
@@ -50,6 +53,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
+import com.intellisoft.nndak.logic.Logics.Companion.FEED_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
@@ -60,18 +64,24 @@ import com.intellisoft.nndak.logic.Logics.Companion.INTERVENTIONS
 import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.JAUNDICE
 import com.intellisoft.nndak.logic.Logics.Companion.MULTIPLE_BIRTH_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.MULTIPLE_PREGNANCY
+import com.intellisoft.nndak.logic.Logics.Companion.MUM_LOCATION
+import com.intellisoft.nndak.logic.Logics.Companion.MUM_WELL
+import com.intellisoft.nndak.logic.Logics.Companion.OTHER_CONDITIONS
 import com.intellisoft.nndak.logic.Logics.Companion.PARITY
 import com.intellisoft.nndak.logic.Logics.Companion.PMTCT
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.PRESCRIPTION_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.REMARKS
+import com.intellisoft.nndak.logic.Logics.Companion.SEPSIS
 import com.intellisoft.nndak.logic.Logics.Companion.STOOL
 import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.VDRL
 import com.intellisoft.nndak.logic.Logics.Companion.VOLUME_DISPENSED
 import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
+import com.intellisoft.nndak.logic.Logics.Companion.WITHIN_ONE
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.intellisoft.nndak.utils.Constants
@@ -220,7 +230,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
                         val childChild = inner.getString("linkId")
-                        Timber.e("Child $inner")
+
                         when (childChild) {
                             "Assessment-Date" -> {
                                 assessDate = extractResponse(inner, "valueDateTime")
@@ -228,7 +238,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "50786-3",
+                                            ASSESSMENT_DATE,
                                             "Assessment Date",
                                             assessDate
                                         )
@@ -241,7 +251,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
-                                            "3141-9",
+                                            CURRENT_WEIGHT,
                                             "Current Weight",
                                             "Current Weight",
                                             code,
@@ -258,7 +268,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "71195-2",
+                                            BABY_WELL,
                                             "Baby is Well",
                                             code
                                         )
@@ -272,7 +282,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                                 bundle.addEntry().setResource(
                                     qh.codingQuestionnaire(
-                                        "Mother-Location",
+                                        MUM_LOCATION,
                                         "Location of Mother",
                                         location
                                     )
@@ -286,7 +296,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "45735-8",
+                                            ASPHYXIA,
                                             "Asphyxia",
                                             code
                                         )
@@ -300,7 +310,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "45736-6",
+                                            JAUNDICE,
                                             "Jaundice",
                                             code
                                         )
@@ -314,7 +324,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "45755-8",
+                                            SEPSIS,
                                             "Neonatal Sepsis",
                                             code
                                         )
@@ -328,7 +338,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Mother-Well",
+                                            MUM_WELL,
                                             "Mother is Well",
                                             code
                                         )
@@ -342,7 +352,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Breast-Problem",
+                                            BREAST_PROBLEM,
                                             "Breast Problems",
                                             code
                                         )
@@ -356,7 +366,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "457736-6",
+                                            OTHER_CONDITIONS,
                                             "Other Conditions",
                                             code
                                         )
@@ -370,7 +380,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "46556-7",
+                                            WITHIN_ONE,
                                             "Baby Fed within 1 Hour",
                                             feed
                                         )
@@ -395,7 +405,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "46557-5",
+                                            FEED_TYPE,
                                             "Type of Feed",
                                             code
                                         )
@@ -423,7 +433,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (type.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.codingQuestionnaire(
-                                            "Additional-Notes",
+                                            REMARKS,
                                             "Additional Notes and Remarks",
                                             type,
                                         )
@@ -439,7 +449,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     /**
                      * Handle date validation assessDate
                      */
-                    Timber.e("Assessment Date $assessDate")
                     val validDate = FormatHelper().dateTimeLessThanNow(assessDate)
                     if (validDate) {
                         val encounterId = generateUuid()
@@ -1601,6 +1610,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.subject = subjectReference
                     resource.id = encounterId
                     resource.reasonCodeFirstRep.text = reason
+                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
                     resource.status = Encounter.EncounterStatus.INPROGRESS
                     saveResourceToDatabase(resource)
                 }
@@ -2416,7 +2426,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             care.created = FormatHelper().generateDate(assessDate)
                             care.addPartOf(basedOnReference)
                             saveResourceToDatabase(care)
-                            
+
                             saveResources(bundle, subjectReference, encounterId, title)
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                             isResourcesSaved.postValue(true)

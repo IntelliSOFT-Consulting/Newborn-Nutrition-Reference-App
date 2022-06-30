@@ -197,6 +197,7 @@ class BabyMonitoringFragment : Fragment() {
             if (data.isNotEmpty()) {
                 val it = data.first()
                 careID = it.resourceId.toString()
+                Timber.e("Care Plans Related History $careID")
                 binding.apply {
                     lnCurrent.visibility = View.VISIBLE
 
@@ -246,7 +247,7 @@ class BabyMonitoringFragment : Fragment() {
 
                 if (ivPresent) {
                     if (ivVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "IV", volume = ivVolume))
+                        feedsList.add(FeedItem(type = "IV", volume = ivVolume.toDouble().toString()))
                     } else {
 
                         Toast.makeText(
@@ -259,7 +260,7 @@ class BabyMonitoringFragment : Fragment() {
                 }
                 if (dhmPresent) {
                     if (dhmVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "DHM", volume = dhmVolume))
+                        feedsList.add(FeedItem(type = "DHM", volume = dhmVolume.toDouble().toString()))
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -273,7 +274,7 @@ class BabyMonitoringFragment : Fragment() {
                 }
                 if (ebmPresent) {
                     if (ebmVolume.isNotEmpty()) {
-                        feedsList.add(FeedItem(type = "EBM", volume = ebmVolume))
+                        feedsList.add(FeedItem(type = "EBM", volume = ebmVolume.toDouble().toString()))
                     } else {
                         Toast.makeText(
                             requireContext(),
