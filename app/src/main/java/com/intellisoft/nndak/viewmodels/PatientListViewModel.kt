@@ -568,7 +568,7 @@ class PatientListViewModel(
 
     private fun filterCity(search: Search, location: String) {
         search.filter(Patient.ADDRESS_POSTALCODE, { value = SYNC_VALUE })
-
+        search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
     }
 
 

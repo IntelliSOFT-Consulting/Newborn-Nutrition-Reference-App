@@ -10,6 +10,7 @@ object Constants {
     const val MAX_RESOURCE_COUNT = 100
     const val MIN_RESOURCE_COUNT = 10
     const val SYNC_VALUE = "Pumwani"
+    const val SYNC_STATE = "PMH"
     const val SYNC_PARAM = "address-postalcode"
     const val ACTIVE = "active"
     const val WELCOME = "welcome"

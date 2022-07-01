@@ -495,6 +495,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     baby.active = true
                     baby.id = patientId
                     baby.addressFirstRep.postalCode = SYNC_VALUE
+                    baby.addressFirstRep.state = SYNC_VALUE
 
                     val subjectReference = Reference("Patient/$patientId")
 
@@ -509,6 +510,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     var deliveryDate = ""
                     var birthDate = ""
                     var admissionDate = ""
+
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (k in 0 until common.length()) {
@@ -648,26 +650,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
 
                             }
-                            "Baby-State" -> {
-                                val state = extractResponseCode(inner, "valueCoding")
-                                if (state.isNotEmpty()) {
-                                    /*   if (state == "Yes") {
-                                           baby.deceased="false"
-                                       } else {
-                                           baby.setDeceased()
-                                       }*/
 
-                                    bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
-                                            "Baby-State",
-                                            "Baby's State",
-                                            state
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-
-                            }
                             "Baby-Name" -> {
                                 val mumsName = extractResponse(inner, "valueString")
                                 val words = mumsName.split("\\s".toRegex()).toTypedArray()

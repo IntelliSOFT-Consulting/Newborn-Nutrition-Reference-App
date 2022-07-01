@@ -189,8 +189,10 @@ class StatisticsFragment : Fragment() {
                  * Calculate the Rates
                  **/
 
-                val prePercentage =((it.preterm.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
-                val termPercentage = ((it.term.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
+                val prePercentage =
+                    ((it.preterm.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
+                val termPercentage =
+                    ((it.term.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
                 incData.tvPreAverage.text = prePercentage.toString()
                 incData.tvTermAverage.text = termPercentage.toString()
 
@@ -324,14 +326,7 @@ class StatisticsFragment : Fragment() {
 
             val intervals = ArrayList<String>()
             val mortality: ArrayList<Entry> = ArrayList()
-            var max = rates.maxOf { it.value }
-            if (max.isNotEmpty()) {
-                if (max.toInt() < 50) {
-                    max += 50
-                } else {
-                    max = 100.toString()
-                }
-            }
+
 
             for ((i, entry) in rates.withIndex()) {
                 intervals.add(entry.month)
@@ -339,7 +334,7 @@ class StatisticsFragment : Fragment() {
                 mortality.add(Entry(i.toFloat(), value.toFloat()))
             }
 
-            val mRate = LineDataSet(mortality, "")
+            val mRate = LineDataSet(mortality, "Rates")
             mRate.setColors(Color.parseColor("#F65050"))
             mRate.fillColor = Color.parseColor("#F65050")
             //  mRate.fillAlpha = 10
@@ -376,7 +371,7 @@ class StatisticsFragment : Fragment() {
             leftAxis.isGranularityEnabled = false
             leftAxis.setLabelCount(5, false)
             leftAxis.axisMinimum = 0f
-            leftAxis.axisMaximum = 60f
+            //leftAxis.axisMaximum = 60f
 
             val rightAxis: YAxis = binding.mortalityChart.axisRight
             rightAxis.setDrawGridLines(false)
@@ -535,9 +530,11 @@ class StatisticsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

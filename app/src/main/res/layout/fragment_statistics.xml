@@ -21,8 +21,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="2">
 
                 <androidx.appcompat.widget.SearchView
@@ -81,11 +81,11 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
-                        android:text="@string/app_feed_time" />
+                        android:text="@string/app_feed_time"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/total_term_chart"
@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_percentage"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"  />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/percentage_chart"
@@ -157,7 +157,8 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
                             android:layout_height="300dp"
-                            android:layout_weight="1.7">
+                            android:layout_weight="1.7"
+                            android:paddingBottom="@dimen/_10dp">
 
                             <TextView
                                 android:id="@+id/textView"

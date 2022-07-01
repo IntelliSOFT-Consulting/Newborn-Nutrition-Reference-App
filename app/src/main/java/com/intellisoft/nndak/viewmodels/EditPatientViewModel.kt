@@ -10,6 +10,7 @@ import com.google.android.fhir.get
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.screens.dashboard.child.EditBabyFragment
+import com.intellisoft.nndak.utils.Constants.SYNC_STATE
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Patient
@@ -71,13 +72,17 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
 
                 if (!patient.hasDeceased()) {
                     patient.addressFirstRep.postalCode = SYNC_VALUE
+                    patient.addressFirstRep.state = SYNC_VALUE
+                    patient.active = true
+                }else{
+                    patient.addressFirstRep.postalCode = SYNC_VALUE
+                    patient.addressFirstRep.state = SYNC_STATE
+                    patient.active = false
                 }
                 patient.id = patientId
-                patient.active = false
                 fhirEngine.update(patient)
                 isPatientSaved.value = true
                 return@launch
-
 
             }
 

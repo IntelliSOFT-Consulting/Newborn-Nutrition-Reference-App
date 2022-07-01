@@ -98,15 +98,16 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
-                if (it.isNotEmpty()) {
-
-                    mumBabyList.addAll(it)
-                    binding.pbLoading.visibility = View.GONE
-//                adapter.submitList(mumBabyList)
-                } else {
+                if (it.isEmpty()){
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
+                        binding.pbLoading.visibility = View.GONE
                     }
+                }
+                if (it.isNotEmpty()) {
+                    mumBabyList.clear()
+                    mumBabyList.addAll(it)
+                    binding.pbLoading.visibility = View.GONE
                 }
             }
 
@@ -135,44 +136,10 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
                     adapterList.filter.filter(newText)
-                  /*  if (filterData == DbMotherKey.BABY_NAME.name) {
-                        patientListViewModel.searchPatientsByName(newText)
-                    } else {
-
-                        formatter.saveSharedPreference(
-                            requireContext(),
-                            "queryValue", newText.toString()
-                        )
-
-                        val motherInfo =
-                            filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
-
-                        if (motherInfo != null) {
-
-                            val patientName = motherInfo.familyName
-                            patientListViewModel.searchPatientsByName(patientName)
-
-                        } else {
-
-                            patientListViewModel.searchPatientsByName(newText)
-                            binding.imgEmpty.visibility = View.GONE*/
-
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "We could not find the patient.",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-                        /*}*/
-
-
-                   /* }*/
-
-
                     return false
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-//                    patientListViewModel.searchPatientsByName(query)
                     adapterList.filter.filter(query)
                     return false
                 }
