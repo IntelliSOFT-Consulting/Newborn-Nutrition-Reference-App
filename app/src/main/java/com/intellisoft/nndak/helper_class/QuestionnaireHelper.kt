@@ -40,7 +40,8 @@ class QuestionnaireHelper {
             .setSystem("http://snomed.info/sct")
             .setCode(code).display = display
         observation.code.text = text
-      //  observation.valueDateTimeType.value = text
+        val date = FormatHelper().generateDate(text)
+        observation.valueDateTimeType.value = date
         return observation
     }
 

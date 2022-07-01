@@ -242,7 +242,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (assessDate.isNotEmpty()) {
 
                                     bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
+                                        qh.codingTimeQuestionnaire(
                                             ASSESSMENT_DATE,
                                             "Assessment Date",
                                             assessDate
@@ -598,7 +598,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 deliveryDate = extractResponse(inner, "valueDateTime")
                                 if (deliveryDate.isNotEmpty()) {
                                     bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
+                                        qh.codingTimeQuestionnaire(
                                             DELIVERY_DATE,
                                             "Time of Delivery",
                                             deliveryDate
@@ -775,7 +775,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 admissionDate = extractResponse(inner, "valueDateTime")
                                 if (admissionDate.isNotEmpty()) {
                                     bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
+                                        qh.codingTimeQuestionnaire(
                                             ADMISSION_DATE,
                                             "Admission Date",
                                             admissionDate
@@ -2062,7 +2062,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             if (dateTime.isNotEmpty()) {
 
                                 bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
+                                    qh.codingTimeQuestionnaire(
                                         EXPRESSION_TIME,
                                         "Time Expressed",
                                         dateTime
@@ -2330,7 +2330,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (assessDate.isNotEmpty()) {
 
                                     bundle.addEntry().setResource(
-                                        qh.codingQuestionnaire(
+                                        qh.codingTimeQuestionnaire(
                                             ASSESSMENT_DATE,
                                             "Assessment Date",
                                             assessDate
@@ -2595,6 +2595,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
             var type = ""
+            var dispensed = "0"
             CoroutineScope(Dispatchers.IO).launch {
                 try {
 
@@ -2607,9 +2608,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         when (inner.getString("linkId")) {
 
                             "Volume" -> {
-                                val volume =
+                                dispensed =
                                     extractResponseQuantity(inner, "valueQuantity")
-                                if (volume.isNotEmpty()) {
+                                if (dispensed.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
                                             VOLUME_DISPENSED,
@@ -2673,6 +2674,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val encounterReference = Reference("Encounter/$encounterId")
                             title = DHM_DISPENSING
                             updateNutrition(orderId)
+                            updateDHMStock(dhmType, dispensed)
 
                             saveResources(bundle, subjectReference, encounterId, title)
                             customMessage.postValue(MessageItem(true, "Success"))
@@ -2692,6 +2694,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             }
         }
+    }
+
+    private fun updateDHMStock(dhmType: String, dispensed: String) {
+        /***
+         * Function to Calculate the Stock Volumes
+         */
     }
 
     private suspend fun updateNutrition(orderId: String) {

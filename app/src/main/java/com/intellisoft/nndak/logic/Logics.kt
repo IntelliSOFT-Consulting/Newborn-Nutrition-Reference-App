@@ -125,9 +125,9 @@ class Logics {
         /**
          * Stock Data
          */
-        const val PASTEURIZED = "7258-7"
-        const val UNPASTEURIZED = "20738-1"
-        const val STOCK_TYPE = "96741-4"
+        const val PASTEURIZED = "Pasteurized"
+        const val UNPASTEURIZED = "Un-Pasteurized"
+        const val STOCK_TYPE = "DHM-Stock-Type"
 
 
         /**
