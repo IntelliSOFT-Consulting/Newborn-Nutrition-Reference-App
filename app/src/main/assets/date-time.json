@@ -18,7 +18,6 @@
     }
   ],
   "item": [
-
     {
       "linkId": "Current-Weight",
       "type": "group",
@@ -34,7 +33,7 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "3141-9",
@@ -54,6 +53,14 @@
               "valueCoding": {
                 "display": "kg"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 100
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 10000
             }
           ],
           "required": true,
@@ -282,12 +289,34 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "50786-3",
               "display": "Diaper-Changed",
               "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20
             }
           ],
           "required": true,

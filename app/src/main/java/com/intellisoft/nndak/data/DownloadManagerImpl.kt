@@ -73,6 +73,14 @@ class DownloadManagerImpl : DownloadWorkManager {
                     urls.add(encounterUrl)
 
                 }
+                if (type == "Encounter") {
+                    val no = entry.resource as Encounter
+                    if (no.hasPartOf()) {
+                        val patientUrl = "${entry.fullUrl}/\$everything"
+                        urls.add(patientUrl)
+                    }
+
+                }
 
             }
             val nextUrl =

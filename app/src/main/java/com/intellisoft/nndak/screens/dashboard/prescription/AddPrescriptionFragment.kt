@@ -107,11 +107,10 @@ class AddPrescriptionFragment : Fragment() {
 
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -123,7 +122,7 @@ class AddPrescriptionFragment : Fragment() {
                 .setTitleText("Success")
                 .setContentText(resources.getString(R.string.app_okay_saved))
                 .setCustomImage(R.drawable.smile)
-                .setConfirmClickListener {sDialog ->
+                .setConfirmClickListener { sDialog ->
                     run {
                         sDialog.dismiss()
                         findNavController().navigateUp()

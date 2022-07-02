@@ -3,11 +3,8 @@ package com.intellisoft.nndak.viewmodels
 import android.app.Application
 import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
-import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
-import com.google.android.fhir.datacapture.common.datatype.asStringValue
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
-import com.google.android.fhir.get
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
@@ -89,22 +86,17 @@ import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.logic.Logics.Companion.WITHIN_ONE
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createCarePlanItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.apache.commons.lang3.time.DateUtils.isSameDay
 import org.hl7.fhir.r4.model.*
-import org.hl7.fhir.r4.model.codesystems.EncounterStatus
 import org.hl7.fhir.r4.model.codesystems.RiskProbability
-import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -220,7 +212,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.postValue(false)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Check required fields"
+                            )
+                        )
                         return@launch
                     }
 
@@ -234,9 +231,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
-                        val childChild = inner.getString("linkId")
 
-                        when (childChild) {
+                        when (inner.getString("linkId")) {
                             "Assessment-Date" -> {
                                 assessDate = extractResponse(inner, "valueDateTime")
                                 if (assessDate.isNotEmpty()) {
@@ -252,7 +248,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "Current-Weight" -> {
-                                val code = extractResponseQuantity(inner, "valueQuantity")
+                                val code = extractResponse(inner, "valueDecimal")
                                 if (code.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
@@ -460,14 +456,29 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val subjectReference = Reference("Patient/$patientId")
                         title = BABY_ASSESSMENT
                         saveResources(bundle, subjectReference, encounterId, title)
-                        isResourcesSaved.postValue(true)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = true,
+                                message = "Assessment Successful"
+                            )
+                        )
                     } else {
-                        isResourcesSaved.postValue(false)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Enter valid Date"
+                            )
+                        )
                         return@launch
                     }
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Please check required fields"
+                        )
+                    )
                     return@launch
                 }
             }
@@ -484,7 +495,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.postValue(false)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Please check required fiels"
+                            )
+                        )
                         return@launch
                     }
 
@@ -531,7 +547,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "Parity" -> {
-                                val parity = extractResponse(inner, "valueInteger")
+                                val parity = extractResponse(inner, "valueDecimal")
                                 if (parity.isNotEmpty()) {
 
                                     bundle.addEntry().setResource(
@@ -670,7 +686,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "Birth-Weight" -> {
-                                val bType = extractResponseQuantity(inner, "valueQuantity")
+                                val bType = extractResponse(inner, "valueDecimal")
                                 if (bType.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
@@ -754,7 +770,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "Admission-Weight" -> {
-                                val bType = extractResponseQuantity(inner, "valueQuantity")
+                                val bType = extractResponse(inner, "valueDecimal")
                                 if (bType.isNotEmpty()) {
                                     if (bType.isNotEmpty()) {
                                         bundle.addEntry().setResource(
@@ -892,31 +908,35 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.value = false
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Please Enter all required data"
+                            )
+                        )
                         return@launch
                     }
-
-
-                    /**
-                     * Extract Observations, Patient Data
-                     */
-
                     val subjectReference = Reference("Patient/$patientId")
                     updatePreviousPrescriptions(patientId)
                     val qh = QuestionnaireHelper()
-
+                    var totalVolume = 0f
+                    var breastVolume = 0f
+                    var ebmVolume = 0f
+                    var formulaVolume = 0f
+                    var ivVolume = 0f
+                    var dhmVolume = 0f
+                    var presDate = ""
+                    var valueConsent = ""
                     val date = FormatHelper().getTodayDate()
                     val json = JSONObject(questionnaire)
                     val common = json.getJSONArray("item")
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
-                        val childChild = inner.getString("linkId")
-                        Timber.e("Child $inner")
-                        when (childChild) {
+                        when (inner.getString("linkId")) {
 
                             "Current-Weight" -> {
                                 val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
+                                    extractResponse(inner, "valueDecimal")
                                 if (value.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
@@ -931,16 +951,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "Total-Feeds" -> {
-                                val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
-                                if (value.isNotEmpty()) {
-
+                                val total =
+                                    extractResponse(inner, "valueDecimal")
+                                if (total.isNotEmpty()) {
+                                    totalVolume = total.toFloat()
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
                                             TOTAL_FEEDS,
                                             "Total Feeds",
                                             "Total Feeds",
-                                            value, "mls"
+                                            total, "mls"
                                         )
                                     )
                                         .request.url = "Observation"
@@ -965,9 +985,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("Breast Feed")) {
                                         val value =
-                                            extractResponseQuantity(inner, "valueQuantity")
+                                            extractResponse(inner, "valueDecimal")
 
                                         if (value.isNotEmpty()) {
+                                            breastVolume = value.toFloat()
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
                                                     BREAST_MILK,
@@ -1024,9 +1045,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     if (feeds.contains("EBM")) {
 
                                         val value =
-                                            extractResponseQuantity(inner, "valueQuantity")
+                                            extractResponse(inner, "valueDecimal")
 
                                         if (value.isNotEmpty()) {
+                                            ebmVolume = value.toFloat()
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
                                                     EBM_VOLUME,
@@ -1099,9 +1121,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("Formula")) {
                                         val value =
-                                            extractResponseQuantity(inner, "valueQuantity")
+                                            extractResponse(inner, "valueDecimal")
 
                                         if (value.isNotEmpty()) {
+                                            formulaVolume = value.toFloat()
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
                                                     FORMULA_VOLUME,
@@ -1177,9 +1200,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("DHM")) {
                                         val value =
-                                            extractResponseQuantity(inner, "valueQuantity")
+                                            extractResponse(inner, "valueDecimal")
 
                                         if (value.isNotEmpty()) {
+                                            dhmVolume = value.toFloat()
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
                                                     DHM_VOLUME,
@@ -1212,11 +1236,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             "Consent-Given" -> {
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("DHM")) {
-                                        val value =
+                                        valueConsent =
                                             extractResponseCode(inner, "valueCoding")
 
-                                        if (value.isNotEmpty()) {
-                                            val consent = if (value == "Yes") {
+                                        if (valueConsent.isNotEmpty()) {
+                                            val consent = if (valueConsent == "Yes") {
                                                 "Signed"
                                             } else {
                                                 "Not Signed"
@@ -1235,14 +1259,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             "Consent-Date" -> {
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("DHM")) {
-                                        val value =
+                                        presDate =
                                             extractResponse(inner, "valueDate")
 
-                                        if (value.isNotEmpty()) {
+                                        if (presDate.isNotEmpty()) {
                                             bundle.addEntry().setResource(
                                                 qh.codingQuestionnaire(
                                                     CONSENT_DATE,
-                                                    "Consent Date", value,
+                                                    "Consent Date", presDate,
                                                 )
                                             )
                                                 .request.url = "Observation"
@@ -1292,9 +1316,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("IV Fluid and Additives")) {
                                         val value =
-                                            extractResponseQuantity(inner, "valueQuantity")
+                                            extractResponse(inner, "valueDecimal")
 
                                         if (value.isNotEmpty()) {
+                                            ivVolume = value.toFloat()
                                             bundle.addEntry().setResource(
                                                 qh.quantityQuestionnaire(
                                                     IV_VOLUME,
@@ -1383,58 +1408,111 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     }
 
-                    val value = retrieveUser(false)
+                    val currentPrescribed =
+                        breastVolume + ebmVolume + formulaVolume + ivVolume + dhmVolume
 
-                    bundle.addEntry()
-                        .setResource(
+                    if (currentPrescribed == totalVolume) {
+
+
+                        val value = retrieveUser(false)
+                        bundle.addEntry()
+                            .setResource(
+                                qh.codingQuestionnaire(
+                                    COMPLETED_BY,
+                                    value,
+                                    value
+                                )
+                            )
+                            .request.url = "Observation"
+
+                        bundle.addEntry().setResource(
                             qh.codingQuestionnaire(
-                                COMPLETED_BY,
-                                value,
-                                value
+                                PRESCRIPTION_DATE,
+                                "Prescription Date",
+                                date
                             )
                         )
-                        .request.url = "Observation"
+                            .request.url = "Observation"
+                        val encounterId = generateUuid()
+                        title = PRESCRIPTION
+                        val encounterReference = Reference("Encounter/$encounterId")
+                        if (feeds.isNotEmpty()) {
+                            if (feeds.contains("DHM")) {
 
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            PRESCRIPTION_DATE,
-                            "Prescription Date",
-                            date
+                                if (valueConsent.isEmpty()) {
+                                    customMessage.postValue(
+                                        MessageItem(
+                                            success = false,
+                                            message = "Please Select if Consent was Given"
+                                        )
+                                    )
+                                    return@launch
+                                }
+                                if (valueConsent == "Yes") {
+                                    val isValid = FormatHelper().dateLessThanToday(presDate)
+                                    if (!isValid) {
+                                        customMessage.postValue(
+                                            MessageItem(
+                                                success = false,
+                                                message = "Please Select a valid Date"
+                                            )
+                                        )
+                                        return@launch
+                                    }
+                                }
+                                val no = NutritionOrder()
+                                no.id = generateUuid()
+                                no.patient = subjectReference
+                                no.encounter = encounterReference
+                                no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
+                                no.dateTime = Date()
+                                no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
+                                saveResourceToDatabase(no)
+                            }
+                        }
+                        val care = CarePlan()
+                        care.encounter = encounterReference
+                        care.subject = subjectReference
+                        care.status = CarePlan.CarePlanStatus.ACTIVE
+                        care.title = title
+                        care.intent = CarePlan.CarePlanIntent.ORDER
+                        care.created = Date()
+                        saveResourceToDatabase(care)
+
+                        saveResources(bundle, subjectReference, encounterId, title)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = true,
+                                message = "Prescription Successfully saved"
+                            )
                         )
-                    )
-                        .request.url = "Observation"
-                    val encounterId = generateUuid()
-                    title = PRESCRIPTION
-
-                    val encounterReference = Reference("Encounter/$encounterId")
-                    if (feeds.isNotEmpty()) {
-                        if (feeds.contains("DHM")) {
-                            val no = NutritionOrder()
-                            no.id = generateUuid()
-                            no.patient = subjectReference
-                            no.encounter = encounterReference
-                            no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
-                            no.dateTime = Date()
-                            no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
-                            saveResourceToDatabase(no)
+                    } else {
+                        if (currentPrescribed < totalVolume) {
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = false,
+                                    message = "Please check Total Volumes"
+                                )
+                            )
+                        } else {
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = false,
+                                    message = "Please check Feed Breakdown Volumes"
+                                )
+                            )
                         }
                     }
 
-                    val care = CarePlan()
-                    care.encounter = encounterReference
-                    care.subject = subjectReference
-                    care.status = CarePlan.CarePlanStatus.ACTIVE
-                    care.title = title
-                    care.intent = CarePlan.CarePlanIntent.ORDER
-                    care.created = Date()
-                    saveResourceToDatabase(care)
-
-                    saveResources(bundle, subjectReference, encounterId, title)
-                    isResourcesSaved.postValue(true)
-
                 } catch (e: Exception) {
-                    Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    Timber.d("Exception:::: ${e.localizedMessage}")
+
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced Problems Processing Data, Try again"
+                        )
+                    )
                     return@launch
 
                 }
@@ -1922,7 +2000,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     .request.url = "Observation"
 
             } catch (e: Exception) {
-                e.printStackTrace()
+                customMessage.postValue(
+                    MessageItem(
+                        success = false,
+                        message = "Experienced problems, please try again"
+                    )
+                )
+                return@launch
             }
 
             val subjectReference = Reference("Patient/$patientId")
@@ -1930,7 +2014,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val encounterId = generateUuid()
             title = "Breast Feeding"
             saveResources(bundle, subjectReference, encounterId, title)
-            isResourcesSaved.value = true
+            customMessage.postValue(
+                MessageItem(
+                    success = true,
+                    message = "Update successful"
+                )
+            )
         }
     }
 
@@ -1982,10 +2071,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val encounterId = generateUuid()
                     title = "Feeding Cues"
                     saveResources(bundle, subjectReference, encounterId, title)
-                    isResourcesSaved.postValue(true)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true,
+                            message = "Record updated successfully"
+                        )
+                    )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced problems, please try again"
+                        )
+                    )
                     return@launch
                 }
 
@@ -2010,13 +2109,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.postValue(false)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Please check required fields"
+                            )
+                        )
                         return@launch
                     }
 
-                    /**
-                     * Extract Observations, Patient Data
-                     */
                     val qh = QuestionnaireHelper()
                     var dateTime = ""
                     val json = JSONObject(questionnaire)
@@ -2026,7 +2127,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val childChild = inner.getString("linkId")
 
                         if (childChild == "Milk-Expressed") {
-                            val volume = extractResponseQuantity(inner, "valueQuantity")
+                            val volume = extractResponse(inner, "valueDecimal")
                             if (volume.isNotEmpty()) {
 
                                 bundle.addEntry().setResource(
@@ -2096,18 +2197,38 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             title = EXPRESSIONS
                             saveResources(bundle, subjectReference, encounterId, title)
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                            isResourcesSaved.postValue(true)
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = true,
+                                    message = "Milk Expression successful"
+                                )
+                            )
                         } else {
-                            isResourcesSaved.postValue(false)
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = false,
+                                    message = "Please Enter valid date"
+                                )
+                            )
                         }
                     } else {
                         Timber.e("Time of Expression Empty ")
-                        isResourcesSaved.postValue(false)
+                        customMessage.postValue(
+                            MessageItem(
+                                success = false,
+                                message = "Please check required fields"
+                            )
+                        )
                     }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced problems, please try again"
+                        )
+                    )
                     return@launch
                 }
             }
@@ -2198,11 +2319,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     title = "Baby Assessment"
                     saveResources(bundle, subjectReference, encounterId, title)
                     generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                    isResourcesSaved.postValue(true)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true,
+                            message = "Update successful"
+                        )
+                    )
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced problems, please try again"
+                        )
+                    )
                     return@launch
                 }
             }
@@ -2230,14 +2361,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-
-                    /**
-                     * Extract Observations, Patient Data
-                     */
                     val qh = QuestionnaireHelper()
-
                     val taken = totalV - deficit.toFloat()
-
                     bundle.addEntry().setResource(
                         qh.quantityQuestionnaire(
                             FEEDS_TAKEN,
@@ -2310,7 +2435,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val inner = common.getJSONObject(i)
                         when (inner.getString("linkId")) {
                             "Current-Weight" -> {
-                                val code = extractResponseQuantity(inner, "valueQuantity")
+                                val code = extractResponse(inner, "valueDecimal")
                                 if (code.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
@@ -2369,7 +2494,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             }
                             "Diaper-Changed" -> {
                                 val value =
-                                    extractResponseQuantity(inner, "valueQuantity")
+                                    extractResponse(inner, "valueDecimal")
                                 if (value.isNotEmpty()) {
 
                                     bundle.addEntry().setResource(
@@ -2457,15 +2582,30 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 title
                             )
                             generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                            isResourcesSaved.postValue(true)
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = true,
+                                    message = "Feeding Successfully saved"
+                                )
+                            )
                         } else {
-                            isResourcesSaved.postValue(false)
+                            customMessage.postValue(
+                                MessageItem(
+                                    success = false,
+                                    message = "Please check Feeding Time"
+                                )
+                            )
                         }
                     }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced Problems, please try again"
+                        )
+                    )
                     return@launch
                 }
             }
@@ -2609,7 +2749,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                             "Volume" -> {
                                 dispensed =
-                                    extractResponseQuantity(inner, "valueQuantity")
+                                    extractResponse(inner, "valueDecimal")
                                 if (dispensed.isNotEmpty()) {
                                     bundle.addEntry().setResource(
                                         qh.quantityQuestionnaire(
@@ -2682,12 +2822,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             customMessage.postValue(MessageItem(false, "Please check the DHM Type"))
                         }
                     } else {
-                        customMessage.postValue(MessageItem(false, "Please check Input fields"))
+                        customMessage.postValue(MessageItem(false, "Please Select DHM Type"))
                     }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    customMessage.postValue(MessageItem(false, "Please check Input fields"))
+                    customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
                     return@launch
 
                 }

@@ -83,6 +83,7 @@ data class FeedsDistribution(
 
 data class FeedsData(
     @SerializedName("time") val time: String,
+    @SerializedName("breastVolume") val breastVolume: String,
     @SerializedName("ivVolume") val ivVolume: String,
     @SerializedName("ebmVolume") val ebmVolume: String,
     @SerializedName("dhmVolume") val dhmVolume: String,
@@ -92,6 +93,7 @@ data class WeightsData(
     @SerializedName("currentWeight") val current: String,
     @SerializedName("data") val data: List<ActualData>,
 )
+
 data class ActualData(
     @SerializedName("lifeDay") val day: String,
     @SerializedName("actual") val actual: String,

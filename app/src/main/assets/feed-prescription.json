@@ -33,12 +33,34 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "Current-Weight",
               "display": "Current Weight",
               "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 100
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 10000
             }
           ],
           "required": true,
@@ -83,12 +105,28 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "Total-Feeds",
               "display": "Total-Feeds",
               "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
             }
           ],
           "required": true,
@@ -219,12 +257,28 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "Breast-Milk",
               "display": "Breast Milk",
               "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
             }
           ],
           "required": true,
@@ -484,7 +538,23 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
+            }
+          ],
           "required": true,
           "linkId": "/EBM-Volume",
           "item": [
@@ -837,7 +907,23 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
+            }
+          ],
           "required": true,
           "linkId": "/EBM-Volume",
           "item": [
@@ -1190,7 +1276,23 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
+            }
+          ],
           "required": true,
           "linkId": "/EBM-Volume",
           "item": [
@@ -1615,7 +1717,23 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20000
+            }
+          ],
           "required": true,
           "linkId": "/EBM-Volume",
           "item": [

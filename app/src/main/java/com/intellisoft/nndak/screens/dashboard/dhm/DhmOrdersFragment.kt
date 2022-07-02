@@ -63,7 +63,8 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var filterData: String? = null
 
-    private lateinit var healthViewModel: HealthViewModel
+    private val orderList = ArrayList<OrdersItem>()
+    lateinit var adapterList: OrdersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,8 +94,10 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 ).get(PatientListViewModel::class.java)
 
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = OrdersAdapter(this::onOrderClick)
-            recyclerView.adapter = adapter
+            adapterList = OrdersAdapter(orderList, this::onOrderClick)
+            recyclerView.adapter = adapterList
+            adapterList.submitList(orderList)
+            adapterList.notifyDataSetChanged()
 
             recyclerView.addItemDecoration(
 
@@ -102,22 +105,28 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
-            patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
+            patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
                 if (it.isEmpty()) {
                     binding.empty.cpBgView.visibility = View.VISIBLE
-                } else {
-                    binding.empty.cpBgView.visibility = View.GONE
+                    binding.pbLoading.visibility = View.GONE
                 }
+                if (it.isNotEmpty()) {
+                    binding.empty.cpBgView.visibility = View.GONE
+                    binding.pbLoading.visibility = View.GONE
+                    orderList.clear()
+                    it.forEach { order ->
+                        if (order.motherName != "null") {
+                            orderList.add(order)
+                        }
+                    }
+                    adapterList.notifyDataSetChanged()
 
-                binding.pbLoading.visibility = View.GONE
-                adapter.submitList(it)
+                }
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        healthViewModel = HealthViewModel(requireActivity().application)
 
         mySpinner = binding.mySpinner
 
@@ -138,32 +147,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
-                    if (filterData == DbMotherKey.BABY_NAME.name) {
-                        patientListViewModel.searchPatientsByName(newText)
-                    } else {
-
-                        formatter.saveSharedPreference(
-                            requireContext(),
-                            "queryValue", newText.toString()
-                        )
-
-                        val motherInfo =
-                            filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
-
-                        if (motherInfo != null) {
-
-                            val patientName = motherInfo.familyName
-                            patientListViewModel.searchPatientsByName(patientName)
-
-                        } else {
-
-                            patientListViewModel.searchPatientsByName(newText)
-
-                        }
-
-                    }
-
 
                     return true
                 }
@@ -237,6 +220,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

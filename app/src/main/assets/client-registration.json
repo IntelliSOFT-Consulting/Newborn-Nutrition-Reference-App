@@ -76,7 +76,23 @@
       ],
       "item": [
         {
-          "type": "integer",
+          "type": "decimal",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20
+            }
+          ],
           "required": true,
           "linkId": "/3141-9",
           "item": [
@@ -881,7 +897,7 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "8339-4",
@@ -895,6 +911,14 @@
               "valueCoding": {
                 "display": "[lb_av]"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 5000
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
@@ -961,10 +985,18 @@
           ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
               "valueCoding": {
                 "display": "wk"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 45
             }
           ],
           "required": true,
@@ -1019,10 +1051,18 @@
           ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
               "valueCoding": {
-                "display": "{score}"
+                "display": "ml"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 10
             }
           ],
           "required": true,
@@ -1137,10 +1177,18 @@
           ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
               "valueCoding": {
-                "display": "mm"
+                "display": "cm"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 50
             }
           ],
           "required": true,
@@ -1235,7 +1283,7 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "29463-7",
@@ -1249,6 +1297,14 @@
               "valueCoding": {
                 "display": "[lb_av]"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 5000
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",

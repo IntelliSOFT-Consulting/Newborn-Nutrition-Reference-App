@@ -213,7 +213,8 @@ class PatientDetailsViewModel(
             feeds.add(loadFeed(it))
         }
         feeds.forEach { dd ->
-            val total = dd.dhmVolume.toFloat() + dd.ivVolume.toFloat() + dd.ebmVolume.toFloat()
+            val total = dd.dhmVolume.toFloat() + dd.ivVolume.toFloat()
+            +dd.ebmVolume.toFloat() + dd.breastVolume.toFloat()
             totalFeed += total
         }
 
@@ -229,6 +230,7 @@ class PatientDetailsViewModel(
         var iv = 0f
         var ebm = 0f
         var dhm = 0f
+        var bm = 0f
         val hour = FormatHelper().getRoundedHour(it.toString())
         val carePlans = getCompletedCarePlans()
 
@@ -260,12 +262,21 @@ class PatientDetailsViewModel(
                         eBms.forEach {
                             ebm += it.quantity.toFloat()
                         }
+
                         val dhmS = observationsPerCodeEncounter(
                             DHM_VOLUME,
                             item.encounterId
                         )
                         dhmS.forEach {
                             dhm += it.quantity.toFloat()
+                        }
+
+                        val bmS = observationsPerCodeEncounter(
+                            BREAST_MILK,
+                            item.encounterId
+                        )
+                        bmS.forEach {
+                            bm += it.quantity.toFloat()
                         }
 
                     }
@@ -280,11 +291,13 @@ class PatientDetailsViewModel(
             iv = 0f
             ebm = 0f
             dhm = 0f
+            bm = 0f
 
         }
 
         return FeedsData(
             time = hour,
+            breastVolume = bm.toString(),
             ivVolume = iv.toString(),
             ebmVolume = ebm.toString(),
             dhmVolume = dhm.toString()

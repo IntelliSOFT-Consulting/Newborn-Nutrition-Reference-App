@@ -11,6 +11,7 @@ import com.intellisoft.nndak.holders.OrdersItemViewHolder
 import com.intellisoft.nndak.models.OrdersItem
 
 class OrdersAdapter(
+    private var ordersList: ArrayList<OrdersItem>,
     private val onItemClicked: (OrdersItem) -> Unit
 ) :
     ListAdapter<OrdersItem, OrdersItemViewHolder>(OrdersItemDiffCallback()) {

@@ -415,7 +415,7 @@ class StatisticsFragment : Fragment() {
         ourSet.colors = pieShades
         data.setValueTextColor(Color.WHITE)
         data.setValueTextSize(10f)
-
+        data.setValueFormatter(ChartFormatter())
         binding.apply {
 
             percentageChart.data = data

@@ -175,8 +175,8 @@ class BabyLactationFragment : Fragment() {
                     val gest = data.dashboard.gestation ?: ""
                     val sta = data.status
                     val weight = data.birthWeight
-                    val code = weight?.split("\\.".toRegex())?.toTypedArray()
-                    bWeight = code?.get(0)?.toInt()!!
+                  try{  val code = weight?.split("\\.".toRegex())?.toTypedArray()
+                    bWeight = code?.get(0)?.toInt()!!}catch (e:Exception){}
 
                     incDetails.tvBabyName.text = data.babyName
                     incDetails.tvMumName.text = data.motherName

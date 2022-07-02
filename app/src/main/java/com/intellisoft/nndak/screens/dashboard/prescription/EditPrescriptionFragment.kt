@@ -70,6 +70,7 @@ class EditPrescriptionFragment : Fragment() {
     private lateinit var totalFeeds: String
     private lateinit var supp: String
     private lateinit var other: String
+    private var aggregateTotal: Float = 0f
 
     private val feedsList: MutableList<FeedItem> = mutableListOf()
     private val binding
@@ -99,16 +100,6 @@ class EditPrescriptionFragment : Fragment() {
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
-        /*  requireArguments()
-              .putString(QUESTIONNAIRE_FILE_PATH_KEY, "feed-prescription.json")
-
-          viewModel.liveEncounterData.observe(viewLifecycleOwner) {
-              Timber.e("Found Data ${it.first}")
-              addQuestionnaireFragment(it)
-              if (!it.toList().isNullOrEmpty()) {
-                  // submitMenuItem?.setEnabled(true)
-              }
-          }*/
         setHasOptionsMenu(true)
         /**
          * Custom Update
@@ -276,10 +267,12 @@ class EditPrescriptionFragment : Fragment() {
                     tvDhm.visibility = View.VISIBLE
                     lnDhmMilk.visibility = View.VISIBLE
                     lnDhmMilkOther.visibility = View.VISIBLE
+                    lnDhmAlt.visibility = View.VISIBLE
                 } else {
                     tvDhm.visibility = View.GONE
                     lnDhmMilk.visibility = View.GONE
                     lnDhmMilkOther.visibility = View.GONE
+                    lnDhmAlt.visibility = View.GONE
                 }
                 feedsList.clear()
             }
@@ -485,9 +478,6 @@ class EditPrescriptionFragment : Fragment() {
         }
     }
 
-    private fun handleClick(item: FeedItem) {
-
-    }
 
     private fun onSubmitAction() {
 
@@ -498,32 +488,34 @@ class EditPrescriptionFragment : Fragment() {
             other = otherValue.appFrequency.text.toString()
             totalFeeds = eTotal.text.toString()
 
-            Timber.e("Sample $other Sup $supp")
-            if (!TextUtils.isEmpty(currentWeight) && !TextUtils.isEmpty(totalFeeds)) {
-
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (TextUtils.isEmpty(currentWeight)) {
+                tilWeight.error = "Please Enter valid value"
+                return
             }
+
+            if (TextUtils.isEmpty(totalFeeds)) {
+                tliTotal.error = "PLease enter valid volume"
+                return
+            }
+            aggregateTotal = totalFeeds.toFloat()
+
         }
 
         if (binding.cbBreast.isChecked || binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
             binding.apply {
+                feedsList.clear()
                 if (cbBreast.isChecked) {
                     val vol = bfVolume.volume.text.toString()
                     val freq = bfFreq.appFrequency.text.toString()
                     if (checkEmptyData(vol) || checkEmptyData(freq)) {
-                        return@apply
+                        return
                     }
                     feedsList.add(
                         FeedItem(
                             resourceId = BREAST_MILK,
                             id = BREAST_FREQUENCY,
                             volume = vol.toDouble().toString(),
-                            frequency = freq.toString()
+                            frequency = freq
                         )
                     )
                 }
@@ -532,7 +524,7 @@ class EditPrescriptionFragment : Fragment() {
                     val freq = ebmFreq.appFrequency.text.toString()
                     val rou = ebmRoute.appType.text.toString()
                     if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
-                        return@apply
+                        return
                     }
                     feedsList.add(
                         FeedItem(
@@ -540,8 +532,8 @@ class EditPrescriptionFragment : Fragment() {
                             id = EBM_FREQUENCY,
                             type = EBM_ROUTE,
                             volume = vol.toDouble().toString(),
-                            frequency = freq.toString(),
-                            route = rou.toString()
+                            frequency = freq,
+                            route = rou
                         )
                     )
                 }
@@ -550,7 +542,7 @@ class EditPrescriptionFragment : Fragment() {
                     val freq = ivFreq.appFrequency.text.toString()
                     val rou = ivRoute.appType.text.toString()
                     if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
-                        return@apply
+                        return
                     }
                     feedsList.add(
                         FeedItem(
@@ -558,8 +550,8 @@ class EditPrescriptionFragment : Fragment() {
                             id = IV_FREQUENCY,
                             type = IV_ROUTE,
                             volume = vol.toDouble().toString(),
-                            frequency = freq.toString(),
-                            route = rou.toString()
+                            frequency = freq,
+                            route = rou
                         )
                     )
                 }
@@ -582,9 +574,9 @@ class EditPrescriptionFragment : Fragment() {
                             type = FORMULA_ROUTE,
                             logicalId = FORMULA_TYPE,
                             volume = vol.toDouble().toString(),
-                            frequency = freq.toString(),
-                            route = rou.toString(),
-                            specific = typ.toString()
+                            frequency = freq,
+                            route = rou,
+                            specific = typ
                         )
                     )
                 }
@@ -592,21 +584,22 @@ class EditPrescriptionFragment : Fragment() {
                     val vol = dhmVolume.volume.text.toString()
                     val freq = dhmFreq.appFrequency.text.toString()
                     val rou = dhmRoute.appType.text.toString()
+
                     val typ = dhmType.appFrequency.text.toString()
                     val con = dhmConsent.appFrequency.text.toString()
+                    val reason = dhmReason.volume.text.toString()
 
                     if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou) || checkEmptyData(
                             typ
-                        ) || checkEmptyData(con)
+                        ) || checkEmptyData(con) || checkEmptyData(reason)
                     ) {
-                        return@apply
+                        return
                     }
-                    val sig = if (con.toString().trim() == "Yes") {
+                    val sig = if (con.trim() == "Yes") {
                         "Signed"
                     } else {
                         "Not Signed"
                     }
-                    val res = dhmReason.volume.text
 
                     feedsList.add(
                         FeedItem(
@@ -617,16 +610,37 @@ class EditPrescriptionFragment : Fragment() {
                             idAlt = DHM_CONSENT,
                             typeAlt = DHM_REASON,
                             volume = vol.toDouble().toString(),
-                            frequency = freq.toString(),
-                            route = rou.toString(),
-                            specific = typ.toString(),
+                            frequency = freq,
+                            route = rou,
+                            specific = typ,
                             frequencyAlt = sig,
-                            routeAlt = res.toString(),
+                            routeAlt = reason,
                         )
                     )
                 }
 
-                confirmationDialog.show(childFragmentManager, "Confirm Details")
+                var totalFeedsVolume = 0f
+                feedsList.forEach {
+                    val quantity = it.volume
+                    totalFeedsVolume += quantity?.toFloat() ?: 0f
+                }
+                if (totalFeedsVolume == aggregateTotal) {
+                    confirmationDialog.show(childFragmentManager, "Confirm Details")
+                } else {
+                    if (totalFeedsVolume < aggregateTotal) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Please check Total Feeds",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Please check Feed Breakdown Volumes",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
 
         } else {

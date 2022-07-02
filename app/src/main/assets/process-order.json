@@ -96,12 +96,34 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "Volume",
               "display": "Volume",
               "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 100000
             }
           ],
           "required": true,

@@ -62,7 +62,7 @@
       ],
       "item": [
         {
-          "type": "quantity",
+          "type": "decimal",
           "code": [
             {
               "code": "3141-9",
@@ -82,6 +82,14 @@
               "valueCoding": {
                 "display": "kg"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 100
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 10000
             }
           ],
           "required": true,

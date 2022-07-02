@@ -26,12 +26,12 @@
                 android:orientation="vertical"
                 android:paddingRight="@dimen/_15dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_marginTop="@dimen/spacing_mlarge"
                     android:layout_marginBottom="@dimen/spacing_mlarge"
-                    app:srcCompat="@drawable/kid" />
+                    android:src="@drawable/kid" />
 
                 <TextView
                     android:id="@+id/tv_baby_name"

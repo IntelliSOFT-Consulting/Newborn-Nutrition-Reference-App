@@ -49,6 +49,7 @@ class Logics {
         const val DIAPER_CHANGED = "Diaper-Changed"
         const val ASSESSMENT_DATE = "50786-3"
         const val VOLUME_DISPENSED = "Volume-Dispensed"
+
         const val BREAST_MILK = "Breast-Milk"
         const val BREAST_FREQUENCY = "Breast-Feed-Frequency"
 
@@ -66,7 +67,7 @@ class Logics {
         const val DHM_REASON = "DHM-Reason"
         const val CONSENT_DATE = "Consent-Date"
 
-        const val IV_VOLUME = "IV-Fluid-Volume"
+        const val IV_VOLUME = "IV-Volume"
         const val IV_FREQUENCY = "IV-Fluid-Frequency"
         const val IV_ROUTE = "IV-Fluid-Route"
 
@@ -95,7 +96,6 @@ class Logics {
         const val MUM_CONTRA = "Mother-Contraindicated"
         const val BABY_BREASTFEEDING = "Baby-BreastFeeding"
         const val MUM_WELL = "Mother-Well"
-        const val FLUID_VOLUME = "IV-Volume"
         const val COMPLETED_BY = "Completed By"
         const val PRESCRIPTION_DATE = "82765-9"
         const val OTHER_CONDITIONS = "457736-6"

@@ -122,7 +122,7 @@
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/custom_number_picker_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/empty.xml" value="0.29157759726378796" />
+        <entry key="app/src/main/res/layout/empty.xml" value="0.25" />
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/feed_item_view.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/feeding.xml" value="0.17760416666666667" />
@@ -193,6 +193,7 @@
         <entry key="app/src/main/res/layout/update_prescription.xml" value="0.1" />
         <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/cache_menu.xml" value="0.14791666666666667" />
         <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
         <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.15494791666666666" />

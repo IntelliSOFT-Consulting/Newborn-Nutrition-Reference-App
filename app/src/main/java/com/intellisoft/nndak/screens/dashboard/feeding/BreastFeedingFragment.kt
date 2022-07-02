@@ -258,11 +258,10 @@ class BreastFeedingFragment : Fragment() {
 
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 ).show()
                 (activity as MainActivity).hideDialog()

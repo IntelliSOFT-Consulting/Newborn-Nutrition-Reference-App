@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -98,7 +99,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
-                if (it.isEmpty()){
+                if (it.isEmpty()) {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
                         binding.pbLoading.visibility = View.GONE
@@ -215,12 +216,20 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
+        Timber.e("Mum ${patientItem.motherName}")
         FhirApplication.setDashboardActive(requireContext(), true)
-        findNavController().navigate(
-            BabiesFragmentDirections.navigateToChildDashboard(
-                patientItem.resourceId
+        if (patientItem.motherIp.isNotEmpty()) {
+
+
+            findNavController().navigate(
+                BabiesFragmentDirections.navigateToChildDashboard(
+                    patientItem.resourceId
+                )
             )
-        )
+        } else {
+            Toast.makeText(requireContext(), "Patient Loading..., please wait", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
 

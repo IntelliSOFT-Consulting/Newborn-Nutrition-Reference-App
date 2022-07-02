@@ -3,11 +3,8 @@ package com.intellisoft.nndak.screens.profile
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +17,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.auth.LoginActivity
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.FragmentProfileBinding
+import com.intellisoft.nndak.utils.deleteCache
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import timber.log.Timber
 
@@ -90,6 +88,25 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
+    private fun confirmClear() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Storage")
+        builder.setMessage("Are you sure you want to reset?")
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            deleteCache(requireContext())
+            FhirApplication.setLoggedIn(requireContext(), false)
+            requireActivity().finishAffinity()
+            val i = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(i)
+        }
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
     private fun loadAccountDetails() {
         val user = FhirApplication.getProfile(requireContext())
         if (user != null) {
@@ -114,6 +131,10 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.hidden_menu, menu)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -121,6 +142,11 @@ class ProfileFragment : Fragment() {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
             }
+            R.id.menu_clear -> {
+                confirmClear()
+                return true
+            }
+
             else -> false
         }
     }
