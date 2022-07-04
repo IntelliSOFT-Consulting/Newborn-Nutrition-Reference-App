@@ -13,6 +13,12 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/_100dp">
 
+        <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_15dp" />
 
         <TextView
             style="?attr/textAppearanceSubtitle1"

@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
@@ -101,9 +102,14 @@ class EditPrescriptionFragment : Fragment() {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
-        /**
-         * Custom Update
-         */
+        binding.apply {
+            breadcrumb.page.text =
+                Html.fromHtml("Baby Panel >Baby's panel <font color=\"#37379B\">Prescribe feeds</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+        }
         createUI()
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
@@ -115,8 +121,7 @@ class EditPrescriptionFragment : Fragment() {
                     fhirEngine,
                     args.patientId
                 )
-            )
-                .get(PatientDetailsViewModel::class.java)
+            ).get(PatientDetailsViewModel::class.java)
 
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
@@ -421,11 +426,10 @@ class EditPrescriptionFragment : Fragment() {
     }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 ).show()
                 (activity as MainActivity).hideDialog()

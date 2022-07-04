@@ -21,6 +21,7 @@
     {
       "linkId": "Mother-Name",
       "type": "group",
+      "text": "Enter Mother's Details",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
@@ -914,7 +915,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 0
+              "valueDecimal": 600
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -1300,7 +1301,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 0
+              "valueDecimal": 600
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",

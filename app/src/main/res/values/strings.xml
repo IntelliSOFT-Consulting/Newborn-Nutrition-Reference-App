@@ -47,7 +47,7 @@
     <string name="close">Close</string>
     <string name="sync_menu">Sync</string>
     <string name="last_sync">Last sync</string>
-    <string name="action_submit">Submit</string>
+    <string name="action_submit">Save</string>
     <string name="action_gender">Gender</string>
     <string name="action_lastname">Last Name</string>
     <string name="action_dob">Date of Birth</string>
@@ -397,8 +397,10 @@
     <string name="add_pres">Add new Prescription</string>
     <string-array name="birds">
         <item>Filter By:</item>
-        <item>Baby\'s Name</item>
-        <item>Mother IP</item>
+        <item>Preterm</item>
+        <item>Term</item>
+        <item>Low Weight Gain</item>
+        <item>High/Medium Weight Gain</item>
     </string-array>
     <string-array name="sort">
         <item>Sort By:</item>

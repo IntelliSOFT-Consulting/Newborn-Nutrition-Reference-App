@@ -22,6 +22,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.utils.dimOption
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,7 +69,13 @@ class ChildDashboardFragment : Fragment() {
             breadcrumb.page.text =
                 Html.fromHtml("Babies > <font color=\"#37379B\">Baby Profile</font>")
             breadcrumb.page.setOnClickListener {
-                findNavController().navigateUp()
+                val noAssessment = FhirApplication.getDashboardActive(requireContext())
+
+                if (!noAssessment) {
+                    findNavController().navigate(ChildDashboardFragmentDirections.navigateToBabiesPanel())
+                } else {
+                    findNavController().navigateUp()
+                }
             }
         }
 

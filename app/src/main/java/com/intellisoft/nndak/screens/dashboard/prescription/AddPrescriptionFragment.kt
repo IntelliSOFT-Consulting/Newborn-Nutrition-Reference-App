@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -75,6 +76,13 @@ class AddPrescriptionFragment : Fragment() {
         setHasOptionsMenu(true)
 
         binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("Baby Panel >Baby's panel <font color=\"#37379B\">Prescribe feeds</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }

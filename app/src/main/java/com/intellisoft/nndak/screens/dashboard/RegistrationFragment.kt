@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -62,6 +63,12 @@ class RegistrationFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > <font color=\"#37379B\">Client Registration</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigate(RegistrationFragmentDirections.navigateToLanding())
+            }
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
@@ -95,7 +102,7 @@ class RegistrationFragment : Fragment() {
 
 
     private fun observeResourcesSaveAction() {
-        viewModel.customMessage.observe(viewLifecycleOwner) { it ->
+        viewModel.customMessage.observe(viewLifecycleOwner) {
 
             if (it != null) {
                 if (it.success) {

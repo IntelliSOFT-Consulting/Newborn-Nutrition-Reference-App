@@ -216,11 +216,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
-        Timber.e("Mum ${patientItem.motherName}")
-        FhirApplication.setDashboardActive(requireContext(), true)
         if (patientItem.motherIp.isNotEmpty()) {
-
-
             findNavController().navigate(
                 BabiesFragmentDirections.navigateToChildDashboard(
                     patientItem.resourceId
@@ -239,7 +235,13 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        filterData = formatter.getSearchQuery(text, requireContext())
+        Timber.e("Text Selected $text")
+        if (text == "Filter By:") {
+
+        } else {
+          //  adapterList.filter.filter(text)
+
+        }
 
     }
 

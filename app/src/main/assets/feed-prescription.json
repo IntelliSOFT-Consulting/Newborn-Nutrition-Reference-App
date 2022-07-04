@@ -51,12 +51,12 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
               "valueCoding": {
-                "display": "kg"
+                "display": "gm"
               }
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 100
+              "valueDecimal": 600
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",

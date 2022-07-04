@@ -107,54 +107,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     AndroidViewModel(application) {
     val questionnaire: String
         get() = getQuestionnaireJson()
-    val isResourcesSaved = MutableLiveData<Boolean>()
     val customMessage = MutableLiveData<MessageItem>()
-//    private val patientId: String = requireNotNull(state["patient_id"])
-    //   val livePatientData = liveData { emit(prepareEditPatient()) }
 
-//    private suspend fun prepareEditPatient(): Pair<String, String> {
-//        val prescription = fhirEngine.get<CarePlan>(patientId)
-//        val question = readFileFromAssets("feed-prescription.json").trimIndent()
-//        val parser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
-//        val questionnaire =
-//            parser.parseResource(org.hl7.fhir.r4.model.Questionnaire::class.java, question) as
-//                    Questionnaire
-//
-//        val questionnaireResponse: QuestionnaireResponse =
-//            ResourceMapper.populate(questionnaire, prescription)
-//        val questionnaireResponseJson = parser.encodeResourceToString(questionnaireResponse)
-//        return question to questionnaireResponseJson
-//    }
-
-//    private suspend fun getActivePrescription(patientId: String): Encounter {
-//        val encounter: MutableList<Encounter> = mutableListOf()
-//        val pres = fetchCarePlans(patientId)
-//        pres.forEach { item ->
-//            prescriptions.add(prescription(item))
-//        }
-//
-//        return encounter
-//    }
-//    private suspend fun fetchCarePlans(): List<CareItem> {
-//        val cares: MutableList<CareItem> = mutableListOf()
-//        fhirEngine
-//            .search<CarePlan> {
-//                filter(
-//                    CarePlan.SUBJECT,
-//                    { value = "Patient/$patientId" })
-//                sort(CarePlan.DATE, Order.DESCENDING)
-//            }
-//            .take(1)
-//            .map {
-//                PatientDetailsViewModel.createCarePlanItem(
-//                    it,
-//                    getApplication<Application>().resources
-//                )
-//            }
-//            .filter { it.status == CarePlan.CarePlanStatus.ACTIVE.toString() }
-//            .let { cares.addAll(it) }
-//        return cares
-//    }
 
     lateinit var title: String
     lateinit var dhm: String
@@ -175,28 +129,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private var volume: String = "0"
     private var feeds: MutableList<String> = mutableListOf()
 
-    fun testAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
-        viewModelScope.launch {
-            val bundle =
-                ResourceMapper.extract(
-                    questionnaireResource,
-                    questionnaireResponse
-                )
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    Timber.e("Bundle  $bundle")
-                    if (isRequiredFieldMissing(bundle)) {
-                        isResourcesSaved.postValue(false)
-                        return@launch
-                    }
-                    isResourcesSaved.postValue(true)
-                } catch (e: Exception) {
-                    isResourcesSaved.postValue(false)
-                    return@launch
-                }
-            }
-        }
-    }
 
     fun completeAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
@@ -541,7 +473,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         mother.nameFirstRep.family = words[1]
                                         mother.nameFirstRep.addGiven(words[0])
                                     } catch (e: Exception) {
-                                        isResourcesSaved.postValue(false)
+                                        customMessage.postValue(
+                                            MessageItem(
+                                                success = false,
+                                                message = "Enter mother's first and last name"
+                                            )
+                                        )
                                         return@launch
                                     }
                                 }
@@ -567,7 +504,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     mother.id = ipNo
 
                                 } else {
-                                    isResourcesSaved.postValue(false)
+                                    customMessage.postValue(
+                                        MessageItem(
+                                            success = false,
+                                            message = "Please enter IP Number"
+                                        )
+                                    )
                                     return@launch
                                 }
                             }
@@ -892,7 +834,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             }
         }
     }
-
 
     fun feedPrescription(questionnaireResponse: QuestionnaireResponse, patientId: String) {
         viewModelScope.launch {
@@ -2705,11 +2646,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val encounterId = generateUuid()
                     val encounterReference = Reference("Encounter/$encounterId")
 //                    saveResources(bundle,)
-                    isResourcesSaved.postValue(true)
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    isResourcesSaved.postValue(false)
+
                     return@launch
 
                 }
@@ -2912,10 +2852,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         .request.url = "Observation"
 
                     emptyObservations(bundle, generateUuid(), DHM_STOCK)
-                    isResourcesSaved.postValue(true)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true,
+                            message = "Update successful"
+                        )
+                    )
 
                 } catch (e: Exception) {
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced problems, please try again"
+                        )
+                    )
 
                 }
             }
@@ -2924,21 +2874,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     }
 
-    fun testSubmit(questionnaireResponse: QuestionnaireResponse) {
-        viewModelScope.launch {
-            val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
-            val subjectReference = Reference("Patient/c6fc7a5f-a74a-494c-907c-85ada7d527ff")
-            val encounterId = generateUuid()
-            if (isRequiredFieldMissing(bundle)) {
-                isResourcesSaved.value = false
-                return@launch
-            }
-            saveResources(bundle, subjectReference, encounterId, "Test Case")
-            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-            isResourcesSaved.value = true
-        }
-
-    }
 
     fun updatePrescription(
         questionnaireResponse: QuestionnaireResponse,
@@ -3106,11 +3041,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     care.created = Date()
                     saveResourceToDatabase(care)
                     saveResources(bundle, subjectReference, encounterId, title)
-                    isResourcesSaved.postValue(true)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true, message = "Update Successful"
+                        )
+                    )
 
                 } catch (e: Exception) {
                     Timber.e("Ex Data ${e.localizedMessage}")
-                    isResourcesSaved.postValue(false)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false, message = "Experienced problems, please try again "
+                        )
+                    )
 
                 }
             }

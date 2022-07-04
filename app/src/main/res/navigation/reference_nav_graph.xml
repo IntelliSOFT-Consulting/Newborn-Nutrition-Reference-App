@@ -38,6 +38,9 @@
         <action
             android:id="@+id/navigate_to_baby_dashboard"
             app:destination="@id/childDashboardFragment" />
+        <action
+            android:id="@+id/navigate_to_landing"
+            app:destination="@id/landingFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"

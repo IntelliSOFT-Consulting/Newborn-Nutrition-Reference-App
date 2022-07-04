@@ -27,6 +27,7 @@
     <color name="gradient_end">#CDDC39</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="textColor">#ECE5EC</color>
+    <color name="grayColor">#D3D3D3</color>
 
     <color name="light_green_50">#F1F8E9</color>
     <color name="light_green_100">#DCEDC8</color>

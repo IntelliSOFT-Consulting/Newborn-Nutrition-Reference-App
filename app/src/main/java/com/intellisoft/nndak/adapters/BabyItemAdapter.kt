@@ -68,7 +68,10 @@ class BabyItemAdapter(
                                 .contains(charSearch.lowercase(Locale.ROOT)) || row.motherIp.lowercase(
                                 Locale.ROOT
                             )
-                                .contains(charSearch.lowercase(Locale.ROOT))
+                                .contains(charSearch.lowercase(Locale.ROOT)) || row.status.toString()
+                                .lowercase(
+                                    Locale.ROOT
+                                ) == charSearch.lowercase(Locale.ROOT)
                         ) {
                             resultList.add(row)
                         }

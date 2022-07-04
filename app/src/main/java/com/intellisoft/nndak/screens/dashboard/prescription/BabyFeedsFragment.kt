@@ -172,6 +172,8 @@ class BabyFeedsFragment : Fragment() {
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
+            binding.incEmpty.cpBgView.visibility = View.GONE
+            binding.incEmpty.cpTitle.visibility = View.GONE
 
         }
 
