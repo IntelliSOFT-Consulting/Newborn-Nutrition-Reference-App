@@ -528,6 +528,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5dp"
+                app:cornerRadius="@dimen/_25dp"
                 android:backgroundTint="@color/dim_red"
                 android:text="@string/action_submit" />
 
@@ -538,6 +539,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5dp"
                 android:text="@string/action_cancel"
+                app:cornerRadius="@dimen/_25dp"
                 app:strokeColor="@color/dim_red" />
 
         </LinearLayout>

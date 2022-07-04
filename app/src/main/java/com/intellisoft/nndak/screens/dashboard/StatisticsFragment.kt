@@ -184,11 +184,6 @@ class StatisticsFragment : Fragment() {
                 incData.tvTerm.text = it.term
                 incData.tvAverage.text = it.averageDays
                 tvRate.text = getString(R.string.app_mortality).replace("0", it.mortalityRate.rate)
-
-                /**
-                 * Calculate the Rates
-                 **/
-
                 val prePercentage =
                     ((it.preterm.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
                 val termPercentage =

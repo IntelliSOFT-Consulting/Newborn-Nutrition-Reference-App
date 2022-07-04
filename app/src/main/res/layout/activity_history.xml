@@ -43,13 +43,18 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-        <ImageView
-            android:id="@+id/img_nothing"
-            android:layout_width="165dp"
-            android:layout_height="165dp"
-            android:visibility="gone"
+        <TextView
+            android:id="@+id/cp_title"
+            style="?attr/textAppearanceBody2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/smile"
-            app:tint="@color/dim_red" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/empty_hist"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

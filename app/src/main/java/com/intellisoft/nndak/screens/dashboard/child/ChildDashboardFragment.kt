@@ -88,8 +88,7 @@ class ChildDashboardFragment : Fragment() {
                     fhirEngine,
                     args.patientId
                 )
-            )
-                .get(PatientDetailsViewModel::class.java)
+            ).get(PatientDetailsViewModel::class.java)
 
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {

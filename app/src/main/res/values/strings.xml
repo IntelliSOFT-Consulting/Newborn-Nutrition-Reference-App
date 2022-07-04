@@ -31,7 +31,7 @@
     <string name="message_syncing">Syncing\u2026</string>
     <string name="message_input_missing">Please check input data.</string>
     <string name="message_patient_updated">Patient is updated.</string>
-    <string name="inputs_missing">Please check input data.</string>
+    <string name="inputs_missing">Please fill in all required fields.</string>
     <string name="resources_saved">Record added successfully.</string>
     <string name="response_received">questionnaire response is received.</string>
     <string name="html_text">Current status: <font color="#ddd">UNKNOWN</font></string>
@@ -343,7 +343,7 @@
     <string name="ebm_mls">EBM mls</string>
     <string name="deficit_mls">Deficit (mls)</string>
     <string name="refresh">Refresh</string>
-    <string name="no_active">No active prescription</string>
+    <string name="no_active">Only accessible once there is an active prescription</string>
     <string name="app_pasteurized">Pasteurized</string>
     <string name="app_unpasteurized">Unpasteurized</string>
     <string name="app_total">Total</string>
@@ -395,6 +395,7 @@
     <string name="app_age">Age (days)</string>
     <string name="there_are_no_update">There are no Updates </string>
     <string name="add_pres">Add new Prescription</string>
+    <string name="empty_hist">Feeding and monitoring has not yet taken place</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

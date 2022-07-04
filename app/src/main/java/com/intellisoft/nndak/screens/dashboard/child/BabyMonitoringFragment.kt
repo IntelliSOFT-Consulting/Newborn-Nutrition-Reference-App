@@ -219,7 +219,7 @@ class BabyMonitoringFragment : Fragment() {
                     SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                         .setTitleText("Error")
                         .setContentText(resources.getString(R.string.no_active))
-                        .setCustomImage(R.drawable.smile)
+                        .setCustomImage(R.drawable.crying)
                         .setConfirmClickListener { sDialog ->
                             run {
                                 sDialog.dismiss()

@@ -430,7 +430,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         customMessage.postValue(
                             MessageItem(
                                 success = false,
-                                message = "Please check required fiels"
+                                message = "Please fill in all required fields"
                             )
                         )
                         return@launch
@@ -761,19 +761,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         }
                     }
 
-
-                    //
-
                     /**
                      * Check for Valid Date of birth:: should be less than today
                      */
                     val validDateOfBirth = FormatHelper().dateLessThanToday(birthDate)
                     if (validDateOfBirth) {
-                        Timber.e("Valid Date of Birth $validDateOfBirth")
                         val valid =
                             FormatHelper().isSameDay(birthDate, deliveryDate.substring(0, 10))
-
-                        Timber.e("Both Date of Birth and Delivery Same $valid")
 
                         val validAdmission =
                             FormatHelper().dateLessThanToday(admissionDate.substring(0, 10))
@@ -827,7 +821,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    customMessage.postValue(MessageItem(false, "Please Check All Inputs"))
+                    customMessage.postValue(MessageItem(false, "Please fill in all required fields"))
                     return@launch
 
                 }
@@ -852,7 +846,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         customMessage.postValue(
                             MessageItem(
                                 success = false,
-                                message = "Please Enter all required data"
+                                message = "Please fill in all required fields"
                             )
                         )
                         return@launch

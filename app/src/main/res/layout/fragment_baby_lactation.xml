@@ -61,6 +61,7 @@
                 android:layout_height="40dp"
                 android:backgroundTint="@color/dim_red"
                 android:text="@string/action_provide_support"
+                android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 app:cornerRadius="@dimen/_25sp" />
         </LinearLayout>
@@ -86,7 +87,8 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_10"
                     android:text="@string/app_lactation_status"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"

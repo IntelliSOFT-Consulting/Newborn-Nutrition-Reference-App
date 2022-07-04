@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.R
@@ -37,7 +39,6 @@ class HistoryActivity : AppCompatActivity() {
         patientId = intent.getStringExtra("patientId").toString()
         careId = intent.getStringExtra("careId").toString()
 
-        Timber.d("Encounter Found History $careId")
         fhirEngine = FhirApplication.fhirEngine(this)
         patientDetailsViewModel =
             ViewModelProvider(
@@ -56,26 +57,31 @@ class HistoryActivity : AppCompatActivity() {
         patientDetailsViewModel.getFeedingInstances(careId)
         patientDetailsViewModel.liveFeedingData.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.imgNothing.visibility=View.VISIBLE
+                promptUser()
                 binding.pbLoadingTwo.visibility = View.GONE
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
             adapter.submitList(it)
         }
-        loadHistory()
     }
 
-    private fun loadHistory() {
-        apiService.loadHistory(this@HistoryActivity,careId,patientId) {
-            if (it != null) {
-
-            } else {
-
-            }
-
-        }
+    private fun promptUser() {
+        val dialog =
+            SweetAlertDialog(this@HistoryActivity, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Error")
+                .setContentText(resources.getString(R.string.empty_hist))
+                .setCustomImage(R.drawable.crying)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                      this@HistoryActivity.finish()
+                    }
+                }
+        dialog.setCancelable(false)
+        dialog.show()
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -87,8 +93,6 @@ class HistoryActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun onPrescriptionItemClick(data: PrescriptionItem) {
 
-    }
 }
 
