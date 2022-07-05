@@ -18,6 +18,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.APGAR_SCORE
 import com.intellisoft.nndak.logic.Logics.Companion.ASPHYXIA
 import com.intellisoft.nndak.logic.Logics.Companion.ASSESSMENT_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_BREASTFEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
@@ -40,6 +41,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSION_TIME
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
@@ -73,6 +75,7 @@ import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
+import okhttp3.internal.http.hasBody
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
 import java.time.LocalDate
@@ -457,12 +460,18 @@ class PatientDetailsViewModel(
         var pmtct = ""
         var mPreg = ""
         var motherMilk = "0 ml"
+        var assessed = false
         val exp = getPatientEncounters()
         var i: Int = 0
         if (exp.isNotEmpty()) {
             for (element in exp) {
-                if (element.code == "Milk Expression") {
-                    i++
+                when (element.code) {
+                    EXPRESSIONS -> {
+                        i++
+                    }
+                    BABY_ASSESSMENT -> {
+                        assessed = true
+                    }
                 }
             }
         }
@@ -573,6 +582,7 @@ class PatientDetailsViewModel(
                 dateOfAdm = admDate,
                 cWeight = cWeight,
                 motherMilk = motherMilk,
+                assessed=assessed
             ),
             mother = MotherDashboard(
                 parity = parity,

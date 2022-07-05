@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5dp"
             android:backgroundTint="@color/dim_red"
-            android:text="@string/action_submit" />
+            android:text="@string/action_submit"
+            app:cornerRadius="@dimen/_25dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancel"
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5dp"
             android:text="@string/action_cancel"
+            app:cornerRadius="@dimen/_25dp"
             app:strokeColor="@color/dim_red" />
 
     </LinearLayout>

@@ -396,6 +396,7 @@
     <string name="there_are_no_update">There are no Updates </string>
     <string name="add_pres">Add new Prescription</string>
     <string name="empty_hist">Feeding and monitoring has not yet taken place</string>
+    <string name="app_breast">EBM</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

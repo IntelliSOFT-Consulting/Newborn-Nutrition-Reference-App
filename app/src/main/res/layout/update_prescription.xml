@@ -397,26 +397,6 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ln_dhm_alt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="3">
-
-
-            <include
-                android:id="@+id/dhm_date"
-                layout="@layout/frequency"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_iv_fluids"

@@ -104,15 +104,15 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
 
-        fun setDashboardActive(context: Context, b: Boolean) {
-            (context.applicationContext as FhirApplication).editor.putBoolean(ACTIVE, b).commit()
+        fun setDashboardActive(context: Context, b: String) {
+            (context.applicationContext as FhirApplication).editor.putString(ACTIVE, b).commit()
         }
 
-        fun getDashboardActive(context: Context): Boolean {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+        fun getDashboardActive(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 ACTIVE,
-                false
-            )
+                ""
+            ).toString()
         }
 
         fun updateDetails(context: Context, it: AuthResponse) {
@@ -162,6 +162,7 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putString("Sync", it)
                 .commit()
         }
+
         fun getSyncTime(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 "Sync",

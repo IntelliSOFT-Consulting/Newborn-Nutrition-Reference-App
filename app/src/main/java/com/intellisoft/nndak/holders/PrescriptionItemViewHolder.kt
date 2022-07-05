@@ -22,6 +22,7 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
     private val appDhmReason: TextView = binding.appDhmReason
     private val appAdditionalFeeds: TextView = binding.appAdditionalFeeds
     private val appFeedingSupplements: TextView = binding.appFeedingSupplements
+    private val appBreast: TextView = binding.appBreast
 
     fun bindTo(
         patientItem: PrescriptionItem,
@@ -33,7 +34,8 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
         this.appRoute.text = patientItem.route
         this.appFrequency.text = patientItem.frequency
         this.appIvFluids.text = patientItem.ivFluids
-        this.appBreastMilk.text = patientItem.ebm
+        this.appBreastMilk.text = patientItem.breastMilk
+        this.appBreast.text = patientItem.ebm
         this.appDhm.text = patientItem.donorMilk
         this.appConsent.text = patientItem.consent
         this.appConsentDate.text = patientItem.consentDate

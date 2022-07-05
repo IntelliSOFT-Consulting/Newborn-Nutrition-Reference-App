@@ -21,10 +21,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
@@ -217,6 +219,16 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
         if (patientItem.motherIp.isNotEmpty()) {
+            val session = SessionData(
+                patientId = patientItem.resourceId,
+                status = patientItem.dashboard.assessed
+            )
+            val gson = Gson()
+            val json = gson.toJson(session)
+            FhirApplication.setDashboardActive(
+                requireContext(),
+                json
+            )
             findNavController().navigate(
                 BabiesFragmentDirections.navigateToChildDashboard(
                     patientItem.resourceId
@@ -236,12 +248,10 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
         Timber.e("Text Selected $text")
-        if (text == "Filter By:") {
-
-        } else {
-          //  adapterList.filter.filter(text)
-
+        if (text != "Filter By:") {
+           // adapterList.filter.filter(text.trim())
         }
+        adapterList.notifyDataSetChanged()
 
     }
 

@@ -18,9 +18,11 @@ import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
@@ -116,7 +118,16 @@ class RegistrationFragment : Fragment() {
                             .setConfirmClickListener { sDialog ->
                                 run {
                                     sDialog.dismiss()
-                                    FhirApplication.setDashboardActive(requireContext(), false)
+                                    val session = SessionData(
+                                        patientId = patientId,
+                                        status = false
+                                    )
+                                    val gson = Gson()
+                                    val json = gson.toJson(session)
+                                    FhirApplication.setDashboardActive(
+                                        requireContext(),
+                                        json
+                                    )
                                     findNavController().navigate(
                                         RegistrationFragmentDirections.navigateToBabyDashboard(
                                             patientId
@@ -142,7 +153,7 @@ class RegistrationFragment : Fragment() {
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "client-registration.json")
-  }
+    }
 
     private fun addQuestionnaireFragment() {
         try {

@@ -272,12 +272,12 @@ class EditPrescriptionFragment : Fragment() {
                     tvDhm.visibility = View.VISIBLE
                     lnDhmMilk.visibility = View.VISIBLE
                     lnDhmMilkOther.visibility = View.VISIBLE
-                    lnDhmAlt.visibility = View.VISIBLE
+
                 } else {
                     tvDhm.visibility = View.GONE
                     lnDhmMilk.visibility = View.GONE
                     lnDhmMilkOther.visibility = View.GONE
-                    lnDhmAlt.visibility = View.GONE
+
                 }
                 feedsList.clear()
             }

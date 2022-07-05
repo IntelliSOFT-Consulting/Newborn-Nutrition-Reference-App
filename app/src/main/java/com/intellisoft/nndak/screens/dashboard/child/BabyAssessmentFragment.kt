@@ -23,9 +23,11 @@ import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
@@ -238,7 +240,16 @@ class BabyAssessmentFragment : Fragment() {
                 .setConfirmClickListener { sDialog ->
                     run {
                         sDialog.dismiss()
-                        FhirApplication.setDashboardActive(requireContext(), true)
+                        val session = SessionData(
+                            patientId = args.patientId,
+                            status = true
+                        )
+                        val gson = Gson()
+                        val json = gson.toJson(session)
+                        FhirApplication.setDashboardActive(
+                            requireContext(),
+                            json
+                        )
                         findNavController().navigateUp()
                     }
                 }

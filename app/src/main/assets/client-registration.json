@@ -915,7 +915,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 600
+              "valueDecimal": 400
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -993,11 +993,11 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 0
+              "valueDecimal": 22
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDecimal": 45
+              "valueDecimal": 42
             }
           ],
           "required": true,
@@ -1301,7 +1301,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 600
+              "valueDecimal": 400
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",

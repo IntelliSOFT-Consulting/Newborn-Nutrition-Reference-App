@@ -35,7 +35,7 @@
                     android:layout_marginTop="3dp"
                     android:text="@string/app_date"
                     android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textStyle="bold"  />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/app_date"
@@ -143,7 +143,7 @@
                     android:layout_marginTop="3dp"
                     android:text="@string/app_iv_fluids"
                     android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textStyle="bold"  />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/app_iv_fluids"
@@ -203,7 +203,7 @@
                     android:layout_marginTop="3dp"
                     android:text="@string/app_consent"
                     android:textAppearance="?attr/textAppearanceSubtitle1"
-                    android:textStyle="bold"  />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/app_consent"
@@ -235,23 +235,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15dp"
-            android:orientation="vertical">
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="@string/app_dhm_reason"
-                android:textAppearance="?attr/textAppearanceSubtitle1"
-                android:textStyle="bold"  />
+                android:layout_marginTop="@dimen/_3dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/app_dhm_reason"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_breast"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/app_breast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3dp"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/app_dhm_reason"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/app_dhm_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -259,8 +288,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="@string/app_additional"
-            android:textColor="@color/dim_red"
             android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/dim_red"
             android:textStyle="bold" />
 
         <LinearLayout

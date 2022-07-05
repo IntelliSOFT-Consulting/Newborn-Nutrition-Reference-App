@@ -27,7 +27,7 @@ data class PatientItem(
 
 data class CodingObservation(
     val code: String,
-    val display:String,
+    val display: String,
     val value: String,
 )
 
@@ -151,8 +151,9 @@ data class BabyDashboard(
     val jaundice: String? = "",
     val cWeight: String? = "",
     val motherMilk: String? = "",
+    val assessed: Boolean = false
 
-    ) {
+) {
     override fun toString(): String = babyWell.toString()
 }
 
