@@ -7,7 +7,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -15,9 +14,9 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
@@ -178,19 +177,16 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        val alertDialog: AlertDialog? =
-            activity?.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@RegistrationFragment).navigateUp()
-                    }
-                    setNegativeButton(getString(R.string.no)) { _, _ -> }
-                }
-                builder.create()
+              SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Are you sure?")
+            .setContentText(getString(R.string.cancel_questionnaire_message))
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                NavHostFragment.findNavController(this@RegistrationFragment).navigateUp()
             }
-        alertDialog?.show()
+            .setCancelText("No")
+            .show()
     }
 
     private fun onBackPressed() {

@@ -447,7 +447,6 @@ class PatientDetailsViewModel(
         val mumWell = retrieveCode(MUM_WELL)
         var dDate = retrieveCode(DELIVERY_DATE)
 
-
         var birthWeight = ""
         var status = ""
         var gestation = ""

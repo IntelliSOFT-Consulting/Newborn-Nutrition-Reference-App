@@ -325,19 +325,17 @@ class BreastFeedingFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        val alertDialog: AlertDialog? =
-            activity?.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@BreastFeedingFragment).navigateUp()
-                    }
-                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
-                }
-                builder.create()
+
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Are you sure?")
+            .setContentText(getString(R.string.cancel_questionnaire_message))
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                NavHostFragment.findNavController(this@BreastFeedingFragment).navigateUp()
             }
-        alertDialog?.show()
+            .setCancelText("No")
+            .show()
     }
 
     private fun onBackPressed() {
