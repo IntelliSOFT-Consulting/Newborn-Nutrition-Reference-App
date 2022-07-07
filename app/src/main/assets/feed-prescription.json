@@ -308,20 +308,20 @@
         }
       ]
     },
+
     {
       "linkId": "Breast-Feed-Frequency",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Breast-Feed",
-            "display": "Breast Feed",
-            "system": "http://snomed.info/sct"
-          }
+      "type": "group",   "enableWhen": [
+      {
+        "question": "/Feed-Selection",
+        "operator": "=",
+        "answerCoding": {
+          "code": "Breast-Feed",
+          "display": "Breast Feed",
+          "system": "http://snomed.info/sct"
         }
-      ],
+      }
+    ],
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",

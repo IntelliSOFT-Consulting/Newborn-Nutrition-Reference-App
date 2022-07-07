@@ -90,7 +90,7 @@
     <string name="desc_two">Register a new born! Capture units for weight and temperature </string>
     <string name="desc_three">Re-assess the baby, check if need for Lactation Support as ease.</string>
     <string name="desc_fourth">Monitor Mother\'s and Baby\'s progress, Discharge once they are both ready</string>
-    <string name="action_username">Username *</string>
+    <string name="action_username">Email *</string>
     <string name="action_password">Password</string>
     <string name="unable_to_login">Forgot your Password? <font color="#32CD32">Click here to reset</font></string>
     <string name="login_offline">Offline</string>

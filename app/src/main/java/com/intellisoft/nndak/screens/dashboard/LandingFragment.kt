@@ -52,22 +52,33 @@ class LandingFragment : Fragment() {
         setHasOptionsMenu(true)
 
 //        setUpLayoutsRecyclerView()
-             binding.apply {
-                 cntBaby.setOnClickListener {
-                     findNavController().navigate(LandingFragmentDirections.navigateToBabies())
+        binding.apply {
+            cntBaby.setOnClickListener {
+                findNavController().navigate(LandingFragmentDirections.navigateToBabies())
 
-                 }
-                 cntRegister.setOnClickListener {
-                     findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
-                 }
-                 cntMilk.setOnClickListener {
-                     findNavController().navigate(LandingFragmentDirections.navigateToMilk())
-                 }
-                 cntStatistics.setOnClickListener {
-                     findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
-                 }
-             }
+            }
+            cntRegister.setOnClickListener {
+                findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
+            }
+            cntMilk.setOnClickListener {
+                val allowed = (activity as MainActivity).dhmAllowed()
+                if (allowed) {
+                    findNavController().navigate(LandingFragmentDirections.navigateToMilk())
+                } else {
+                    (activity as MainActivity).accessDenied()
+                }
+            }
+            cntStatistics.setOnClickListener {
+                val allowed = (activity as MainActivity).statisticsAllowed()
+                if (allowed) {
+                    findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
+                } else {
+                    (activity as MainActivity).accessDenied()
+                }
+            }
+        }
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
@@ -91,22 +102,22 @@ class LandingFragment : Fragment() {
         }
     }
 
-   /* private fun setUpLayoutsRecyclerView() {
-        val adapter =
-            LandingAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
-        val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
-    }*/
+    /* private fun setUpLayoutsRecyclerView() {
+         val adapter =
+             LandingAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
+         recyclerView.adapter = adapter
+         recyclerView.layoutManager = GridLayoutManager(context, 2)
+     }*/
 
-  /*  private fun onItemClick(layout: LayoutListViewModel.Layout) {
-        // TODO Remove check when all layout questionnaire json are updated.
-        // https://github.com/google/android-fhir/issues/1079
-        if (layout.questionnaireFileName.isEmpty()) {
-            return
-        }
-        launchQuestionnaireFragment(layout)
-    }*/
+    /*  private fun onItemClick(layout: LayoutListViewModel.Layout) {
+          // TODO Remove check when all layout questionnaire json are updated.
+          // https://github.com/google/android-fhir/issues/1079
+          if (layout.questionnaireFileName.isEmpty()) {
+              return
+          }
+          launchQuestionnaireFragment(layout)
+      }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

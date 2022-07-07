@@ -29,6 +29,8 @@ class Logics {
         const val PEDIATRICIAN = "Pediatrician"
         const val HEAD_OF_DEPARTMENT = "Head of Department"
         const val NUTRITION_OFFICER = "Nutrition Officer"
+        const val DEPUTY_NURSE_MANAGER = "Deputy Nurse Manager"
+        const val NURSING_OFFICER_IN_CHARGE = "Nursing Officer In Charge"
 
         /**
          * Prescriptions

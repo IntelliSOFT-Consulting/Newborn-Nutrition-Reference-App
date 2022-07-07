@@ -26,6 +26,7 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
+import com.intellisoft.nndak.alerts.NotificationFactory
 import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
@@ -55,7 +56,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var searchView: SearchView
     private var _binding: FragmentBabiesBinding? = null
     lateinit var adapterList: BabyItemAdapter
-    private val mumBabyList = ArrayList<MotherBabyItem>()
+    private var mumBabyList = ArrayList<MotherBabyItem>()
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -229,11 +230,19 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 requireContext(),
                 json
             )
+            /*  val sender = NotificationFactory(requireContext())
+              sender.displayNotification(
+                  SimpleNotification(
+                      title = "Baby Registration",
+                      content = "A new Baby ${patientItem.babyName} has been registered"
+                  )
+              )*/
             findNavController().navigate(
                 BabiesFragmentDirections.navigateToChildDashboard(
                     patientItem.resourceId
                 )
             )
+
         } else {
             Toast.makeText(requireContext(), "Patient Loading..., please wait", Toast.LENGTH_SHORT)
                 .show()
@@ -247,10 +256,23 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        Timber.e("Text Selected $text")
-        if (text != "Filter By:") {
-           // adapterList.filter.filter(text.trim())
+      /*  if (text != "Filter By:") {
+            reloadFiltered(text)
         }
+        adapterList.notifyDataSetChanged()*/
+
+    }
+
+    private fun reloadFiltered(text: String) {
+        val matching = ArrayList<MotherBabyItem>()
+        mumBabyList.forEach {
+            Timber.e("\n\n Each Baby ${it.status?.trim()}")
+            val status = it.status?.trim()
+            if (status == text) {
+                matching.add(it)
+            }
+        }
+        mumBabyList = matching
         adapterList.notifyDataSetChanged()
 
     }

@@ -1,6 +1,12 @@
 package com.intellisoft.nndak.models
 
+import android.app.PendingIntent
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
+
+class SimpleNotification(
+    val title: String,
+    val content: String,
+)
 
 data class PatientItem(
     val id: String,

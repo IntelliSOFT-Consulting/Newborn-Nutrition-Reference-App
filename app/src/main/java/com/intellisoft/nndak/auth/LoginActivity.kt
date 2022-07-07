@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.*
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
@@ -19,9 +17,9 @@ import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
 import com.intellisoft.nndak.dialogs.ConnectionDialog
 import com.intellisoft.nndak.utils.*
-import org.hl7.fhir.r4.model.Flag
 import timber.log.Timber
-import java.util.regex.Pattern
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var connectionDialog: ConnectionDialog
@@ -102,8 +100,8 @@ class LoginActivity : AppCompatActivity() {
         }
         if (isValidPassword(pass)) {
 
-            if (isNetworkAvailable(this@LoginActivity)){
-            validateLogin(user, pass)
+            if (isNetworkAvailable(this@LoginActivity)) {
+                validateLogin(user, pass)
             } else {
 
                 connectionDialog.show(supportFragmentManager, "Confirm Details")
@@ -156,17 +154,18 @@ class LoginActivity : AppCompatActivity() {
             hideProgress(progressBar, binding.btnSubmit)
 
             if (it != null) {
+
                 FhirApplication.updateDetails(this@LoginActivity, it)
                 FhirApplication.setLoggedIn(this, true)
                 finishAffinity()
-                /*     if (it.newUser == true) {*/
+
                 startActivity(
                     Intent(
                         this@LoginActivity,
                         MainActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
-                /* }*/
+
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
                     .show()

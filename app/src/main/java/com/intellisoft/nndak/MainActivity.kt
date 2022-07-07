@@ -33,8 +33,11 @@ import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
+import com.intellisoft.nndak.logic.Logics.Companion.DEPUTY_NURSE_MANAGER
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.HEAD_OF_DEPARTMENT
 import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
+import com.intellisoft.nndak.logic.Logics.Companion.NURSING_OFFICER_IN_CHARGE
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -71,11 +74,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun dhmAllowed(): Boolean {
+    fun dhmAllowed(): Boolean {
 
         val role = retrieveUser(true)
         if (role.isNotEmpty()) {
             return role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT
+        }
+        return false
+    }
+
+    fun statisticsAllowed(): Boolean {
+
+        val role = retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMINISTRATOR
+                    || role == HEAD_OF_DEPARTMENT
+                    || role == DEPUTY_NURSE_MANAGER || role == NURSING_OFFICER_IN_CHARGE
         }
         return false
     }
@@ -100,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         binding.apply {
-            val allowed = dhmAllowed()
+
             menu.lnHome.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
@@ -110,7 +124,11 @@ class MainActivity : AppCompatActivity() {
             menu.lnStatistics.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.statisticsFragment)
+                if (statisticsAllowed()) {
+                    navController.navigate(R.id.statisticsFragment)
+                } else {
+                    accessDenied()
+                }
             }
 
             menu.lnRegister.setOnClickListener {
@@ -126,7 +144,7 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmOrders.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                if (allowed) {
+                if (dhmAllowed()) {
                     navController.navigate(R.id.dhmOrdersFragment)
                 } else {
                     accessDenied()
@@ -135,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmStock.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                if (allowed) {
+                if (dhmAllowed()) {
                     val bundle =
                         bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
                     findNavController(R.id.nav_host_fragment).navigate(
@@ -163,7 +181,11 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmDashboard.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.homeFragment)
+                if (dhmAllowed()) {
+                    navController.navigate(R.id.homeFragment)
+                } else {
+                    accessDenied()
+                }
             }
             menu.lnSync.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
@@ -173,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun accessDenied() {
+    fun accessDenied() {
         SweetAlertDialog(this@MainActivity, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
             .setTitleText("Access Denied!!")
             .setContentText("You are not Authorized")
