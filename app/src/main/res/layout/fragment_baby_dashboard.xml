@@ -56,8 +56,15 @@
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/growth_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="@dimen/_10dp" />
+                        android:layout_height="300dp"/>
+
+                    <TextView
+                        style="?attr/textAppearanceBody2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_age"
+                        android:layout_marginBottom="@dimen/_10dp"
+                        android:textAlignment="center" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -86,22 +93,23 @@
                             android:id="@+id/tv_current_weight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
 
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_current_weight"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="invisible">
 
                             <ImageView
                                 android:layout_width="@dimen/_15dp"
@@ -113,7 +121,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/action_percent"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
                                 android:textColor="@color/dim_green" />
 
 
@@ -124,7 +132,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_compared_weight"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -146,8 +155,8 @@
                             android:id="@+id/tv_mother_milk"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
 
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
@@ -155,7 +164,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_mothers_milk"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -222,22 +232,25 @@
                             android:id="@+id/tv_total_volume"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                             android:text="@string/app_zero_mls"
+
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_daily_feeds"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="invisible">
 
                             <ImageView
                                 android:layout_width="@dimen/_15dp"
@@ -261,7 +274,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_compared_prescribed"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -284,7 +298,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_zero"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="@dimen/_20sp" />
 
                         <TextView
@@ -292,7 +307,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_expressions"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+
+                            android:textAppearance="?attr/textAppearanceBody2" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

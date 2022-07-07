@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -26,7 +25,6 @@ import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
@@ -34,6 +32,7 @@ import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
+import java.io.File
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -41,11 +40,33 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.regex.Pattern
 
+fun deleteCache(context: Context) {
+    try {
+        val dir: File = context.cacheDir
+        deleteDir(dir)
+    } catch (e: Exception) {
+    }
+}
 
+fun deleteDir(dir: File?): Boolean {
+    return if (dir != null && dir.isDirectory) {
+        val children: Array<String> = dir.list()
+        for (i in children.indices) {
+            val success = deleteDir(File(dir, children[i]))
+            if (!success) {
+                return false
+            }
+        }
+        dir.delete()
+    } else if (dir != null && dir.isFile) {
+        dir.delete()
+    } else {
+        false
+    }
+}
 fun boldText(textView: TextView) {
     textView.setTypeface(null, Typeface.BOLD)
 }
@@ -63,6 +84,16 @@ fun formatTime(values: List<LocalDateTime>): ArrayList<String> {
     return days
 
 }
+
+fun formatDate(values: List<LocalDate>): ArrayList<String> {
+    val days = ArrayList<String>()
+    values.forEach {
+        val format = FormatHelper().getRefinedDate(it.toString())
+        days.add(format)
+    }
+    return days
+}
+
 
 fun formatMonths(values: List<LocalDate>): ArrayList<String> {
     val days = ArrayList<String>()

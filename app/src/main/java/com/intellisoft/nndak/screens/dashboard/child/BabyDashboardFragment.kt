@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -34,6 +31,7 @@ import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.DistributionItem
 import com.intellisoft.nndak.utils.extractUnits
+import com.intellisoft.nndak.utils.formatFeedingTime
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -167,7 +165,7 @@ class BabyDashboardFragment : Fragment() {
                             incDetails.appJaundice.visibility = View.GONE
                         }
 
-                        // lineChart(it.assessment.weights)
+                        refinePatientWeights(it.assessment.weights)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -178,14 +176,22 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.feedsDistribution()
         patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
             if (it != null) {
-
+                binding.tvTotalVolume.text = it.totalFeed
+                binding.tvExpressionNumber.text = it.varianceAmount
+                barGraph(it)
+            }
+        }
+        patientDetailsViewModel.activeBabyWeights()
+        patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
+            if (it != null) {
+                populateLineChart(it)
             }
         }
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     binding.apply {
-                        tvTotalVolume.text = it.first().feedsGiven
+//                        tvTotalVolume.text = it.first().feedsGiven
                         tvExpressionNumber.text = it.first().expressions
 
                         /**
@@ -212,82 +218,96 @@ class BabyDashboardFragment : Fragment() {
             }
         }
 
-        if (isNetworkAvailable(requireContext())) {
-            loadData()
-        } else {
-            syncLocal()
-        }
+        /*  if (isNetworkAvailable(requireContext())) {
+              loadData()
+          } else {
+              syncLocal()
+          }*/
+
+    }
+
+    private fun refinePatientWeights(weights: MutableList<Int>?) {
+
 
     }
 
     private fun loadData() {
-        apiService.loadFeedDistribution(requireContext(),args.patientId) {
+        apiService.loadFeedDistribution(requireContext(), args.patientId) {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                FhirApplication.updateFeedings(requireContext(), json)
-                populateBarChart(it)
+                try {
+                    FhirApplication.updateFeedings(requireContext(), json)
+                    //  populateBarChart(it)
+                } catch (e: Exception) {
+                }
             } else {
                 syncLocal()
             }
         }
 
-        apiService.loadWeights(requireContext(),args.patientId) {
+        apiService.loadWeights(requireContext(), args.patientId) {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                FhirApplication.updateWeights(requireContext(), json)
-                populateLineChart(it)
+                try {
+                    FhirApplication.updateWeights(requireContext(), json)
+                    populateLineChart(it)
+                } catch (e: Exception) {
+                }
             } else {
                 syncLocal()
             }
         }
     }
 
-    private fun populateBarChart(it: FeedsDistribution) {
+    private fun barGraph(it: FeedsDistribution) {
+
+        Timber.e("Found Feeding ${it.data}")
+        val groupCount = 8
+        val groupSpace = 0.15f
+        val barSpace = 0.05f
+        val barWidth = 0.25f
+        val iv: ArrayList<BarEntry> = ArrayList()
+        val ebm: ArrayList<BarEntry> = ArrayList()
+        val dhm: ArrayList<BarEntry> = ArrayList()
+
+        val intervals = ArrayList<String>()
+        for ((i, entry) in it.data.withIndex()) {
+            intervals.add(entry.time)
+            iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
+            ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
+            dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
+
+
+        }
+
+        val fluids = BarDataSet(iv, "IV")
+        fluids.setColors(Color.parseColor("#4472C4"))
+        fluids.setDrawValues(false)
+
+        val expressed = BarDataSet(ebm, "EBM")
+        expressed.setColors(Color.parseColor("#ED7D31"))
+        expressed.setDrawValues(false)
+
+        val donor = BarDataSet(dhm, "DHM")
+        donor.setColors(Color.parseColor("#A5A5A5"))
+        donor.setDrawValues(false)
+
+        val data = BarData(fluids, expressed, donor)
+        data.setValueFormatter(LargeValueFormatter())
+
         binding.apply {
-
-            val groupCount = 8
-            val groupSpace = 0.06f
-            val barSpace = 0.04f
-            val barWidth = 0.2f
-
-            val iv: ArrayList<BarEntry> = ArrayList()
-            val ebm: ArrayList<BarEntry> = ArrayList()
-            val dhm: ArrayList<BarEntry> = ArrayList()
-
-            val intervals = ArrayList<String>()
-            for ((i, entry) in it.data.withIndex()) {
-                intervals.add(entry.time)
-                iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
-                ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
-                dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
-
-            }
-
-            val fluids = BarDataSet(iv, "IV")
-            fluids.setColors(Color.parseColor("#4472C4"))
-            fluids.setDrawValues(false)
-
-            val expressed = BarDataSet(ebm, "EBM")
-            expressed.setColors(Color.parseColor("#ED7D31"))
-            expressed.setDrawValues(false)
-
-            val donor = BarDataSet(dhm, "DHM")
-            donor.setColors(Color.parseColor("#A5A5A5"))
-            donor.setDrawValues(false)
-
-            val data = BarData(fluids, expressed, donor)
-            data.setValueFormatter(LargeValueFormatter())
-
+            feedsChart.data = data
             val xAxis: XAxis = feedsChart.xAxis
             xAxis.setDrawGridLines(false)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.labelRotationAngle = -45f
-            xAxis.mAxisMinimum = 1f
+            xAxis.mAxisMinimum = 0f
+//            xAxis.setCenterAxisLabels(true)
+
             xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-           // xAxis.setLabelCount(it.data.size, true)
 
             feedsChart.axisLeft.setDrawGridLines(false)
             feedsChart.legend.isEnabled = true
@@ -306,25 +326,25 @@ class BabyDashboardFragment : Fragment() {
             leftAxis.setDrawGridLines(true)
             leftAxis.isGranularityEnabled = false
 
-            feedsChart.barData.barWidth = barWidth
-            feedsChart.xAxis.axisMinimum = 0f
-            feedsChart.xAxis.axisMaximum =
-                0 + feedsChart.barData.getGroupWidth(
-                    groupSpace,
-                    barSpace
-                ) * groupCount
-            feedsChart.groupBars(0f, groupSpace, barSpace)
-
             val rightAxis: YAxis = feedsChart.axisRight
             rightAxis.setDrawGridLines(false)
             rightAxis.setDrawZeroLine(false)
             rightAxis.isGranularityEnabled = false
             rightAxis.isEnabled = false
 
+
+            feedsChart.barData.barWidth = barWidth
+            feedsChart.xAxis.axisMaximum =
+                0f + feedsChart.barData.getGroupWidth(
+                    groupSpace,
+                    barSpace
+                ) * groupCount
+            feedsChart.groupBars(-1f, groupSpace, barSpace)
+
             //refresh
             feedsChart.invalidate()
-        }
 
+        }
 
     }
 
@@ -333,10 +353,9 @@ class BabyDashboardFragment : Fragment() {
         val gson = Gson()
         val data = FhirApplication.getFeedings(requireContext())
         if (data != null) {
-
             try {
                 val it: FeedsDistribution = gson.fromJson(data, FeedsDistribution::class.java)
-                populateBarChart(it)
+                //  populateBarChart(it)
             } catch (e: Exception) {
                 Timber.e("Local Sync Error ${e.localizedMessage}")
             }
@@ -369,6 +388,7 @@ class BabyDashboardFragment : Fragment() {
         actual.setDrawCircleHole(false)
         actual.setDrawValues(false)
         actual.setDrawCircles(true)
+        actual.circleRadius=5f
         actual.mode = LineDataSet.Mode.CUBIC_BEZIER
         actual.lineWidth = 5f
 
@@ -425,12 +445,23 @@ class BabyDashboardFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
+                return true
             }
             else -> false
         }

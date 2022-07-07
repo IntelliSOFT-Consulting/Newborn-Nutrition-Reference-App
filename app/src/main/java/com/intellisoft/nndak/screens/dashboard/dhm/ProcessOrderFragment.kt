@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
@@ -24,7 +25,6 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentProcessOrderBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -47,12 +47,12 @@ private const val ARG_PARAM2 = "param2"
  */
 class ProcessOrderFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: ProcessOrderFragmentArgs by navArgs()
     private var _binding: FragmentProcessOrderBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
+    private var dhmType: String = ""
     private val binding
         get() = _binding!!
 
@@ -97,7 +97,7 @@ class ProcessOrderFragment : Fragment() {
         patientDetailsViewModel.liveOrder.observe(viewLifecycleOwner) { ordersItem ->
             if (ordersItem != null) {
                 binding.apply {
-
+                    dhmType = ordersItem.dhmType.toString()
                     incTitle.lnParent.weightSum = 5F
                     incDetails.appBabyName.text = ordersItem.babyName
                     incDetails.appMotherName.text = ordersItem.motherName
@@ -149,9 +149,7 @@ class ProcessOrderFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved),false
-        )
+
 
     }
 
@@ -163,33 +161,20 @@ class ProcessOrderFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
-
             viewModel.dispensingDetails(
                 questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId, args.order, args.encounter
+                args.patientId, args.order, args.encounter, dhmType
             )
         }
 
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        findNavController().navigateUp()
-
-    }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -197,10 +182,19 @@ class ProcessOrderFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
-
-
     }
 
     private fun updateArguments() {

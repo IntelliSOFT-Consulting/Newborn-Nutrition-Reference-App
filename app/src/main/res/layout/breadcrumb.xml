@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/page"
-        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        style="?attr/textAppearanceBody2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

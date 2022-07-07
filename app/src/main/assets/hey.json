@@ -34,70 +34,56 @@
       ],
       "item": [
         {
-          "linkId": "Assessment-Date",
-          "type": "group",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
-            }
-          ],
+          "type": "string",
+          "required": true,
+          "linkId": "/Mother-Name",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
           "item": [
             {
-              "type": "string",
-              "required": true,
-              "linkId": "/Mother-Name",
-              "item": [
+              "linkId": "4.1",
+              "text": "Mother's Name",
+              "type": "display",
+              "extension": [
                 {
-                  "linkId": "4.1",
-                  "text": "Mother's Name",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
-                    }
-                  ]
+                    ],
+                    "text": "Flyover"
+                  }
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "/Mother",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "item": [
             {
-              "type": "string",
-              "required": true,
-              "linkId": "/Mother-Name",
-              "item": [
+              "linkId": "4.1",
+              "text": "Mother's Name",
+              "type": "display",
+              "extension": [
                 {
-                  "linkId": "4.1",
-                  "text": "Mother's Name",
-                  "type": "display",
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                      "valueCodeableConcept": {
-                        "coding": [
-                          {
-                            "system": "http://hl7.org/fhir/questionnaire-item-control",
-                            "code": "flyover",
-                            "display": "Fly-over"
-                          }
-                        ],
-                        "text": "Flyover"
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
-                    }
-                  ]
+                    ],
+                    "text": "Flyover"
+                  }
                 }
               ]
             }

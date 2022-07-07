@@ -21,19 +21,22 @@
             android:orientation="vertical"
             android:paddingRight="@dimen/_15dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_marginTop="@dimen/spacing_mlarge"
                 android:layout_marginBottom="@dimen/spacing_mlarge"
-                app:srcCompat="@drawable/mum" />
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp"
+                android:src="@drawable/mum" />
 
             <TextView
                 android:id="@+id/tv_mum_name"
-               app:autoSizeTextType="uniform"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBody2"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -66,18 +69,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_ip_number"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_ip_number"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -87,18 +92,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_delivery_method"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_delivery_method"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -108,18 +115,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_delivery_date"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_delivery_date"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -129,18 +138,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_mother_status"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_mother_status"
-                        app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -157,18 +168,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_parity"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_parity"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,18 +191,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_pmctc_status"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_pmctc_status"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -199,18 +214,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/menu_multiple"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_multiple_pregnancy"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -220,18 +237,20 @@
                     android:orientation="vertical">
 
                     <TextView
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_mum_location"
-                        android:textStyle="bold" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform" />
 
                     <TextView
                         android:id="@+id/app_mum_location"
-                       app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
             </LinearLayout>
 

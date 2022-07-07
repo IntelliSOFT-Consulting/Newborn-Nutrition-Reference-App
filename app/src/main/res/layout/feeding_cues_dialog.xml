@@ -80,7 +80,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/readiness" />
@@ -129,7 +131,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/latch" />
@@ -178,7 +182,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/steady" />
@@ -227,7 +233,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/audible" />
@@ -276,7 +284,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/chocking" />
@@ -325,7 +335,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/softening" />
@@ -374,7 +386,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/side_feed" />
@@ -423,7 +437,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/three_hours" />
@@ -472,7 +488,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/diapers" />
@@ -499,6 +517,7 @@
 
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -520,7 +539,9 @@
                         android:layout_weight="1.75"
                         android:orientation="vertical">
 
+
                         <TextView
+                            style="?attr/textAppearanceBody2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/mother_contraindicated" />

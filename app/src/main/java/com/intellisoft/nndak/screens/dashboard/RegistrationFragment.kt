@@ -2,26 +2,30 @@ package com.intellisoft.nndak.screens.dashboard
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
+import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +35,6 @@ import timber.log.Timber
 
 class RegistrationFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private lateinit var patientId: String
     private var _binding: FragmentRegistrationBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
@@ -62,6 +65,12 @@ class RegistrationFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > <font color=\"#37379B\">Client Registration</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigate(RegistrationFragmentDirections.navigateToLanding())
+            }
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
@@ -73,9 +82,7 @@ class RegistrationFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_confirm_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered),false
-        )
+
         patientId = generateUuid()
 
     }
@@ -88,12 +95,6 @@ class RegistrationFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
             patientId = generateUuid()
             viewModel.clientRegistration(
                 questionnaireFragment.getQuestionnaireResponse(), patientId
@@ -101,16 +102,6 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        viewModel.makeComplete()
-        FhirApplication.setDashboardActive(requireContext(), false)
-        findNavController().navigate(
-            RegistrationFragmentDirections.navigateToBabyDashboard(
-                patientId
-            )
-        )
-    }
 
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
@@ -118,7 +109,36 @@ class RegistrationFragment : Fragment() {
             if (it != null) {
                 if (it.success) {
                     (activity as MainActivity).hideDialog()
-                    successDialog.show(childFragmentManager, "Success Details")
+
+                    val dialog =
+                        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                            .setTitleText("Success")
+                            .setContentText(resources.getString(R.string.app_client_registered))
+                            .setCustomImage(R.drawable.smile)
+                            .setConfirmClickListener { sDialog ->
+                                run {
+                                    sDialog.dismiss()
+                                    val session = SessionData(
+                                        patientId = patientId,
+                                        status = false
+                                    )
+                                    val gson = Gson()
+                                    val json = gson.toJson(session)
+                                    FhirApplication.setDashboardActive(
+                                        requireContext(),
+                                        json
+                                    )
+                                    findNavController().navigate(
+                                        RegistrationFragmentDirections.navigateToBabyDashboard(
+                                            patientId
+                                        )
+                                    )
+                                }
+                            }
+
+
+                    dialog.setCancelable(false)
+                    dialog.show()
                 } else {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
 
@@ -137,7 +157,7 @@ class RegistrationFragment : Fragment() {
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = QuestionnaireFragment()
+            val fragment = CustomQuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

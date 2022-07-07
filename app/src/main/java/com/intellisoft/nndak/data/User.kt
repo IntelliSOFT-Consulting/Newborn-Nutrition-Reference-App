@@ -33,3 +33,7 @@ data class User(
     @SerializedName("role") val role: String
 
 )
+data class SessionData(
+    @SerializedName("patientId") val patientId: String,
+    @SerializedName("status") val status: Boolean,
+)

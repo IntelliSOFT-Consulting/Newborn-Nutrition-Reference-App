@@ -17,18 +17,18 @@ class HealthRepository(private val healthDao: HealthDao) {
     }
 
 
-    fun insertMotherInfo(context: Context){
+    fun insertMotherInfo(context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
 
-            val natID = DbMotherKey.NATIONALID.name
+            val natID = DbMotherKey.MOTHER_IP.name
             val nationalId = getSharedPref(context, natID)
 
-            if (nationalId != null){
+            if (nationalId != null) {
 
                 //Check if id number is in the system
                 val isMother = healthDao.checkMotherInfo(nationalId)
-                if (!isMother){
+                if (!isMother) {
 
                     val motherInfo = MotherInfo(nationalId)
                     healthDao.addMotherInfo(motherInfo)
@@ -41,7 +41,7 @@ class HealthRepository(private val healthDao: HealthDao) {
 
     }
 
-    fun updateMotherInfo(context: Context, dbMotherInfo:DbMotherInfo){
+    fun updateMotherInfo(context: Context, dbMotherInfo: DbMotherInfo) {
 
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -55,35 +55,41 @@ class HealthRepository(private val healthDao: HealthDao) {
             val phoneNumber = dbMotherInfo.phoneNumber
             val fhirId = dbMotherInfo.fhirId
 
-            if (motherInfo != null){
+            if (motherInfo != null) {
 
                 val id = motherInfo.id.toString().toInt()
-                healthDao.updateMotherInfo(fhirId, phoneNumber, firstName, familyName, motherDob, id)
+                healthDao.updateMotherInfo(
+                    fhirId,
+                    phoneNumber,
+                    firstName,
+                    familyName,
+                    motherDob,
+                    id
+                )
 
-            }else{
+            } else {
 
-                val motherDataInfo = MotherInfo(nationalId, motherDob, firstName, familyName, phoneNumber, fhirId)
+                val motherDataInfo =
+                    MotherInfo(nationalId, motherDob, firstName, familyName, phoneNumber, fhirId)
                 healthDao.addMotherInfo(motherDataInfo)
             }
-
 
 
         }
 
     }
 
-    fun deleteMotherInfo(context: Context){
+    fun deleteMotherInfo(context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
 
-            val natID = DbMotherKey.NATIONALID.name
+            val natID = DbMotherKey.MOTHER_IP.name
             val nationalId = getSharedPref(context, natID).toString()
             val motherInfo = healthDao.getMotherInfoNational(nationalId)
-            if (motherInfo != null){
+            if (motherInfo != null) {
                 val id = motherInfo.id.toString().toInt()
                 healthDao.deleteMotherInfo(id)
             }
-
 
 
         }
@@ -94,26 +100,23 @@ class HealthRepository(private val healthDao: HealthDao) {
         return getMotherData(queryString, context)
     }
 
-    private suspend fun getMotherData(queryString: String,
-                                      context: Context):MotherInfo?{
+    private suspend fun getMotherData(
+        queryString: String,
+        context: Context
+    ): MotherInfo? {
 
         val queryValue = FormatHelper().retrieveSharedPreference(
-                context,
-                "queryValue").toString()
+            context,
+            "queryValue"
+        ).toString()
 
-        var motherInfo : MotherInfo? = null
+        var motherInfo: MotherInfo? = null
         val job = Job()
-        CoroutineScope(Dispatchers.IO + job).launch{
+        CoroutineScope(Dispatchers.IO + job).launch {
 
             when (queryString) {
-                DbMotherKey.NATIONALID.name -> {
+                DbMotherKey.MOTHER_IP.name -> {
                     motherInfo = healthDao.getMotherInfoNational(queryValue)
-                }
-                DbMotherKey.PHONE_NUMBER.name -> {
-                    motherInfo = healthDao.getMotherInfoPhone(queryValue)
-                }
-                DbMotherKey.MOTHER_DOB.name -> {
-                    motherInfo = healthDao.getMotherInfoMotherDoB(queryValue)
                 }
             }
 

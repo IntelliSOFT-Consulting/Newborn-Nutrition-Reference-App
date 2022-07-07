@@ -20,14 +20,16 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -53,7 +55,6 @@ class BabyAssessmentFragment : Fragment() {
     private val args: BabyAssessmentFragmentArgs by navArgs()
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentBabyAssessmentBinding? = null
     private val binding
         get() = _binding!!
@@ -98,26 +99,23 @@ class BabyAssessmentFragment : Fragment() {
                 .get(PatientDetailsViewModel::class.java)
 
         binding.apply {
-            incDetails.pbLoading.visibility=View.VISIBLE
-            incDetails.lnBody.visibility=View.GONE
+            incDetails.pbLoading.visibility = View.VISIBLE
+            incDetails.lnBody.visibility = View.GONE
         }
 
         confirmationDialog = ConfirmationDialog(
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick,
-            resources.getString(R.string.app_okay_saved), false
-        )
+
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
             if (data != null) {
 
                 binding.apply {
-                    incDetails.pbLoading.visibility=View.GONE
-                    incDetails.lnBody.visibility=View.VISIBLE
+                    incDetails.pbLoading.visibility = View.GONE
+                    incDetails.lnBody.visibility = View.VISIBLE
 
                     val gest = data.dashboard.gestation ?: ""
                     val status = data.status
@@ -195,11 +193,11 @@ class BabyAssessmentFragment : Fragment() {
         }
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        FhirApplication.setDashboardActive(requireContext(), true)
-        findNavController().navigateUp()
-    }
+    /*   private fun proceedClick() {
+           successDialog.dismiss()
+           FhirApplication.setDashboardActive(requireContext(), true)
+           findNavController().navigateUp()
+       }*/
 
     private fun addQuestionnaireFragment() {
         try {
@@ -224,11 +222,10 @@ class BabyAssessmentFragment : Fragment() {
     }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -236,7 +233,28 @@ class BabyAssessmentFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        val session = SessionData(
+                            patientId = args.patientId,
+                            status = true
+                        )
+                        val gson = Gson()
+                        val json = gson.toJson(session)
+                        FhirApplication.setDashboardActive(
+                            requireContext(),
+                            json
+                        )
+                        findNavController().navigateUp()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
 
 

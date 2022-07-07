@@ -33,9 +33,9 @@ import com.intellisoft.nndak.adapters.OrdersAdapter
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
-import com.intellisoft.nndak.logic.Logics.Companion.HMB
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.models.OrdersItem
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
@@ -44,6 +44,7 @@ import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import timber.log.Timber
 
 
@@ -62,7 +63,8 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var filterData: String? = null
 
-    private lateinit var healthViewModel: HealthViewModel
+    private val orderList = ArrayList<OrdersItem>()
+    lateinit var adapterList: OrdersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,30 +94,39 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 ).get(PatientListViewModel::class.java)
 
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = OrdersAdapter(this::onOrderClick)
-            recyclerView.adapter = adapter
+            adapterList = OrdersAdapter(orderList, this::onOrderClick)
+            recyclerView.adapter = adapterList
+            adapterList.submitList(orderList)
+            adapterList.notifyDataSetChanged()
+
             recyclerView.addItemDecoration(
 
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
-            patientListViewModel.liveOrders.observe(viewLifecycleOwner) {
+            patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
                 if (it.isEmpty()) {
                     binding.empty.cpBgView.visibility = View.VISIBLE
-                } else {
-                    binding.empty.cpBgView.visibility = View.GONE
+                    binding.pbLoading.visibility = View.GONE
                 }
+                if (it.isNotEmpty()) {
+                    binding.empty.cpBgView.visibility = View.GONE
+                    binding.pbLoading.visibility = View.GONE
+                    orderList.clear()
+                    it.forEach { order ->
+                        if (order.motherName != "null") {
+                            orderList.add(order)
+                        }
+                    }
+                    adapterList.notifyDataSetChanged()
 
-                binding.pbLoading.visibility = View.GONE
-                adapter.submitList(it)
+                }
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        healthViewModel = HealthViewModel(requireActivity().application)
 
         mySpinner = binding.mySpinner
 
@@ -136,33 +147,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
-                    if (filterData == DbMotherKey.PATIENT_NAME.name) {
-                        patientListViewModel.searchPatientsByName(newText)
-                    } else {
-
-                        formatter.saveSharedPreference(
-                            requireContext(),
-                            "queryValue", newText.toString()
-                        )
-
-                        val motherInfo =
-                            filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
-
-                        if (motherInfo != null) {
-
-                            val patientName = motherInfo.familyName
-                            patientListViewModel.searchPatientsByName(patientName)
-
-                        } else {
-
-                            patientListViewModel.searchPatientsByName(newText)
-
-                        }
-
-
-                    }
-
 
                     return true
                 }
@@ -241,10 +225,12 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // hide the soft keyboard when the navigation drawer is shown on the screen.
-                searchView.clearFocus()
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
             }
             else -> false
         }
@@ -253,7 +239,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun onOrderClick(order: OrdersItem) {
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            if (role == ADMIN || role == DOCTOR || role == HMB) {
+            if (role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT) {
                 findNavController().navigate(
                     DhmOrdersFragmentDirections.navigateToProcessing(
                         order.patientId, order.encounterId, order.resourceId

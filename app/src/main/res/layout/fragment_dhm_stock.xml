@@ -15,13 +15,13 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        style="@android:style/TextAppearance.DeviceDefault.Medium"
+        style="?attr/textAppearanceSubtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/app_closing_stock" />
 
     <TextView
-        style="@android:style/TextAppearance.DeviceDefault.Small"
+        style="?attr/textAppearanceBody2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15dp"
@@ -30,10 +30,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_marginTop="@dimen/_15dp"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:visibility="visible"
+        android:weightSum="2">
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -73,6 +73,41 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="2">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:hint="@string/app_dhm_type">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/app_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:textColorHint="#757575"
+                android:textSize="12sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
@@ -87,7 +122,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
 
@@ -99,9 +133,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:visibility="visible"
         android:orientation="horizontal"
         android:padding="@dimen/_15dp"
+        android:visibility="visible"
         android:weightSum="2">
 
         <com.google.android.material.button.MaterialButton
@@ -110,7 +144,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5dp"
             android:backgroundTint="@color/dim_red"
-            android:text="@string/action_submit" />
+            android:text="@string/action_submit"
+            app:cornerRadius="@dimen/_25dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancel"
@@ -119,6 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5dp"
             android:text="@string/action_cancel"
+            app:cornerRadius="@dimen/_25dp"
             app:strokeColor="@color/dim_red" />
 
     </LinearLayout>

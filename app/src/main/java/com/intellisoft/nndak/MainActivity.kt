@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -30,6 +32,12 @@ import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
+import com.intellisoft.nndak.logic.Logics.Companion.DEPUTY_NURSE_MANAGER
+import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.HEAD_OF_DEPARTMENT
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
+import com.intellisoft.nndak.logic.Logics.Companion.NURSING_OFFICER_IN_CHARGE
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -66,22 +74,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.dashboard_menu, menu)
-        return true
+    fun dhmAllowed(): Boolean {
+
+        val role = retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT
+        }
+        return false
     }
 
+    fun statisticsAllowed(): Boolean {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-
-            R.id.menu_profile -> {
-                findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
-                return true
-            }
-            else -> false
+        val role = retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMINISTRATOR
+                    || role == HEAD_OF_DEPARTMENT
+                    || role == DEPUTY_NURSE_MANAGER || role == NURSING_OFFICER_IN_CHARGE
         }
+        return false
     }
 
     fun retrieveUser(isRole: Boolean): String {
@@ -104,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         binding.apply {
+
             menu.lnHome.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
@@ -113,7 +124,11 @@ class MainActivity : AppCompatActivity() {
             menu.lnStatistics.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.statisticsFragment)
+                if (statisticsAllowed()) {
+                    navController.navigate(R.id.statisticsFragment)
+                } else {
+                    accessDenied()
+                }
             }
 
             menu.lnRegister.setOnClickListener {
@@ -129,17 +144,25 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmOrders.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.dhmOrdersFragment)
+                if (dhmAllowed()) {
+                    navController.navigate(R.id.dhmOrdersFragment)
+                } else {
+                    accessDenied()
+                }
             }
             menu.lnDhmStock.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                val bundle =
-                    bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
-                findNavController(R.id.nav_host_fragment).navigate(
-                    R.id.dhmStockFragment,
-                    bundle
-                )
+                if (dhmAllowed()) {
+                    val bundle =
+                        bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "dhm-stock.json")
+                    findNavController(R.id.nav_host_fragment).navigate(
+                        R.id.dhmStockFragment,
+                        bundle
+                    )
+                } else {
+                    accessDenied()
+                }
 
             }
             menu.btnCloseFilter.setOnClickListener {
@@ -158,13 +181,26 @@ class MainActivity : AppCompatActivity() {
             menu.lnDhmDashboard.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 navController.navigateUp()
-                navController.navigate(R.id.homeFragment)
+                if (dhmAllowed()) {
+                    navController.navigate(R.id.homeFragment)
+                } else {
+                    accessDenied()
+                }
             }
             menu.lnSync.setOnClickListener {
                 binding.drawer.closeDrawer(GravityCompat.START)
+                Timber.e("Sync Start")
                 viewModel.poll()
             }
         }
+    }
+
+    fun accessDenied() {
+        SweetAlertDialog(this@MainActivity, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+            .show()
     }
 
     fun displayDialog() {
@@ -173,7 +209,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideDialog() {
-        progressDialog.dialog.dismiss()
+        if (progressDialog.dialog.isShowing) {
+            progressDialog.dialog.dismiss()
+        }
     }
 
     override fun onBackPressed() {
@@ -334,17 +372,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeSyncState() {
         lifecycleScope.launch {
             viewModel.pollState.collect {
                 Timber.d("observerSyncState: pollState Got status $it")
                 when (it) {
                     is State.Started -> showToast("Sync: started")
-                    is State.InProgress -> showToast("Sync: in progress with ${it.resourceType?.name}")
+                    is State.InProgress -> showToast(
+                        "Sync: in progress with ${it.resourceType?.name}"
+                    )
                     is State.Finished -> {
                         showToast("Sync: succeeded at ${it.result.timestamp}")
                         viewModel.updateLastSyncTimestamp()
@@ -360,12 +400,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeLastSyncTime() {
-        /*  viewModel.lastSyncTimestampLiveData.observe(
-              this
-          ) {
-              binding.navigationView.getHeaderView(0)
-                  .findViewById<TextView>(R.id.last_sync_tv).text = it
-          }*/
+        viewModel.lastSyncTimestampLiveData.observe(
+            this
+        ) {
+            FhirApplication.updateSyncTime(this@MainActivity, it)
+        }
     }
 
     fun navigate(resource: Int) {

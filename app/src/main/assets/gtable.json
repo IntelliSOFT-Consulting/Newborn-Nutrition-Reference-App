@@ -1,0 +1,177 @@
+{
+  "status": "active",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire|2.7"
+    ],
+    "tag": [
+      {
+        "code": "lformsVersion: 29.2.1"
+      }
+    ]
+  },
+  "item": [
+    {
+      "text": "Symptoms",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+      ]
+    },
+    {
+      "text": "Symptoms",
+      "linkId": "1.0.0",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "group",
+          "code": [
+            {
+              "code": "90230-4",
+              "display": "Myeloperoxidase Ab.IgG and Proteinase 3 Ab.IgG Panel - Serum",
+              "system": "http://loinc.org"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "gtable",
+                    "display": "Group Table"
+                  }
+                ],
+                "text": "Group Table"
+              }
+            }
+          ],
+          "required": false,
+          "linkId": "/90230-4",
+          "text": "Myeloperoxidase Ab.IgG and Proteinase 3 Ab.IgG Panel - Serum",
+          "item": [
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "48404-8",
+                  "display": "Myeloperoxidase IgG Ser-aCnc",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "[arb'U]/mL"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/48404-8",
+              "text": "Myeloperoxidase IgG Ser-aCnc"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "48408-9",
+                  "display": "Proteinase3 IgG Ser-aCnc",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "[arb'U]/mL"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/48408-9",
+              "text": "Proteinase3 IgG Ser-aCnc"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "32708-0",
+                  "display": "c-ANCA Titr Ser",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{titer}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/32708-0",
+              "text": "c-ANCA Titr Ser"
+            },
+            {
+              "type": "decimal",
+              "code": [
+                {
+                  "code": "32787-4",
+                  "display": "p-ANCA Titr Ser",
+                  "system": "http://loinc.org"
+                }
+              ],
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                  "valueCoding": {
+                    "display": "{titer}"
+                  }
+                }
+              ],
+              "required": false,
+              "linkId": "/32787-4",
+              "text": "p-ANCA Titr Ser"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

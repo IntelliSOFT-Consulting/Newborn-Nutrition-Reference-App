@@ -27,11 +27,12 @@ import com.intellisoft.nndak.charts.DHMModel
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentHomeBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
-import com.intellisoft.nndak.logic.Logics.Companion.HMB
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.isNetworkAvailable
+import com.intellisoft.nndak.utils.isTablet
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
@@ -76,14 +77,14 @@ class HomeFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-
+        checkCurrentDevice()
         syncLocalData()
 
-
         binding.apply {
+
+            val allowed = validatePermission()
             actionEnterStock.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(HomeFragmentDirections.navigateToStock())
                 } else {
@@ -91,7 +92,11 @@ class HomeFragment : Fragment() {
                 }
             }
             actionViewDhm.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.navigateToOrders())
+                if (allowed) {
+                    findNavController().navigate(HomeFragmentDirections.navigateToOrders())
+                } else {
+                    accessDenied()
+                }
             }
         }
         if (isNetworkAvailable(requireContext())) {
@@ -102,11 +107,17 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun checkCurrentDevice() {
+        if (isTablet(requireContext())) {
+            binding.textView1.visibility = View.VISIBLE
+        }
+    }
+
     private fun validatePermission(): Boolean {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            return role == ADMIN || role == DOCTOR || role == HMB
+            return role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT
         }
         return false
     }
@@ -116,7 +127,6 @@ class HomeFragment : Fragment() {
             .setTitleText("Access Denied!!")
             .setContentText("You are not Authorized")
             .setCustomImage(R.drawable.smile)
-
             .show()
     }
 
@@ -127,8 +137,11 @@ class HomeFragment : Fragment() {
                 val gson = Gson()
                 val json = gson.toJson(it)
                 Timber.e("Local Sync Dara $json")
-                FhirApplication.updateDHM(requireContext(), json)
-                updateUI(it)
+                try {
+                    FhirApplication.updateDHM(requireContext(), json)
+                    updateUI(it)
+                } catch (e: Exception) {
+                }
             } else {
                 Timber.e("Failed to Load Data")
                 syncLocalData()
@@ -137,12 +150,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(it: DHMModel) {
+
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
             tvVolumeAvailable.text = it.dhmVolume
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength
+
         }
 
         populateData(it.data)
@@ -261,7 +276,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.hidden_menu, menu)
+        inflater.inflate(R.menu.dashboard_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -273,6 +288,10 @@ class HomeFragment : Fragment() {
             }
             R.id.menu_profile -> {
                 (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
                 return true
             }
             else -> false

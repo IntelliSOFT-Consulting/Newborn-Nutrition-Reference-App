@@ -7,6 +7,11 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
+import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
+import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
 import com.intellisoft.nndak.logic.Translations.Companion.feedTypes
 import com.intellisoft.nndak.logic.Translations.Companion.feedingTimes
 import com.intellisoft.nndak.models.*
@@ -207,12 +212,16 @@ class PatientListViewModel(
                 .search<NutritionOrder> {
                     sort(NutritionOrder.DATETIME, Order.ASCENDING)
                     from = 0
-                }
-                .map {
-                    loadOrders(it, createNutritionItem(it, getApplication<Application>().resources))
 
                 }
-                .filter { it.status == "ACTIVE" }
+                .map {
+                    loadOrders(
+                        it,
+                        createNutritionItem(it, getApplication<Application>().resources)
+                    )
+
+                }
+                .filter { it.status.trim() == NutritionOrder.NutritionOrderStatus.ACTIVE.toString() }
                 .let {
 
                     orders.addAll(it)
@@ -235,7 +244,10 @@ class PatientListViewModel(
                 from = 0
             }
             .map {
-                loadOrdersOld(it, createEncounterItem(it, getApplication<Application>().resources))
+                loadOrdersOld(
+                    it,
+                    createEncounterItem(it, getApplication<Application>().resources)
+                )
 
             }
             .filter { it.description == "DHM Recipient" }
@@ -421,8 +433,6 @@ class PatientListViewModel(
                             value = nameQuery
                         }
                     )
-
-
                 }
                 filterCity(this, location)
                 sort(Patient.GIVEN, Order.ASCENDING)
@@ -462,18 +472,28 @@ class PatientListViewModel(
 
             }
             .let { mother.addAll(it) }
-        Timber.e("Baby Id ${baby.resourceId}")
+
         val obs = getObservations(baby.resourceId)
         var birthWeight = ""
         var status = ""
-
+        var assessed = false
+        val encounters = getEncounters(baby.resourceId)
+        if (encounters.isNotEmpty()) {
+            for (element in encounters) {
+                when (element.code) {
+                    BABY_ASSESSMENT -> {
+                        assessed = true
+                    }
+                }
+            }
+        }
         if (obs.isNotEmpty()) {
             for (element in obs) {
-                Timber.e("Baby Observations Found ${obs.size}")
-                if (element.code == "8339-4") {
+
+                if (element.code == BIRTH_WEIGHT) {
                     birthWeight = element.value
                 }
-                if (element.code == "11885-1") {
+                if (element.code == GESTATION) {
                     val code = element.value.split("\\.".toRegex()).toTypedArray()
                     status = try {
                         if (code[0].toInt() < 37) {
@@ -507,11 +527,28 @@ class PatientListViewModel(
             status = status,
             gainRate = "Normal",
             dashboard = BabyDashboard(
+                assessed = assessed
             ),
             mother = MotherDashboard(),
             assessment = AssessmentItem()
+
         )
 
+    }
+
+
+    private suspend fun getEncounters(patientId: String): List<EncounterItem> {
+        val encounters: MutableList<EncounterItem> = mutableListOf()
+        fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                sort(Encounter.DATE, Order.DESCENDING)
+            }
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+
+            .let { encounters.addAll(it) }
+
+        return encounters.reversed()
     }
 
     private suspend fun getObservations(resourceId: String): List<ObservationItem> {
@@ -528,7 +565,6 @@ class PatientListViewModel(
                 )
             }
             .let { observations.addAll(it) }
-        Timber.e("Baby Found Obs ${observations.size}")
         return observations
     }
 
@@ -562,6 +598,7 @@ class PatientListViewModel(
 
     private fun filterCity(search: Search, location: String) {
         search.filter(Patient.ADDRESS_POSTALCODE, { value = SYNC_VALUE })
+        search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
     }
 
 
@@ -587,7 +624,7 @@ class PatientListViewModel(
 
     private suspend fun extractPerHour(key: String): String {
         var i = 0
-        val feedingTimes = countFeedingIntervals("Fed-After")
+        val feedingTimes = countFeedingIntervals(FED_AFTER)
         feedingTimes.forEach {
             if (key == it.value.trim()) {
                 i++

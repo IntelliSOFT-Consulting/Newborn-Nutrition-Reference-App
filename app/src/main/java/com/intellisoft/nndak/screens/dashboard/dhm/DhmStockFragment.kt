@@ -12,26 +12,29 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
-import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
+import com.intellisoft.nndak.logic.Logics.Companion.PASTEURIZED
+import com.intellisoft.nndak.logic.Logics.Companion.STOCK_TYPE
+import com.intellisoft.nndak.logic.Logics.Companion.UNPASTEURIZED
+import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.hl7.fhir.r4.model.ServiceRequest
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,15 +49,15 @@ private const val ARG_PARAM2 = "param2"
  */
 class DhmStockFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentDhmStockBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var pa: String
     private lateinit var upa: String
+    private lateinit var type: String
     private lateinit var totalDhm: String
+    val stockList = ArrayList<CodingObservation>()
     private val binding
         get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +67,6 @@ class DhmStockFragment : Fragment() {
         _binding = FragmentDhmStockBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,6 +87,17 @@ class DhmStockFragment : Fragment() {
             listenToChange(edUnpasteurized)
             disableEditing(edTotal)
 
+            appType.setOnClickListener {
+                PopupMenu(requireContext(), appType).apply {
+                    menuInflater.inflate(R.menu.menu_in_transaction, menu)
+                    setOnMenuItemClickListener { item ->
+                        appType.setText(item.title)
+                        true
+                    }
+                    show()
+                }
+            }
+
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
@@ -96,9 +109,7 @@ class DhmStockFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved), false
-        )
+
 
     }
 
@@ -199,33 +210,39 @@ class DhmStockFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
+            val pasteurized = CodingObservation(
+                PASTEURIZED,
+                "Pasteurized",
+                pa
+            )
 
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
+            val unpasteurized = CodingObservation(
+                UNPASTEURIZED,
+                "Un-Pasteurized",
+                upa
+            )
+
+            val milkType = CodingObservation(
+                STOCK_TYPE,
+                "DHM-Stock-Type",
+                type
+            )
+
+            stockList.addAll(listOf(pasteurized, unpasteurized, milkType))
 
             viewModel.updateStock(
                 questionnaireFragment.getQuestionnaireResponse(),
-                pa,
-                upa,
-                totalDhm
+                stockList
             )
         }
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        findNavController().navigateUp()
-    }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(),it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -234,7 +251,18 @@ class DhmStockFragment : Fragment() {
             }
 
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
 
     }
@@ -242,7 +270,10 @@ class DhmStockFragment : Fragment() {
     private fun onSubmitAction() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
-        if (TextUtils.isEmpty(pa) || pa == "0" || TextUtils.isEmpty(upa) || upa == "0") {
+        type = binding.appType.text.toString()
+        if (TextUtils.isEmpty(pa) || pa == "0"
+            || TextUtils.isEmpty(upa) || upa == "0" || TextUtils.isEmpty(type)
+        ) {
             Toast.makeText(
                 requireContext(),
                 getString(R.string.inputs_missing),

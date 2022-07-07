@@ -1,13 +1,12 @@
 package com.intellisoft.nndak.screens.dashboard.prescription
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -21,8 +20,10 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
-import com.intellisoft.nndak.logic.Logics.Companion.ADMIN
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
+import com.intellisoft.nndak.logic.Logics.Companion.NEONATOLOGIST
+import com.intellisoft.nndak.logic.Logics.Companion.PEDIATRICIAN
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -43,6 +44,7 @@ class BabyFeedsFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyFeedsFragmentArgs by navArgs()
+    private lateinit var careId: String
     private val binding
         get() = _binding!!
 
@@ -94,7 +96,6 @@ class BabyFeedsFragment : Fragment() {
 
         }
         patientDetailsViewModel.getMumChild()
-        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
             if (data != null) {
@@ -154,19 +155,33 @@ class BabyFeedsFragment : Fragment() {
         val adapter = PrescriptionAdapter(this::onPrescriptionItemClick)
         recyclerView.adapter = adapter
 
+        patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             Timber.d("Prescriptions has " + it.count() + " records")
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
+                binding.tvHeader.visibility = View.VISIBLE
+                val value = it.first().resourceId.toString()
+                careId = value
+                Timber.e("Found Reference $careId")
+                adapter.submitList(it.subList(0, 1))
             }
+            if (it.isEmpty()) {
+                binding.incEmpty.cpBgView.visibility = View.VISIBLE
+                binding.incEmpty.cpTitle.text = getString(R.string.add_pres)
+            }
+
             binding.pbLoadingTwo.visibility = View.GONE
-            adapter.submitList(it)
+            binding.incEmpty.cpBgView.visibility = View.GONE
+            binding.incEmpty.cpTitle.visibility = View.GONE
+
         }
 
         binding.apply {
+
+            val allowed = validatePermission()
             actionNewPrescription.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(
                         BabyFeedsFragmentDirections.navigateToAddPrescription(
@@ -179,12 +194,10 @@ class BabyFeedsFragment : Fragment() {
             }
             actionUpdatePrescription.setOnClickListener {
 
-                val allowed = validatePermission()
                 if (allowed) {
                     findNavController().navigate(
-                        BabyFeedsFragmentDirections.navigateToAddPrescription(
-                            args.patientId,
-                            "Edit Prescription"
+                        BabyFeedsFragmentDirections.navigateToEditPrescription(
+                            args.patientId, careId
                         )
                     )
                 } else {
@@ -207,12 +220,17 @@ class BabyFeedsFragment : Fragment() {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
-            return role == ADMIN || role == DOCTOR
+            return role == ADMINISTRATOR || role == DOCTOR || role == NEONATOLOGIST || role == PEDIATRICIAN
         }
         return false
     }
 
-    private fun onPrescriptionItemClick(prescriptionItem: PrescriptionItem) {
+    private fun onPrescriptionItemClick(item: PrescriptionItem) {
+        startActivity(
+            Intent(requireContext(), HistoryActivity::class.java)
+                .putExtra("careId", item.resourceId)
+                .putExtra("patientId", args.patientId)
+        )
 
     }
 
@@ -221,12 +239,20 @@ class BabyFeedsFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
             }
             else -> false
         }

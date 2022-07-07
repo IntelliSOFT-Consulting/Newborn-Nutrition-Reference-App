@@ -19,7 +19,7 @@
   ],
   "item": [
     {
-      "linkId": "DHM Stock",
+      "linkId": "DHM-Type",
       "type": "group",
       "extension": [
         {
@@ -27,131 +27,137 @@
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "mha"
+            "name": "doneStatus"
           }
         }
       ],
       "item": [
         {
-          "linkId": "DHM-Type",
-          "type": "group",
+          "type": "choice",
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
               }
             }
           ],
-          "item": [
+          "required": true,
+          "linkId": "/DHM",
+          "text": "Type of DHM",
+          "answerOption": [
             {
-              "type": "choice",
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "drop-down",
-                        "display": "Drop down"
-                      }
-                    ],
-                    "text": "Drop down"
-                  }
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
                 }
               ],
-              "required": true,
-              "linkId": "/DHM",
-              "text": "Type of DHM",
-              "answerOption": [
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "0"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LAD32-8",
-                    "display": "Term DHM"
-                  }
-                },
-                {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                      "valueString": "1"
-                    }
-                  ],
-                  "valueCoding": {
-                    "code": "LAD33-6",
-                    "display": "Pre-Term DHM"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "linkId": "Volume",
-          "type": "group",
-          "extension": [
+              "valueCoding": {
+                "code": "LAD32-8",
+                "display": "Term DHM"
+              }
+            },
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LAD33-6",
+                "display": "Pre Term DHM"
               }
             }
-          ],
-          "item": [
-            {
-              "type": "quantity",
-              "code": [
-                {
-                  "code": "Volume",
-                  "display": "Volume",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/Volume",
-              "text": "Volume"
-            }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "linkId": "Volume",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Additional-Notes",
-          "type": "group",
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "decimal",
+          "code": [
+            {
+              "code": "Volume",
+              "display": "Volume",
+              "system": "http://loinc.org/modified"
+            }
+          ],
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "kg"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 100000
             }
           ],
-          "item": [
+          "required": true,
+          "linkId": "/Volume",
+          "text": "Volume"
+        }
+      ]
+    },
+    {
+      "linkId": "Additional-Notes",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "string",
+          "code": [
             {
-              "type": "string",
-              "code": [
-                {
-                  "code": "Additional-Notes",
-                  "display": "Additional-Notes",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/Additional-Notes",
-              "text": "Additional Notes and Remarks"
+              "code": "Additional-Notes",
+              "display": "Additional-Notes",
+              "system": "http://loinc.org/modified"
             }
-          ]
+          ],
+          "required": true,
+          "linkId": "/Additional-Notes",
+          "text": "Additional Notes and Remarks"
         }
       ]
     }

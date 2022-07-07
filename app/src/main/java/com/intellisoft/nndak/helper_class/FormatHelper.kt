@@ -1,16 +1,12 @@
 package com.intellisoft.nndak.helper_class
 
 import android.content.Context
-import android.os.Build
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.models.DbObservations
 import timber.log.Timber
 import java.lang.Double.parseDouble
+import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class FormatHelper {
@@ -50,9 +46,32 @@ class FormatHelper {
         return false
     }
 
+
+    fun dateTimeLessThanNow(date: String): Boolean {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val today = getTodayDate()
+
+        val convertedDate = sdf.parse(date)
+        Timber.e("Current $today")
+        Timber.e("Value $convertedDate")
+
+        val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val cool = convertedDate?.let { sdf2.format(it) }.toString()
+
+        val date1 = sdf2.parse(today)
+        val date2 = sdf2.parse(cool)
+
+        if (date1 != null) {
+            if (date1.equals(date2) || date1.after(date2)) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun checkDate(birthDate: String, d2: String): Boolean {
 
-        val sdf1 = SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+        val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val currentdate = sdf1.parse(birthDate)
 
         val sdf2 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
@@ -76,6 +95,21 @@ class FormatHelper {
         val date = Date()
         return formatter.format(date)
     }
+    fun extractDateOnly(date :String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
+
+    fun extractTimeOnly(date :String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
 
     private fun getTodayDateNoTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -89,7 +123,7 @@ class FormatHelper {
 
     }
 
-     fun getHour(date: String): String {
+    fun getHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
 
@@ -98,7 +132,179 @@ class FormatHelper {
 
     }
 
-     fun getHourNoExtension(date: String): String {
+    fun getRoundedHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        val convertedDate = sourceFormat.parse(date)
+
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = convertedDate
+        calendar[Calendar.MILLISECOND] = 0
+        calendar[Calendar.SECOND] = 0
+        val minutes = calendar[Calendar.MINUTE]
+/*
+        if (minutes < 30) {
+            calendar[Calendar.MINUTE] = 0
+        } else {
+            calendar[Calendar.MINUTE] = 30
+        }*/
+        val time = calendar.time
+        return time.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun getDateHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun getRoundedDateHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = convertedDate
+        calendar[Calendar.MILLISECOND] = 0
+        calendar[Calendar.SECOND] = 0
+        val minutes = calendar[Calendar.MINUTE]
+
+//        if (minutes < 30) {
+//            calendar[Calendar.MINUTE] = 0
+//        } else {2022-06-30
+//            calendar[Calendar.MINUTE] = 30
+//        }
+        val time = calendar.time
+        return time.let { destFormat.format(it) }.toString()
+
+
+    }
+
+    fun getRefinedDatePmAm(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+    fun getRefinedDatePmAmEncounter(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun generateDate(date: String): Date {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        return sourceFormat.parse(date)
+    }
+
+    fun getHourRange(date: String): String {
+
+        val calendar = Calendar.getInstance()
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+        val date: Date = destFormat.parse(date)
+        calendar.time = date
+        calendar.add(Calendar.HOUR, -3)
+        return destFormat.format(calendar.time)
+
+    }
+
+
+    fun getDateHourZone(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = try {
+            sourceFormat.parse(date)
+        } catch (e: Exception) {
+            sourceFormat.parse(sourceFormat.format(Date()))
+        }
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun isWithinRange(systemTime: String, startTime: String, endTime: String): Boolean {
+        try {
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a")
+
+            val starttime = simpleDateFormat.parse(startTime)
+            val endtime = simpleDateFormat.parse(endTime)
+            val current_time = simpleDateFormat.parse(systemTime)
+
+
+            return if (current_time.after(endtime) && current_time.before(starttime)) {
+                println("Yes it Matches ")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+
+        }
+        return false
+    }
+    fun startCurrentEnd(min: String, actual: String, max: String): Boolean {
+        try {
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a")
+
+            val starttime = simpleDateFormat.parse(min)
+            val endtime = simpleDateFormat.parse(max)
+            val current_time = simpleDateFormat.parse(actual)
+
+
+            return if (current_time.after(starttime) && current_time.before(endtime)) {
+                println("Yes it Matches ")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+
+        }
+        return false
+    }
+
+    fun allowedDate(incoming: String): Boolean {
+
+        try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val dest = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val currentDate = dest.format(Date())
+            val incomingString = sdf.format(incoming.substring(0, 19))
+            val startTime = dest.parse(currentDate)
+            val endTime = dest.parse(incomingString)
+
+            return if (startTime.after(endTime)) {
+                println("Yes")
+                true
+            } else {
+                println("No")
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            Timber.e("Exception Formatter ${e.localizedMessage}")
+
+        }
+        return false
+    }
+
+    fun getHourNoExtension(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh", Locale.ENGLISH)
 
@@ -107,7 +313,7 @@ class FormatHelper {
 
     }
 
-     fun getDayName(date: String): String {
+    fun getDayName(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
@@ -117,7 +323,7 @@ class FormatHelper {
 
     }
 
-     fun getMonthName(date: String): String {
+    fun getMonthName(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("MMM", Locale.ENGLISH)
@@ -126,6 +332,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun getRefinedDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
@@ -136,10 +343,50 @@ class FormatHelper {
 
     }
 
-    fun extractDateString(date: String): String {
+    fun getSimpleDate(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun extractCareDateString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+    fun extractCareTimeString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+
+    fun extractDateString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun extractTimeString(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()
@@ -188,21 +435,15 @@ class FormatHelper {
 
         val queryParam = when (spinnerValue) {
             birds[0].toString() -> {
-                DbMotherKey.PATIENT_NAME.name
+                DbMotherKey.BABY_NAME.name
             }
             birds[1].toString() -> {
-                DbMotherKey.PATIENT_NAME.name
+                DbMotherKey.BABY_NAME.name
             }
             birds[2].toString() -> {
-                DbMotherKey.NATIONALID.name
+                DbMotherKey.MOTHER_IP.name
             }
-            birds[3].toString() -> {
-                DbMotherKey.PHONE_NUMBER.name
-            }
-            birds[4].toString() -> {
-                DbMotherKey.MOTHER_DOB.name
-            }
-            else -> DbMotherKey.PATIENT_NAME.name
+            else -> DbMotherKey.MOTHER_IP.name
         }
         return queryParam
 

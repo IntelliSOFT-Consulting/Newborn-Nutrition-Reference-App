@@ -1,14 +1,20 @@
 package com.intellisoft.nndak.screens.dashboard
 
+import android.os.Build
 import android.os.Bundle
+import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.LandingAdapter
 import com.intellisoft.nndak.databinding.FragmentLandingBinding
+import com.intellisoft.nndak.viewmodels.LayoutListViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +28,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class LandingFragment : Fragment() {
     private var _binding: FragmentLandingBinding? = null
+    private val viewModel: LayoutListViewModel by viewModels()
     private val binding
         get() = _binding!!
 
@@ -44,6 +51,7 @@ class LandingFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
+//        setUpLayoutsRecyclerView()
         binding.apply {
             cntBaby.setOnClickListener {
                 findNavController().navigate(LandingFragmentDirections.navigateToBabies())
@@ -53,13 +61,63 @@ class LandingFragment : Fragment() {
                 findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
             }
             cntMilk.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToMilk())
+                val allowed = (activity as MainActivity).dhmAllowed()
+                if (allowed) {
+                    findNavController().navigate(LandingFragmentDirections.navigateToMilk())
+                } else {
+                    (activity as MainActivity).accessDenied()
+                }
             }
             cntStatistics.setOnClickListener {
-                findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
+                val allowed = (activity as MainActivity).statisticsAllowed()
+                if (allowed) {
+                    findNavController().navigate(LandingFragmentDirections.navigateToStatistics())
+                } else {
+                    (activity as MainActivity).accessDenied()
+                }
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                (requireActivity() as MainActivity).openNavigationDrawer()
+                true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
+                return true
+            }
+            else -> false
+        }
+    }
+
+    /* private fun setUpLayoutsRecyclerView() {
+         val adapter =
+             LandingAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
+         recyclerView.adapter = adapter
+         recyclerView.layoutManager = GridLayoutManager(context, 2)
+     }*/
+
+    /*  private fun onItemClick(layout: LayoutListViewModel.Layout) {
+          // TODO Remove check when all layout questionnaire json are updated.
+          // https://github.com/google/android-fhir/issues/1079
+          if (layout.questionnaireFileName.isEmpty()) {
+              return
+          }
+          launchQuestionnaireFragment(layout)
+      }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

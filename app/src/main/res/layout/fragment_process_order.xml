@@ -53,40 +53,47 @@
             android:layout_marginStart="@dimen/padding_10"
             android:layout_marginTop="@dimen/_10dp"
             android:layout_marginEnd="@dimen/_10dp"
-            android:text="@string/app_dhm_reason" />
+            android:text="@string/app_dhm_reason"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceSubtitle1" />
 
         <TextView
             android:id="@+id/app_dhm_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_10" />
+            android:layout_marginStart="@dimen/padding_10"
+            android:textAppearance="?attr/textAppearanceBody2" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_10"
             android:layout_marginEnd="@dimen/_10dp"
-            android:text="@string/app_dhm_volume" />
+            android:text="@string/app_dhm_volume"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceSubtitle1" />
 
         <TextView
             android:id="@+id/app_dhm_volume"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_10"
-            android:layout_marginEnd="@dimen/_10dp" />
+            android:layout_marginEnd="@dimen/_10dp"
+            android:textAppearance="?attr/textAppearanceBody2" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_10"
+            android:layout_marginStart="@dimen/padding_10"
             android:text="@string/app_dispensing"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/colorPrimary" />
 
         <include
             android:id="@+id/screen"
-            layout="@layout/screen_questionnaire" />
+            layout="@layout/screen_questionnaire"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
-
 
 </RelativeLayout>

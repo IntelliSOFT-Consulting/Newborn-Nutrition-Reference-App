@@ -1,10 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.dashboard.LandingFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sdcLayoutsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="@dimen/component_horizontal_margin"
+        tools:listitem="@layout/item_landing" />
+
+</RelativeLayout>-->
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/_15dp"
+    android:background="@color/grayColor"
+    android:paddingHorizontal="@dimen/_10dp"
     tools:context=".screens.dashboard.LandingFragment">
 
     <View
@@ -21,12 +38,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/_5dp"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:layout_constraintHeight_percent="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintWidth_percent="0.5">
+        app:layout_constraintWidth_percent="0.48">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cnt_baby"
@@ -43,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.6"
+                app:layout_constraintHeight_percent="0.7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.5"
@@ -51,12 +68,12 @@
                 app:tint="@color/dim_red" />
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:text="@string/home_babies"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,8 +88,8 @@
         android:id="@+id/cardView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/_5dp"
-        app:cardCornerRadius="3dp"
+        android:layout_marginStart="@dimen/_15dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,12 +121,12 @@
                 app:tint="@color/dim_red" />
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:text="@string/app_registration"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -124,11 +141,13 @@
         android:id="@+id/cardView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/_5dp"
-        app:cardCornerRadius="3dp"
+        android:layout_marginStart="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_15dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView4"
         app:layout_constraintEnd_toEndOf="@+id/cardView"
+        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
@@ -159,12 +178,12 @@
                 app:tint="@color/dim_red" />
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:text="@string/app_human_milk"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +197,7 @@
         android:id="@+id/cardView6"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView3"
         app:layout_constraintEnd_toEndOf="@+id/cardView2"
@@ -192,7 +211,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/spacing_large"
@@ -212,12 +233,12 @@
                 app:tint="@color/dim_red" />
 
             <TextView
-                style="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:text="@string/app_statistics"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

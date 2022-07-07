@@ -26,27 +26,27 @@
                 android:orientation="vertical"
                 android:paddingRight="@dimen/_15dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_marginTop="@dimen/spacing_mlarge"
                     android:layout_marginBottom="@dimen/spacing_mlarge"
-                    app:srcCompat="@drawable/kid" />
+                    android:src="@drawable/kid" />
 
                 <TextView
                     android:id="@+id/tv_baby_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
                     android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
                     android:id="@+id/tv_mum_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
                     android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     app:autoSizeTextType="uniform" />
 
             </LinearLayout>
@@ -83,8 +83,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
                             android:text="@string/app_baby_well"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -92,7 +92,7 @@
                             android:id="@+id/app_baby_well"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -106,7 +106,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_birth_date"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -115,7 +115,7 @@
                             android:id="@+id/app_birth_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -129,7 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_adm_date"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -138,7 +138,7 @@
                             android:id="@+id/app_adm_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -152,7 +152,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_life_day"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -161,7 +161,7 @@
                             android:id="@+id/app_life_day"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>
@@ -182,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_gestation"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -191,7 +191,7 @@
                             android:id="@+id/app_gestation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -205,7 +205,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_birth_weight"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -214,7 +214,7 @@
                             android:id="@+id/app_birth_weight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -227,8 +227,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/menu_apgar_score"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -237,7 +236,7 @@
                             android:id="@+id/app_apgar_score"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -251,7 +250,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_mum_ip"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -260,7 +259,7 @@
                             android:id="@+id/app_mum_ip"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>
@@ -284,7 +283,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_asphyxia"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -293,7 +292,7 @@
                             android:id="@+id/app_asphyxia"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -308,7 +307,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_neonatal_sepsis"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -317,7 +316,7 @@
                             android:id="@+id/app_neonatal_sepsis"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -332,7 +331,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:text="@string/app_jaundice"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -341,7 +340,7 @@
                             android:id="@+id/app_jaundice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 

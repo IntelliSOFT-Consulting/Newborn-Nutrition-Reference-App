@@ -20,7 +20,6 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentCuesBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 
@@ -36,7 +35,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class CuesFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentCuesBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private val binding
@@ -80,9 +78,7 @@ class CuesFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_confirm_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_client_registered),false
-        )
+
 
     }
 
@@ -101,22 +97,20 @@ class CuesFragment : Fragment() {
     }
 
     private fun proceedClick() {
-        successDialog.dismiss()
+
 
     }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(),it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
                 return@observe
             }
-            successDialog.show(childFragmentManager, "Success Details")
         }
 
 

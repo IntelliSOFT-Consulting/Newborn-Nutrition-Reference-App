@@ -21,6 +21,7 @@
             android:id="@+id/text_input_edit_text"
             style="?attr/editTextInputTextAppearanceQuestionnaire"
             android:layout_width="match_parent"
+            android:text="@string/app_name"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>

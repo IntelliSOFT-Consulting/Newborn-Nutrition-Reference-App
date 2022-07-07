@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grayColor"
     android:orientation="vertical"
     android:padding="@dimen/_5dp"
     tools:context=".screens.dashboard.BabiesFragment">
@@ -47,6 +48,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/design_default_color_error"
             android:text="@string/action_register_baby"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
             app:cornerRadius="@dimen/_35dp" />
     </LinearLayout>

@@ -49,7 +49,7 @@ class FhirApplication : Application() {
             FhirEngineConfiguration(
                 enableEncryptionIfSupported = true,
                 DatabaseErrorStrategy.RECREATE_AT_OPEN,
-                getHapiServerURL(this)?.let { ServerConfiguration(it) }
+                ServerConfiguration(DEMO_SERVER)
             )
         )
         Sync.oneTimeSync<FhirPeriodicSyncWorker>(this)
@@ -67,19 +67,10 @@ class FhirApplication : Application() {
         fun fhirEngine(context: Context) =
             (context.applicationContext as FhirApplication).fhirEngine
 
-        fun getSharedPreferences(context: Context): SharedPreferences {
-            return (context.applicationContext as FhirApplication).sharedPreferences
-        }
 
         fun getServerURL(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 SERVER_URL, DEMO_API_SERVER
-            )
-        }
-
-        fun getHapiServerURL(context: Context): String? {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                SERVER_URL_DEMO, DEMO_SERVER
             )
         }
 
@@ -104,10 +95,6 @@ class FhirApplication : Application() {
             )
         }
 
-        fun setServerDetails(context: Context, b: Boolean, url: String, demo: String) {
-            (context.applicationContext as FhirApplication).editor.putBoolean(SERVER_SET, b)
-                .putString(SERVER_URL, url).putString(SERVER_URL_DEMO, demo).commit()
-        }
 
         fun setWelcomed(context: Context, b: Boolean) {
             (context.applicationContext as FhirApplication).editor.putBoolean(WELCOME, b).commit()
@@ -117,15 +104,15 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
 
-        fun setDashboardActive(context: Context, b: Boolean) {
-            (context.applicationContext as FhirApplication).editor.putBoolean(ACTIVE, b).commit()
+        fun setDashboardActive(context: Context, b: String) {
+            (context.applicationContext as FhirApplication).editor.putString(ACTIVE, b).commit()
         }
 
-        fun getDashboardActive(context: Context): Boolean {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getBoolean(
+        fun getDashboardActive(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 ACTIVE,
-                false
-            )
+                ""
+            ).toString()
         }
 
         fun updateDetails(context: Context, it: AuthResponse) {
@@ -152,28 +139,6 @@ class FhirApplication : Application() {
             )
         }
 
-        fun setPatient(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("Patient", state)
-                .commit()
-        }
-
-        fun setCurrent(context: Context, state: String) {
-            (context.applicationContext as FhirApplication).editor.putString("State", state)
-                .commit()
-        }
-
-        fun getCurrent(context: Context): String {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "State", ""
-            ).toString()
-        }
-
-        fun getPatient(context: Context): String {
-            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
-                "Patient", ""
-            ).toString()
-        }
-
 
         fun updateLocalFeeding(context: Context, it: String) {
             (context.applicationContext as FhirApplication).editor.putString(MILK_EXPRESSION, it)
@@ -181,9 +146,28 @@ class FhirApplication : Application() {
         }
 
 
+        fun mumContra(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Contra", it)
+                .commit()
+        }
+
+
         fun updateFeedings(context: Context, it: String) {
             (context.applicationContext as FhirApplication).editor.putString(FEEDINGS, it)
                 .commit()
+        }
+
+
+        fun updateSyncTime(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString("Sync", it)
+                .commit()
+        }
+
+        fun getSyncTime(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "Sync",
+                ""
+            )
         }
 
         fun updateWeights(context: Context, it: String) {
@@ -208,24 +192,28 @@ class FhirApplication : Application() {
                 ""
             )
         }
+
         fun getFeedings(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 FEEDINGS,
                 ""
             )
         }
+
         fun getStatistics(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 STATISTICS,
                 ""
             )
         }
+
         fun getDHM(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 DHM,
                 ""
             )
         }
+
         fun getWeights(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 WEIGHTS,

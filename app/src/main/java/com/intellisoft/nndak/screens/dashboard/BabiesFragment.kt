@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -20,10 +21,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
+import com.intellisoft.nndak.alerts.NotificationFactory
+import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
@@ -51,6 +55,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
     private var _binding: FragmentBabiesBinding? = null
+    lateinit var adapterList: BabyItemAdapter
+    private var mumBabyList = ArrayList<MotherBabyItem>()
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -89,18 +95,24 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     )
                 ).get(PatientListViewModel::class.java)
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
-            val adapter = BabyItemAdapter(this::onPatientItemClicked)
-            recyclerView.adapter = adapter
+
+            adapterList = BabyItemAdapter(mumBabyList, this::onPatientItemClicked)
+            recyclerView.adapter = adapterList
+            adapterList.submitList(mumBabyList)
 
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
                 if (it.isEmpty()) {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
+                        binding.pbLoading.visibility = View.GONE
                     }
                 }
-                binding.pbLoading.visibility = View.GONE
-                adapter.submitList(it)
+                if (it.isNotEmpty()) {
+                    mumBabyList.clear()
+                    mumBabyList.addAll(it)
+                    binding.pbLoading.visibility = View.GONE
+                }
             }
 
         } catch (e: Exception) {
@@ -127,45 +139,13 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
-                    if (filterData == DbMotherKey.PATIENT_NAME.name) {
-                        patientListViewModel.searchPatientsByName(newText)
-                    } else {
-
-                        formatter.saveSharedPreference(
-                            requireContext(),
-                            "queryValue", newText.toString()
-                        )
-
-                        val motherInfo =
-                            filterData?.let { healthViewModel.getMotherInfo(it, requireContext()) }
-
-                        if (motherInfo != null) {
-
-                            val patientName = motherInfo.familyName
-                            patientListViewModel.searchPatientsByName(patientName)
-
-                        } else {
-
-                            patientListViewModel.searchPatientsByName(newText)
-
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "We could not find the patient.",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-                        }
-
-
-                    }
-
-
-                    return true
+                    adapterList.filter.filter(newText)
+                    return false
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    patientListViewModel.searchPatientsByName(query)
-                    return true
+                    adapterList.filter.filter(query)
+                    return false
                 }
             }
         )
@@ -216,29 +196,57 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.hidden_menu, menu)
+        inflater.inflate(R.menu.dashboard_menu, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // hide the soft keyboard when the navigation drawer is shown on the screen.
-                searchView.clearFocus()
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
+            }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
+                return true
             }
             else -> false
         }
     }
 
     private fun onPatientItemClicked(patientItem: MotherBabyItem) {
-        FhirApplication.setDashboardActive(requireContext(), true)
-        findNavController().navigate(
-            BabiesFragmentDirections.navigateToChildDashboard(
-                patientItem.resourceId
+        if (patientItem.motherIp.isNotEmpty()) {
+            val session = SessionData(
+                patientId = patientItem.resourceId,
+                status = patientItem.dashboard.assessed
             )
-        )
+            val gson = Gson()
+            val json = gson.toJson(session)
+            FhirApplication.setDashboardActive(
+                requireContext(),
+                json
+            )
+            /*  val sender = NotificationFactory(requireContext())
+              sender.displayNotification(
+                  SimpleNotification(
+                      title = "Baby Registration",
+                      content = "A new Baby ${patientItem.babyName} has been registered"
+                  )
+              )*/
+            findNavController().navigate(
+                BabiesFragmentDirections.navigateToChildDashboard(
+                    patientItem.resourceId
+                )
+            )
+
+        } else {
+            Toast.makeText(requireContext(), "Patient Loading..., please wait", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
 
@@ -248,7 +256,24 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        filterData = formatter.getSearchQuery(text, requireContext())
+      /*  if (text != "Filter By:") {
+            reloadFiltered(text)
+        }
+        adapterList.notifyDataSetChanged()*/
+
+    }
+
+    private fun reloadFiltered(text: String) {
+        val matching = ArrayList<MotherBabyItem>()
+        mumBabyList.forEach {
+            Timber.e("\n\n Each Baby ${it.status?.trim()}")
+            val status = it.status?.trim()
+            if (status == text) {
+                matching.add(it)
+            }
+        }
+        mumBabyList = matching
+        adapterList.notifyDataSetChanged()
 
     }
 

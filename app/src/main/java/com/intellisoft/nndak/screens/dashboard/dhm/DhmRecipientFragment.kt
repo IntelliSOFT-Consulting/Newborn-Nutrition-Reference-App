@@ -15,12 +15,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentDhmReceipientBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +39,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class DhmRecipientFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentDhmReceipientBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private val binding
@@ -82,43 +81,21 @@ class DhmRecipientFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved),false
-        )
+
 
     }
 
     private fun okClick() {
         confirmationDialog.dismiss()
-        (activity as MainActivity).displayDialog()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
-            viewModel.addDhmRecipient(questionnaireFragment.getQuestionnaireResponse())
-        }
 
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        findNavController().navigateUp()
-
-    }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(),it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -126,7 +103,18 @@ class DhmRecipientFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+          val dialog= SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener {sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
         }
 
 

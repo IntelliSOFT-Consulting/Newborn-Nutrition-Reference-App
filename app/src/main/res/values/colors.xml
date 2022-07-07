@@ -21,12 +21,13 @@
     <color name="dim_red">#A8001E</color>
     <color name="dim_green">#24A047</color>
     <color name="inactive1">#94C4C4C4</color>
-
+    <color name="grey_50">#F8F9FA</color>
     <color name="dialogBackground">#60000000</color>
     <color name="gradient_start">#4CAF50</color>
     <color name="gradient_end">#CDDC39</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="textColor">#ECE5EC</color>
+    <color name="grayColor">#D3D3D3</color>
 
     <color name="light_green_50">#F1F8E9</color>
     <color name="light_green_100">#DCEDC8</color>

@@ -31,7 +31,7 @@
     <string name="message_syncing">Syncing\u2026</string>
     <string name="message_input_missing">Please check input data.</string>
     <string name="message_patient_updated">Patient is updated.</string>
-    <string name="inputs_missing">Please check input data.</string>
+    <string name="inputs_missing">Please fill in all required fields.</string>
     <string name="resources_saved">Record added successfully.</string>
     <string name="response_received">questionnaire response is received.</string>
     <string name="html_text">Current status: <font color="#ddd">UNKNOWN</font></string>
@@ -47,7 +47,7 @@
     <string name="close">Close</string>
     <string name="sync_menu">Sync</string>
     <string name="last_sync">Last sync</string>
-    <string name="action_submit">Submit</string>
+    <string name="action_submit">Save</string>
     <string name="action_gender">Gender</string>
     <string name="action_lastname">Last Name</string>
     <string name="action_dob">Date of Birth</string>
@@ -90,7 +90,7 @@
     <string name="desc_two">Register a new born! Capture units for weight and temperature </string>
     <string name="desc_three">Re-assess the baby, check if need for Lactation Support as ease.</string>
     <string name="desc_fourth">Monitor Mother\'s and Baby\'s progress, Discharge once they are both ready</string>
-    <string name="action_username">Username *</string>
+    <string name="action_username">Email *</string>
     <string name="action_password">Password</string>
     <string name="unable_to_login">Forgot your Password? <font color="#32CD32">Click here to reset</font></string>
     <string name="login_offline">Offline</string>
@@ -251,7 +251,9 @@
     <string name="menu_dhm">DHM</string>
     <string name="app_consent">Consent</string>
     <string name="app_consent_date">Date of Consent</string>
+    <string name="dhm_reason">DHM Reason</string>
     <string name="app_dhm_reason">Reasons for Receiving DHM</string>
+    <string name="app_add">Additional</string>
     <string name="app_additional">Additional Feeds</string>
     <string name="app_feeding_supplements">Feeding Supplements</string>
     <string name="app_add_dhm_recipient">Add DHM Recipient</string>
@@ -319,7 +321,8 @@
     <string name="app_review_pres">Review Prescription Details</string>
     <string name="mother_breastfeeding_baby">Mother Breastfeeding Baby?</string>
     <string name="breast_problems">Breast Problems</string>
-    <string name="mother_contraindicated">Is mother contraindicated for Infant?</string>
+    <string name="mother_contraindicated">Is mother\'s milk contraindicated for Infant?</string>
+    <string name="app_contra">Mother\'s milk contraindicated for Infant</string>
     <string name="app_total_expressed">Total Milk Expressed</string>
     <string name="middle_lorem_ipsum">Online Sync</string>
     <string name="settings">Settings</string>
@@ -340,7 +343,7 @@
     <string name="ebm_mls">EBM mls</string>
     <string name="deficit_mls">Deficit (mls)</string>
     <string name="refresh">Refresh</string>
-    <string name="no_active">No active prescription</string>
+    <string name="no_active">Only accessible once there is an active prescription</string>
     <string name="app_pasteurized">Pasteurized</string>
     <string name="app_unpasteurized">Unpasteurized</string>
     <string name="app_total">Total</string>
@@ -352,12 +355,54 @@
     <string name="app_zero">0</string>
     <string name="app_zero_mls">0 ml</string>
     <string name="number_of_babies">Number of Babies</string>
+    <string name="number_of_mothers">Number of mothers</string>
+    <string name="dhm_volume">Volume of DHM</string>
+    <string name="remarks">Feeding Remarks</string>
+    <string name="changer">Change Prescription</string>
+    <string name="total_taken">Total Taken</string>
+    <string name="total_input">Total Input</string>
+    <string name="tv_vomit">Vomit</string>
+    <string name="stool">Stool</string>
+    <string name="diaper">Diaper Changed</string>
+    <string name="monitoring"><![CDATA[Feeding & Monitoring]]></string>
+    <string name="edit_baby">Edit Baby</string>
+    <string name="action_start">From Date</string>
+    <string name="action_to">To Date</string>
+    <string name="menu_preterm">Pre Term DHM</string>
+    <string name="menu_term">Term DHM</string>
+    <string name="bf">Breast Feeding</string>
+    <string name="_ebm">EBM</string>
+    <string name="formula">Formula</string>
+    <string name="dhm">DHM</string>
+    <string name="iv">IV Fluids</string>
+    <string name="volume">Volume mls</string>
+    <string name="menu_two">2 Hourly</string>
+    <string name="menu_three">3 Hourly</string>
+    <string name="menu_cup">Cup</string>
+    <string name="menu_ngt">NGT</string>
+    <string name="menu_ogt">OGT</string>
+    <string name="enter">Enter Feeds Prescription</string>
+    <string name="ebm_milk">Expressed Breast Milk</string>
+    <string name="dhm_milk">Donor Human Milk</string>
+    <string name="menu_yes">Yes</string>
+    <string name="menu_no">No</string>
+    <string name="supp">Supplement</string>
+    <string name="menu_formula">Formula</string>
+    <string name="type">Formula Type</string>
+    <string name="menu_term_fo">Term Formula</string>
+    <string name="menu_pre_term">Preterm Formula</string>
+    <string name="update">Last Update</string>
+    <string name="app_age">Age (days)</string>
+    <string name="there_are_no_update">There are no Updates </string>
+    <string name="add_pres">Add new Prescription</string>
+    <string name="empty_hist">Feeding and monitoring has not yet taken place</string>
+    <string name="app_breast">EBM</string>
     <string-array name="birds">
         <item>Filter By:</item>
-        <item>Patient Name</item>
-        <item>National Id</item>
-        <item>Phone Number</item>
-        <item>Mother DoB</item>
+        <item>Preterm</item>
+        <item>Term</item>
+        <item>Low Weight Gain</item>
+        <item>High/Medium Weight Gain</item>
     </string-array>
     <string-array name="sort">
         <item>Sort By:</item>
@@ -366,29 +411,3 @@
     </string-array>
 
 </resources>
-
-<!--
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.6">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:rotation="-90"
-                                android:text="@string/number_of_babies"
-                                android:textColor="@color/dim_red"
-                                app:layout_constraintHeight_percent="0.3"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.github.mikephil.charting.charts.LineChart
-                                android:id="@+id/mortality_chart"
-                                android:layout_width="1000dp"
-                                android:visibility="visible"
-                                android:layout_height="400dp"
-                                android:layout_weight="1.6" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--    -->

@@ -23,6 +23,25 @@ class QuestionnaireHelper {
             .setSystem("http://snomed.info/sct")
             .setCode(code).display = display
         observation.code.text = text
+        observation.valueStringType.value = text
+        return observation
+    }
+
+    fun codingTimeQuestionnaire(
+        code: String,
+        display: String,
+        text: String
+    ):
+            Observation {
+        val observation = Observation()
+        observation
+            .code
+            .addCoding()
+            .setSystem("http://snomed.info/sct")
+            .setCode(code).display = display
+        observation.code.text = text
+        val date = FormatHelper().generateDate(text)
+        observation.valueDateTimeType.value = date
         return observation
     }
 

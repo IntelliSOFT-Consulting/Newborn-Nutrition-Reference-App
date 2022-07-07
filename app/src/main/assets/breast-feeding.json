@@ -19,85 +19,82 @@
   ],
   "item": [
     {
-      "linkId": "Baby-Assessment",
+      "linkId": "Milk-Expressed",
       "type": "group",
-      "text": "",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "mha"
+            "name": "doneStatus"
           }
         }
       ],
       "item": [
         {
-          "linkId": "Milk-Expressed",
-          "type": "group",
-          "extension": [
+          "type": "decimal",
+          "code": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
+              "code": "Milk-Expressed",
+              "display": "Milk Expressed",
+              "system": "http://loinc.org/modified"
             }
           ],
-          "item": [
+          "extension": [
             {
-              "type": "quantity",
-              "code": [
-                {
-                  "code": "Milk-Expressed",
-                  "display": "Milk Expressed",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-                  "valueCoding": {
-                    "display": "ml"
-                  }
-                }
-              ],
-              "required": true,
-              "linkId": "/Milk-9",
-              "text": "Milk Expressed (ml)"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "[lb_av]"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
+              "valueCoding": {
+                "display": "ml"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 1
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 3000
             }
-          ]
-        },
+          ],
+          "required": true,
+          "linkId": "/Milk-9",
+          "text": "Milk Expressed (ml)"
+        }
+      ]
+    },
+    {
+      "linkId": "Time-Expressed",
+      "type": "group",
+      "extension": [
         {
-          "linkId": "Time-Expressed",
-          "type": "group",
-          "extension": [
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "dateTime",
+          "code": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Observation",
-                "name": "doneStatus"
-              }
+              "code": "Time-Expressed",
+              "display": "Time Expressed",
+              "system": "http://loinc.org/modified"
             }
           ],
-          "item": [
-            {
-              "type": "dateTime",
-              "code": [
-                {
-                  "code": "Time-Expressed",
-                  "display": "Time Expressed",
-                  "system": "http://loinc.org/modified"
-                }
-              ],
-              "required": true,
-              "linkId": "/Time-Expressed",
-              "text": "Time Expressed"
-            }
-          ]
+          "required": true,
+          "linkId": "/Time-Expressed",
+          "text": "Time Expressed"
         }
       ]
     }

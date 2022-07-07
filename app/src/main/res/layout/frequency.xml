@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
+    android:id="@+id/til_fre"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:hint="@string/app_frequency">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/app_frequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:textColorHint="#757575"
+        android:textSize="12sp" />
+
+</com.google.android.material.textfield.TextInputLayout>

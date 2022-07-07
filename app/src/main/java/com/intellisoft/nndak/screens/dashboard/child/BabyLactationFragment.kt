@@ -4,16 +4,14 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -32,6 +30,11 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.MilkExpression
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
+import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
+import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
+import com.intellisoft.nndak.logic.Logics.Companion.NEONATOLOGIST
+import com.intellisoft.nndak.logic.Logics.Companion.NUTRITION_OFFICER
+import com.intellisoft.nndak.logic.Logics.Companion.PEDIATRICIAN
 import com.intellisoft.nndak.utils.formatTime
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import com.intellisoft.nndak.utils.isNetworkAvailable
@@ -57,7 +60,7 @@ class BabyLactationFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyLactationFragmentArgs by navArgs()
     private var bWeight: Int = 0
-    private var chart: BarChart? = null
+    private var contra: String = "No"
     private val binding
         get() = _binding!!
 
@@ -107,6 +110,7 @@ class BabyLactationFragment : Fragment() {
 
 
         binding.apply {
+            val allowed = validatePermission()
             breadcrumb.page.text =
                 Html.fromHtml("Baby Panel > <font color=\"#37379B\">Lactation Support</font>")
             breadcrumb.page.setOnClickListener {
@@ -146,7 +150,15 @@ class BabyLactationFragment : Fragment() {
 
 
             actionProvideSupport.setOnClickListener {
-                findNavController().navigate(BabyLactationFragmentDirections.navigateToFeeding(args.patientId))
+                if (allowed) {
+                    findNavController().navigate(
+                        BabyLactationFragmentDirections.navigateToFeeding(
+                            args.patientId,contra
+                        )
+                    )
+                } else {
+                    accessDenied()
+                }
             }
         }
         patientDetailsViewModel.getMumChild()
@@ -163,8 +175,8 @@ class BabyLactationFragment : Fragment() {
                     val gest = data.dashboard.gestation ?: ""
                     val sta = data.status
                     val weight = data.birthWeight
-                    val code = weight?.split("\\.".toRegex())?.toTypedArray()
-                    bWeight = code?.get(0)?.toInt()!!
+                  try{  val code = weight?.split("\\.".toRegex())?.toTypedArray()
+                    bWeight = code?.get(0)?.toInt()!!}catch (e:Exception){}
 
                     incDetails.tvBabyName.text = data.babyName
                     incDetails.tvMumName.text = data.motherName
@@ -202,7 +214,7 @@ class BabyLactationFragment : Fragment() {
                     response.appIpNumber.text = data.assessment.breastfeedingBaby
                     response.appMotherName.text = data.assessment.breastProblems
                     response.appBabyName.text = data.assessment.contraindicated
-                    tvTotalExpressed.text = data.assessment.totalExpressed
+                    contra = data.assessment.contraindicated.toString()
 
                     val isSepsis = data.dashboard.neonatalSepsis
                     val isAsphyxia = data.dashboard.asphyxia
@@ -229,12 +241,43 @@ class BabyLactationFragment : Fragment() {
                 }
             }
         }
-        if (isNetworkAvailable(requireContext())) {
-            loadData()
-        } else {
-            syncLocal()
-        }
+        patientDetailsViewModel.getExpressions()
+        patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
+            if (expression != null) {
+                populateBarChart(expression)
+                binding.apply {
 
+                    tvTotalExpressed.text = expression.totalFeed
+                }
+            }
+        }
+        /* if (isNetworkAvailable(requireContext())) {
+             loadData()
+         } else {
+             syncLocal()
+         }*/
+
+    }
+
+
+    private fun validatePermission(): Boolean {
+
+        val role = (requireActivity() as MainActivity).retrieveUser(true)
+        if (role.isNotEmpty()) {
+            return role == ADMINISTRATOR
+                    || role == NUTRITION_OFFICER
+                    || role == PEDIATRICIAN
+                    || role == NEONATOLOGIST
+        }
+        return false
+    }
+
+    private fun accessDenied() {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Access Denied!!")
+            .setContentText("You are not Authorized")
+            .setCustomImage(R.drawable.smile)
+            .show()
     }
 
     private fun loadData() {
@@ -242,8 +285,12 @@ class BabyLactationFragment : Fragment() {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                FhirApplication.updateLocalFeeding(requireContext(), json)
-                populateBarChart(it)
+                try {
+                    FhirApplication.updateLocalFeeding(requireContext(), json)
+                    populateBarChart(it)
+                } catch (e: Exception) {
+
+                }
             } else {
                 syncLocal()
             }
@@ -345,6 +392,10 @@ class BabyLactationFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -352,9 +403,16 @@ class BabyLactationFragment : Fragment() {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
             }
+            R.id.menu_profile -> {
+                (requireActivity() as MainActivity).navigate(R.id.profileFragment)
+                return true
+            }
+            R.id.menu_notification -> {
+                (requireActivity() as MainActivity).navigate(R.id.notificationFragment)
+                return true
+            }
             else -> false
         }
     }
-
 
 }

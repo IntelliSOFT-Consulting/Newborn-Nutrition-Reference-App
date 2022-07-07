@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,12 +17,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ca.uhn.fhir.context.FhirContext
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.FragmentAddPrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.dialogs.SuccessDialog
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -42,7 +43,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class AddPrescriptionFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var successDialog: SuccessDialog
     private var _binding: FragmentAddPrescriptionBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
     private val args: AddPrescriptionFragmentArgs by navArgs()
@@ -76,6 +76,13 @@ class AddPrescriptionFragment : Fragment() {
         setHasOptionsMenu(true)
 
         binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("Baby Panel >Baby's panel <font color=\"#37379B\">Prescribe feeds</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
             btnSubmit.setOnClickListener {
                 onSubmitAction()
             }
@@ -87,9 +94,7 @@ class AddPrescriptionFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-        successDialog = SuccessDialog(
-            this::proceedClick, resources.getString(R.string.app_okay_saved), false
-        )
+
 
     }
 
@@ -101,13 +106,6 @@ class AddPrescriptionFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-            Timber.e("Questionnaire  $questionnaire")
-
             viewModel.feedPrescription(
                 questionnaireFragment.getQuestionnaireResponse(), args.patientId
             )
@@ -115,18 +113,12 @@ class AddPrescriptionFragment : Fragment() {
 
     }
 
-    private fun proceedClick() {
-        successDialog.dismiss()
-        findNavController().navigateUp()
-
-    }
 
     private fun observeResourcesSaveAction() {
-        viewModel.isResourcesSaved.observe(viewLifecycleOwner) {
-            if (!it) {
+        viewModel.customMessage.observe(viewLifecycleOwner) {
+            if (!it.success) {
                 Toast.makeText(
-                    requireContext(),
-                    getString(R.string.inputs_missing),
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -134,7 +126,17 @@ class AddPrescriptionFragment : Fragment() {
                 return@observe
             }
             (activity as MainActivity).hideDialog()
-            successDialog.show(childFragmentManager, "Success Details")
+            SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        findNavController().navigateUp()
+                    }
+                }
+                .show()
         }
 
 

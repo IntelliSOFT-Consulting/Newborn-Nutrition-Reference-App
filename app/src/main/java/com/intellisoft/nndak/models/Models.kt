@@ -1,6 +1,12 @@
 package com.intellisoft.nndak.models
 
+import android.app.PendingIntent
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
+
+class SimpleNotification(
+    val title: String,
+    val content: String,
+)
 
 data class PatientItem(
     val id: String,
@@ -25,6 +31,12 @@ data class PatientItem(
 
 }
 
+data class CodingObservation(
+    val code: String,
+    val display: String,
+    val value: String,
+)
+
 data class BasicThree(
     val lmp: String,
     val edd: String,
@@ -46,7 +58,9 @@ data class ObservationItem(
     val id: String,
     val code: String,
     val effective: String,
-    val value: String
+    val quantity: String,
+    val value: String,
+    val encounterId: String
 ) {
     override fun toString(): String = code
 }
@@ -64,7 +78,9 @@ data class EncounterItem(
     val id: String,
     val code: String,
     val effective: String,
-    val value: String
+    val value: String,
+    val status: String,
+    val partOf: String
 ) {
     override fun toString(): String = code
 }
@@ -80,23 +96,6 @@ data class NutritionItem(
 }
 
 
-data class DbObservations(
-    val value: String,
-    val title: String
-)
-
-data class ApGar(
-    val score: String,
-    val message: String,
-    val isSafe: Boolean
-)
-
-data class Steps(
-    val fistIn: String?,
-    val lastIn: String?,
-    val secondButton: Boolean?
-)
-
 data class OrdersItem(
     val id: String,
     val resourceId: String,
@@ -111,6 +110,7 @@ data class OrdersItem(
     val dhmType: String? = "",
     val consentGiven: String? = "",
     val dhmReason: String? = "",
+    val code: String? = "",
 )
 
 /**
@@ -157,8 +157,9 @@ data class BabyDashboard(
     val jaundice: String? = "",
     val cWeight: String? = "",
     val motherMilk: String? = "",
+    val assessed: Boolean = false
 
-    ) {
+) {
     override fun toString(): String = babyWell.toString()
 }
 
@@ -205,6 +206,7 @@ data class FeedingCuesTips(
 data class PrescriptionItem(
     val id: String? = "",
     val resourceId: String? = "",
+    val hour: String? = "",
     val date: String? = "",
     val time: String? = "",
     val totalVolume: String? = "",
@@ -212,6 +214,7 @@ data class PrescriptionItem(
     val frequency: String? = "",
     val ivFluids: String? = "",
     val breastMilk: String? = "",
+    val ebm: String? = "",
     val donorMilk: String? = "",
     val consent: String? = "",
     val consentDate: String? = "",
@@ -220,6 +223,9 @@ data class PrescriptionItem(
     val supplements: String? = "",
     val expressions: String? = "",
     val feedsGiven: String? = "",
+    val cWeight: String? = "",
+    val formula: String? = "",
+    val deficit: String? = "",
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
@@ -227,7 +233,6 @@ data class PrescriptionItem(
 
 
 data class DistributionItem(
-    val time: List<String>,
     val feed: List<FeedItem>
 )
 
@@ -251,13 +256,27 @@ data class MessageItem(
     override fun toString(): String = message
 }
 
+data class Prescription(
+    val currentWeight: String,
+    val totalFeeds: String,
+    val supplements: String,
+    val additional: String,
+    val data: List<FeedItem>
+)
+
 data class FeedItem(
     val id: String? = "",
+    val idAlt: String? = "",
     val resourceId: String? = "",
     val type: String? = "",
     val route: String? = "",
+    val typeAlt: String? = "",
+    val routeAlt: String? = "",
     val volume: String? = "",
-    val frequency: String? = ""
+    val frequency: String? = "",
+    val frequencyAlt: String? = "",
+    val logicalId: String? = "",
+    val specific: String? = ""
 ) {
     override fun toString(): String = type.toString()
 }
@@ -278,6 +297,7 @@ data class CareItem(
     val patientId: String,
     val encounterId: String,
     val status: String,
+    val created: String,
 ) {
     override fun toString(): String = resourceId
 }
