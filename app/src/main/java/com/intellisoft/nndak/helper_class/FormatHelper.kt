@@ -90,12 +90,43 @@ class FormatHelper {
     }
 
 
+    fun checkDateTime(birthDate: String, d2: String): Boolean {
+
+        val sdf1 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val currentDate = sdf1.parse(birthDate)
+        val newCurrentDate = sdf1.format(currentDate)
+        val date1 = sdf1.parse(newCurrentDate)
+        val date2 = sdf1.parse(d2)
+
+        // after() will return true if and only if date1 is after date 2
+        if (date1.after(date2)) {
+            return false
+        }
+        return true
+
+    }
+
+    fun getBirthdayZone(date: String): String {
+        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+
+        val convertedDate = try {
+            sourceFormat.parse(date)
+        } catch (e: Exception) {
+            sourceFormat.parse(sourceFormat.format(Date()))
+            Timber.e("Birthday ${e.localizedMessage}")
+        }
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
     fun getTodayDate(): String {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val date = Date()
         return formatter.format(date)
     }
-    fun extractDateOnly(date :String): String {
+
+    fun extractDateOnly(date: String): String {
         val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
@@ -103,7 +134,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
     }
 
-    fun extractTimeOnly(date :String): String {
+    fun extractTimeOnly(date: String): String {
         val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
 
@@ -194,6 +225,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun getRefinedDatePmAmEncounter(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
@@ -219,7 +251,6 @@ class FormatHelper {
         return destFormat.format(calendar.time)
 
     }
-
 
     fun getDateHourZone(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
@@ -256,6 +287,7 @@ class FormatHelper {
         }
         return false
     }
+
     fun startCurrentEnd(min: String, actual: String, max: String): Boolean {
         try {
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a")
@@ -362,6 +394,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun extractCareTimeString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)

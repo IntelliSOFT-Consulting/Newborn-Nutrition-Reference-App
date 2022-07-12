@@ -1,0 +1,1256 @@
+[
+  {
+    "age": 27,
+    "data": [
+      {
+        "option": "third",
+        "value": "0450"
+      },
+      {
+        "option": "fifth",
+        "value": "0480"
+      },
+      {
+        "option": "tenth",
+        "value": "0510"
+      },
+      {
+        "option": "fiftieth",
+        "value": "0670"
+      },
+      {
+        "option": "ninetieth",
+        "value": "0880"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "0950"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "0990"
+      }
+    ]
+  },
+  {
+    "age": 28,
+    "data": [
+      {
+        "option": "third",
+        "value": "0570"
+      },
+      {
+        "option": "fifth",
+        "value": "0600"
+      },
+      {
+        "option": "tenth",
+        "value": "0640"
+      },
+      {
+        "option": "fiftieth",
+        "value": "0830"
+      },
+      {
+        "option": "ninetieth",
+        "value": "1070"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "1150"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "1200"
+      }
+    ]
+  },
+  {
+    "age": 29,
+    "data": [
+      {
+        "option": "third",
+        "value": "0700"
+      },
+      {
+        "option": "fifth",
+        "value": "0740"
+      },
+      {
+        "option": "tenth",
+        "value": "0790"
+      },
+      {
+        "option": "fiftieth",
+        "value": "1000"
+      },
+      {
+        "option": "ninetieth",
+        "value": "1270"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "1370"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "1430"
+      }
+    ]
+  },
+  {
+    "age": 30,
+    "data": [
+      {
+        "option": "third",
+        "value": "0850"
+      },
+      {
+        "option": "fifth",
+        "value": "0880"
+      },
+      {
+        "option": "tenth",
+        "value": "0940"
+      },
+      {
+        "option": "fiftieth",
+        "value": "1190"
+      },
+      {
+        "option": "ninetieth",
+        "value": "1500"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "1600 "
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "1670"
+      }
+    ]
+  },
+  {
+    "age": 31,
+    "data": [
+      {
+        "option": "third",
+        "value": "1000"
+      },
+      {
+        "option": "fifth",
+        "value": "1040"
+      },
+      {
+        "option": "tenth",
+        "value": "1110"
+      },
+      {
+        "option": "fiftieth",
+        "value": "1390"
+      },
+      {
+        "option": "ninetieth",
+        "value": "1730"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "1840"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "1920"
+      }
+    ]
+  },
+  {
+    "age": 32,
+    "data": [
+      {
+        "option": "third",
+        "value": "1170"
+      },
+      {
+        "option": "fifth",
+        "value": "1210"
+      },
+      {
+        "option": "tenth",
+        "value": "1290"
+      },
+      {
+        "option": "fiftieth",
+        "value": "1600"
+      },
+      {
+        "option": "ninetieth",
+        "value": "1980"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "2100"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "2180"
+      }
+    ]
+  },
+  {
+    "age": 33,
+    "data": [
+      {
+        "option": "third",
+        "value": "1340"
+      },
+      {
+        "option": "fifth",
+        "value": "1390"
+      },
+      {
+        "option": "tenth",
+        "value": "1470"
+      },
+      {
+        "option": "fiftieth",
+        "value": "1810"
+      },
+      {
+        "option": "ninetieth",
+        "value": "2230"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "2360"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "2460"
+      }
+    ]
+  },
+  {
+    "age": 34,
+    "data": [
+      {
+        "option": "third",
+        "value": "1510"
+      },
+      {
+        "option": "fifth",
+        "value": "1570"
+      },
+      {
+        "option": "tenth",
+        "value": "1660"
+      },
+      {
+        "option": "fiftieth",
+        "value": "2040"
+      },
+      {
+        "option": "ninetieth",
+        "value": "2490"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "2640"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "2740"
+      }
+    ]
+  },
+  {
+    "age": 35,
+    "data": [
+      {
+        "option": "third",
+        "value": "1700"
+      },
+      {
+        "option": "fifth",
+        "value": "1760"
+      },
+      {
+        "option": "tenth",
+        "value": "1860"
+      },
+      {
+        "option": "fiftieth",
+        "value": "2260"
+      },
+      {
+        "option": "ninetieth",
+        "value": "2750"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "2910"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "3020"
+      }
+    ]
+  },
+  {
+    "age": 36,
+    "data": [
+      {
+        "option": "third",
+        "value": "1880"
+      },
+      {
+        "option": "fifth",
+        "value": "1950"
+      },
+      {
+        "option": "tenth",
+        "value": "2060"
+      },
+      {
+        "option": "fiftieth",
+        "value": "2500"
+      },
+      {
+        "option": "ninetieth",
+        "value": "3020"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "3190"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "3310"
+      }
+    ]
+  },
+  {
+    "age": 37,
+    "data": [
+      {
+        "option": "third",
+        "value": "2070"
+      },
+      {
+        "option": "fifth",
+        "value": "2140"
+      },
+      {
+        "option": "tenth",
+        "value": "2260"
+      },
+      {
+        "option": "fiftieth",
+        "value": "2730"
+      },
+      {
+        "option": "ninetieth",
+        "value": "3290"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "3480"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "3600"
+      }
+    ]
+  },
+  {
+    "age": 38,
+    "data": [
+      {
+        "option": "third",
+        "value": "2260"
+      },
+      {
+        "option": "fifth",
+        "value": "2340"
+      },
+      {
+        "option": "tenth",
+        "value": "2460"
+      },
+      {
+        "option": "fiftieth",
+        "value": "2960"
+      },
+      {
+        "option": "ninetieth",
+        "value": "3570"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "3760"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "3890"
+      }
+    ]
+  },
+  {
+    "age": 39,
+    "data": [
+      {
+        "option": "third",
+        "value": "2450"
+      },
+      {
+        "option": "fifth",
+        "value": "2530"
+      },
+      {
+        "option": "tenth",
+        "value": "2670"
+      },
+      {
+        "option": "fiftieth",
+        "value": "3200"
+      },
+      {
+        "option": "ninetieth",
+        "value": "3840"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "4040"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "4180"
+      }
+    ]
+  },
+  {
+    "age": 40,
+    "data": [
+      {
+        "option": "third",
+        "value": "2640"
+      },
+      {
+        "option": "fifth",
+        "value": "2730"
+      },
+      {
+        "option": "tenth",
+        "value": "2870"
+      },
+      {
+        "option": "fiftieth",
+        "value": "3430"
+      },
+      {
+        "option": "ninetieth",
+        "value": "4110"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "4320"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "4470"
+      }
+    ]
+  },
+  {
+    "age": 41,
+    "data": [
+      {
+        "option": "third",
+        "value": "2820"
+      },
+      {
+        "option": "fifth",
+        "value": "2920"
+      },
+      {
+        "option": "tenth",
+        "value": "3070"
+      },
+      {
+        "option": "fiftieth",
+        "value": "3660"
+      },
+      {
+        "option": "ninetieth",
+        "value": "4380"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "4600"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "4760"
+      }
+    ]
+  },
+  {
+    "age": 42,
+    "data": [
+      {
+        "option": "third",
+        "value": "3010"
+      },
+      {
+        "option": "fifth",
+        "value": "3110"
+      },
+      {
+        "option": "tenth",
+        "value": "3270 "
+      },
+      {
+        "option": "fiftieth",
+        "value": "3890"
+      },
+      {
+        "option": "ninetieth",
+        "value": "4640"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "4880"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "5040"
+      }
+    ]
+  },
+  {
+    "age": 43,
+    "data": [
+      {
+        "option": "third",
+        "value": "3190"
+      },
+      {
+        "option": "fifth",
+        "value": "3300"
+      },
+      {
+        "option": "tenth",
+        "value": "3460"
+      },
+      {
+        "option": "fiftieth",
+        "value": "4120"
+      },
+      {
+        "option": "ninetieth",
+        "value": "4900"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "5150"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "5320"
+      }
+    ]
+  },
+  {
+    "age": 44,
+    "data": [
+      {
+        "option": "third",
+        "value": "3370"
+      },
+      {
+        "option": "fifth",
+        "value": "3480"
+      },
+      {
+        "option": "tenth",
+        "value": "3660"
+      },
+      {
+        "option": "fiftieth",
+        "value": "4340"
+      },
+      {
+        "option": "ninetieth",
+        "value": "5160"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "5420"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "5590"
+      }
+    ]
+  },
+  {
+    "age": 45,
+    "data": [
+      {
+        "option": "third",
+        "value": "3550"
+      },
+      {
+        "option": "fifth",
+        "value": "3660"
+      },
+      {
+        "option": "tenth",
+        "value": "3840"
+      },
+      {
+        "option": "fiftieth",
+        "value": "4560"
+      },
+      {
+        "option": "ninetieth",
+        "value": "5410"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "5680"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "5860"
+      }
+    ]
+  },
+  {
+    "age": 46,
+    "data": [
+      {
+        "option": "third",
+        "value": "3720"
+      },
+      {
+        "option": "fifth",
+        "value": "3840"
+      },
+      {
+        "option": "tenth",
+        "value": "4030"
+      },
+      {
+        "option": "fiftieth",
+        "value": "4780"
+      },
+      {
+        "option": "ninetieth",
+        "value": "5660 "
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "5940"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "6130"
+      }
+    ]
+  },
+  {
+    "age": 47,
+    "data": [
+      {
+        "option": "third",
+        "value": "3890"
+      },
+      {
+        "option": "fifth",
+        "value": "4010"
+      },
+      {
+        "option": "tenth",
+        "value": "4210"
+      },
+      {
+        "option": "fiftieth",
+        "value": "4990"
+      },
+      {
+        "option": "ninetieth",
+        "value": "5900"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "6190"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "6390"
+      }
+    ]
+  },
+  {
+    "age": 48,
+    "data": [
+      {
+        "option": "third",
+        "value": "4060"
+      },
+      {
+        "option": "fifth",
+        "value": "4180"
+      },
+      {
+        "option": "tenth",
+        "value": "4390"
+      },
+      {
+        "option": "fiftieth",
+        "value": "5190"
+      },
+      {
+        "option": "ninetieth",
+        "value": "6140"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "6440"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "6640"
+      }
+    ]
+  },
+  {
+    "age": 49,
+    "data": [
+      {
+        "option": "third",
+        "value": "4220"
+      },
+      {
+        "option": "fifth",
+        "value": "4350"
+      },
+      {
+        "option": "tenth",
+        "value": "4560"
+      },
+      {
+        "option": "fiftieth",
+        "value": "5390"
+      },
+      {
+        "option": "ninetieth",
+        "value": "6370"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "6680"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "6890"
+      }
+    ]
+  },
+  {
+    "age": 50,
+    "data": [
+      {
+        "option": "third",
+        "value": "4370"
+      },
+      {
+        "option": "fifth",
+        "value": "4510"
+      },
+      {
+        "option": "tenth",
+        "value": "4730"
+      },
+      {
+        "option": "fiftieth",
+        "value": "5590"
+      },
+      {
+        "option": "ninetieth",
+        "value": "6600"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "6920"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "7130"
+      }
+    ]
+  },
+  {
+    "age": 51,
+    "data": [
+      {
+        "option": "third",
+        "value": "4520"
+      },
+      {
+        "option": "fifth",
+        "value": "4660"
+      },
+      {
+        "option": "tenth",
+        "value": "4890"
+      },
+      {
+        "option": "fiftieth",
+        "value": "5770"
+      },
+      {
+        "option": "ninetieth",
+        "value": "6820"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "7150"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "7370"
+      }
+    ]
+  },
+  {
+    "age": 52,
+    "data": [
+      {
+        "option": "third",
+        "value": "4670"
+      },
+      {
+        "option": "fifth",
+        "value": "4820"
+      },
+      {
+        "option": "tenth",
+        "value": "5050"
+      },
+      {
+        "option": "fiftieth",
+        "value": "5960"
+      },
+      {
+        "option": "ninetieth",
+        "value": "7030"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "7370"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "7600"
+      }
+    ]
+  },
+  {
+    "age": 53,
+    "data": [
+      {
+        "option": "third",
+        "value": "4810"
+      },
+      {
+        "option": "fifth",
+        "value": "4960"
+      },
+      {
+        "option": "tenth",
+        "value": "5200"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6140"
+      },
+      {
+        "option": "ninetieth",
+        "value": "7240"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "7590"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "7830"
+      }
+    ]
+  },
+  {
+    "age": 54,
+    "data": [
+      {
+        "option": "third",
+        "value": "4950"
+      },
+      {
+        "option": "fifth",
+        "value": "5110"
+      },
+      {
+        "option": "tenth",
+        "value": "5350"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6310"
+      },
+      {
+        "option": "ninetieth",
+        "value": "7450"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "7800"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "8040"
+      }
+    ]
+  },
+  {
+    "age": 55,
+    "data": [
+      {
+        "option": "third",
+        "value": "5090"
+      },
+      {
+        "option": "fifth",
+        "value": "5240"
+      },
+      {
+        "option": "tenth",
+        "value": "5500"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6480"
+      },
+      {
+        "option": "ninetieth",
+        "value": "7640"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8010"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "8260"
+      }
+    ]
+  },
+  {
+    "age": 56,
+    "data": [
+      {
+        "option": "third",
+        "value": "5220"
+      },
+      {
+        "option": "fifth",
+        "value": "5380"
+      },
+      {
+        "option": "tenth",
+        "value": "5640"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6650"
+      },
+      {
+        "option": "ninetieth",
+        "value": "7830"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8210"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "8460"
+      }
+    ]
+  },
+  {
+    "age": 57,
+    "data": [
+      {
+        "option": "third",
+        "value": "5340"
+      },
+      {
+        "option": "fifth",
+        "value": "5510"
+      },
+      {
+        "option": "tenth",
+        "value": "5770"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6800"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8020"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8410"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "8660"
+      }
+    ]
+  },
+  {
+    "age": 58,
+    "data": [
+      {
+        "option": "third",
+        "value": "5470"
+      },
+      {
+        "option": "fifth",
+        "value": "5630"
+      },
+      {
+        "option": "tenth",
+        "value": "5900"
+      },
+      {
+        "option": "fiftieth",
+        "value": "6960"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8200"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8590"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "8860"
+      }
+    ]
+  },
+  {
+    "age": 59,
+    "data": [
+      {
+        "option": "third",
+        "value": "5580"
+      },
+      {
+        "option": "fifth",
+        "value": "5760"
+      },
+      {
+        "option": "tenth",
+        "value": "6030"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7110"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8380"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8780"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9050"
+      }
+    ]
+  },
+  {
+    "age": 60,
+    "data": [
+      {
+        "option": "third",
+        "value": "5700"
+      },
+      {
+        "option": "fifth",
+        "value": "5870"
+      },
+      {
+        "option": "tenth",
+        "value": "6150"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7250"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8550"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "8960"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9230"
+      }
+    ]
+  },
+  {
+    "age": 61,
+    "data": [
+      {
+        "option": "third",
+        "value": "5810"
+      },
+      {
+        "option": "fifth",
+        "value": "5990"
+      },
+      {
+        "option": "tenth",
+        "value": "6270"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7390"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8710"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "9130"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9410"
+      }
+    ]
+  },
+  {
+    "age": 62,
+    "data": [
+      {
+        "option": "third",
+        "value": "5920"
+      },
+      {
+        "option": "fifth",
+        "value": "6100"
+      },
+      {
+        "option": "tenth",
+        "value": "6390"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7530"
+      },
+      {
+        "option": "ninetieth",
+        "value": "8870"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "9300 "
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9580"
+      }
+    ]
+  },
+  {
+    "age": 63,
+    "data": [
+      {
+        "option": "third",
+        "value": "6020"
+      },
+      {
+        "option": "fifth",
+        "value": "6200"
+      },
+      {
+        "option": "tenth",
+        "value": "6500"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7660"
+      },
+      {
+        "option": "ninetieth",
+        "value": "9030"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "9460"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9750"
+      }
+    ]
+  },
+  {
+    "age": 64,
+    "data": [
+      {
+        "option": "third",
+        "value": "6120"
+      },
+      {
+        "option": "fifth",
+        "value": "6310"
+      },
+      {
+        "option": "tenth",
+        "value": "6610"
+      },
+      {
+        "option": "fiftieth",
+        "value": "7790"
+      },
+      {
+        "option": "ninetieth",
+        "value": "9180"
+      },
+      {
+        "option": "ninetyfifth",
+        "value": "9620"
+      },
+      {
+        "option": "ninetyseventh",
+        "value": "9910"
+      }
+    ]
+  }
+]

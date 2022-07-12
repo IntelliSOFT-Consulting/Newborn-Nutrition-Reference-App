@@ -12,9 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.TintInfo
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -23,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
@@ -37,7 +34,6 @@ import com.intellisoft.nndak.dialogs.TipsDialog
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.FeedingCuesTips
 import com.intellisoft.nndak.models.PrescriptionItem
-import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
@@ -47,6 +43,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -74,6 +72,7 @@ class BabyMonitoringFragment : Fragment() {
     private var ivPresent: Boolean = true
     private var dhmPresent: Boolean = true
     private var ebmPresent: Boolean = true
+    private var formulaPresent: Boolean = true
     private val feedsList: MutableList<FeedItem> = mutableListOf()
 
 
@@ -197,18 +196,18 @@ class BabyMonitoringFragment : Fragment() {
             if (data.isNotEmpty()) {
                 val it = data.first()
                 careID = it.resourceId.toString()
-                Timber.e("Encounter Feeding $careID")
+                Timber.e("Encounter Feeding ${it.frequency}")
                 binding.apply {
                     lnCurrent.visibility = View.VISIBLE
                     availableFeed = it.deficit.toString()
                     incPrescribe.appTodayTotal.text =
-                        it.totalVolume
+                        it.deficit
                     incPrescribe.appRoute.text = it.route ?: ""
-                    val threeHourly = calculateFeeds(it.totalVolume ?: "0")
+                    val threeHourly = calculateFeeds(it.totalVolume ?: "0", it.frequency.toString())
                     incPrescribe.appThreeHourly.text = threeHourly
                     val breakDown = generateFeedsBreakDown(it)
                     incPrescribe.appThreeHourlyBreak.text = breakDown
-
+                    incPrescribe.tvFrequency.text = "${it.frequency} Feed Volume"
                     regulateViews(it)
 
                 }
@@ -233,6 +232,7 @@ class BabyMonitoringFragment : Fragment() {
         listenToChange(binding.control.edDhm)
         listenToChange(binding.control.edEbm)
         listenToChange(binding.control.edIv)
+        listenToChange(binding.control.edFormula)
         binding.apply {
 
             disableEditing(control.edDeficit)
@@ -242,6 +242,9 @@ class BabyMonitoringFragment : Fragment() {
                 val ivVolume = control.edIv.text.toString()
                 val dhmVolume = control.edDhm.text.toString()
                 val ebmVolume = control.edEbm.text.toString()
+                val formulaVolume = control.edFormula.text.toString()
+                val total = incPrescribe.appTodayTotal.text.toString()
+                totalV = total.toFloat()
                 deficit = control.edDeficit.text.toString()
 
                 if (ivPresent) {
@@ -298,8 +301,34 @@ class BabyMonitoringFragment : Fragment() {
                         return@setOnClickListener
                     }
                 }
+                if (formulaPresent) {
+                    if (formulaVolume.isNotEmpty()) {
+                        feedsList.add(
+                            FeedItem(
+                                type = "Formula",
+                                volume = formulaVolume.toDouble().toString()
+                            )
+                        )
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
+                }
 
                 exit = true
+                Timber.e(
+                    "Data\n" +
+                            "IV $ivVolume\n" +
+                            "DHM $dhmVolume\n" +
+                            "EBM $ebmVolume\n" +
+                            "Formula $formulaVolume\n" +
+                            "Deficit $deficit\n" +
+                            "Total $totalV"
+                )
                 confirmationDialog.show(childFragmentManager, "Confirm Action")
             }
             btnCancel.setOnClickListener {
@@ -369,8 +398,9 @@ class BabyMonitoringFragment : Fragment() {
                 val dhm = control.edDhm.text.toString()
                 val ebm = control.edEbm.text.toString()
                 val iv = control.edIv.text.toString()
-                if (dhm.isNotEmpty() || ebm.isNotEmpty() || iv.isNotEmpty()) {
-                    val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat()
+                val formula = control.edFormula.text.toString()
+                if (dhm.isNotEmpty() || ebm.isNotEmpty() || iv.isNotEmpty() || formula.isNotEmpty()) {
+                    val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat() + formula.toFloat()
                     val def = availableFeed.toDouble() - total
 
                     control.edDeficit.setText(def.toString())
@@ -398,6 +428,11 @@ class BabyMonitoringFragment : Fragment() {
                 control.edEbm.setText("0")
                 ebmPresent = false
             }
+            if (pr.formula == "N/A") {
+                control.tilFormula.visibility = View.GONE
+                control.edFormula.setText("0")
+                formulaPresent = false
+            }
             if (pr.donorMilk == "N/A") {
                 control.tilDhm.visibility = View.GONE
                 control.edDhm.setText("0")
@@ -409,30 +444,55 @@ class BabyMonitoringFragment : Fragment() {
     private fun generateFeedsBreakDown(pr: PrescriptionItem): String {
         val sb = StringBuilder()
         if (pr.ivFluids != "N/A") {
-            sb.append("IV- ${calculateFeeds(pr.ivFluids.toString())}\n")
+            sb.append("IV- ${calculateFeeds(pr.ivFluids.toString(), pr.frequency.toString())}\n")
         }
         if (pr.ebm != "N/A") {
-            sb.append("EBM- ${calculateFeeds(pr.ebm.toString())}\n")
+            sb.append("EBM- ${calculateFeeds(pr.ebm.toString(), pr.frequency.toString())}\n")
         }
         if (pr.donorMilk != "N/A") {
-            sb.append("DHM- ${calculateFeeds(pr.donorMilk.toString())}\n")
+            sb.append("DHM- ${calculateFeeds(pr.donorMilk.toString(), pr.frequency.toString())}\n")
+        }
+        if (pr.formula != "N/A") {
+            sb.append(
+                "Formula- ${
+                    calculateFeeds(
+                        pr.formula.toString(),
+                        pr.frequency.toString()
+                    )
+                }\n"
+            )
         }
         return sb.toString()
     }
 
-    private fun calculateFeeds(totalVolume: String): String {
+    private fun calculateFeeds(totalVolume: String, frequency: String): String {
+        Timber.e("Feed Calculation $totalVolume")
         var total = 0.0
         try {
             val code = totalVolume.split("\\.".toRegex()).toTypedArray()
-            val times = 24 / 3
-            val j: Float = times.toFloat()
+            val rate = getNumericFrequency(frequency)
+            Timber.e("Rate $rate")
+            val times = 24 / rate.toFloat()
+            val j: Float = times
             val k: Float = code[0].toFloat()
-            totalV = k
-            total = (k / j).toDouble()
+
+            val totalPerSession = (k / j).toDouble()
+
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.DOWN
+            total = df.format(totalPerSession).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
+            Timber.e("Feeding Exception ${e.localizedMessage} ")
         }
         return "$total mls"
+    }
+
+    private fun getNumericFrequency(frequency: String): String {
+        val index = 0
+        val ch = frequency[index]
+        Timber.e("Value $ch")
+        return ch.toString()
     }
 
     private fun handleShowCues() {
@@ -470,7 +530,7 @@ class BabyMonitoringFragment : Fragment() {
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = CustomQuestionnaireFragment() //QuestionnaireFragment()
+            val fragment = QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

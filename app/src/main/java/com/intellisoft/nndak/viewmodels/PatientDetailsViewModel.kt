@@ -8,9 +8,17 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
+import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
+import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
+import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
+import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
+import com.intellisoft.nndak.logic.DataSort.Companion.sortPrescriptions
 import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_DATE
@@ -22,7 +30,6 @@ import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_BREASTFEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
-import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
@@ -30,29 +37,26 @@ import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
-import com.intellisoft.nndak.logic.Logics.Companion.DHM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
 import com.intellisoft.nndak.logic.Logics.Companion.EBM
-import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSION_TIME
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
-import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
-import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.JAUNDICE
@@ -75,9 +79,9 @@ import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
 import kotlinx.coroutines.launch
-import okhttp3.internal.http.hasBody
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
+import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
@@ -160,42 +164,39 @@ class PatientDetailsViewModel(
         val patient = getPatient()
         val weight = pullWeights()
         val data = arrayListOf<ActualData>()
-        var dayOfLife = ""
+        var dayOfLife = 0
+        var babyGender = ""
+        val gestationAge = retrieveQuantity(GESTATION)
+        val birthWeight = retrieveQuantity(BIRTH_WEIGHT)
+        val lastKnownWeight = retrieveQuantity(CURRENT_WEIGHT)
         patient.let {
             dayOfLife = getFormattedAge(it.dob)
+            babyGender = it.gender
 
         }
 
         if (weight.isNotEmpty()) {
 
-            val daysString = getPastDaysOnIntervalOf(dayOfLife.toInt() + 1, 1)
+            val daysString = getPastDaysOnIntervalOf(dayOfLife + 1, 1)
             for ((i, entry) in daysString.withIndex()) {
                 val sorted = sortCollected(weight)
-                val value = extractDailyMeasure(entry, sorted)
+                var value = extractDailyMeasure(entry, sorted)
+
+                if (value == "0.0") {
+                    value = lastKnownWeight
+                }
                 data.add(ActualData(day = i.toString(), actual = value, projected = value))
             }
         }
 
-        return WeightsData("200 kg", data = data)
+        return WeightsData(
+            babyGender = babyGender,
+            currentWeight = lastKnownWeight,
+            gestationAge = gestationAge,
+            dayOfLife = dayOfLife,
+            data = data
+        )
 
-    }
-
-    private fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
-//        var value = "0 gm"
-
-        sorted.forEach {
-            val day = FormatHelper().getSimpleDate(it.effective)
-            Timber.e("Day $day  ${it.value}")
-            /* if (day == entry.toString()) {
-                 value = it.value
-                 Timber.e("Simple $day Value ${it.value}")
-             } else {
-                 value = "0 gm"
-             }*/
-        }
-        return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
-            ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
-            ?: "0.0"
     }
 
 
@@ -430,7 +431,6 @@ class PatientDetailsViewModel(
     private suspend fun getMumChildDataModel(
         context: Application,
     ): MotherBabyItem {
-        val feeds: MutableList<FeedItem> = mutableListOf()
         val patient = getPatient()
         val mum = getMother(patientId)
         val mumName = mum.first.toString()
@@ -451,9 +451,8 @@ class PatientDetailsViewModel(
         var status = ""
         var gestation = ""
         var apgar = ""
-        val gainRate = "Normal"
+        val gainRate = calculateWeightGainRate(patientId)
         var admDate = ""
-        var cWeight = ""
         var dMethod = ""
         var parity = ""
         var pmtct = ""
@@ -477,14 +476,6 @@ class PatientDetailsViewModel(
 
         val obs = getObservations()
 
-        val sample = pullWeights()
-
-        val refined = sortCollected(sample)
-
-        if (refined.isNotEmpty()) {
-            cWeight = refined.last().value
-
-        }
 
         if (obs.isNotEmpty()) {
             for (element in obs) {
@@ -503,11 +494,15 @@ class PatientDetailsViewModel(
                     }
                     BIRTH_WEIGHT -> {
                         birthWeight = element.value
-                        val code = element.value.split("\\.".toRegex()).toTypedArray()
-                        birthWeight = if (code[0].toInt() < 2500) {
-                            "$birthWeight -Low"
-                        } else {
-                            "$birthWeight -Normal"
+                        try {
+                            val code = element.value.split("\\.".toRegex()).toTypedArray()
+                            birthWeight = if (code[0].toInt() < 2500) {
+                                "$birthWeight -Low"
+                            } else {
+                                "$birthWeight -Normal"
+                            }
+                        } catch (e: Exception) {
+
                         }
                     }
                     ADMISSION_DATE -> {
@@ -515,7 +510,7 @@ class PatientDetailsViewModel(
                             try {
                                 FormatHelper().extractDateString(element.value)
                             } catch (e: Exception) {
-                                element.value.substring(0, 10)
+                                element.value
                             }
                     }
                     APGAR_SCORE -> {
@@ -543,14 +538,13 @@ class PatientDetailsViewModel(
         dDate = try {
             FormatHelper().extractDateString(dDate)
         } catch (e: Exception) {
-            dDate.substring(0, 10)
+            dDate
         }
         val total = calculateTotalExpressedMilk()
 
         var name = ""
         var dateOfBirth = ""
-        var dayOfLife = ""
-
+        var dayOfLife: Int
 
         patient.let {
             name = it.name
@@ -577,11 +571,10 @@ class PatientDetailsViewModel(
                 asphyxia = asphyxia,
                 jaundice = jaundice,
                 dateOfBirth = dateOfBirth,
-                dayOfLife = dayOfLife,
+                dayOfLife = dayOfLife.toString(),
                 dateOfAdm = admDate,
-                cWeight = cWeight,
                 motherMilk = motherMilk,
-                assessed=assessed
+                assessed = assessed
             ),
             mother = MotherDashboard(
                 parity = parity,
@@ -601,12 +594,75 @@ class PatientDetailsViewModel(
         )
     }
 
+    private suspend fun calculateWeightGainRate(resourceId: String): String {
+
+        var gainRate = "Normal"
+        try {
+            val it = getWeightsDataModel()
+            val jsonFileString = getJsonDataFromAsset("boy.json")
+
+            val gson = Gson()
+            val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
+            val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
+
+            val totalDays = calculateGestationDays(it)
+            val chartData = extractDaysData(totalDays, it, growths)
+            val projectWeight = regulateProjection(chartData.projectedWeight)
+            for ((i, entry) in chartData.actualWeight.data.withIndex()) {
+                val equivalent = projectWeight[i].value.toDouble()
+                val cc = entry.actual.toDouble()
+                gainRate = if (cc > equivalent) {
+                    "High"
+                } else if (cc == equivalent) {
+                    "Normal"
+                } else {
+                    "Low"
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e("Growth Exception ${e.localizedMessage}")
+        }
+        return gainRate
+    }
+
+    private fun getJsonDataFromAsset(fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
+    }
+
+    private suspend fun retrieveFirstCode(code: String): String {
+        var data = ""
+        val obs = observationsPerCode(code)
+        if (obs.isNotEmpty()) {
+            val sort = sortCollected(obs)
+            data = sort.first().value.trim()
+        }
+        return data
+    }
+
     private suspend fun retrieveCode(code: String): String {
         var data = ""
         val obs = observationsPerCode(code)
         if (obs.isNotEmpty()) {
             val sort = sortCollected(obs)
             data = sort.last().value.trim()
+        }
+        return data
+    }
+
+
+    private suspend fun retrieveQuantity(code: String): String {
+        var data = ""
+        val obs = observationsPerCode(code)
+        if (obs.isNotEmpty()) {
+            val sort = sortCollected(obs)
+            data = sort.last().quantity.trim()
         }
         return data
     }
@@ -754,37 +810,21 @@ class PatientDetailsViewModel(
         return obs
     }
 
-    private fun sortCollected(data: List<ObservationItem>): List<ObservationItem> {
-
-        val sortedList = data.sortedWith(compareBy { it.effective })
-
-        sortedList.forEach {
-            Timber.e("Refined Data::::: ${it.value} Time:::: ${it.effective} ${it.id}")
-        }
-        return sortedList
-    }
-
-
-    private fun sortCollectedCare(data: List<CareItem>): List<CareItem> {
-
-        return data.sortedWith(compareBy { it.created })
-    }
-
 
     private fun getFormattedAge(
         dob: String
-    ): String {
-        if (dob.isEmpty()) return ""
+    ): Int {
+        if (dob.isEmpty()) return 0
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Period.between(LocalDate.parse(dob), LocalDate.now()).let {
                 when {
-                    it.years > 0 -> it.years.toString()
-                    it.months > 0 -> it.months.toString()
-                    else -> it.days.toString()
+                    it.years > 0 -> it.years
+                    it.months > 0 -> it.months
+                    else -> it.days
                 }
             }
         } else {
-            ""
+            0
         }
     }
 
@@ -829,7 +869,7 @@ class PatientDetailsViewModel(
         pres.forEach { item ->
             prescriptions.add(prescription(item))
         }
-        return prescriptions
+        return sortPrescriptions(prescriptions)
 
     }
 
@@ -837,13 +877,7 @@ class PatientDetailsViewModel(
         context: Application,
         careId: String
     ): List<PrescriptionItem> {
-        /*  val data: MutableList<PrescriptionItem> = mutableListOf()
-          val pres = fetchCarePlans(careId)
-          val sort = sortCollectedCare(pres)
-          sort.forEach { item ->
-              data.add(feedsTaken(item))
-          }
-          return data.reversed()*/
+
 
         val data: MutableList<PrescriptionItem> = mutableListOf()
         val pres = fetchCarePlansEncounter(careId)
@@ -853,7 +887,8 @@ class PatientDetailsViewModel(
                 data.add(feedsTakenEncounter(item))
             }
         }
-        return data.reversed()
+
+        return sortPrescriptions(data)
     }
 
 
@@ -1024,9 +1059,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun feedsTakenEncounter(care: EncounterItem): PrescriptionItem {
-        Timber.e("Encounter Part Of ${care.id}")
         val observations = getReferencedObservationsEncounter(care.id)
-        Timber.e("Encounter Part Observations ${observations.size}")
         val hour = extractValue(observations, ASSESSMENT_DATE)
         val date = try {
             FormatHelper().extractDateString(hour)
@@ -1045,6 +1078,7 @@ class PatientDetailsViewModel(
             hour = hour,
             date = date,
             time = time,
+            deficit = extractQuantity(observations, FEEDS_DEFICIT),
             totalVolume = extractValue(observations, FEEDS_TAKEN),
             route = extractValue(observations, DIAPER_CHANGED),
             ivFluids = extractValue(observations, IV_VOLUME),
@@ -1055,8 +1089,7 @@ class PatientDetailsViewModel(
             supplements = extractValue(observations, VOMIT),
             consentDate = extractValue(observations, STOOL),
             additionalFeeds = extractValue(observations, REMARKS),
-
-            )
+        )
     }
 
     private fun extractValue(observations: List<ObservationItem>, code: String): String {
@@ -1071,8 +1104,7 @@ class PatientDetailsViewModel(
     private suspend fun prescription(care: CareItem): PrescriptionItem {
         val observations = getReferencedObservations(care.encounterId)
         val feeds: MutableList<FeedItem> = mutableListOf()
-        val relatedFeeds = fetchCarePlans(care.encounterId)
-
+        val relatedFeeds = fetchCarePlansEncounter(care.encounterId)
 
         var date = "N/A"
         var time = "N/A"
@@ -1088,26 +1120,19 @@ class PatientDetailsViewModel(
         var additional = "N/A"
         var consentDate = "N/A"
         var expressions = 0
-        var bFreq = ""
+
         val givenFeeds = pullFeeds()
-        val cWeight =
-            observationsCodePerEncounterCare(
-                CURRENT_WEIGHT,
-                care.encounterId
-            ).firstOrNull()?.quantity
+
 
         val def = if (relatedFeeds.isNotEmpty()) {
-            val recentFeed = relatedFeeds.last().encounterId
-            val obs = getReferencedObservations(recentFeed)
-            extractQuantity(obs, FEEDS_DEFICIT)
+
+            val parentId = getFeedingInstancesDataModel(context, care.encounterId)
+            parentId.first().deficit
 
         } else {
             total
         }
 
-        /**
-         * Expressions Count
-         */
         val exp = getPatientEncounters()
         if (exp.isNotEmpty()) {
             for (ex in exp) {
@@ -1116,8 +1141,11 @@ class PatientDetailsViewModel(
                 }
             }
         }
+        val weight = pullWeights()
+        val sort = sortCollected(weight)
+        val cWeight = sort.last().quantity
         val routes = StringBuilder()
-        val frequency = StringBuilder()
+        var frequency = "2 Hourly"
         if (observations.isNotEmpty()) {
 
             val breastMilk = observationsCodePerEncounterCare(
@@ -1126,13 +1154,11 @@ class PatientDetailsViewModel(
             ).firstOrNull()?.value
             if (breastMilk != null) {
                 val bmVolume = extractQuantity(observations, BREAST_MILK)
-                val bmFrequency = extractValue(observations, BREAST_FREQUENCY)
 
                 feeds.add(
                     FeedItem(
                         resourceId = BREAST_MILK,
                         volume = bmVolume,
-                        frequency = bmFrequency
                     )
                 )
             }
@@ -1142,7 +1168,6 @@ class PatientDetailsViewModel(
             ).firstOrNull()?.value
             if (form != null) {
                 val fVolume = extractQuantity(observations, FORMULA_VOLUME)
-                val fFrequency = extractValue(observations, FORMULA_FREQUENCY)
                 val fRoute = extractValue(observations, FORMULA_ROUTE)
                 val fType = extractValue(observations, FORMULA_TYPE)
 
@@ -1150,7 +1175,6 @@ class PatientDetailsViewModel(
                     FeedItem(
                         resourceId = FORMULA_VOLUME,
                         volume = fVolume,
-                        frequency = fFrequency,
                         route = fRoute,
                         type = fType
                     )
@@ -1162,14 +1186,12 @@ class PatientDetailsViewModel(
             ).firstOrNull()?.value
             if (expressed != null) {
                 val fVolume = extractQuantity(observations, EBM_VOLUME)
-                val fFrequency = extractValue(observations, EBM_FREQUENCY)
                 val fRoute = extractValue(observations, EBM_ROUTE)
 
                 feeds.add(
                     FeedItem(
                         resourceId = EBM_VOLUME,
                         volume = fVolume,
-                        frequency = fFrequency,
                         route = fRoute,
                     )
                 )
@@ -1182,7 +1204,6 @@ class PatientDetailsViewModel(
 
             if (donor != null) {
                 val fVolume = extractQuantity(observations, DHM_VOLUME)
-                val fFrequency = extractValue(observations, DHM_FREQUENCY)
                 val fRoute = extractValue(observations, DHM_ROUTE)
                 val dType = extractValue(observations, DHM_TYPE)
                 consent = extractValue(observations, DHM_CONSENT)
@@ -1192,7 +1213,6 @@ class PatientDetailsViewModel(
                     FeedItem(
                         resourceId = DHM_VOLUME,
                         volume = fVolume,
-                        frequency = fFrequency,
                         route = fRoute,
                         type = dType
                     )
@@ -1206,14 +1226,12 @@ class PatientDetailsViewModel(
 
             if (fl != null) {
                 val fVolume = extractQuantity(observations, IV_VOLUME)
-                val fFrequency = extractValue(observations, IV_FREQUENCY)
                 val fRoute = extractValue(observations, IV_ROUTE)
 
                 feeds.add(
                     FeedItem(
                         resourceId = IV_VOLUME,
                         volume = fVolume,
-                        frequency = fFrequency,
                         route = fRoute,
                     )
                 )
@@ -1224,14 +1242,8 @@ class PatientDetailsViewModel(
                         date = FormatHelper().extractDateOnly(element.value)
                         time = FormatHelper().extractTimeOnly(element.value)
                     }
-                    DHM_FREQUENCY -> {
-                        frequency.append("DHM - ${element.value}\n")
-                    }
-                    EBM_FREQUENCY -> {
-                        frequency.append("EBM - ${element.value}\n")
-                    }
-                    IV_FREQUENCY -> {
-                        frequency.append("IV - ${element.value}\n")
+                    FEEDING_FREQUENCY -> {
+                        frequency = element.value
                     }
                     EBM_ROUTE -> {
                         routes.append("EBM - ${element.value}\n")
@@ -1242,6 +1254,9 @@ class PatientDetailsViewModel(
                     DHM_ROUTE -> {
 
                         routes.append("DHM- ${element.value}\n")
+                    }
+                    FORMULA_ROUTE -> {
+                        routes.append("Formula- ${element.value}\n")
                     }
                     IV_VOLUME -> {
                         iv = element.value
@@ -1276,7 +1291,7 @@ class PatientDetailsViewModel(
             date = date,
             time = time,
             totalVolume = total,
-            frequency = frequency.toString(),
+            frequency = frequency,
             route = routes.toString(),
             ivFluids = iv,
             breastMilk = bm,
@@ -1291,7 +1306,8 @@ class PatientDetailsViewModel(
             feedsGiven = givenFeeds,
             expressions = expressions.toString(),
             cWeight = cWeight,
-            formula = formula, deficit = def
+            formula = formula,
+            deficit = def,
         )
     }
 
@@ -1431,7 +1447,7 @@ class PatientDetailsViewModel(
             ipNumber = motherIp,
             motherName = motherName,
             babyName = baby.name,
-            babyAge = getFormattedAge(baby.dob),
+            babyAge = getFormattedAge(baby.dob).toString(),
             consentGiven = consent,
             dhmType = dhm,
             dhmReason = reason,
@@ -1544,7 +1560,7 @@ class PatientDetailsViewModel(
             return EncounterItem(
                 encounter.logicalId,
                 encounterCode,
-                encounter.logicalId,
+                value,
                 value,
                 status.toString(),
                 part
@@ -1635,10 +1651,7 @@ class PatientDetailsViewModelFactory(
         }
         return PatientDetailsViewModel(application, fhirEngine, patientId) as T
     }
-
-
 }
-
 
 data class RiskAssessmentItem(
     var riskStatusColor: Int,

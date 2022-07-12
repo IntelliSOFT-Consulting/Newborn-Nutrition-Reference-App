@@ -105,6 +105,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
+            patientListViewModel.reloadOrders()
             patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
                 if (it.isEmpty()) {
                     binding.empty.cpBgView.visibility = View.VISIBLE
@@ -254,6 +255,15 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
 
+    }
+
+    override fun onResume() {
+        try {
+            patientListViewModel.reloadOrders()
+        } catch (e: Exception) {
+
+        }
+        super.onResume()
     }
 
     private fun accessDenied() {

@@ -101,6 +101,9 @@ class ChildDashboardFragment : Fragment() {
                     if (it.status == "Term") {
                         incDetails.appStatus.setTextColor(resources.getColor(R.color.dim_green))
                     }
+                    if (it.gainRate == "Low") {
+                        incDetails.appRateGain.setTextColor(resources.getColor(R.color.dim_red))
+                    }
                 }
             }
         }
@@ -151,7 +154,6 @@ class ChildDashboardFragment : Fragment() {
                 )
             }
         }
-
     }
 
     private fun checkAssessment() {

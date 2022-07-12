@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -16,30 +17,28 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import com.google.android.fhir.FhirEngine
+import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.charts.FeedsDistribution
-import com.intellisoft.nndak.charts.WeightsData
+import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
-import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.models.DistributionItem
+import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
+import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
+import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
 import com.intellisoft.nndak.utils.extractUnits
-import com.intellisoft.nndak.utils.formatFeedingTime
-import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
-import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
-import java.time.LocalDateTime
+import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -139,7 +138,6 @@ class BabyDashboardFragment : Fragment() {
                         incDetails.appLifeDay.text = it.dashboard.dayOfLife ?: ""
                         incDetails.appAdmDate.text = it.dashboard.dateOfAdm ?: ""
 
-                        tvCurrentWeight.text = it.dashboard.cWeight ?: ""
                         tvMotherMilk.text = it.dashboard.motherMilk ?: ""
 
 
@@ -165,7 +163,6 @@ class BabyDashboardFragment : Fragment() {
                             incDetails.appJaundice.visibility = View.GONE
                         }
 
-                        refinePatientWeights(it.assessment.weights)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -184,14 +181,15 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.activeBabyWeights()
         patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
             if (it != null) {
-                populateLineChart(it)
+                // populateLineChart(it)
+
+                standardCharts(it)
             }
         }
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     binding.apply {
-//                        tvTotalVolume.text = it.first().feedsGiven
                         tvExpressionNumber.text = it.first().expressions
 
                         /**
@@ -218,52 +216,40 @@ class BabyDashboardFragment : Fragment() {
             }
         }
 
-        /*  if (isNetworkAvailable(requireContext())) {
-              loadData()
-          } else {
-              syncLocal()
-          }*/
-
     }
 
-    private fun refinePatientWeights(weights: MutableList<Int>?) {
-
-
-    }
-
-    private fun loadData() {
-        apiService.loadFeedDistribution(requireContext(), args.patientId) {
-            if (it != null) {
-                val gson = Gson()
-                val json = gson.toJson(it)
-                try {
-                    FhirApplication.updateFeedings(requireContext(), json)
-                    //  populateBarChart(it)
-                } catch (e: Exception) {
-                }
-            } else {
-                syncLocal()
+    private fun standardCharts(it: WeightsData) {
+        try {
+            var standard = "boy.json"
+            if (it.babyGender == "female") {
+                standard = "girl.json"
             }
-        }
-
-        apiService.loadWeights(requireContext(), args.patientId) {
-            if (it != null) {
-                val gson = Gson()
-                val json = gson.toJson(it)
-                try {
-                    FhirApplication.updateWeights(requireContext(), json)
-                    populateLineChart(it)
-                } catch (e: Exception) {
-                }
-            } else {
-                syncLocal()
-            }
+            val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
+            val gson = Gson()
+            val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
+            val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
+            growths.forEachIndexed { idx, growth -> Timber.e("Growth Item $idx:\n$growth") }
+            populateLineChart(it, growths)
+        } catch (e: Exception) {
+            Timber.e("Growth Exception ${e.localizedMessage}")
         }
     }
+
+    private fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            Timber.e("Growth Exception ${ioException.localizedMessage}")
+            return null
+        }
+        return jsonString
+    }
+
 
     private fun barGraph(it: FeedsDistribution) {
 
-        Timber.e("Found Feeding ${it.data}")
         val groupCount = 8
         val groupSpace = 0.15f
         val barSpace = 0.05f
@@ -348,47 +334,30 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
-    private fun syncLocal() {
-
-        val gson = Gson()
-        val data = FhirApplication.getFeedings(requireContext())
-        if (data != null) {
-            try {
-                val it: FeedsDistribution = gson.fromJson(data, FeedsDistribution::class.java)
-                //  populateBarChart(it)
-            } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
-            }
-        }
-        val wData = FhirApplication.getWeights(requireContext())
-        if (wData != null) {
-
-            try {
-                val it: WeightsData = gson.fromJson(wData, WeightsData::class.java)
-                populateLineChart(it)
-            } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
-            }
-        }
-    }
-
-    private fun populateLineChart(values: WeightsData) {
+    /*    private fun populateLineChart(values: WeightsData) {*/
+    private fun populateLineChartOriginal(values: WeightsData, growths: List<GrowthData>) {
 
         val intervals = ArrayList<String>()
         val actualEntries: ArrayList<Entry> = ArrayList()
         val projectedEntries: ArrayList<Entry> = ArrayList()
+        val one: ArrayList<Entry> = ArrayList()
 
-        for ((i, entry) in values.data.withIndex()) {
-            intervals.add(entry.day)
-            actualEntries.add(Entry(i.toFloat(), entry.actual.toFloat()))
-            projectedEntries.add(Entry(i.toFloat(), entry.projected.toFloat()))
+        for ((i, entry) in growths.withIndex()) {
+            intervals.add(entry.age.toString())
+            val option = entry.data[i].option
+            if (option == "one") {
+                one.add(Entry(i.toFloat(), entry.data[i].value.toFloat()))
+            }
+            //  actualEntries.add(Entry(i.toFloat(), entry.data[i]..toFloat()))
+            //  projectedEntries.add(Entry(i.toFloat(), entry.projected.toFloat()))
         }
-        val actual = LineDataSet(actualEntries, "Actual Weight")
+        /*   val actual = LineDataSet(actualEntries, "Actual Weight")*/
+        val actual = LineDataSet(one, "Actual Weight")
         actual.setColors(Color.parseColor("#4472C4"))
         actual.setDrawCircleHole(false)
         actual.setDrawValues(false)
         actual.setDrawCircles(true)
-        actual.circleRadius=5f
+        actual.circleRadius = 5f
         actual.mode = LineDataSet.Mode.CUBIC_BEZIER
         actual.lineWidth = 5f
 
@@ -425,6 +394,109 @@ class BabyDashboardFragment : Fragment() {
         binding.growthChart.data = data
         val leftAxis: YAxis = binding.growthChart.axisLeft
         leftAxis.axisMinimum = 0f
+        leftAxis.mAxisMaximum = 12f
+        leftAxis.labelCount = 6
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = true
+
+
+        val rightAxis: YAxis = binding.growthChart.axisRight
+        rightAxis.setDrawGridLines(false)
+        rightAxis.setDrawZeroLine(false)
+        rightAxis.isGranularityEnabled = false
+        rightAxis.isEnabled = false
+        //refresh
+        binding.growthChart.invalidate()
+
+    }
+
+    private fun populateLineChart(values: WeightsData, growths: List<GrowthData>) {
+        binding.apply {
+            tvCurrentWeight.text = "${values.currentWeight} gm"
+        }
+        val totalDays = calculateGestationDays(values)
+        val intervals = ArrayList<String>()
+        val babyWeight: ArrayList<Entry> = ArrayList()
+        val one: ArrayList<Entry> = ArrayList()
+        val three: ArrayList<Entry> = ArrayList()
+        val four: ArrayList<Entry> = ArrayList()
+        val five: ArrayList<Entry> = ArrayList()
+        val seven: ArrayList<Entry> = ArrayList()
+
+        val chartData = extractDaysData(totalDays, values, growths)
+        val projectWeight = regulateProjection(chartData.projectedWeight)
+
+
+        /**
+         * Refined Weights
+         */
+        /*  for ((i, entry) in chartData.actualWeight.data.withIndex()) {
+              intervals.add(entry.day)
+
+              val equivalent = projectWeight[i].value
+              babyWeight.add(Entry(i.toFloat(), entry.actual.toFloat()))
+              one.add(Entry(i.toFloat(), equivalent.toFloat()))
+              *//*  three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
+            four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+            five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
+            seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))*//*
+
+
+        }  */
+
+        for ((i, entry) in growths.withIndex()) {
+            intervals.add(entry.age.toString())
+/*
+            val equivalent = projectWeight[i].value
+            Timber.e("Equivalent Weight $equivalent")*/
+            babyWeight.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
+            one.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
+            three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
+            four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+            five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
+            seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+
+        }
+
+        val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
+        val dataOne = generateSource(one, "Projected Weight", "#eb975e")
+        val dataThree = generateSource(three, "", "#e3a23c")
+        val dataFour = generateSource(four, "", "#006600")
+        val dataFive = generateSource(five, "", "#ffa20e")
+        val dataSeven = generateSource(seven, "", "#0f0f0f")
+
+        val data = LineData(
+            baby, dataOne, dataThree, dataFour,
+            dataFive, dataSeven
+        )
+        binding.growthChart.axisLeft.setDrawGridLines(false)
+
+        val xAxis: XAxis = binding.growthChart.xAxis
+        xAxis.setDrawGridLines(true)
+        xAxis.setDrawAxisLine(true)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.mAxisMinimum = 1f
+        xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+        xAxis.setLabelCount(4, true)
+        xAxis.setLabelCount(values.data.size, true)
+
+        binding.growthChart.legend.isEnabled = true
+
+        //remove description label
+        binding.growthChart.description.isEnabled = true
+        binding.growthChart.isDragEnabled = false
+        binding.growthChart.setScaleEnabled(false)
+        binding.growthChart.description.text = "Age (Days)"
+        binding.growthChart.description.setPosition(0f, 10f)
+
+        //add animation
+        binding.growthChart.animateX(1000, Easing.EaseInSine)
+        binding.growthChart.data = data
+        val leftAxis: YAxis = binding.growthChart.axisLeft
+        leftAxis.axisMinimum = 0f
+        /* leftAxis.mAxisMaximum = 1200f
+         leftAxis.setLabelCount(6, true)
+      */
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true
 
@@ -440,6 +512,19 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
+    private fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {
+        val actual = LineDataSet(one, label)
+        actual.setColors(Color.parseColor(color))
+        actual.setDrawCircleHole(false)
+        actual.setDrawValues(false)
+        actual.setDrawCircles(false)
+        actual.circleRadius = 0f
+        actual.mode = LineDataSet.Mode.CUBIC_BEZIER
+        actual.lineWidth = 3f
+
+        return actual
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -448,6 +533,7 @@ class BabyDashboardFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

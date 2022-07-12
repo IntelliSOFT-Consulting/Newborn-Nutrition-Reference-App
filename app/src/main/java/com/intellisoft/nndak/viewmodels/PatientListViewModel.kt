@@ -6,16 +6,33 @@ import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.*
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+import com.intellisoft.nndak.charts.ActualData
+import com.intellisoft.nndak.charts.GrowthData
+import com.intellisoft.nndak.charts.WeightsData
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
+import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
+import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
+import com.intellisoft.nndak.logic.DataSort.Companion.getFormattedIntAge
+import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
+import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
+import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
+import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
 import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
 import com.intellisoft.nndak.logic.Translations.Companion.feedTypes
 import com.intellisoft.nndak.logic.Translations.Companion.feedingTimes
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
+import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
@@ -24,11 +41,9 @@ import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.create
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
+import java.io.IOException
 import java.time.LocalDate
 import java.time.Period
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.*
 import java.util.stream.*
 
@@ -49,6 +64,7 @@ class PatientListViewModel(
     val liveOrders = MutableLiveData<List<OrdersItem>>()
     val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
     val patientCount = MutableLiveData<Long>()
+    val context: Application = application
 
     init {
         updatePatientListAndPatientCount(
@@ -63,6 +79,13 @@ class PatientListViewModel(
             { count("", location) })
         updateDhmDashboardCount(
             { getDhmDashboardSearchResults("", location) },
+            { count("", location) })
+    }
+
+    fun reloadOrders() {
+
+        updateOrdersCount(
+            { getOrdersSearchResults("", location) },
             { count("", location) })
     }
 
@@ -165,33 +188,9 @@ class PatientListViewModel(
         val days = getPastDaysOnIntervalOf(7, 1)
 
         days.forEach {
-            //  println("Dates $it")
             val format = FormatHelper().getDayName(it.toString())
-            println("Dates $format")
             data.add(PieItem(value = format, "10", "#F65050"))
         }
-        /**
-         * Retrieve Stock Encounters & Observations
-         */
-        // val volume = get(nameQuery, location)
-
-        /* val orders: MutableList<OrdersItem> = mutableListOf()
-         fhirEngine
-             .search<NutritionOrder> {
-                 sort(NutritionOrder.DATETIME, Order.ASCENDING)
-                 filterOrders(this)
-                 from = 0
-             }
-             .map {
-                 createOrdersItem(
-                     it
-                 )
-             }
-             .let {
-
-                 orders.addAll(it)
-             }*/
-
         return DHMDashboardItem(
             dhmInfants = orders.size.toString(),
             dhmFullyInfants = orders.size.toString(),
@@ -210,6 +209,7 @@ class PatientListViewModel(
         try {
             fhirEngine
                 .search<NutritionOrder> {
+
                     sort(NutritionOrder.DATETIME, Order.ASCENDING)
                     from = 0
 
@@ -275,16 +275,16 @@ class PatientListViewModel(
         val observations = getObservationsPerEncounter(it.encounter.reference)
         if (observations.isNotEmpty()) {
             for (element in observations) {
-                if (element.code == "Consent-Given") {
-
-                    consentGiven = element.value
-                }
-                if (element.code == "DHM-Type") {
-                    dhmType = element.value
-                }
-                if (element.code == "DHM-Reason") {
-                    dhmReason = element.value
-                    Timber.e("DHM Order ${element.value}")
+                when (element.code) {
+                    DHM_CONSENT -> {
+                        consentGiven = element.value
+                    }
+                    DHM_TYPE -> {
+                        dhmType = element.value
+                    }
+                    DHM_REASON -> {
+                        dhmReason = element.value
+                    }
                 }
             }
         }
@@ -321,14 +321,16 @@ class PatientListViewModel(
         val observations = getObservationsPerEncounter("Encounter/${it.logicalId}")
         if (observations.isNotEmpty()) {
             for (element in observations) {
-                if (element.code == "Consent-Given") {
-                    consentGiven = element.value
-                }
-                if (element.code == "DHM-Type") {
-                    dhmType = element.value
-                }
-                if (element.code == "DHM-Reason") {
-                    dhmReason = element.value
+                when (element.code) {
+                    DHM_CONSENT -> {
+                        consentGiven = element.value
+                    }
+                    DHM_TYPE -> {
+                        dhmType = element.value
+                    }
+                    DHM_REASON -> {
+                        dhmReason = element.value
+                    }
                 }
             }
         }
@@ -378,7 +380,6 @@ class PatientListViewModel(
             .search<Patient> {
                 filter(
                     Patient.LINK, { value = patientId }
-
                 )
             }
             .take(MAX_RESOURCE_COUNT)
@@ -514,7 +515,7 @@ class PatientListViewModel(
             mumName = mother[0].name
             motherIp = mother[0].resourceId
         }
-
+        val gainRate = calculateWeightGainRate(baby.resourceId)
 
         return MotherBabyItem(
             id = position.toString(),
@@ -525,7 +526,7 @@ class PatientListViewModel(
             babyIp = baby.resourceId,
             birthWeight = birthWeight,
             status = status,
-            gainRate = "Normal",
+            gainRate = gainRate,
             dashboard = BabyDashboard(
                 assessed = assessed
             ),
@@ -534,6 +535,134 @@ class PatientListViewModel(
 
         )
 
+    }
+
+    private suspend fun calculateWeightGainRate(resourceId: String): String {
+
+        var gainRate = "Normal"
+        try {
+            val it = getWeightsDataModel(resourceId)
+            val jsonFileString = getJsonDataFromAsset("boy.json")
+
+            val gson = Gson()
+            val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
+            val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
+            val totalDays = calculateGestationDays(it)
+            val chartData = extractDaysData(totalDays, it, growths)
+            val projectWeight = regulateProjection(chartData.projectedWeight)
+            for ((i, entry) in chartData.actualWeight.data.withIndex()) {
+                val equivalent = projectWeight[i].value.toDouble()
+                val cc = entry.actual.toDouble()
+                gainRate = if (cc > equivalent) {
+                    "High"
+                } else if (cc == equivalent) {
+                    "Normal"
+                } else {
+                    "Low"
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e("Growth Exception ${e.localizedMessage}")
+        }
+        return gainRate
+    }
+
+    private fun getJsonDataFromAsset(fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
+    }
+
+    private suspend fun getWeightsDataModel(resourceId: String): WeightsData {
+        val patient = getPatient(resourceId)
+        val weight = pullWeights(resourceId)
+        val data = arrayListOf<ActualData>()
+        var dayOfLife = 0
+        var babyGender = ""
+        val gestationAge = retrieveQuantity(resourceId, GESTATION)
+        val birthWeight = retrieveQuantity(resourceId, BIRTH_WEIGHT)
+        val lastKnownWeight = retrieveQuantity(resourceId, CURRENT_WEIGHT)
+        patient.let {
+            dayOfLife = getFormattedIntAge(it.dob)
+            babyGender = it.gender
+
+        }
+
+        if (weight.isNotEmpty()) {
+
+            val daysString = getPastDaysOnIntervalOf(dayOfLife + 1, 1)
+            for ((i, entry) in daysString.withIndex()) {
+                val sorted = sortCollected(weight)
+                var value = extractDailyMeasure(entry, sorted)
+                if (value == "0.0") {
+                    value = lastKnownWeight
+                }
+                data.add(ActualData(day = i.toString(), actual = value, projected = value))
+            }
+        }
+        val currentWeight = data.lastOrNull()?.actual ?: birthWeight
+
+        return WeightsData(
+            babyGender = babyGender,
+            currentWeight = currentWeight,
+            gestationAge = gestationAge,
+            dayOfLife = dayOfLife,
+            data = data
+        )
+    }
+
+    private suspend fun retrieveQuantity(patientId: String, code: String): String {
+        var data = ""
+        val obs = observationsPerCode(patientId, code)
+        if (obs.isNotEmpty()) {
+            val sort = sortCollected(obs)
+            data = sort.last().quantity.trim()
+        }
+        return data
+    }
+
+    private suspend fun observationsPerCode(patientId: String, key: String): List<ObservationItem> {
+        val obs: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(
+                    Observation.CODE,
+                    {
+                        value = of(Coding().apply {
+                            system = "http://snomed.info/sct"
+                            code = key
+                        })
+                    })
+                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                sort(Observation.DATE, Order.DESCENDING)
+            }
+            .take(MIN_RESOURCE_COUNT)
+            .map {
+                createObservationItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .let { obs.addAll(it) }
+        return obs
+    }
+
+    private suspend fun pullWeights(patientId: String): List<ObservationItem> {
+        val observations: MutableList<ObservationItem> = mutableListOf()
+        fhirEngine
+            .search<Observation> {
+                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+                sort(Observation.DATE, Order.ASCENDING)
+            }
+            .map { createObservationItem(it, getApplication<Application>().resources) }
+            .filter { it.code == ADMISSION_WEIGHT || it.code == CURRENT_WEIGHT }
+            .let { observations.addAll(it) }
+        return observations
     }
 
 

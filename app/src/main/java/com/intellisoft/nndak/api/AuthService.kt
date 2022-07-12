@@ -1,10 +1,7 @@
 package com.intellisoft.nndak.api
 
 import com.intellisoft.nndak.charts.*
-import com.intellisoft.nndak.data.AuthResponse
-import com.intellisoft.nndak.data.LoginData
-import com.intellisoft.nndak.data.User
-import com.intellisoft.nndak.data.UserResponse
+import com.intellisoft.nndak.data.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -43,5 +40,10 @@ interface AuthService {
     @Headers("Content-Type: application/json")
     @GET("baby-growth/{ip}")
     fun loadWeights(@Path("ip") ip: String): Call<WeightsData>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("dhm-stock")
+    fun addDHMStock(@Body data: DHMStock): Call<AuthResponse>
 
 }

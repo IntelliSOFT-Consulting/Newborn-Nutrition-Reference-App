@@ -24,7 +24,6 @@ import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BBA
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
-import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.COMPLETED_BY
@@ -35,14 +34,12 @@ import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_DISPENSING
-import com.intellisoft.nndak.logic.Logics.Companion.DHM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_STOCK
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
-import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.EFFECTIVE_EXPRESSION
@@ -50,19 +47,18 @@ import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSED_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
 import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSION_TIME
 import com.intellisoft.nndak.logic.Logics.Companion.FED_AFTER
+import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_MONITORING
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_DEFICIT
 import com.intellisoft.nndak.logic.Logics.Companion.FEEDS_TAKEN
 import com.intellisoft.nndak.logic.Logics.Companion.FEED_TYPE
-import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
 import com.intellisoft.nndak.logic.Logics.Companion.HEAD_CIRCUMFERENCE
 import com.intellisoft.nndak.logic.Logics.Companion.INTERVENTIONS
-import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.JAUNDICE
@@ -821,7 +817,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    customMessage.postValue(MessageItem(false, "Please fill in all required fields"))
+                    customMessage.postValue(
+                        MessageItem(
+                            false,
+                            "Please fill in all required fields"
+                        )
+                    )
                     return@launch
 
                 }
@@ -901,6 +902,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         .request.url = "Observation"
                                 }
                             }
+                            "Feed-Frequency" -> {
+                                val value =
+                                    extractResponseCode(inner, "valueCoding")
+
+                                if (value.isNotEmpty()) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            FEEDING_FREQUENCY,
+                                            "Feed Frequency", value,
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }
+
+
+                            }
                             "Feed-Type-Selection" -> {
                                 val value = extractResponseCodeArray(inner, "valueCoding")
 
@@ -929,24 +946,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                                     BREAST_MILK,
                                                     "Breast Milk", "Breast Milk",
                                                     value, "mls"
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-                            }
-                            "Breast-Feed-Frequency" -> {
-                                if (feeds.isNotEmpty()) {
-                                    if (feeds.contains("Breast Feed")) {
-                                        val value =
-                                            extractResponseCode(inner, "valueCoding")
-
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    BREAST_FREQUENCY,
-                                                    "Breast Feed Frequency", value,
                                                 )
                                             )
                                                 .request.url = "Observation"
@@ -988,25 +987,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                                 qh.quantityQuestionnaire(
                                                     EBM_VOLUME,
                                                     "EBM Volume", "EBM Volume", value, "mls"
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-                            }
-                            "EBM-Feeding-Frequency" -> {
-                                if (feeds.isNotEmpty()) {
-                                    if (feeds.contains("EBM")) {
-
-                                        val value =
-                                            extractResponseCode(inner, "valueCoding")
-
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    EBM_FREQUENCY,
-                                                    "EBM Feeding Frequency", value
                                                 )
                                             )
                                                 .request.url = "Observation"
@@ -1074,24 +1054,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     }
                                 }
                             }
-                            "Formula-Frequency" -> {
-                                if (feeds.isNotEmpty()) {
-                                    if (feeds.contains("Formula")) {
-                                        val value =
-                                            extractResponseCode(inner, "valueCoding")
 
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    FORMULA_FREQUENCY,
-                                                    "Formula Frequency", value
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-                            }
 
                             /**DHM**/
 
@@ -1150,24 +1113,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     }
                                 }
                             }
-                            "DHM-Frequency" -> {
-                                if (feeds.isNotEmpty()) {
-                                    if (feeds.contains("DHM")) {
-                                        val value =
-                                            extractResponseCode(inner, "valueCoding")
 
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    DHM_FREQUENCY,
-                                                    "DHM Frequency", value,
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-                            }
                             "Consent-Given" -> {
                                 if (feeds.isNotEmpty()) {
                                     if (feeds.contains("DHM")) {
@@ -1269,24 +1215,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     }
                                 }
                             }
-                            "IV-Fluid-Frequency" -> {
-                                if (feeds.isNotEmpty()) {
-                                    if (feeds.contains("IV Fluid and Additives")) {
-                                        val value =
-                                            extractResponseCode(inner, "valueCoding")
 
-                                        if (value.isNotEmpty()) {
-                                            bundle.addEntry().setResource(
-                                                qh.codingQuestionnaire(
-                                                    IV_FREQUENCY,
-                                                    "IV-Fluid-Frequency", value
-                                                )
-                                            )
-                                                .request.url = "Observation"
-                                        }
-                                    }
-                                }
-                            }
                             "Feeding-Supplements" -> {
                                 val value =
                                     extractResponseCode(inner, "valueCoding")
@@ -2889,67 +2818,87 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val date = FormatHelper().getTodayDate()
                     if (data.data.isNotEmpty()) {
                         data.data.forEach {
-                            if (it.volume != null) {
+                            if (it.coding) {
+                                bundle.addEntry().setResource(
+                                    qh.codingQuestionnaire(
+                                        it.code,
+                                        it.title,
+                                        it.value,
+                                    )
+                                )
+                                    .request.url = "Observation"
+                            } else {
                                 bundle.addEntry().setResource(
                                     qh.quantityQuestionnaire(
-                                        it.resourceId.toString(),
-                                        it.resourceId.toString(),
-                                        it.resourceId.toString(),
-                                        it.volume.toString(), "mls"
+                                        it.code,
+                                        it.title,
+                                        it.title,
+                                        it.value, "mls"
                                     )
                                 )
                                     .request.url = "Observation"
                             }
-                            if (it.frequency != null) {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        it.id.toString(),
-                                        it.id.toString(),
-                                        it.frequency.toString(),
+                            /*    if (it.volume != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.quantityQuestionnaire(
+                                            it.resourceId.toString(),
+                                            it.resourceId.toString(),
+                                            it.resourceId.toString(),
+                                            it.volume.toString(), "mls"
+                                        )
                                     )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (it.route != null) {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        it.type.toString(),
-                                        it.type.toString(),
-                                        it.route.toString(),
+                                        .request.url = "Observation"
+                                }
+                                if (it.frequency != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            it.id.toString(),
+                                            it.id.toString(),
+                                            it.frequency.toString(),
+                                        )
                                     )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (it.specific != null) {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        it.logicalId.toString(),
-                                        it.logicalId.toString(),
-                                        it.specific.toString(),
+                                        .request.url = "Observation"
+                                }
+                                if (it.route != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            it.type.toString(),
+                                            it.type.toString(),
+                                            it.route.toString(),
+                                        )
                                     )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (it.frequencyAlt != null) {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        it.idAlt.toString(),
-                                        it.idAlt.toString(),
-                                        it.frequencyAlt.toString(),
+                                        .request.url = "Observation"
+                                }
+                                if (it.specific != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            it.logicalId.toString(),
+                                            it.logicalId.toString(),
+                                            it.specific.toString(),
+                                        )
                                     )
-                                )
-                                    .request.url = "Observation"
-                            }
-                            if (it.routeAlt != null) {
-                                bundle.addEntry().setResource(
-                                    qh.codingQuestionnaire(
-                                        it.typeAlt.toString(),
-                                        it.typeAlt.toString(),
-                                        it.routeAlt.toString(),
+                                        .request.url = "Observation"
+                                }
+                                if (it.frequencyAlt != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            it.idAlt.toString(),
+                                            it.idAlt.toString(),
+                                            it.frequencyAlt.toString(),
+                                        )
                                     )
-                                )
-                                    .request.url = "Observation"
-                            }
+                                        .request.url = "Observation"
+                                }
+                                if (it.routeAlt != null) {
+                                    bundle.addEntry().setResource(
+                                        qh.codingQuestionnaire(
+                                            it.typeAlt.toString(),
+                                            it.typeAlt.toString(),
+                                            it.routeAlt.toString(),
+                                        )
+                                    )
+                                        .request.url = "Observation"
+                                }*/
 
                         }
                     }
@@ -3001,6 +2950,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         .request.url = "Observation"
                     bundle.addEntry().setResource(
                         qh.codingQuestionnaire(
+                            FEEDING_FREQUENCY,
+                            "Feed Frequency", data.feedFrequency
+                        )
+                    )
+                        .request.url = "Observation"
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
                             ADDITIONAL_FEEDS,
                             "Feeding Supplements", data.additional
                         )
@@ -3013,7 +2969,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
 
                     if (data.data.isNotEmpty()) {
-                        val dhm = data.data.find { it.resourceId == DHM_VOLUME }?.volume
+                        val dhm = data.data.find { it.code == DHM_VOLUME }?.value
 
                         if (dhm != null) {
                             val no = NutritionOrder()

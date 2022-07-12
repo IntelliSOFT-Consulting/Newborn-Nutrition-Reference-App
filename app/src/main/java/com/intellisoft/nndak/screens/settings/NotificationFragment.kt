@@ -1,10 +1,10 @@
 package com.intellisoft.nndak.screens.settings
 
+import android.os.Build
 import android.os.Bundle
+import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -51,5 +51,26 @@ class NotificationFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.hidden_menu, menu)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                (requireActivity() as MainActivity).openNavigationDrawer()
+                true
+            }
+
+            else -> false
+        }
     }
 }

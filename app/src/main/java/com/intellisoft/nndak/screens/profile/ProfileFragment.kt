@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
@@ -71,21 +73,19 @@ class ProfileFragment : Fragment() {
     }
 
     private fun confirmLogout() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Logout")
-        builder.setMessage("Are you sure you want to logout?")
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            FhirApplication.setLoggedIn(requireContext(), false)
-            requireActivity().finishAffinity()
-            val i = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(i)
-        }
-
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            dialog.dismiss()
-        }
-        builder.show()
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Logout")
+            .setContentText("Are you sure you want to logout?")
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                FhirApplication.setLoggedIn(requireContext(), false)
+                requireActivity().finishAffinity()
+                val i = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(i)
+            }
+            .setCancelText("No")
+            .show()
     }
 
     private fun confirmClear() {

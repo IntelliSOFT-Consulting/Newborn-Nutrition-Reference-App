@@ -2,8 +2,10 @@ package com.intellisoft.nndak.screens.dashboard.prescription
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -24,37 +26,34 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.UpdatePrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
-import com.intellisoft.nndak.logic.Logics.Companion.BREAST_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
-import com.intellisoft.nndak.logic.Logics.Companion.DHM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.EBM_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.FEEDING_SUPPLEMENTS
-import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.IV_FREQUENCY
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.models.FeedDataItem
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.Prescription
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
+import kotlinx.android.synthetic.main.success_dialog.*
+import kotlinx.android.synthetic.main.update_prescription.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,11 +68,12 @@ class EditPrescriptionFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private lateinit var currentWeight: String
     private lateinit var totalFeeds: String
+    private lateinit var feedFrequency: String
     private lateinit var supp: String
     private lateinit var other: String
     private var aggregateTotal: Float = 0f
 
-    private val feedsList: MutableList<FeedItem> = mutableListOf()
+    private val feedsList: MutableList<FeedDataItem> = mutableListOf()
     private val binding
         get() = _binding!!
 
@@ -147,11 +147,11 @@ class EditPrescriptionFragment : Fragment() {
     }
 
     private fun updateUI(it: PrescriptionItem) {
-        Timber.e("Update Pres ${it.cWeight}")
         binding.apply {
 
             eWeight.setText(it.cWeight.toString())
             eTotal.setText(it.totalVolume.toString())
+            eFrequency.setText(it.frequency.toString())
             otherSup.appFrequency.setText(it.additionalFeeds)
             otherValue.appFrequency.setText(it.supplements)
 
@@ -159,7 +159,7 @@ class EditPrescriptionFragment : Fragment() {
                 cbBreast.isChecked = true
                 tvBreast.visibility = View.VISIBLE
                 lnBrestMilk.visibility = View.VISIBLE
-                updateVolumeFrequency(bfVolume.volume, bfFreq.appFrequency, it.feed, BREAST_MILK)
+                updateVolumeFrequency(bfVolume.volume, it.feed, BREAST_MILK)
 
             }
             if (it.formula != "N/A") {
@@ -169,7 +169,6 @@ class EditPrescriptionFragment : Fragment() {
                 lnFormulaAlt.visibility = View.VISIBLE
                 updateVolumeFrequencyRouteType(
                     formulaVolume.volume,
-                    formulaFreq.appFrequency,
                     formulaRoute.appType,
                     formulaType.appFrequency,
                     it.feed,
@@ -183,7 +182,6 @@ class EditPrescriptionFragment : Fragment() {
 
                 updateVolumeFrequencyRoute(
                     ebmVolume.volume,
-                    ebmFreq.appFrequency,
                     ebmRoute.appType,
                     it.feed,
                     EBM_VOLUME
@@ -194,6 +192,7 @@ class EditPrescriptionFragment : Fragment() {
                 tvDhm.visibility = View.VISIBLE
                 lnDhmMilk.visibility = View.VISIBLE
                 lnDhmMilkOther.visibility = View.VISIBLE
+                lnDhmReason.visibility = View.VISIBLE
                 val con = if (it.consent == "Signed") {
                     "Yes"
                 } else {
@@ -202,7 +201,7 @@ class EditPrescriptionFragment : Fragment() {
                 dhmConsent.appFrequency.setText(con)
                 dhmReason.volume.setText(it.dhmReason)
                 updateVolumeFrequencyRouteType(
-                    dhmVolume.volume, dhmFreq.appFrequency,
+                    dhmVolume.volume,
                     dhmRoute.appType, dhmType.appFrequency, it.feed, DHM_VOLUME
                 )
             }
@@ -212,7 +211,6 @@ class EditPrescriptionFragment : Fragment() {
                 lnIvFluids.visibility = View.VISIBLE
                 updateVolumeFrequencyRoute(
                     ivVolume.volume,
-                    ivFreq.appFrequency,
                     ivRoute.appType,
                     it.feed,
                     IV_VOLUME
@@ -272,11 +270,13 @@ class EditPrescriptionFragment : Fragment() {
                     tvDhm.visibility = View.VISIBLE
                     lnDhmMilk.visibility = View.VISIBLE
                     lnDhmMilkOther.visibility = View.VISIBLE
+                    lnDhmReason.visibility = View.VISIBLE
 
                 } else {
                     tvDhm.visibility = View.GONE
                     lnDhmMilk.visibility = View.GONE
                     lnDhmMilkOther.visibility = View.GONE
+                    lnDhmReason.visibility = View.GONE
 
                 }
                 feedsList.clear()
@@ -297,19 +297,16 @@ class EditPrescriptionFragment : Fragment() {
 
     private fun updateVolumeFrequencyRouteType(
         volume: TextInputEditText,
-        frequency: TextInputEditText,
         route: TextInputEditText,
         type: TextInputEditText,
         feed: List<FeedItem>?,
         code: String
     ) {
         val vol = feed?.find { it.resourceId == code }?.volume
-        val freq = feed?.find { it.resourceId == code }?.frequency
         val rou = feed?.find { it.resourceId == code }?.route
         val typ = feed?.find { it.resourceId == code }?.type
 
         volume.setText(vol)
-        frequency.setText(freq)
         route.setText(rou)
         type.setText(typ)
     }
@@ -317,30 +314,24 @@ class EditPrescriptionFragment : Fragment() {
 
     private fun updateVolumeFrequency(
         volume: TextInputEditText,
-        appFrequency: TextInputEditText,
         feed: List<FeedItem>?,
         code: String
     ) {
         val vol = feed?.find { it.resourceId == code }?.volume
-        val freq = feed?.find { it.resourceId == code }?.frequency
 
         volume.setText(vol)
-        appFrequency.setText(freq)
     }
 
     private fun updateVolumeFrequencyRoute(
         volume: TextInputEditText,
-        frequency: TextInputEditText,
         route: TextInputEditText,
         feed: List<FeedItem>?,
         code: String
     ) {
         val vol = feed?.find { it.resourceId == code }?.volume
-        val freq = feed?.find { it.resourceId == code }?.frequency
         val rou = feed?.find { it.resourceId == code }?.route
 
         volume.setText(vol)
-        frequency.setText(freq)
         route.setText(rou)
     }
 
@@ -357,13 +348,9 @@ class EditPrescriptionFragment : Fragment() {
             /**
              * Freq
              */
-            showOptions(bfFreq.appFrequency, R.menu.menu_frequency)
-            showOptions(ebmFreq.appFrequency, R.menu.menu_frequency)
-            showOptions(dhmFreq.appFrequency, R.menu.menu_frequency)
+            showOptions(eFrequency, R.menu.menu_frequency)
             showOptions(dhmType.appFrequency, R.menu.menu_in_transaction)
             showOptions(dhmConsent.appFrequency, R.menu.menu_consent)
-            showOptions(ivFreq.appFrequency, R.menu.menu_frequency)
-            showOptions(formulaFreq.appFrequency, R.menu.menu_frequency)
             showOptions(otherSup.appFrequency, R.menu.menu_consent)
             showOptions(otherValue.appFrequency, R.menu.menu_supp)
             showOptions(formulaType.appFrequency, R.menu.menu_formula)
@@ -376,6 +363,64 @@ class EditPrescriptionFragment : Fragment() {
             showOptions(ivRoute.appType, R.menu.route)
             showOptions(formulaRoute.appType, R.menu.route)
 
+            /**
+             * Listeners
+             */
+            listenChanges(eWeight, tilWeight, "Please enter valid wight value")
+            listenChanges(eTotal, tliTotal, "Please enter valid value")
+            listenChanges(bfVolume.volume, bfVolume.tilVolume, "Please enter valid value")
+            listenChanges(ebmVolume.volume, ebmVolume.tilVolume, "Please enter valid value")
+            listenChanges(formulaVolume.volume, formulaVolume.tilVolume, "Please enter valid value")
+            listenChanges(dhmVolume.volume, dhmVolume.tilVolume, "Please enter valid  value")
+            listenChanges(ivVolume.volume, ivVolume.tilVolume, "Please enter valid  value")
+
+        }
+    }
+
+    private fun listenChanges(
+        input: TextInputEditText,
+        inputLayout: TextInputLayout,
+        error: String
+    ) {
+
+        CoroutineScope(Dispatchers.Default).launch {
+            input.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position);
+                            }
+                            input.addTextChangedListener(this)
+                            inputLayout.error = null
+                        } else {
+                            inputLayout.error = error
+                        }
+                    } catch (e: Exception) {
+
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
+
+                }
+            })
         }
     }
 
@@ -403,6 +448,7 @@ class EditPrescriptionFragment : Fragment() {
             val data = Prescription(
                 currentWeight = currentWeight.toDouble().toString(),
                 totalFeeds = totalFeeds.toDouble().toString(),
+                feedFrequency = feedFrequency,
                 supplements = other,
                 additional = supp,
                 data = feedsList
@@ -491,6 +537,7 @@ class EditPrescriptionFragment : Fragment() {
             supp = otherSup.appFrequency.text.toString()
             other = otherValue.appFrequency.text.toString()
             totalFeeds = eTotal.text.toString()
+            feedFrequency = eFrequency.text.toString()
 
             if (TextUtils.isEmpty(currentWeight)) {
                 tilWeight.error = "Please Enter valid value"
@@ -499,6 +546,10 @@ class EditPrescriptionFragment : Fragment() {
 
             if (TextUtils.isEmpty(totalFeeds)) {
                 tliTotal.error = "PLease enter valid volume"
+                return
+            }
+            if (TextUtils.isEmpty(feedFrequency)) {
+                tliFrequency.error = "PLease select frequency"
                 return
             }
             aggregateTotal = totalFeeds.toFloat()
@@ -510,90 +561,111 @@ class EditPrescriptionFragment : Fragment() {
                 feedsList.clear()
                 if (cbBreast.isChecked) {
                     val vol = bfVolume.volume.text.toString()
-                    val freq = bfFreq.appFrequency.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(freq)) {
+                    if (checkEmptyData(vol)) {
                         return
                     }
                     feedsList.add(
-                        FeedItem(
-                            resourceId = BREAST_MILK,
-                            id = BREAST_FREQUENCY,
-                            volume = vol.toDouble().toString(),
-                            frequency = freq
+                        FeedDataItem(
+                            code = BREAST_MILK,
+                            title = "Breast Volume",
+                            value = vol.toDouble().toString(),
+                            coding = false
                         )
                     )
                 }
                 if (cbEbm.isChecked) {
                     val vol = ebmVolume.volume.text.toString()
-                    val freq = ebmFreq.appFrequency.text.toString()
                     val rou = ebmRoute.appType.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
+                    if (checkEmptyData(vol) || checkEmptyData(rou)) {
                         return
                     }
                     feedsList.add(
-                        FeedItem(
-                            resourceId = EBM_VOLUME,
-                            id = EBM_FREQUENCY,
-                            type = EBM_ROUTE,
-                            volume = vol.toDouble().toString(),
-                            frequency = freq,
-                            route = rou
+                        FeedDataItem(
+                            code = EBM_VOLUME,
+                            title = "EBM Volume",
+                            value = vol.toDouble().toString(),
+                            coding = false,
+                        )
+                    )
+
+                    feedsList.add(
+                        FeedDataItem(
+                            code = EBM_ROUTE,
+                            title = "EBM Route",
+                            value = rou,
+                            coding = true,
                         )
                     )
                 }
                 if (cbFluid.isChecked) {
                     val vol = ivVolume.volume.text.toString()
-                    val freq = ivFreq.appFrequency.text.toString()
                     val rou = ivRoute.appType.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou)) {
+                    if (checkEmptyData(vol) || checkEmptyData(rou)) {
                         return
                     }
                     feedsList.add(
-                        FeedItem(
-                            resourceId = IV_VOLUME,
-                            id = IV_FREQUENCY,
-                            type = IV_ROUTE,
-                            volume = vol.toDouble().toString(),
-                            frequency = freq,
-                            route = rou
+                        FeedDataItem(
+                            code = IV_VOLUME,
+                            title = "IV Volume",
+                            value = vol.toDouble().toString(),
+                            coding = false
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "IV Route",
+                            code = IV_ROUTE,
+                            coding = true,
+                            value = rou
                         )
                     )
                 }
                 if (cbFormula.isChecked) {
                     val vol = formulaVolume.volume.text.toString()
-                    val freq = formulaFreq.appFrequency.text.toString()
                     val rou = formulaRoute.appType.text.toString()
                     val typ = formulaType.appFrequency.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou) || checkEmptyData(
+                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
                             typ
                         )
                     ) {
                         return@apply
                     }
                     feedsList.add(
-                        FeedItem(
-                            resourceId = FORMULA_VOLUME,
-                            id = FORMULA_FREQUENCY,
-                            type = FORMULA_ROUTE,
-                            logicalId = FORMULA_TYPE,
-                            volume = vol.toDouble().toString(),
-                            frequency = freq,
-                            route = rou,
-                            specific = typ
+                        FeedDataItem(
+                            title = "Formula Volume",
+                            code = FORMULA_VOLUME,
+                            coding = false,
+                            value = vol.toDouble().toString()
                         )
                     )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "Formula Route",
+                            code = FORMULA_ROUTE,
+                            coding = true,
+                            value = rou
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "Formula Type",
+                            code = FORMULA_TYPE,
+                            coding = true,
+                            value = typ
+                        )
+                    )
+
                 }
                 if (cbDhm.isChecked) {
                     val vol = dhmVolume.volume.text.toString()
-                    val freq = dhmFreq.appFrequency.text.toString()
                     val rou = dhmRoute.appType.text.toString()
 
                     val typ = dhmType.appFrequency.text.toString()
                     val con = dhmConsent.appFrequency.text.toString()
                     val reason = dhmReason.volume.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(freq) || checkEmptyData(rou) || checkEmptyData(
+                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
                             typ
                         ) || checkEmptyData(con) || checkEmptyData(reason)
                     ) {
@@ -604,29 +676,54 @@ class EditPrescriptionFragment : Fragment() {
                     } else {
                         "Not Signed"
                     }
-
                     feedsList.add(
-                        FeedItem(
-                            logicalId = DHM_TYPE,
-                            resourceId = DHM_VOLUME,
-                            id = DHM_FREQUENCY,
-                            type = DHM_ROUTE,
-                            idAlt = DHM_CONSENT,
-                            typeAlt = DHM_REASON,
-                            volume = vol.toDouble().toString(),
-                            frequency = freq,
-                            route = rou,
-                            specific = typ,
-                            frequencyAlt = sig,
-                            routeAlt = reason,
+                        FeedDataItem(
+                            title = "DHM Type",
+                            code = DHM_TYPE,
+                            coding = true,
+                            value = typ
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "DHM Volume",
+                            code = DHM_VOLUME,
+                            coding = false,
+                            value = vol.toDouble().toString()
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "DHM Route",
+                            code = DHM_ROUTE,
+                            coding = true,
+                            value = rou
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "Consent Given",
+                            code = DHM_CONSENT,
+                            coding = true,
+                            value = sig
+                        )
+                    )
+                    feedsList.add(
+                        FeedDataItem(
+                            title = "DHM Reason",
+                            code = DHM_REASON,
+                            coding = true,
+                            value = reason
                         )
                     )
                 }
 
                 var totalFeedsVolume = 0f
                 feedsList.forEach {
-                    val quantity = it.volume
-                    totalFeedsVolume += quantity?.toFloat() ?: 0f
+                    if (!it.coding) {
+                        val quantity = it.value
+                        totalFeedsVolume += quantity.toFloat()
+                    }
                 }
                 if (totalFeedsVolume == aggregateTotal) {
                     confirmationDialog.show(childFragmentManager, "Confirm Details")

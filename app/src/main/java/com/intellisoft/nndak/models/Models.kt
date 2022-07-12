@@ -259,9 +259,10 @@ data class MessageItem(
 data class Prescription(
     val currentWeight: String,
     val totalFeeds: String,
+    val feedFrequency: String,
     val supplements: String,
     val additional: String,
-    val data: List<FeedItem>
+    val data: List<FeedDataItem>
 )
 
 data class FeedItem(
@@ -301,3 +302,10 @@ data class CareItem(
 ) {
     override fun toString(): String = resourceId
 }
+
+data class FeedDataItem(
+    val code: String,
+    val title: String,
+    val value: String,
+    val coding: Boolean
+)
