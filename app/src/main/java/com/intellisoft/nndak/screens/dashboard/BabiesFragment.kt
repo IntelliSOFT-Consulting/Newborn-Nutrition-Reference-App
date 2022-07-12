@@ -26,15 +26,14 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.BabyItemAdapter
-import com.intellisoft.nndak.alerts.NotificationFactory
 import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
-import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
+import kotlinx.android.synthetic.main.patient_list_item_view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -64,8 +63,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var mySpinner: Spinner
 
     private var formatter = FormatHelper()
-
-    private var filterData: String? = null
+    private var status: String = "Filter By:"
 
     private lateinit var healthViewModel: HealthViewModel
 
@@ -99,7 +97,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapterList = BabyItemAdapter(mumBabyList, this::onPatientItemClicked)
             recyclerView.adapter = adapterList
             adapterList.submitList(mumBabyList)
-
+            binding.pbLoading.visibility = View.VISIBLE
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
                 Timber.d("Submitting " + it.count() + " patient records")
                 if (it.isEmpty()) {
@@ -110,8 +108,28 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
                 if (it.isNotEmpty()) {
                     mumBabyList.clear()
-                    mumBabyList.addAll(it)
-                    binding.pbLoading.visibility = View.GONE
+                    when (status) {
+                        "Filter By:" -> {
+                            displayComplete(it)
+                        }
+                        "Preterm" -> {
+                            filterByStatus(it, "Preterm")
+                        }
+                        "Term" -> {
+                            filterByStatus(it, "Term")
+                        }
+                        "Low Weight Gain" -> {
+
+                            filterByGain(it, true)
+                        }
+                        "High/Medium Weight Gain" -> {
+
+                            filterByGain(it, false)
+                        }
+                        else -> {
+                            displayComplete(it)
+                        }
+                    }
                 }
             }
 
@@ -190,6 +208,67 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    private fun displayComplete(it: List<MotherBabyItem>) {
+        mumBabyList.addAll(it)
+        binding.pbLoading.visibility = View.GONE
+        binding.apply {
+            if (mumBabyList.isEmpty()) {
+                imgEmpty.visibility = View.VISIBLE
+            } else {
+                imgEmpty.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun filterByGain(it: List<MotherBabyItem>, isLow: Boolean) {
+        it.forEach { d ->
+            val status = d.gainRate
+            if (isLow) {
+                if (status == "Low") {
+                    mumBabyList.add(d)
+                }
+            } else {
+                if (status == "Normal" || status == "High") {
+                    mumBabyList.add(d)
+                }
+            }
+        }
+        binding.apply {
+            if (mumBabyList.isEmpty()) {
+                imgEmpty.visibility = View.VISIBLE
+            } else {
+
+                imgEmpty.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun filterByStatus(babies: List<MotherBabyItem>, s: String) {
+        for ((i, baby) in babies.withIndex()) {
+            if (baby.status == s) {
+                mumBabyList.add(baby)
+            }
+        }
+        /*   baby.forEach {
+               val status = it.status
+               if (status.equals(s)) {
+                   mumBabyList.add(it)
+
+               }
+               Timber.e("Selected Status $s  Current $status ${it.babyName} ${it.status}\n" +
+                       "Added $mumBabyList")
+
+           }*/
+        binding.apply {
+            if (mumBabyList.isEmpty()) {
+                imgEmpty.visibility = View.VISIBLE
+            } else {
+
+                imgEmpty.visibility = View.GONE
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -230,13 +309,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 requireContext(),
                 json
             )
-            /*  val sender = NotificationFactory(requireContext())
-              sender.displayNotification(
-                  SimpleNotification(
-                      title = "Baby Registration",
-                      content = "A new Baby ${patientItem.babyName} has been registered"
-                  )
-              )*/
+
             findNavController().navigate(
                 BabiesFragmentDirections.navigateToChildDashboard(
                     patientItem.resourceId
@@ -256,24 +329,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-      /*  if (text != "Filter By:") {
-            reloadFiltered(text)
-        }
-        adapterList.notifyDataSetChanged()*/
-
-    }
-
-    private fun reloadFiltered(text: String) {
-        val matching = ArrayList<MotherBabyItem>()
-        mumBabyList.forEach {
-            Timber.e("\n\n Each Baby ${it.status?.trim()}")
-            val status = it.status?.trim()
-            if (status == text) {
-                matching.add(it)
-            }
-        }
-        mumBabyList = matching
-        adapterList.notifyDataSetChanged()
+        patientListViewModel.searchPatientsByName("")
+        status = text
 
     }
 

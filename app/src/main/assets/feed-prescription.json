@@ -157,6 +157,90 @@
       ]
     },
     {
+      "linkId": "Feed-Frequency",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Feeding-Frequency",
+          "item": [
+            {
+              "linkId": "4.1",
+              "text": "Frequency",
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
+                      }
+                    ],
+                    "text": "Flyover"
+                  }
+                }
+              ]
+            }
+          ],
+          "answerOption": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "0"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA32-8",
+                "display": "2 Hourly"
+              }
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                  "valueString": "1"
+                }
+              ],
+              "valueCoding": {
+                "code": "LA33-6",
+                "display": "3 Hourly"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "linkId": "Feed-Type-Selection",
       "type": "group",
       "extension": [
@@ -303,101 +387,6 @@
                   }
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-
-    {
-      "linkId": "Breast-Feed-Frequency",
-      "type": "group",   "enableWhen": [
-      {
-        "question": "/Feed-Selection",
-        "operator": "=",
-        "answerCoding": {
-          "code": "Breast-Feed",
-          "display": "Breast Feed",
-          "system": "http://snomed.info/sct"
-        }
-      }
-    ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Frequency",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Frequency",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "2 Hourly"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "3 Hourly"
-              }
             }
           ]
         }
@@ -581,102 +570,7 @@
           ]
         }
       ]
-    },
-    {
-      "linkId": "EBM-Feeding-Frequency",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "EBM",
-            "display": "EBM",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Frequency",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Frequency",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "2 Hourly"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "3 Hourly"
-              }
-            }
-          ]
-        }
-      ]
-    },
+    }, 
     {
       "linkId": "Formula-Type",
       "type": "group",
@@ -952,101 +846,6 @@
       ]
     },
     {
-      "linkId": "Formula-Frequency",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Formula",
-            "display": "Formula",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Frequency",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Frequency",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "2 Hourly"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "3 Hourly"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "linkId": "DHM-Type",
       "type": "group",
       "enableWhen": [
@@ -1315,101 +1114,6 @@
                   }
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "DHM-Frequency",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "DHM",
-            "display": "DHM",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Frequency",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Frequency",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "2 Hourly"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "3 Hourly"
-              }
             }
           ]
         }
@@ -1756,101 +1460,6 @@
                   }
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "IV-Fluid-Frequency",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "IV Fluid-Additives",
-            "display": "IV Fluid and Additives",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Frequency",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Frequency",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "2 Hourly"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "3 Hourly"
-              }
             }
           ]
         }

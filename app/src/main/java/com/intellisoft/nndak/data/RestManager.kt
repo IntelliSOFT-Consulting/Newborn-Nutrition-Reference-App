@@ -115,6 +115,28 @@ class RestManager {
             }
         )
     }
+    fun addDHMStock(context: Context, data: DHMStock, onResult: (AuthResponse?) -> Unit) {
+        getService(context).addDHMStock(data).enqueue(
+            object : Callback<AuthResponse> {
+                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<AuthResponse>,
+                    response: Response<AuthResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
 
     fun loadStatistics(context: Context, onResult: (Statistics?) -> Unit) {
         getService(context).loadStatistics().enqueue(

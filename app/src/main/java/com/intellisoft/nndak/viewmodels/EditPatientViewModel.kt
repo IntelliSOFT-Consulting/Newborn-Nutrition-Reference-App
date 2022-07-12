@@ -70,20 +70,27 @@ class EditPatientViewModel(application: Application, private val state: SavedSta
 
             ) {
 
-                if (!patient.hasDeceased()) {
-                    patient.addressFirstRep.postalCode = SYNC_VALUE
-                    patient.addressFirstRep.state = SYNC_VALUE
-                    patient.active = true
-                }else{
-                    patient.addressFirstRep.postalCode = SYNC_VALUE
-                    patient.addressFirstRep.state = SYNC_STATE
-                    patient.active = false
-                }
-                patient.id = patientId
-                fhirEngine.update(patient)
-                isPatientSaved.value = true
-                return@launch
+                val birthDate = patient.birthDate.toString()
+                val refineDate = FormatHelper().getBirthdayZone(birthDate)
+                val todayDate = FormatHelper().getTodayDate()
+                val isValid = FormatHelper().checkDateTime(refineDate, todayDate)
 
+                if (isValid) {
+                    if (!patient.hasDeceased()) {
+                        patient.addressFirstRep.postalCode = SYNC_VALUE
+                        patient.addressFirstRep.state = SYNC_VALUE
+                        patient.active = true
+                    } else {
+                        patient.addressFirstRep.postalCode = SYNC_VALUE
+                        patient.addressFirstRep.state = SYNC_STATE
+                        patient.active = false
+                    }
+                    patient.id = patientId
+                    fhirEngine.update(patient)
+                    isPatientSaved.value = true
+                    return@launch
+
+                }
             }
 
             isPatientSaved.value = false

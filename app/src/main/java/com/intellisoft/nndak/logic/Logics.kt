@@ -53,15 +53,13 @@ class Logics {
         const val VOLUME_DISPENSED = "Volume-Dispensed"
 
         const val BREAST_MILK = "Breast-Milk"
-        const val BREAST_FREQUENCY = "Breast-Feed-Frequency"
+        const val FEEDING_FREQUENCY = "Feed-Frequency"
 
         const val FORMULA_VOLUME = "Formula-Volume"
-        const val FORMULA_FREQUENCY = "Formula-Frequency"
         const val FORMULA_ROUTE = "Formula-Route"
         const val FORMULA_TYPE = "Formula-Type"
 
         const val DHM_VOLUME = "DHM-Volume"
-        const val DHM_FREQUENCY = "DHM-Frequency"
         const val DHM_ROUTE = "DHM-Route"
 
         const val DHM_TYPE = "DHM-Type"
@@ -70,11 +68,9 @@ class Logics {
         const val CONSENT_DATE = "Consent-Date"
 
         const val IV_VOLUME = "IV-Volume"
-        const val IV_FREQUENCY = "IV-Fluid-Frequency"
         const val IV_ROUTE = "IV-Fluid-Route"
 
         const val EBM_VOLUME = "EBM-Volume"
-        const val EBM_FREQUENCY = "EBM-Feeding-Frequency"
         const val EBM_ROUTE = "EBM-Feeding-Route"
 
         const val ADDITIONAL_FEEDS = "Additional-Feeds"

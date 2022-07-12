@@ -90,7 +90,10 @@ data class FeedsData(
 )
 
 data class WeightsData(
-    @SerializedName("currentWeight") val current: String,
+    @SerializedName("babyGender") val babyGender: String,
+    @SerializedName("currentWeight") val currentWeight: String,
+    @SerializedName("gestationAge") val gestationAge: String,
+    @SerializedName("dayOfLife") val dayOfLife: Int,
     @SerializedName("data") val data: List<ActualData>,
 )
 
@@ -98,4 +101,19 @@ data class ActualData(
     @SerializedName("lifeDay") val day: String,
     @SerializedName("actual") val actual: String,
     @SerializedName("projected") val projected: String,
+)
+
+data class CombinedGrowth(
+    val actualWeight: WeightsData,
+    val projectedWeight: List<GrowthOptions>
+)
+
+data class GrowthData(
+    val age: Int,
+    val data: List<GrowthOptions>
+)
+
+data class GrowthOptions(
+    val option: String,
+    val value: String,
 )

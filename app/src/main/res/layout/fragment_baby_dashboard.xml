@@ -93,7 +93,6 @@
                             android:id="@+id/tv_current_weight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="@dimen/_20sp" />
 

@@ -397,6 +397,9 @@
     <string name="add_pres">Add new Prescription</string>
     <string name="empty_hist">Feeding and monitoring has not yet taken place</string>
     <string name="app_breast">EBM</string>
+    <string name="app_formula">Formula</string>
+    <string name="formula_mls">Formula mls</string>
+    <string name="problems">Experienced problems submitting data</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

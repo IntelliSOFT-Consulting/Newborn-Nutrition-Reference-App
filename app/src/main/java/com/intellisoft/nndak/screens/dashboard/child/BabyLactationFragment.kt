@@ -33,6 +33,7 @@ import com.intellisoft.nndak.databinding.FragmentBabyLactationBinding
 import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.logic.Logics.Companion.NEONATOLOGIST
+import com.intellisoft.nndak.logic.Logics.Companion.NURSE
 import com.intellisoft.nndak.logic.Logics.Companion.NUTRITION_OFFICER
 import com.intellisoft.nndak.logic.Logics.Companion.PEDIATRICIAN
 import com.intellisoft.nndak.utils.formatTime
@@ -153,7 +154,7 @@ class BabyLactationFragment : Fragment() {
                 if (allowed) {
                     findNavController().navigate(
                         BabyLactationFragmentDirections.navigateToFeeding(
-                            args.patientId,contra
+                            args.patientId, contra
                         )
                     )
                 } else {
@@ -175,8 +176,11 @@ class BabyLactationFragment : Fragment() {
                     val gest = data.dashboard.gestation ?: ""
                     val sta = data.status
                     val weight = data.birthWeight
-                  try{  val code = weight?.split("\\.".toRegex())?.toTypedArray()
-                    bWeight = code?.get(0)?.toInt()!!}catch (e:Exception){}
+                    try {
+                        val code = weight?.split("\\.".toRegex())?.toTypedArray()
+                        bWeight = code?.get(0)?.toInt()!!
+                    } catch (e: Exception) {
+                    }
 
                     incDetails.tvBabyName.text = data.babyName
                     incDetails.tvMumName.text = data.motherName
@@ -268,6 +272,7 @@ class BabyLactationFragment : Fragment() {
                     || role == NUTRITION_OFFICER
                     || role == PEDIATRICIAN
                     || role == NEONATOLOGIST
+                    || role == NURSE
         }
         return false
     }

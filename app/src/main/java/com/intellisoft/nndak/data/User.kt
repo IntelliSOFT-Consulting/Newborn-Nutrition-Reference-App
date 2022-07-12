@@ -33,7 +33,16 @@ data class User(
     @SerializedName("role") val role: String
 
 )
+
 data class SessionData(
     @SerializedName("patientId") val patientId: String,
     @SerializedName("status") val status: Boolean,
+)
+
+data class DHMStock(
+    @SerializedName("Pasteurized") val Pasteurized: String,
+    @SerializedName("unPasteurized") val unPasteurized: String,
+    @SerializedName("dhmType") val dhmType: String,
+    @SerializedName("userId") val userId: String
+
 )

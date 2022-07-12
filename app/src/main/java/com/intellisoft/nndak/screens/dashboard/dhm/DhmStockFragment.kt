@@ -24,6 +24,8 @@ import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.DHMStock
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.logic.Logics.Companion.PASTEURIZED
@@ -56,6 +58,7 @@ class DhmStockFragment : Fragment() {
     private lateinit var type: String
     private lateinit var totalDhm: String
     val stockList = ArrayList<CodingObservation>()
+    private val apiService = RestManager()
     private val binding
         get() = _binding!!
 
@@ -205,6 +208,41 @@ class DhmStockFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         (activity as MainActivity).displayDialog()
+        val userId = (activity as MainActivity).retrieveUser(false)
+
+        val stock = DHMStock(unPasteurized = upa, Pasteurized = pa, dhmType = type, userId = userId)
+        apiService.addDHMStock(requireContext(), stock) {
+
+            (activity as MainActivity).hideDialog()
+
+            if (it != null) {
+                val message = it.message
+                val alertDialog: AlertDialog =
+                    this.let {
+                        val builder = AlertDialog.Builder(requireContext())
+                        builder.apply {
+                            setTitle("Success")
+                            setMessage(message)
+                            setPositiveButton(getString(android.R.string.yes)) { _, _ ->
+                            }
+                        }
+                        builder.create()
+                    }
+                alertDialog.show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.problems),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+    }
+
+    private fun okClickFhir() {
+        confirmationDialog.dismiss()
+        (activity as MainActivity).displayDialog()
 
         CoroutineScope(Dispatchers.IO).launch {
             val questionnaireFragment =
@@ -242,7 +280,7 @@ class DhmStockFragment : Fragment() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
             if (!it.success) {
                 Toast.makeText(
-                    requireContext(),it.message,
+                    requireContext(), it.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -287,19 +325,17 @@ class DhmStockFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        val alertDialog: AlertDialog? =
-            activity?.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setMessage(getString(R.string.cancel_questionnaire_message))
-                    setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                        NavHostFragment.findNavController(this@DhmStockFragment).navigateUp()
-                    }
-                    setNegativeButton(getString(android.R.string.no)) { _, _ -> }
-                }
-                builder.create()
+
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Are you sure?")
+            .setContentText(getString(R.string.cancel_questionnaire_message))
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                NavHostFragment.findNavController(this@DhmStockFragment).navigateUp()
             }
-        alertDialog?.show()
+            .setCancelText("No")
+            .show()
     }
 
     private fun onBackPressed() {

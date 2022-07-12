@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="1dp"
-    android:paddingTop="@dimen/_5dp"
+    android:paddingTop="@dimen/_1dp"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
