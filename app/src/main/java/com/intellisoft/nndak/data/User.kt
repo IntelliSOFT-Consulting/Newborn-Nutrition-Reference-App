@@ -8,6 +8,7 @@ data class LoginData(
 )
 
 data class AuthResponse(
+    @SerializedName("id") val id: String?,
     @SerializedName("status") val status: String?,
     @SerializedName("token") val token: String?,
     @SerializedName("issued") val issued: String?,
@@ -40,7 +41,7 @@ data class SessionData(
 )
 
 data class DHMStock(
-    @SerializedName("Pasteurized") val Pasteurized: String,
+    @SerializedName("pasteurized") val pasteurized: String,
     @SerializedName("unPasteurized") val unPasteurized: String,
     @SerializedName("dhmType") val dhmType: String,
     @SerializedName("userId") val userId: String

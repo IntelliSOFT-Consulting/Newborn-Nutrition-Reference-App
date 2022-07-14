@@ -2,7 +2,7 @@ package com.intellisoft.nndak.screens.custom
 
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.contrib.views.barcode.QuestionnaireItemBarCodeReaderViewHolderFactory
-
+/*
 class CustomQuestionnaireFragment : QuestionnaireFragment() {
     override fun getCustomQuestionnaireItemViewHolderFactoryMatchers():
             List<QuestionnaireItemViewHolderFactoryMatcher> {
@@ -24,8 +24,7 @@ class CustomQuestionnaireFragment : QuestionnaireFragment() {
             }
         )
     }
-}
-/*
+}*/
 
 class CustomQuestionnaireFragment : QuestionnaireFragment() {
     override fun getCustomQuestionnaireItemViewHolderFactoryMatchers():
@@ -49,4 +48,4 @@ class CustomQuestionnaireFragment : QuestionnaireFragment() {
             }
         )
     }
-}*/
+}

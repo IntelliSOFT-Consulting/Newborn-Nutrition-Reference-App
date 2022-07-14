@@ -400,6 +400,18 @@
     <string name="app_formula">Formula</string>
     <string name="formula_mls">Formula mls</string>
     <string name="problems">Experienced problems submitting data</string>
+    <string name="new_expression">New Expression Assessment</string>
+    <string name="tv_history">Expression History</string>
+    <string name="hist">Expression History</string>
+    <string name="exp_freq">Frequency of Expressions</string>
+    <string name="_date">Date</string>
+    <string name="timings">Timings of Expressions</string>
+    <string name="stimulating">Stimulating Milk Ejection</string>
+    <string name="hand_expres">Hand Expression</string>
+    <string name="breast_pump">Using breast pump</string>
+    <string name="breast_cond">Breast Condition</string>
+    <string name="milk_flow">Milk Flow</string>
+    <string name="milk_volume">Milk Volume</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

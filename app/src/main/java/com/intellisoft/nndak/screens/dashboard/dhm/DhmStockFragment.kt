@@ -210,7 +210,12 @@ class DhmStockFragment : Fragment() {
         (activity as MainActivity).displayDialog()
         val userId = (activity as MainActivity).retrieveUser(false)
 
-        val stock = DHMStock(unPasteurized = upa, Pasteurized = pa, dhmType = type, userId = userId)
+        val stock = DHMStock(
+            unPasteurized = upa,
+            pasteurized = pa,
+            dhmType = type,
+            userId = userId
+        )
         apiService.addDHMStock(requireContext(), stock) {
 
             (activity as MainActivity).hideDialog()

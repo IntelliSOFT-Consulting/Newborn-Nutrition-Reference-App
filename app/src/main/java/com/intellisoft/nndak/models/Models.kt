@@ -114,6 +114,23 @@ data class OrdersItem(
 )
 
 /**
+ * Expressions History
+ */
+data class ExpressionHistory(
+    val id: String,
+    val resourceId: String,
+    val date: String,
+    val frequency: String,
+    val timing: String,
+    val massage: String,
+    val anxious: String,
+    val skinContact: String,
+    val handExpression: String,
+    val breastCondition: String,
+    val milkVolume: String,
+)
+
+/**
  * Mother-Baby
  */
 

@@ -97,6 +97,7 @@ class PatientDetailsViewModel(
     private val patientId: String
 ) : AndroidViewModel(application) {
     val liveMumChild = MutableLiveData<MotherBabyItem>()
+    val liveAssessmentExpressions = MutableLiveData<List<ExpressionHistory>>()
     val liveOrder = MutableLiveData<OrdersItem>()
     val liveFeeds = MutableLiveData<FeedsDistribution>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
@@ -1096,6 +1097,10 @@ class PatientDetailsViewModel(
         return observations.find { it.code == code }?.value ?: "--"
     }
 
+    private fun extractValueDate(observations: List<ObservationItem>, code: String): String {
+        return observations.find { it.code == code }?.effective ?: "--"
+    }
+
     private fun extractQuantity(observations: List<ObservationItem>, code: String): String {
         return observations.find { it.code == code }?.quantity ?: "0"
     }
@@ -1127,7 +1132,11 @@ class PatientDetailsViewModel(
         val def = if (relatedFeeds.isNotEmpty()) {
 
             val parentId = getFeedingInstancesDataModel(context, care.encounterId)
-            parentId.first().deficit
+            try {
+                parentId.first().deficit
+            } catch (e: Exception) {
+                total
+            }
 
         } else {
             total
@@ -1454,6 +1463,83 @@ class PatientDetailsViewModel(
             description = dhmVolume,
             status = "active"
         )
+    }
+
+    fun getAssessmentExpressions() {
+        viewModelScope.launch {
+            liveAssessmentExpressions.value = getExpressionAssessmentDataModel()
+        }
+    }
+
+    private suspend fun getExpressionAssessmentDataModel(): List<ExpressionHistory> {
+        val expressions: MutableList<ExpressionHistory> = mutableListOf()
+        val history = getAllEncounters("Expression-Assessment")
+        if (history.isNotEmpty()) {
+            history.forEach {
+
+                expressions.add(retrieveExpressions(it))
+
+            }
+        }
+
+        return expressions.reversed()
+    }
+
+    private suspend fun retrieveExpressions(it: EncounterItem): ExpressionHistory {
+        val observations = getObservationsPerEncounter(it.id)
+        var frequency = "N/A"
+        var timing = "N/A"
+        var date = "N/A"
+        var massage = "N/A"
+        var anxious = "N/A"
+        var skinContact = "N/A"
+        var handExpression = "N/A"
+        var breastCondition = "N/A"
+        var milkVolume = "N/A"
+        if (observations.isNotEmpty()) {
+            frequency = extractValue(observations, "Expression-Frequency")
+            timing = extractValue(observations, "Timing-Expression")
+            massage = extractValue(observations, "Breast-Massage")
+            anxious = extractValue(observations, "Anxious")
+            skinContact = extractValue(observations, "Skin-Contact")
+            handExpression = extractValue(observations, "Hand-Expression")
+            milkVolume = extractValue(observations, "Milk-Volume")
+            breastCondition = extractValue(observations, "Breast-Condition")
+            date = extractValueDate(observations, "Timing-Expression")
+            if (date.isNotEmpty()) date = try {
+                FormatHelper().getSimpleReverseDate(date)
+            } catch (e: Exception) {
+                date
+            }
+        }
+        return ExpressionHistory(
+            id = it.id,
+            resourceId = it.id,
+            date = date,
+            frequency = "$frequency in 24 hours",
+            timing = timing,
+            massage = massage,
+            anxious = anxious,
+            skinContact = skinContact,
+            handExpression = handExpression,
+            breastCondition = breastCondition,
+            milkVolume = milkVolume,
+        )
+    }
+
+    private suspend fun getAllEncounters(key: String): List<EncounterItem> {
+        val encounters: MutableList<EncounterItem> = mutableListOf()
+        fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                sort(Encounter.DATE, Order.DESCENDING)
+
+            }
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+            .filter { it.code == key }
+            .let { encounters.addAll(it) }
+
+        return encounters.reversed()
     }
 
 

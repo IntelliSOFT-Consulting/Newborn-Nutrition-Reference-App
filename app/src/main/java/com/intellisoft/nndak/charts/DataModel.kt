@@ -103,6 +103,25 @@ data class ActualData(
     @SerializedName("projected") val projected: String,
 )
 
+
+data class OrderData(
+    @SerializedName("status") val status: String,
+    @SerializedName("data") val data: List<ItemOrder>,
+)
+
+data class ItemOrder(
+    @SerializedName("orderId") val orderId: String,
+    @SerializedName("patientId") val patientId: String,
+    @SerializedName("motherIp") val motherIp: String,
+    @SerializedName("motherName") val motherName: String,
+    @SerializedName("babyName") val babyName: String,
+    @SerializedName("babyAge") val babyAge: String,
+    @SerializedName("consentGiven") val consentGiven: String,
+    @SerializedName("dhmType") val dhmType: String,
+    @SerializedName("dhmReason") val dhmReason: String,
+    @SerializedName("dhmVolume") val dhmVolume: String,
+)
+
 data class CombinedGrowth(
     val actualWeight: WeightsData,
     val projectedWeight: List<GrowthOptions>

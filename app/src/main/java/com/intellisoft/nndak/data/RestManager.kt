@@ -24,7 +24,7 @@ class RestManager {
         if (!::apiService.isInitialized) {
             val retrofit = base?.let {
                 Retrofit.Builder()
-                   .baseUrl(it) 
+                    .baseUrl(it)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okhttpClient(context))
                     .build()
@@ -115,6 +115,7 @@ class RestManager {
             }
         )
     }
+
     fun addDHMStock(context: Context, data: DHMStock, onResult: (AuthResponse?) -> Unit) {
         getService(context).addDHMStock(data).enqueue(
             object : Callback<AuthResponse> {
@@ -128,6 +129,7 @@ class RestManager {
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
+                    Timber.e("onResponse $response")
                     if (response.isSuccessful) {
                         onResult(response.body())
                     } else {
@@ -150,6 +152,29 @@ class RestManager {
                 override fun onResponse(
                     call: Call<Statistics>,
                     response: Response<Statistics>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+
+    fun loadOrders(context: Context, onResult: (OrderData?) -> Unit) {
+        getService(context).loadOrders().enqueue(
+            object : Callback<OrderData> {
+                override fun onFailure(call: Call<OrderData>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<OrderData>,
+                    response: Response<OrderData>
                 ) {
                     if (response.isSuccessful) {
                         onResult(response.body())
@@ -184,7 +209,7 @@ class RestManager {
         )
     }
 
-    fun loadExpressedMilk(context: Context,ip:String, onResult: (MilkExpression?) -> Unit) {
+    fun loadExpressedMilk(context: Context, ip: String, onResult: (MilkExpression?) -> Unit) {
         getService(context).loadExpressedMilk(ip).enqueue(
             object : Callback<MilkExpression> {
                 override fun onFailure(call: Call<MilkExpression>, t: Throwable) {
@@ -206,7 +231,7 @@ class RestManager {
         )
     }
 
-    fun loadFeedDistribution(context: Context,ip:String, onResult: (FeedsDistribution?) -> Unit) {
+    fun loadFeedDistribution(context: Context, ip: String, onResult: (FeedsDistribution?) -> Unit) {
         getService(context).loadFeedDistribution(ip).enqueue(
             object : Callback<FeedsDistribution> {
                 override fun onFailure(call: Call<FeedsDistribution>, t: Throwable) {
@@ -226,7 +251,8 @@ class RestManager {
             }
         )
     }
-    fun loadWeights(context: Context,ip:String, onResult: (WeightsData?) -> Unit) {
+
+    fun loadWeights(context: Context, ip: String, onResult: (WeightsData?) -> Unit) {
 
         getService(context).loadWeights(ip).enqueue(
             object : Callback<WeightsData> {
@@ -247,29 +273,33 @@ class RestManager {
             }
         )
     }
-    fun loadHistory(context: Context,careId:String, patientId:String, onResult: (WeightsData?) -> Unit) {
 
-     /*   getService(context).loadHistory(careId,patientId).enqueue(
-            object : Callback<WeightsData> {
-                override fun onFailure(call: Call<WeightsData>, t: Throwable) {
-                    onResult(null)
-                }
+    fun loadHistory(
+        context: Context,
+        careId: String,
+        patientId: String,
+        onResult: (WeightsData?) -> Unit
+    ) {
 
-                override fun onResponse(
-                    call: Call<WeightsData>,
-                    response: Response<WeightsData>
-                ) {
-                    if (response.isSuccessful) {
-                        onResult(response.body())
-                    } else {
-                        onResult(null)
-                    }
-                }
-            }
-        )*/
+        /*   getService(context).loadHistory(careId,patientId).enqueue(
+               object : Callback<WeightsData> {
+                   override fun onFailure(call: Call<WeightsData>, t: Throwable) {
+                       onResult(null)
+                   }
+
+                   override fun onResponse(
+                       call: Call<WeightsData>,
+                       response: Response<WeightsData>
+                   ) {
+                       if (response.isSuccessful) {
+                           onResult(response.body())
+                       } else {
+                           onResult(null)
+                       }
+                   }
+               }
+           )*/
     }
-
-
 
 
 }

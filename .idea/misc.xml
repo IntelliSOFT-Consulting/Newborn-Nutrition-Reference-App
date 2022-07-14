@@ -88,6 +88,7 @@
         <entry key="app/src/main/res/drawable/btn_rounded_green.xml" value="0.1545" />
         <entry key="app/src/main/res/drawable/default_border.xml" value="0.2685" />
         <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.272" />
+        <entry key="app/src/main/res/drawable/line_dash_grey_20.xml" value="0.2545" />
         <entry key="app/src/main/res/font/poppins.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_bold.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_light.xml" value="0.10598958333333333" />
@@ -121,9 +122,11 @@
         <entry key="app/src/main/res/layout/custom_edittext_layout.xml" value="0.14" />
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/custom_number_picker_layout.xml" value="0.10849834983498349" />
+        <entry key="app/src/main/res/layout/dialog_expression_success.xml" value="0.10375412541254125" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.25" />
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/expression_history.xml" value="0.16979166666666667" />
         <entry key="app/src/main/res/layout/feed_item_view.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/feeding.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/feeding_cues_dialog.xml" value="0.22" />
@@ -144,6 +147,7 @@
         <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_stock.xml" value="0.16848958333333333" />
         <entry key="app/src/main/res/layout/fragment_edit_baby.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_expression.xml" value="0.15944719471947194" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16316006600660066" />
         <entry key="app/src/main/res/layout/fragment_landing.xml" value="0.11" />
         <entry key="app/src/main/res/layout/fragment_maternity.xml" value="0.1" />
@@ -182,6 +186,7 @@
         <entry key="app/src/main/res/layout/prescription_list_item.xml" value="0.1375" />
         <entry key="app/src/main/res/layout/progress.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/reason.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/record_feeding.xml" value="0.15859375" />
         <entry key="app/src/main/res/layout/routes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/screen_questionnaire.xml" value="0.1747112211221122" />
         <entry key="app/src/main/res/layout/screener_encounter_fragment.xml" value="0.1" />

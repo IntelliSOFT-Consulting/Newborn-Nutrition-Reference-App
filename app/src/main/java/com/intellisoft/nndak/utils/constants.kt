@@ -26,6 +26,7 @@ object Constants {
     const val WEIGHTS = "weights"
     const val STATISTICS = "statistics"
     const val DHM = "donor"
+    const val CURRENT_BABY = "current_baby"
     const val STROKE_WIDTH = 2f
     const val CORNER_RADIUS = 10f
 

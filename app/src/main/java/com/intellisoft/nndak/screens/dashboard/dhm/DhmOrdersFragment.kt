@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -30,6 +31,8 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.OrdersAdapter
+import com.intellisoft.nndak.charts.ItemOrder
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
 import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
@@ -53,6 +56,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
     private var _binding: FragmentDhmOrdersBinding? = null
+    private val apiService = RestManager()
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -63,7 +67,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var filterData: String? = null
 
-    private val orderList = ArrayList<OrdersItem>()
+    private val orderList = ArrayList<ItemOrder>()
     lateinit var adapterList: OrdersAdapter
 
     override fun onCreateView(
@@ -105,25 +109,26 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
-            patientListViewModel.reloadOrders()
-            patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
-                if (it.isEmpty()) {
-                    binding.empty.cpBgView.visibility = View.VISIBLE
-                    binding.pbLoading.visibility = View.GONE
-                }
-                if (it.isNotEmpty()) {
-                    binding.empty.cpBgView.visibility = View.GONE
-                    binding.pbLoading.visibility = View.GONE
-                    orderList.clear()
-                    it.forEach { order ->
-                        if (order.motherName != "null") {
-                            orderList.add(order)
-                        }
-                    }
-                    adapterList.notifyDataSetChanged()
+            loadOrders()
+            /*  patientListViewModel.reloadOrders()
+              patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
+                  if (it.isEmpty()) {
+                      binding.empty.cpBgView.visibility = View.VISIBLE
+                      binding.pbLoading.visibility = View.GONE
+                  }
+                  if (it.isNotEmpty()) {
+                      binding.empty.cpBgView.visibility = View.GONE
+                      binding.pbLoading.visibility = View.GONE
+                      orderList.clear()
+                      it.forEach { order ->
+                          if (order.motherName != "null") {
+                              orderList.add(order)
+                          }
+                      }
+                      adapterList.notifyDataSetChanged()
 
-                }
-            }
+                  }
+              }*/
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -213,6 +218,37 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    private fun loadOrders() {
+        apiService.loadOrders(requireContext()) {
+            if (it != null) {
+                Timber.e("Data Retrieved $it")
+                if (it.data.isEmpty()) {
+                    binding.empty.cpBgView.visibility = View.VISIBLE
+                    binding.pbLoading.visibility = View.GONE
+                }
+                if (it.data.isNotEmpty()) {
+                    binding.empty.cpBgView.visibility = View.GONE
+                    binding.pbLoading.visibility = View.GONE
+                    orderList.clear()
+                    it.data.forEach { order ->
+                        if (order.motherName != "null") {
+                            orderList.add(order)
+                        }
+                    }
+                    adapterList.notifyDataSetChanged()
+
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.problems),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -237,15 +273,15 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onOrderClick(order: OrdersItem) {
+    private fun onOrderClick(order: ItemOrder) {
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
             if (role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT) {
-                findNavController().navigate(
+             /*   findNavController().navigate(
                     DhmOrdersFragmentDirections.navigateToProcessing(
                         order.patientId, order.encounterId, order.resourceId
                     ),
-                )
+                )*/
             } else {
                 accessDenied()
             }

@@ -255,7 +255,7 @@
       ],
       "item": [
         {
-          "text": "Enter Types of Feeds",
+          "text": "Enter Types of Feeds and ",
           "type": "choice",
           "linkId": "/Feed-Selection",
           "repeats": true,
@@ -275,13 +275,6 @@
             }
           ],
           "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Breast-Feed",
-                "display": "Breast Feed",
-                "system": "http://snomed.info/sct"
-              }
-            },
             {
               "valueCoding": {
                 "code": "EBM",
@@ -549,7 +542,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -570,7 +563,7 @@
           ]
         }
       ]
-    }, 
+    },
     {
       "linkId": "Formula-Type",
       "type": "group",
@@ -823,7 +816,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -1097,7 +1090,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -1443,7 +1436,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {

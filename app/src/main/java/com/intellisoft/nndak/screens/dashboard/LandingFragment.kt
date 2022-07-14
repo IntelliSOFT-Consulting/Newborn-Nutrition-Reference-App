@@ -46,7 +46,7 @@ class LandingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = resources.getString(R.string.home_menu_dashboard)
+            title = resources.getString(R.string.app_dashboard)
             setDisplayHomeAsUpEnabled(true)
         }
         setHasOptionsMenu(true)

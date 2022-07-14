@@ -1628,10 +1628,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
-                    if (resource.hasCode() && !resource.code.hasCoding()) {
-                        return true
-                    }
-                    if (resource.hasValue() && !resource.value.hasPrimitiveValue()) {
+                    if (resource.hasCode() && !resource.code.hasText()) {
                         return true
                     }
 
@@ -3008,6 +3005,86 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
             }
 
+        }
+    }
+
+    fun updateExpression(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                if (isRequiredFieldMissing(bundle)) {
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Check required fields"
+                        )
+                    )
+                    return@launch
+                }
+
+                val subjectReference = Reference("Patient/$patientId")
+                val encounterId = generateUuid()
+                title = "Expression-Assessment"
+                autoSaveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(
+                    MessageItem(
+                        success = true, message = "Update Successful"
+                    )
+                )
+            } catch (e: Exception) {
+                customMessage.postValue(
+                    MessageItem(
+                        success = false, message = "Experienced problems saving data"
+                    )
+                )
+            }
+        }
+    }
+
+    private suspend fun autoSaveResources(
+        bundle: Bundle,
+        subjectReference: Reference,
+        encounterId: String,
+        reason: String,
+    ) {
+
+        val encounterReference = Reference("Encounter/$encounterId")
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        resource.valueStringType.value = resource.code.text
+                        resource.issued = Date()
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Condition -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Encounter -> {
+                    resource.subject = subjectReference
+                    resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
+                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
+                    resource.status = Encounter.EncounterStatus.INPROGRESS
+                    resource.period.start = Date()
+                    saveResourceToDatabase(resource)
+                }
+
+            }
         }
     }
 }

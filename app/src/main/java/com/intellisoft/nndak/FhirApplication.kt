@@ -10,6 +10,7 @@ import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
 import com.intellisoft.nndak.utils.Constants.ACTIVE
+import com.intellisoft.nndak.utils.Constants.CURRENT_BABY
 import com.intellisoft.nndak.utils.Constants.DEMO_API_SERVER
 import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
 import com.intellisoft.nndak.utils.Constants.DHM
@@ -186,11 +187,23 @@ class FhirApplication : Application() {
                 .commit()
         }
 
+
+        fun updateCurrentPatient(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(CURRENT_BABY, it)
+                .commit()
+        }
+
         fun getExpressions(context: Context): String? {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 MILK_EXPRESSION,
                 ""
             )
+        }
+        fun getCurrentPatient(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                CURRENT_BABY,
+                ""
+            ).toString()
         }
 
         fun getFeedings(context: Context): String? {
@@ -220,6 +233,7 @@ class FhirApplication : Application() {
                 ""
             )
         }
+
 
 
     }

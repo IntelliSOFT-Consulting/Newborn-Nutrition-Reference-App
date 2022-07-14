@@ -384,6 +384,15 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+    fun getSimpleReverseDate(date: String): String {
+
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
 
     fun extractCareDateString(date: String): String {
 
