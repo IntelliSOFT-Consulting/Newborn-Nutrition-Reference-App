@@ -20,9 +20,12 @@ import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.ItemOrder
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentProcessOrderBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.utils.boldText
@@ -47,12 +50,11 @@ private const val ARG_PARAM2 = "param2"
  */
 class ProcessOrderFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
-    private lateinit var fhirEngine: FhirEngine
-    private lateinit var patientDetailsViewModel: PatientDetailsViewModel
-    private val args: ProcessOrderFragmentArgs by navArgs()
     private var _binding: FragmentProcessOrderBinding? = null
     private val viewModel: ScreenerViewModel by viewModels()
+    private val apiService = RestManager()
     private var dhmType: String = ""
+    private lateinit var order: ItemOrder
     private val binding
         get() = _binding!!
 
@@ -82,52 +84,19 @@ class ProcessOrderFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-        fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientDetailsViewModel =
-            ViewModelProvider(
-                this,
-                PatientDetailsViewModelFactory(
-                    requireActivity().application,
-                    fhirEngine,
-                    args.patientId
-                )
-            )
-                .get(PatientDetailsViewModel::class.java)
-        patientDetailsViewModel.getOrder(args.encounter)
-        patientDetailsViewModel.liveOrder.observe(viewLifecycleOwner) { ordersItem ->
-            if (ordersItem != null) {
-                binding.apply {
-                    dhmType = ordersItem.dhmType.toString()
-                    incTitle.lnParent.weightSum = 5F
-                    incDetails.appBabyName.text = ordersItem.babyName
-                    incDetails.appMotherName.text = ordersItem.motherName
-                    incDetails.appIpNumber.text = ordersItem.ipNumber
-                    incDetails.appBabyAge.text = ordersItem.babyAge
-                    incDetails.appDhmType.text = ordersItem.dhmType
-                    incDetails.appConsent.text = ordersItem.consentGiven
+        val data = FhirApplication.getOrder(requireContext())
+        if (data != null) {
+            val gson = Gson()
+            try {
+                val it: ItemOrder = gson.fromJson(data, ItemOrder::class.java)
+                order = it
+                updateUI(it)
 
-
-                    incDetails.appBabyAge.visibility = View.VISIBLE
-                    incDetails.appAction.visibility = View.GONE
-                    incDetails.lnAction.visibility = View.GONE
-                    incDetails.appConsent.visibility = View.GONE
-                    incDetails.lnParent.weightSum = 5F
-
-                    appDhmReason.text = ordersItem.dhmReason
-                    appDhmVolume.text = ordersItem.description
-
-                    /** Hide Titles */
-
-                    incTitle.appBabyAge.visibility = View.VISIBLE
-                    incTitle.appAction.visibility = View.GONE
-                    incTitle.lnAction.visibility = View.GONE
-                    incTitle.appConsent.visibility = View.GONE
-                    incTitle.lnParent.weightSum = 5F
-                }
-
+            } catch (e: Exception) {
             }
-
         }
+
+
         binding.apply {
 
             /**
@@ -153,6 +122,38 @@ class ProcessOrderFragment : Fragment() {
 
     }
 
+    private fun updateUI(it: ItemOrder) {
+
+        binding.apply {
+             dhmType = it.dhmType
+            incTitle.lnParent.weightSum = 5F
+            incDetails.appBabyName.text = it.babyName
+            incDetails.appMotherName.text = it.motherName
+            incDetails.appIpNumber.text = it.motherIp
+            incDetails.appBabyAge.text = it.babyAge
+            incDetails.appDhmType.text = it.dhmType
+            incDetails.appConsent.text = it.consentGiven
+            appDhmReason.text = it.dhmReason
+            appDhmVolume.text = it.dhmVolume
+
+            incDetails.appBabyAge.visibility = View.VISIBLE
+            incDetails.appAction.visibility = View.GONE
+            incDetails.lnAction.visibility = View.GONE
+            incDetails.appConsent.visibility = View.GONE
+            incDetails.lnParent.weightSum = 5F
+
+
+            /** Hide Titles */
+
+            incTitle.appBabyAge.visibility = View.VISIBLE
+            incTitle.appAction.visibility = View.GONE
+            incTitle.lnAction.visibility = View.GONE
+            incTitle.appConsent.visibility = View.GONE
+            incTitle.lnParent.weightSum = 5F
+        }
+
+    }
+
     private fun okClick() {
         confirmationDialog.dismiss()
         (activity as MainActivity).displayDialog()
@@ -161,9 +162,8 @@ class ProcessOrderFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            viewModel.dispensingDetails(
-                questionnaireFragment.getQuestionnaireResponse(),
-                args.patientId, args.order, args.encounter, dhmType
+            viewModel.liveDispensing(
+                questionnaireFragment.getQuestionnaireResponse(),requireContext(),apiService, order, dhmType
             )
         }
 

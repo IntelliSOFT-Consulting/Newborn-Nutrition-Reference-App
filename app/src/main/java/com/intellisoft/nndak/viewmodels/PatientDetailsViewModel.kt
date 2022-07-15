@@ -105,6 +105,7 @@ class PatientDetailsViewModel(
     val liveWeights = MutableLiveData<WeightsData>()
     val liveExpressions = MutableLiveData<MilkExpression>()
     val context: Application = application
+    val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
 
 
     fun feedsDistribution() {
@@ -1540,6 +1541,55 @@ class PatientDetailsViewModel(
             .let { encounters.addAll(it) }
 
         return encounters.reversed()
+    }
+
+    fun getFeedingHistory() {
+        viewModelScope.launch {
+            liveFeedingHistory.value = getFeedingHistoryDataModel(context)
+        }
+    }
+
+    private suspend fun getFeedingHistoryDataModel(context: Application): List<FeedingHistory> {
+        val history: MutableList<FeedingHistory> = mutableListOf()
+        val feeding = getAllEncounters(FEEDING_MONITORING)
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrieveFeeding(it))
+
+            }
+        }
+        return history
+    }
+
+    private suspend fun retrieveFeeding(it: EncounterItem): FeedingHistory {
+        val observations = getObservationsPerEncounter(it.id)
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+
+        val date = try {
+            FormatHelper().extractDateString(hour.trim())
+        } catch (e: Exception) {
+            Timber.e("Date Feeding Exception ${e.localizedMessage}")
+            hour
+        }
+
+        val time = try {
+            FormatHelper().extractTimeString(hour.trim())
+        } catch (e: Exception) {
+            Timber.e("Date Feeding Exception ${e.localizedMessage}")
+            date
+        }
+        return FeedingHistory(
+            date = date,
+            time = time,
+            ebm = extractValue(observations, EBM_VOLUME),
+            dhm = extractValue(observations, DHM_VOLUME),
+            iv = extractValue(observations, IV_VOLUME),
+            deficit = extractValue(observations, FEEDS_DEFICIT),
+            vomit = extractValue(observations, VOMIT),
+            diaper = extractValue(observations, DIAPER_CHANGED),
+            stool = extractValue(observations, STOOL)
+        )
     }
 
 

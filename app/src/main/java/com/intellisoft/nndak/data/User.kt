@@ -47,3 +47,12 @@ data class DHMStock(
     @SerializedName("userId") val userId: String
 
 )
+
+data class DispenseData(
+    @SerializedName("dhmType") val dhmType: String,
+    @SerializedName("dhmVolume") val dhmVolume: String,
+    @SerializedName("remarks") val remarks: String,
+    @SerializedName("userId") val userId: String,
+    @SerializedName("orderId") val orderId: String
+
+)

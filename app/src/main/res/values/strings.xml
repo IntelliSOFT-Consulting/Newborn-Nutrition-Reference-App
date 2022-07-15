@@ -368,8 +368,8 @@
     <string name="edit_baby">Edit Baby</string>
     <string name="action_start">From Date</string>
     <string name="action_to">To Date</string>
-    <string name="menu_preterm">Pre Term DHM</string>
-    <string name="menu_term">Term DHM</string>
+    <string name="menu_preterm">Preterm</string>
+    <string name="menu_term">Term</string>
     <string name="bf">Breast Feeding</string>
     <string name="_ebm">EBM</string>
     <string name="formula">Formula</string>
@@ -412,6 +412,11 @@
     <string name="breast_cond">Breast Condition</string>
     <string name="milk_flow">Milk Flow</string>
     <string name="milk_volume">Milk Volume</string>
+    <string name="tv_positioning">Positioning Support History</string>
+    <string name="new_breast_feeding">New Breast Feeding Assessment</string>
+    <string name="app_upcoming">"Click the Upcoming Feeding Schedules to feed "</string>
+    <string name="app_enter_feeding">Enter Feeding Details</string>
+    <string name="app_feeding_history">Feeding History</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

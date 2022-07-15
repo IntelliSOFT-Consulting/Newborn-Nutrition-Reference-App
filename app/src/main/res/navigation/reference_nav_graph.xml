@@ -206,15 +206,7 @@
         android:name="com.intellisoft.nndak.screens.dashboard.dhm.ProcessOrderFragment"
         android:label="@string/app_dhm_orders"
         tools:layout="@layout/fragment_process_order">
-        <argument
-            android:name="patient_id"
-            app:argType="string" />
-        <argument
-            android:name="encounter"
-            app:argType="string" />
-        <argument
-            android:name="order"
-            app:argType="string" />
+
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

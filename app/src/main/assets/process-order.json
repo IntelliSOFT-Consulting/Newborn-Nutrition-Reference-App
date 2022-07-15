@@ -62,7 +62,7 @@
               ],
               "valueCoding": {
                 "code": "LAD32-8",
-                "display": "Term DHM"
+                "display": "Term"
               }
             },
             {
@@ -74,7 +74,7 @@
               ],
               "valueCoding": {
                 "code": "LAD33-6",
-                "display": "Pre Term DHM"
+                "display": "Preterm"
               }
             }
           ]

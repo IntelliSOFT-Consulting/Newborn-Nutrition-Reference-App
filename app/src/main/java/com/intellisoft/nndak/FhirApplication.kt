@@ -17,6 +17,7 @@ import com.intellisoft.nndak.utils.Constants.DHM
 import com.intellisoft.nndak.utils.Constants.FEEDINGS
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.MILK_EXPRESSION
+import com.intellisoft.nndak.utils.Constants.ORDER
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
 import com.intellisoft.nndak.utils.Constants.SERVER_URL_DEMO
@@ -182,6 +183,12 @@ class FhirApplication : Application() {
         }
 
 
+        fun updateCurrentOrder(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(ORDER, it)
+                .commit()
+        }
+
+
         fun updateDHM(context: Context, it: String) {
             (context.applicationContext as FhirApplication).editor.putString(DHM, it)
                 .commit()
@@ -199,6 +206,14 @@ class FhirApplication : Application() {
                 ""
             )
         }
+
+        fun getOrder(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                ORDER,
+                ""
+            )
+        }
+
         fun getCurrentPatient(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 CURRENT_BABY,
@@ -233,7 +248,6 @@ class FhirApplication : Application() {
                 ""
             )
         }
-
 
 
     }

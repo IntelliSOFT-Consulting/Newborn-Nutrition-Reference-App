@@ -1,5 +1,6 @@
 package com.intellisoft.nndak.charts
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class Statistics(

@@ -210,7 +210,7 @@ class ExpressionFragment : Fragment() {
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
-                add(
+                replace(
                     R.id.add_patient_container, fragment,
                     QUESTIONNAIRE_FRAGMENT_TAG
                 )

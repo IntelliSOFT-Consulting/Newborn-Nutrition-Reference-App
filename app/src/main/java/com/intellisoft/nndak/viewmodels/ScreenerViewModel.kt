@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
@@ -10,6 +11,9 @@ import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.charts.ItemOrder
+import com.intellisoft.nndak.data.DispenseData
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
@@ -2425,15 +2429,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (assessDate.isNotEmpty()) {
                         val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
                         if (lessThanNow) {
-                            /* val care = CarePlan()
-                             care.encounter = encounterReference
-                             care.subject = subjectReference
-                             care.status = CarePlan.CarePlanStatus.COMPLETED
-                             care.title = title
-                             care.intent = CarePlan.CarePlanIntent.ORDER
-                             care.created = FormatHelper().generateDate(assessDate)
-                             care.addPartOf(basedOnReference)
-                             saveResourceToDatabase(care)*/
+
 
                             saveFeedingResources(
                                 bundle,
@@ -3017,7 +3013,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
 
             try {
-                if (isRequiredFieldMissing(bundle)) {
+                if (hasMissingRequired(bundle)) {
                     customMessage.postValue(
                         MessageItem(
                             success = false,
@@ -3044,6 +3040,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
             }
         }
+    }
+
+    private fun hasMissingRequired(bundle: Bundle): Boolean {
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+ 
+                    if (resource.hasValue() && !resource.valueStringType.hasValue()) {
+
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 
     private suspend fun autoSaveResources(
@@ -3087,6 +3098,109 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             }
         }
     }
+
+    fun liveDispensing(
+        questionnaireResponse: QuestionnaireResponse,
+        context: Context,
+        apiService: RestManager,
+        order: ItemOrder,
+        dhmType: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val fh = FhirContext.forR4()
+            val questionnaire =
+                fh.newJsonParser().encodeResourceToString(questionnaireResponse)
+            var type = ""
+            var dispensed = "0"
+            var remarks = ""
+            var typeDHM = ""
+            var volumeD = ""
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val inner = common.getJSONObject(i)
+                        when (inner.getString("linkId")) {
+
+                            "Volume" -> {
+                                dispensed =
+                                    extractResponse(inner, "valueDecimal")
+                                if (dispensed.isNotEmpty()) {
+                                    volumeD = dispensed
+                                }
+                            }
+                            "DHM-Type" -> {
+                                type = extractResponseCode(inner, "valueCoding")
+
+                                if (type.isNotEmpty()) {
+                                    typeDHM = type
+                                }
+                            }
+                            "Additional-Notes" -> {
+                                val notes = extractResponse(inner, "valueString")
+                                if (notes.isNotEmpty()) {
+                                    remarks = notes
+                                }
+                            }
+                            else -> {
+                                println("Items skipped...")
+                            }
+                        }
+
+                    }
+                    if (type.isNotEmpty()) {
+                        if (dhmType.trim() == type.trim()) {
+                            val stock = DispenseData(
+                                dhmType = typeDHM,
+                                dhmVolume = volumeD,
+                                remarks = remarks,
+                                orderId = order.orderId,
+                                userId = retrieveUser(false)
+                            )
+                            val k = Gson()
+                            Timber.e("Payload ${k.toJson(stock)}")
+                            apiService.dispenseStock(context, stock) {
+                                if (it != null) {
+
+                                    customMessage.postValue(MessageItem(true, "Success"))
+                                } else {
+
+                                    customMessage.postValue(
+                                        MessageItem(
+                                            false,
+                                            "Experienced problems saving data"
+                                        )
+                                    )
+                                }
+                            }
+                        } else {
+                            customMessage.postValue(MessageItem(false, "Please check the DHM Type"))
+                        }
+                    } else {
+                        customMessage.postValue(MessageItem(false, "Please Select DHM Type"))
+                    }
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
+                    return@launch
+
+                }
+
+            }
+        }
+    }
+
+
 }
 
 

@@ -183,6 +183,25 @@ class FormatHelper {
         return time.let { destFormat.format(it) }.toString()
 
     }
+    fun getRoundedApproxHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        val convertedDate = sourceFormat.parse(date)
+
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = convertedDate
+        calendar[Calendar.MILLISECOND] = 0
+        calendar[Calendar.SECOND] = 0
+        val minutes = calendar[Calendar.MINUTE]
+        if (minutes < 30) {
+            calendar[Calendar.MINUTE] = 0
+        } else {
+            calendar[Calendar.MINUTE] = 30
+        }
+        val time = calendar.time
+        return time.let { destFormat.format(it) }.toString()
+
+    }
 
     fun getDateHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
@@ -215,6 +234,8 @@ class FormatHelper {
 
 
     }
+
+
 
     fun getRefinedDatePmAm(date: String): String {
 
@@ -418,7 +439,7 @@ class FormatHelper {
     fun extractDateString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
-        val destFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()
@@ -428,7 +449,7 @@ class FormatHelper {
     fun extractTimeString(date: String): String {
 
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
-        val destFormat = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm a", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()

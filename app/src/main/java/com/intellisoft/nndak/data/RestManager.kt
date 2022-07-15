@@ -140,6 +140,30 @@ class RestManager {
         )
     }
 
+    fun dispenseStock(context: Context, data: DispenseData, onResult: (AuthResponse?) -> Unit) {
+        getService(context).dispenseStock(data).enqueue(
+            object : Callback<AuthResponse> {
+                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                    Timber.e("onFailure " + t.localizedMessage)
+                    onResult(null)
+
+                }
+
+                override fun onResponse(
+                    call: Call<AuthResponse>,
+                    response: Response<AuthResponse>
+                ) {
+                    Timber.e("onResponse $response")
+                    if (response.isSuccessful) {
+                        onResult(response.body())
+                    } else {
+                        onResult(null)
+                    }
+                }
+            }
+        )
+    }
+
     fun loadStatistics(context: Context, onResult: (Statistics?) -> Unit) {
         getService(context).loadStatistics().enqueue(
             object : Callback<Statistics> {

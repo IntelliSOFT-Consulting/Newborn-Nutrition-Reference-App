@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.sync.State
+import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -273,15 +274,23 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onOrderClick(order: ItemOrder) {
+    private fun onOrderClick(it: ItemOrder) {
         val role = (requireActivity() as MainActivity).retrieveUser(true)
         if (role.isNotEmpty()) {
             if (role == ADMINISTRATOR || role == DOCTOR || role == HMB_ASSISTANT) {
-             /*   findNavController().navigate(
-                    DhmOrdersFragmentDirections.navigateToProcessing(
-                        order.patientId, order.encounterId, order.resourceId
-                    ),
-                )*/
+
+                try {
+                    val gson = Gson()
+                    val json = gson.toJson(it)
+                    FhirApplication.updateCurrentOrder(requireContext(), json)
+
+                    findNavController().navigate(
+                        DhmOrdersFragmentDirections.navigateToProcessing(
+                        ),
+                    )
+                } catch (e: Exception) {
+
+                }
             } else {
                 accessDenied()
             }

@@ -281,6 +281,17 @@ data class Prescription(
     val additional: String,
     val data: List<FeedDataItem>
 )
+data class FeedingHistory(
+    val date: String,
+    val time: String,
+    val ebm: String,
+    val dhm: String,
+    val iv: String,
+    val deficit: String,
+    val vomit: String,
+    val diaper: String,
+    val stool: String,
+)
 
 data class FeedItem(
     val id: String? = "",
@@ -325,4 +336,8 @@ data class FeedDataItem(
     val title: String,
     val value: String,
     val coding: Boolean
+)
+
+data class ScheduleTime(
+    val hour: String,
 )
