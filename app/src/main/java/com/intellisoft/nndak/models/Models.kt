@@ -293,6 +293,15 @@ data class FeedingHistory(
     val stool: String,
 )
 
+data class PositioningHistory(
+    val date: String,
+    val hands: String,
+    val mum: String,
+    val baby: String,
+    val attach: String,
+    val suckle: String
+)
+
 data class FeedItem(
     val id: String? = "",
     val idAlt: String? = "",

@@ -161,7 +161,6 @@ class ExpressionFragment : Fragment() {
     }
 
     private fun handleClick(data: ExpressionHistory) {
-        Timber.e("Clicked Item ${data.date}")
         moreExpression = MoreExpression(data)
         moreExpression.show(childFragmentManager, "Confirm Details")
     }

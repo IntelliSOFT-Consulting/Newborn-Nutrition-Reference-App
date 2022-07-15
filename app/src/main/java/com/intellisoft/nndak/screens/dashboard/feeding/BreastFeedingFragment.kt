@@ -245,7 +245,7 @@ class BreastFeedingFragment : Fragment() {
         viewModel.feedingCues(
             questionnaireFragment.getQuestionnaireResponse(),
             feedingCuesList,
-            args.patientId
+            args.patientId,"Feeding Cues"
         )
 
     }

@@ -191,9 +191,15 @@ class BabyMonitoringFragment : Fragment() {
         val feeding = FeedingFragment()
         feeding.arguments = bundle
 
+        val position = PositioningFragment()
+        position.arguments = bundle
+
+        val breast = BreastFragment()
+        breast.arguments = bundle
+
         adapter.addFragment(expression, "Assess Expression")
-        adapter.addFragment(PositioningFragment(), "Assess Positioning")
-        adapter.addFragment(BreastFragment(), "Assess Breastfeeding")
+        adapter.addFragment(position, "Assess Positioning")
+        adapter.addFragment(breast, "Assess Breastfeeding")
         adapter.addFragment(feeding, "Record Feeding")
 
         viewpager.adapter = adapter

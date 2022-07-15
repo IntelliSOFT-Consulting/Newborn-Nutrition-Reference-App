@@ -1891,7 +1891,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     fun feedingCues(
         questionnaireResponse: QuestionnaireResponse,
         cues: ArrayList<CodingObservation>,
-        patientId: String
+        patientId: String,
+        code: String
     ) {
         viewModelScope.launch {
             val bundle =
@@ -1901,8 +1902,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
             val qh = QuestionnaireHelper()
             val context = FhirContext.forR4()
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -1931,10 +1930,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                         .request.url = "Observation"
 
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                ASSESSMENT_DATE,
+                                "Assessment Date",
+                                Date().toString()
+                            )
+                        )
+                        .request.url = "Observation"
+
                     val subjectReference = Reference("Patient/$patientId")
 
                     val encounterId = generateUuid()
-                    title = "Feeding Cues"
+                    title = code
                     saveResources(bundle, subjectReference, encounterId, title)
                     customMessage.postValue(
                         MessageItem(
@@ -3046,7 +3055,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         bundle.entry.forEach {
             when (val resource = it.resource) {
                 is Observation -> {
- 
+
                     if (resource.hasValue() && !resource.valueStringType.hasValue()) {
 
                         return true

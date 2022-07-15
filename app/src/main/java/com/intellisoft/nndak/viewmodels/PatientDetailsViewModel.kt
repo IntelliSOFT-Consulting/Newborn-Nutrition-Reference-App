@@ -106,6 +106,7 @@ class PatientDetailsViewModel(
     val liveExpressions = MutableLiveData<MilkExpression>()
     val context: Application = application
     val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
+    val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
 
 
     fun feedsDistribution() {
@@ -1549,6 +1550,12 @@ class PatientDetailsViewModel(
         }
     }
 
+    fun getPositioningHistory() {
+        viewModelScope.launch {
+            livePositioningHistory.value = getPositioningHistoryDataModel(context)
+        }
+    }
+
     private suspend fun getFeedingHistoryDataModel(context: Application): List<FeedingHistory> {
         val history: MutableList<FeedingHistory> = mutableListOf()
         val feeding = getAllEncounters(FEEDING_MONITORING)
@@ -1562,6 +1569,39 @@ class PatientDetailsViewModel(
         return history
     }
 
+    private suspend fun getPositioningHistoryDataModel(context: Application): List<PositioningHistory> {
+        val history: MutableList<PositioningHistory> = mutableListOf()
+        val feeding = getAllEncounters("Positioning-Assessment")
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrievePositioning(it))
+
+            }
+        }
+        return history
+    }
+
+    private suspend fun retrievePositioning(it: EncounterItem): PositioningHistory {
+        val observations = getObservationsPerEncounter(it.id)
+
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+        val date = try {
+            FormatHelper().getRefinedDateOnly(hour)
+        } catch (e: Exception) {
+            hour
+        }
+
+        return PositioningHistory(
+            date = date,
+            hands = extractValue(observations, "Hand-Wash"),
+            mum = extractValue(observations, "Mother-Position"),
+            baby = extractValue(observations, "Baby-Position"),
+            attach = extractValue(observations, "Good-Attachment"),
+            suckle = extractValue(observations, "Effective-Suckling"),
+        )
+    }
+
     private suspend fun retrieveFeeding(it: EncounterItem): FeedingHistory {
         val observations = getObservationsPerEncounter(it.id)
         val hour = extractValue(observations, ASSESSMENT_DATE)
@@ -1569,7 +1609,6 @@ class PatientDetailsViewModel(
         val date = try {
             FormatHelper().extractDateString(hour.trim())
         } catch (e: Exception) {
-            Timber.e("Date Feeding Exception ${e.localizedMessage}")
             hour
         }
 

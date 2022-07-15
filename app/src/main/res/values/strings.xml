@@ -401,6 +401,7 @@
     <string name="formula_mls">Formula mls</string>
     <string name="problems">Experienced problems submitting data</string>
     <string name="new_expression">New Expression Assessment</string>
+    <string name="new_positioning">New Positioning Assessment</string>
     <string name="tv_history">Expression History</string>
     <string name="hist">Expression History</string>
     <string name="exp_freq">Frequency of Expressions</string>
@@ -417,6 +418,8 @@
     <string name="app_upcoming">"Click the Upcoming Feeding Schedules to feed "</string>
     <string name="app_enter_feeding">Enter Feeding Details</string>
     <string name="app_feeding_history">Feeding History</string>
+    <string name="app_cleaned_hands">Cleaned hands (Do not wash breast for purpose of breastfeeding)</string>
+    <string name="app_cleaned">Cleaned Hands</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>
