@@ -155,13 +155,6 @@ class EditPrescriptionFragment : Fragment() {
             otherSup.appFrequency.setText(it.additionalFeeds)
             otherValue.appFrequency.setText(it.supplements)
 
-            if (it.breastMilk != "N/A") {
-                cbBreast.isChecked = true
-                tvBreast.visibility = View.VISIBLE
-                lnBrestMilk.visibility = View.VISIBLE
-                updateVolumeFrequency(bfVolume.volume, it.feed, BREAST_MILK)
-
-            }
             if (it.formula != "N/A") {
                 cbFormula.isChecked = true
                 tvFormula.visibility = View.VISIBLE
@@ -229,17 +222,6 @@ class EditPrescriptionFragment : Fragment() {
 
     private fun regulateViews() {
         binding.apply {
-
-            cbBreast.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    tvBreast.visibility = View.VISIBLE
-                    lnBrestMilk.visibility = View.VISIBLE
-                } else {
-                    tvBreast.visibility = View.GONE
-                    lnBrestMilk.visibility = View.GONE
-                }
-                feedsList.clear()
-            }
 
             cbFormula.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
@@ -555,23 +537,10 @@ class EditPrescriptionFragment : Fragment() {
 
         }
 
-        if (binding.cbBreast.isChecked || binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
+        if ( binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
             binding.apply {
                 feedsList.clear()
-                if (cbBreast.isChecked) {
-                    val vol = bfVolume.volume.text.toString()
-                    if (checkEmptyData(vol)) {
-                        return
-                    }
-                    feedsList.add(
-                        FeedDataItem(
-                            code = BREAST_MILK,
-                            title = "Breast Volume",
-                            value = vol.toDouble().toString(),
-                            coding = false
-                        )
-                    )
-                }
+
                 if (cbEbm.isChecked) {
                     val vol = ebmVolume.volume.text.toString()
                     val rou = ebmRoute.appType.text.toString()

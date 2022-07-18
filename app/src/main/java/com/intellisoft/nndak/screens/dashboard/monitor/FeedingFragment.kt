@@ -74,6 +74,7 @@ class FeedingFragment : Fragment() {
     private var dhmPresent: Boolean = true
     private var ebmPresent: Boolean = true
     private var formulaPresent: Boolean = true
+    private var prescriptionExists: Boolean = false
     private val feedsList: MutableList<FeedItem> = mutableListOf()
     private val binding
         get() = _binding!!
@@ -322,7 +323,7 @@ class FeedingFragment : Fragment() {
             if (data.isNotEmpty()) {
                 val it = data.first()
                 careID = it.resourceId.toString()
-                Timber.e("Encounter Feeding ${it.frequency}")
+                prescriptionExists = true
                 binding.apply {
                     // lnCurrent.visibility = View.VISIBLE
                     availableFeed = it.deficit.toString()
@@ -339,19 +340,8 @@ class FeedingFragment : Fragment() {
                 }
 
             } else {
-                val dialog =
-                    SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                        .setTitleText("Error")
-                        .setContentText(resources.getString(R.string.no_active))
-                        .setCustomImage(R.drawable.crying)
-                        .setConfirmClickListener { sDialog ->
-                            run {
-                                sDialog.dismiss()
-                             //resetDisplay()
-                            }
-                        }
-                dialog.setCancelable(false)
-                dialog.show()
+                prescriptionExists = false
+
             }
         }
     }
@@ -485,7 +475,23 @@ class FeedingFragment : Fragment() {
     }
 
     private fun click(item: FeedItem) {
-        resetDisplay(true)
+        if (prescriptionExists) {
+            resetDisplay(true)
+        } else {
+            val dialog =
+                SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                    .setTitleText("Error")
+                    .setContentText(resources.getString(R.string.no_active))
+                    .setCustomImage(R.drawable.crying)
+                    .setConfirmClickListener { sDialog ->
+                        run {
+                            sDialog.dismiss()
+                            //resetDisplay()
+                        }
+                    }
+            dialog.setCancelable(false)
+            dialog.show()
+        }
     }
 
     private fun onSubmitAction() {

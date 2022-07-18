@@ -168,7 +168,7 @@ class CustomRegistrationFragment : Fragment() {
         binding.apply {
 
             breadcrumb.page.text =
-                Html.fromHtml("Babies > <font color=\"#37379B\">Client Registration</font>")
+                Html.fromHtml("Babies > <font color=\"#37379B\">Patient Registration</font>")
             breadcrumb.page.setOnClickListener {
                 findNavController().navigate(CustomRegistrationFragmentDirections.navigateToLanding())
             }
@@ -290,13 +290,13 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (pari1.isEmpty()) {
-                tilParity.error = "Please enter parity"
+                tilParity.error = ""
                 appParity.requestFocus()
                 return
 
             }
             if (pari2.isEmpty()) {
-                tilTwoParity.error = "Please complete parity"
+                tilTwoParity.error = ""
                 appTwoParity.requestFocus()
                 return
 
@@ -399,13 +399,13 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (apgarfive.isEmpty()) {
-                tilFiveScore.error = "Please 5 min score"
+                tilFiveScore.error = "Enter score"
                 appFiveScore.requestFocus()
                 return
 
             }
             if (apgarten.isEmpty()) {
-                tilTenScore.error = "Please 10 min score"
+                tilTenScore.error = "Enter score"
                 appTenScore.requestFocus()
                 return
 
@@ -425,24 +425,24 @@ class CustomRegistrationFragment : Fragment() {
 
 
             if (head.isEmpty()) {
-                tilHead.error = "Please enter head circumference"
+                tilHead.error = "enter head circumference"
                 appHead.requestFocus()
                 return
 
             }
             if (inter.isEmpty()) {
-                tilInter.error = "Please enter interventions"
+                tilInter.error = "enter interventions"
                 appInter.requestFocus()
                 return
 
             }
             if (adWeight.isEmpty()) {
-                tilAdmWeight.error = "Please enter adm weight"
+                tilAdmWeight.error = "enter adm weight"
                 appAdmWeight.requestFocus()
                 return
             }
             if (admDate.isEmpty()) {
-                tilAdmDate.error = "Please select adm date"
+                tilAdmDate.error = "select adm date"
                 appAdmDate.requestFocus()
                 return
             }

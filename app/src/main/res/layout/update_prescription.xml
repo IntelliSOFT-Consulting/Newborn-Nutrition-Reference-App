@@ -125,12 +125,6 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/cb_breast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bf" />
-
-                <CheckBox
                     android:id="@+id/cb_ebm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
