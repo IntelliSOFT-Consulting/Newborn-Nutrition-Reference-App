@@ -86,7 +86,6 @@ class ExpressionFragment : Fragment() {
 
             updateArguments()
             onBackPressed()
-            observeResourcesSaveAction()
             if (savedInstanceState == null) {
                 addQuestionnaireFragment()
             }
@@ -112,24 +111,43 @@ class ExpressionFragment : Fragment() {
                 if (data != null) {
                     adapterList.submitList(data)
                     binding.apply {
-                        incTitle.tvhDate.text = getString(R.string._date)
-                        incTitle.tvhFrequency.text = getString(R.string.exp_freq)
-                        incTitle.tvhTiming.text = getString(R.string.timings)
-                        incTitle.tvhView.visibility = View.INVISIBLE
 
-                        val seven: ViewGroup.LayoutParams =
-                            LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.7f)
-                        val three: ViewGroup.LayoutParams =
-                            LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.3f)
-                        incTitle.lnParent.weightSum = 4f
-                        incTitle.tvhDate.layoutParams = seven
-                        incTitle.tvhFrequency.layoutParams = three
-                        incTitle.tvhTiming.layoutParams = three
-                        incTitle.tvhView.layoutParams = seven
+                        if (data.isNotEmpty()) {
 
-                        boldText(incTitle.tvhDate)
-                        boldText(incTitle.tvhFrequency)
-                        boldText(incTitle.tvhTiming)
+                            cpTitle.visibility = View.GONE
+                            incTitle.tvhDate.text = getString(R.string._date)
+                            incTitle.tvhFrequency.text = getString(R.string.exp_freq)
+                            incTitle.tvhTiming.text = getString(R.string.timings)
+                            incTitle.tvhView.visibility = View.INVISIBLE
+
+                            val seven: ViewGroup.LayoutParams =
+                                LinearLayout.LayoutParams(
+                                    0,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    0.7f
+                                )
+                            val three: ViewGroup.LayoutParams =
+                                LinearLayout.LayoutParams(
+                                    0,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    1.3f
+                                )
+                            incTitle.lnParent.weightSum = 4f
+                            incTitle.tvhDate.layoutParams = seven
+                            incTitle.tvhFrequency.layoutParams = three
+                            incTitle.tvhTiming.layoutParams = three
+                            incTitle.tvhView.layoutParams = seven
+
+                            boldText(incTitle.tvhDate)
+                            boldText(incTitle.tvhFrequency)
+                            boldText(incTitle.tvhTiming)
+                        } else {
+                            binding.apply {
+                                cpTitle.visibility = View.VISIBLE
+                                cpTitle.text =
+                                    "There are not expression data at the moment. Click the assessment button to start "
+                            }
+                        }
                     }
                 }
             }
@@ -169,6 +187,8 @@ class ExpressionFragment : Fragment() {
     private fun onSubmitAction() {
 
         (activity as MainActivity).displayDialog()
+
+        observeResourcesSaveAction()
         CoroutineScope(Dispatchers.IO).launch {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
@@ -200,7 +220,7 @@ class ExpressionFragment : Fragment() {
     }
 
     private fun updateArguments() {
-        arguments?.putString(QUESTIONNAIRE_FILE_PATH_KEY, "expression.json")
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "expression.json")
     }
 
     private fun addQuestionnaireFragment() {
@@ -247,6 +267,7 @@ class ExpressionFragment : Fragment() {
 
     private fun resetDisplay() {
         updateArguments()
+        addQuestionnaireFragment()
         binding.apply {
             actionNewExpression.visibility = View.VISIBLE
             lnHistory.visibility = View.VISIBLE

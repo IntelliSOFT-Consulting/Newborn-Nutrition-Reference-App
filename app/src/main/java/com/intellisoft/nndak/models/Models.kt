@@ -36,6 +36,12 @@ data class CodingObservation(
     val display: String,
     val value: String,
 )
+data class QuantityObservation(
+    val code: String,
+    val display: String,
+    val value: String,
+    val unit: String,
+)
 
 data class BasicThree(
     val lmp: String,
@@ -300,6 +306,18 @@ data class PositioningHistory(
     val baby: String,
     val attach: String,
     val suckle: String
+)
+data class BreastsHistory(
+    val date: String,
+    val interest: String,
+    val cues: String,
+    val sleep: String,
+    val bursts: String,
+    val shortFeed: String,
+    val longSwallow: String,
+    val skin: String,
+    val nipples: String,
+    val shape: String
 )
 
 data class FeedItem(

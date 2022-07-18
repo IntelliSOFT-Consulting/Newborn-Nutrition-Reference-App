@@ -431,7 +431,7 @@
             {
               "valueCoding": {
                 "code": "LA36-8",
-                "display": "Sextuplets"
+                "display": "Septuplets"
               }
             }
           ]
@@ -751,56 +751,6 @@
           "required": true,
           "linkId": "/45394-8",
           "text": "Date of Birth"
-        }
-      ]
-    },
-    {
-      "linkId": "Baby-Name",
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "consentGiven"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "string",
-          "code": [
-            {
-              "code": "45094-4",
-              "display": "Baby's Name",
-              "system": "http://loinc.org/modified"
-            }
-          ],
-          "required": true,
-          "linkId": "/45094-4",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Baby's Name",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ]
         }
       ]
     },

@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.holders.BreastHolder
 import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
@@ -30,6 +31,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_BREASTFEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.BREASTS_FEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
@@ -107,6 +109,7 @@ class PatientDetailsViewModel(
     val context: Application = application
     val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
     val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
+    val liveBreastHistory = MutableLiveData<List<BreastsHistory>>()
 
 
     fun feedsDistribution() {
@@ -1556,6 +1559,25 @@ class PatientDetailsViewModel(
         }
     }
 
+    fun getBreastAssessmentHistory() {
+        viewModelScope.launch {
+            liveBreastHistory.value = getBreastHistoryDataModel(context)
+        }
+    }
+
+    private suspend fun getBreastHistoryDataModel(context: Application): List<BreastsHistory> {
+        val history: MutableList<BreastsHistory> = mutableListOf()
+        val feeding = getAllEncounters(BREASTS_FEEDING)
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrieveBreast(it))
+
+            }
+        }
+        return history
+    }
+
     private suspend fun getFeedingHistoryDataModel(context: Application): List<FeedingHistory> {
         val history: MutableList<FeedingHistory> = mutableListOf()
         val feeding = getAllEncounters(FEEDING_MONITORING)
@@ -1580,6 +1602,31 @@ class PatientDetailsViewModel(
             }
         }
         return history
+    }
+
+    private suspend fun retrieveBreast(it: EncounterItem): BreastsHistory {
+        val observations = getObservationsPerEncounter(it.id)
+
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+        val date = try {
+            FormatHelper().getRefinedDateOnly(hour)
+        } catch (e: Exception) {
+            hour
+        }
+
+        return BreastsHistory(
+            date = date,
+            interest = extractValue(observations, "Baby-Interest"),
+            cues = extractValue(observations, "Feeding-Cues"),
+            sleep = extractValue(observations, "Baby-Sleep"),
+            bursts = extractValue(observations, "Bursts"),
+            shortFeed = extractValue(observations, "Short-Feed"),
+            longSwallow = extractValue(observations, "Long-Swallow"),
+            skin = extractValue(observations, "Skin-Tone"),
+            nipples = extractValue(observations, "Nipples"),
+            shape = extractValue(observations, "Shape"),
+
+        )
     }
 
     private suspend fun retrievePositioning(it: EncounterItem): PositioningHistory {

@@ -49,6 +49,15 @@ class RegistrationFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        hideBottom()
+        super.onResume()
+    }
+
+    private fun hideBottom() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,11 +67,11 @@ class RegistrationFragment : Fragment() {
         }
         updateArguments()
         onBackPressed()
-        observeResourcesSaveAction()
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
         setHasOptionsMenu(true)
+
         binding.apply {
 
             breadcrumb.page.text =
@@ -89,7 +98,7 @@ class RegistrationFragment : Fragment() {
     private fun okClick() {
         confirmationDialog.dismiss()
         (activity as MainActivity).displayDialog()
-
+        observeResourcesSaveAction()
         CoroutineScope(Dispatchers.IO).launch {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
@@ -108,7 +117,6 @@ class RegistrationFragment : Fragment() {
             if (it != null) {
                 if (it.success) {
                     (activity as MainActivity).hideDialog()
-
                     val dialog =
                         SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                             .setTitleText("Success")
@@ -139,7 +147,6 @@ class RegistrationFragment : Fragment() {
                     dialog.setCancelable(false)
                     dialog.show()
                 } else {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
 
                     (activity as MainActivity).hideDialog()
                     return@observe
@@ -177,7 +184,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-              SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
             .setTitleText("Are you sure?")
             .setContentText(getString(R.string.cancel_questionnaire_message))
             .setConfirmText("Yes")

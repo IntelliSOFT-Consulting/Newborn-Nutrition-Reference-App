@@ -347,7 +347,7 @@ class FeedingFragment : Fragment() {
                         .setConfirmClickListener { sDialog ->
                             run {
                                 sDialog.dismiss()
-                                //  resetDisplay()
+                             //resetDisplay()
                             }
                         }
                 dialog.setCancelable(false)
@@ -597,6 +597,7 @@ class FeedingFragment : Fragment() {
 
     private fun resetDisplay(isCollection: Boolean) {
         updateArguments()
+        loadFeedingHistory()
         binding.apply {
             if (isCollection) {
                 lnHistory.visibility = View.GONE

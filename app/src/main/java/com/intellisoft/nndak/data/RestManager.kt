@@ -3,6 +3,7 @@ package com.intellisoft.nndak.data
 import android.content.Context
 import android.util.Log
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.api.AuthInterceptor
 import com.intellisoft.nndak.api.AuthService
 import com.intellisoft.nndak.charts.*
@@ -83,6 +84,9 @@ class RestManager {
                     call: Call<UserResponse>,
                     response: Response<UserResponse>
                 ) {
+                    if (response.code() == 401) {
+                        (context as MainActivity).sessionTimeOut()
+                    }
                     if (response.isSuccessful) {
                         onResult(response.body())
                     } else {

@@ -6,6 +6,7 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1459832134292566" />
         <entry key="../../.gradle/caches/transforms-3/193e25b5797b1b86462bfa0a849a26cf/transformed/jetified-data-capture-0.1.0-beta03/res/layout/questionnaire_item_header.xml" value="0.178125" />
         <entry key="../../.gradle/caches/transforms-3/934a5461f6d134512450e4b2a594c898/transformed/jetified-library-1.6.2/res/drawable/error_circle.xml" value="0.2685" />
+        <entry key="../../.gradle/caches/transforms-3/98c072e175e95053ec1ecaca800dd1da/transformed/jetified-data-capture-0.1.0-beta03/res/drawable/gm_calendar_today_24.xml" value="0.1865" />
         <entry key="../../Android/Sdk/platforms/android-31/data/res/drawable/ic_popup_sync.xml" value="0.272" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_btn.xml" value="0.332" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_tv.xml" value="0.332" />
@@ -115,6 +116,7 @@
         <entry key="app/src/main/res/layout/baby_list_item_view.xml" value="0.17325227963525835" />
         <entry key="app/src/main/res/layout/bottom_sheet_assessment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/breadcrumb.xml" value="0.2787516032492518" />
+        <entry key="app/src/main/res/layout/breast_assessment.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/chart.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/confirmation_dialog.xml" value="0.14479166666666668" />
         <entry key="app/src/main/res/layout/connection_dialog.xml" value="0.1" />
@@ -144,6 +146,7 @@
         <entry key="app/src/main/res/layout/fragment_breast_feeding.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.1296875" />
         <entry key="app/src/main/res/layout/fragment_cues.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.10891089108910891" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/fragment_dhm_orders.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />
@@ -206,9 +209,11 @@
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
         <entry key="app/src/main/res/layout/update_prescription.xml" value="0.1" />
         <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/birthtypes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/cache_menu.xml" value="0.14791666666666667" />
         <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
+        <entry key="app/src/main/res/menu/delivery.xml" value="1.4327731092436975" />
         <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.15494791666666666" />
         <entry key="app/src/main/res/menu/edit_patient_fragment_menu.xml" value="0.12057291666666667" />
@@ -221,8 +226,12 @@
         <entry key="app/src/main/res/menu/menu_in_transaction.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/menu_supp.xml" value="0.15963541666666667" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/pmtct.xml" value="0.1" />
         <entry key="app/src/main/res/menu/post_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/reasons.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/route.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/sex.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/yesno.xml" value="0.1" />
       </map>
     </option>
   </component>

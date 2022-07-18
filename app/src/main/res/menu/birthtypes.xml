@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_cuo"
+        android:title="Twins" />
+
+    <item
+        android:id="@+id/menu_ngt"
+        android:title="Triplets" />
+    <item
+        android:id="@+id/menu_quad"
+        android:title="Quadruplets" />
+    <item
+        android:id="@+id/menu_quin"
+        android:title="Quintuplets" />
+    <item
+        android:id="@+id/menu_sex"
+        android:title="Sextuplets" />
+    <item
+        android:id="@+id/menu_sep"
+        android:title="Septuplets" />
+
+</menu>

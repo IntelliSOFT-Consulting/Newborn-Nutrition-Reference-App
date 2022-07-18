@@ -35,20 +35,15 @@ import com.intellisoft.nndak.adapters.OrdersAdapter
 import com.intellisoft.nndak.charts.ItemOrder
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentDhmOrdersBinding
-import com.intellisoft.nndak.helper_class.DbMotherKey
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
 import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
-import com.intellisoft.nndak.models.OrdersItem
-import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 import timber.log.Timber
 
 
@@ -111,25 +106,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             )
             loadOrders()
-            /*  patientListViewModel.reloadOrders()
-              patientListViewModel.liveOrders.observe(viewLifecycleOwner) { it ->
-                  if (it.isEmpty()) {
-                      binding.empty.cpBgView.visibility = View.VISIBLE
-                      binding.pbLoading.visibility = View.GONE
-                  }
-                  if (it.isNotEmpty()) {
-                      binding.empty.cpBgView.visibility = View.GONE
-                      binding.pbLoading.visibility = View.GONE
-                      orderList.clear()
-                      it.forEach { order ->
-                          if (order.motherName != "null") {
-                              orderList.add(order)
-                          }
-                      }
-                      adapterList.notifyDataSetChanged()
 
-                  }
-              }*/
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -222,7 +199,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun loadOrders() {
         apiService.loadOrders(requireContext()) {
             if (it != null) {
-                Timber.e("Data Retrieved $it")
                 if (it.data.isEmpty()) {
                     binding.empty.cpBgView.visibility = View.VISIBLE
                     binding.pbLoading.visibility = View.GONE

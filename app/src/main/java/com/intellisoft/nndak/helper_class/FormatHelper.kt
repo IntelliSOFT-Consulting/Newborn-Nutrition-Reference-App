@@ -14,14 +14,39 @@ class FormatHelper {
     fun isSameDay(dateOne: String, dateTwo: String): Boolean {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
-        Timber.e("Current $dateOne")
-        Timber.e("Value $dateTwo")
+        val date1 = sdf.parse(dateOne)
+        val date2 = sdf.parse(dateTwo)
+
+        if (date1 != null) {
+            if (date1.equals(date2)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isSimilarDay(dateOne: String, dateTwo: String): Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
         val date1 = sdf.parse(dateOne)
         val date2 = sdf.parse(dateTwo)
 
         if (date1 != null) {
             if (date1.equals(date2)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun isLaterDay(dateOne: String, dateTwo: String): Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+        val date1 = sdf.parse(dateOne)
+        val date2 = sdf.parse(dateTwo)
+
+        if (date1 != null) {
+            if (date1.after(date2) || date1.equals(date2)) {
                 return true
             }
         }
@@ -106,6 +131,22 @@ class FormatHelper {
 
     }
 
+    fun checkBirthDate(birthDate: String, d2: String): Boolean {
+
+        val sdf1 = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val currentDate = sdf1.parse(birthDate)
+        val newCurrentDate = sdf1.format(currentDate)
+        val date1 = sdf1.parse(newCurrentDate)
+        val date2 = sdf1.parse(d2)
+
+        // after() will return true if and only if date1 is after date 2
+        if (date1.after(date2)) {
+            return false
+        }
+        return true
+
+    }
+
     fun getBirthdayZone(date: String): String {
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
@@ -154,6 +195,12 @@ class FormatHelper {
 
     }
 
+    fun dateOfBirthCustom(date: String): Date? {
+        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        return destFormat.parse(date)
+
+    }
+
     fun getHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
@@ -183,6 +230,7 @@ class FormatHelper {
         return time.let { destFormat.format(it) }.toString()
 
     }
+
     fun getRoundedApproxHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
@@ -194,9 +242,9 @@ class FormatHelper {
         calendar[Calendar.SECOND] = 0
         val minutes = calendar[Calendar.MINUTE]
         if (minutes < 30) {
-            calendar[Calendar.MINUTE] = 0
-        } else {
             calendar[Calendar.MINUTE] = 30
+        } else {
+            calendar[Calendar.MINUTE] = 60
         }
         val time = calendar.time
         return time.let { destFormat.format(it) }.toString()
@@ -234,7 +282,6 @@ class FormatHelper {
 
 
     }
-
 
 
     fun getRefinedDatePmAm(date: String): String {
@@ -395,6 +442,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun getRefinedDateOnly(date: String): String {
 
         val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
@@ -414,6 +462,7 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+
     fun getSimpleReverseDate(date: String): String {
 
         val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)

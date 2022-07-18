@@ -137,7 +137,7 @@ class StatisticsFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { view, myear, mmonth, mdayOfMonth ->
-                btnEnd.text = "$label"
+                btnEnd.text = label
             },
             year,
             month,
@@ -175,7 +175,11 @@ class StatisticsFragment : Fragment() {
             operation(requireContext())
         }
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
+        super.onResume()
+    }
     private fun updateUI(it: Statistics) {
         checkIfFragmentAttached {
             binding.apply {

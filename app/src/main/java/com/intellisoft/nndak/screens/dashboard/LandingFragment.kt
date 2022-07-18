@@ -83,6 +83,12 @@ class LandingFragment : Fragment() {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
 
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
+        super.onResume()
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

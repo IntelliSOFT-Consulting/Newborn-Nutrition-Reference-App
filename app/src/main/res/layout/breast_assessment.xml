@@ -17,28 +17,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10dp"
-            android:text="@string/app_support_mother"
+            android:text="@string/app_baby_assess"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
+
         <include
-            android:id="@+id/data_hands"
+            android:id="@+id/data_interest"
             layout="@layout/positioning_item" />
 
         <include
-            android:id="@+id/data_mother"
+            android:id="@+id/data_cues"
             layout="@layout/positioning_item" />
 
         <include
-            android:id="@+id/data_baby"
+            android:id="@+id/data_sleep"
             layout="@layout/positioning_item" />
 
         <include
-            android:id="@+id/data_attach"
+            android:id="@+id/data_bursts"
             layout="@layout/positioning_item" />
 
         <include
-            android:id="@+id/data_suck"
+            android:id="@+id/data_short_feed"
             layout="@layout/positioning_item" />
 
+        <include
+            android:id="@+id/data_long_swallow"
+            layout="@layout/positioning_item" />
+
+        <include
+            android:id="@+id/data_normal_skin"
+            layout="@layout/positioning_item" />
+
+        <TextView
+            android:id="@+id/tv_title_mum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_15dp"
+            android:text="@string/app_mother_assess"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/data_nipples"
+            layout="@layout/positioning_item" />
+
+        <include
+            android:id="@+id/data_shape"
+            layout="@layout/positioning_item" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -472,11 +472,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     try {
                                         mother.nameFirstRep.family = words[1]
                                         mother.nameFirstRep.addGiven(words[0])
+                                        mother.nameFirstRep.addGiven(words[2])
+
+                                        baby.nameFirstRep.family = "Baby"
+                                        baby.nameFirstRep.addGiven(words[0])
                                     } catch (e: Exception) {
                                         customMessage.postValue(
                                             MessageItem(
                                                 success = false,
-                                                message = "Enter mother's first and last name"
+                                                message = "Enter mother's first middle and last name"
                                             )
                                         )
                                         return@launch
@@ -607,13 +611,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     baby.birthDate = FormatHelper().dateOfBirth(birthDate)
                                 }
 
-                            }
-
-                            "Baby-Name" -> {
-                                val mumsName = extractResponse(inner, "valueString")
-                                val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                baby.nameFirstRep.family = words[1]
-                                baby.nameFirstRep.addGiven(words[0])
                             }
                             "Baby-Sex" -> {
                                 when (extractResponseCode(inner, "valueCoding")) {
@@ -3042,6 +3039,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                 )
             } catch (e: Exception) {
+                Timber.e("Test Exception ${e.localizedMessage}")
                 customMessage.postValue(
                     MessageItem(
                         success = false, message = "Experienced problems saving data"
@@ -3052,13 +3050,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
     private fun hasMissingRequired(bundle: Bundle): Boolean {
+
         bundle.entry.forEach {
-            when (val resource = it.resource) {
+            val resource = it.resource
+            Timber.e("Collected Bundle $resource")
+            when (resource) {
                 is Observation -> {
-
-                    if (resource.hasValue() && !resource.valueStringType.hasValue()) {
-
+                    Timber.e("Collected Observation ${resource.code.text}")
+                    if (!resource.hasCode()) {
                         return true
+
                     }
                 }
             }
@@ -3192,20 +3193,100 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                         } else {
-                            customMessage.postValue(MessageItem(false, "Please check the DHM Type"))
+                            customMessage.postValue(
+                                MessageItem(
+                                    false,
+                                    "Please check the DHM Type"
+                                )
+                            )
                         }
                     } else {
-                        customMessage.postValue(MessageItem(false, "Please Select DHM Type"))
+                        customMessage.postValue(
+                            MessageItem(
+                                false,
+                                "Please Select DHM Type"
+                            )
+                        )
                     }
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.printStackTrace()}")
-                    customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
+                    customMessage.postValue(
+                        MessageItem(
+                            false,
+                            "Experienced problems saving data"
+                        )
+                    )
                     return@launch
 
                 }
 
             }
+        }
+    }
+
+    fun customRegistration(
+        questionnaireResponse: QuestionnaireResponse,
+        baby: Patient,
+        mother: Patient,
+        patientId: String,
+        dataCodes: java.util.ArrayList<CodingObservation>,
+        dataQuantity: java.util.ArrayList<QuantityObservation>
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            val qh = QuestionnaireHelper()
+            dataCodes.forEach {
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            it.code,
+                            it.display,
+                            it.value
+
+                        )
+                    )
+                    .request.url = "Observation"
+
+            }
+            dataQuantity.forEach {
+                bundle.addEntry()
+                    .setResource(
+                        qh.quantityQuestionnaire(
+                            it.code,
+                            it.display,
+                            it.display,
+                            it.value, it.unit
+
+                        )
+                    )
+                    .request.url = "Observation"
+
+            }
+
+            val value = retrieveUser(false)
+
+            bundle.addEntry()
+                .setResource(
+                    qh.codingQuestionnaire(
+                        "Completed By",
+                        value,
+                        value
+                    )
+                )
+                .request.url = "Observation"
+            val encounterId = generateUuid()
+            val subjectReference = Reference("Patient/$patientId")
+            title = "Client Registration"
+            saveResourceToDatabase(resource = baby)
+            saveResourceToDatabase(resource = mother)
+            saveResources(bundle, subjectReference, encounterId, title)
+            customMessage.postValue(MessageItem(true, "Success"))
         }
     }
 

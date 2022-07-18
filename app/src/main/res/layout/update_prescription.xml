@@ -428,6 +428,7 @@
                 android:id="@+id/iv_route"
                 layout="@layout/routes"
                 android:layout_width="0dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"

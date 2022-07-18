@@ -26,6 +26,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/ln_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15dp"
@@ -33,6 +34,7 @@
             android:weightSum="2">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_image"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_weight="0.3"

@@ -58,7 +58,6 @@ class BabyDashboardFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyAssessmentFragmentArgs by navArgs()
     private val viewModel: ScreenerViewModel by viewModels()
-    private var bWeight: Int = 0
     private val binding
         get() = _binding!!
 
@@ -150,9 +149,6 @@ class BabyDashboardFragment : Fragment() {
                     incDetails.lnBody.visibility = View.VISIBLE
                     try {
                         val gest = it.dashboard.gestation ?: ""
-                        val weight = it.birthWeight
-                        val code = weight?.split("\\.".toRegex())?.toTypedArray()
-                        bWeight = code?.get(0)?.toInt()!!
 
                         val status = it.status
                         incDetails.tvBabyName.text = it.babyName
@@ -653,7 +649,11 @@ class BabyDashboardFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

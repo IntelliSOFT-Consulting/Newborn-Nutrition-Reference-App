@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_babies">
         <action
             android:id="@+id/navigate_to_register_client"
-            app:destination="@id/registrationFragment" />
+            app:destination="@id/customRegistrationFragment" />
         <action
             android:id="@+id/navigate_to_child_dashboard"
             app:destination="@id/childDashboardFragment" />
@@ -231,7 +231,7 @@
             app:destination="@id/homeFragment" />
         <action
             android:id="@+id/navigate_to_registration"
-            app:destination="@id/registrationFragment" />
+            app:destination="@id/customRegistrationFragment" />
         <action
             android:id="@+id/navigate_to_statistics"
             app:destination="@id/statisticsFragment" />
@@ -250,5 +250,17 @@
         android:name="com.intellisoft.nndak.screens.settings.NotificationFragment"
         android:label="@string/menu_notification"
         tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/customRegistrationFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.CustomRegistrationFragment"
+        android:label="@string/home_client"
+        tools:layout="@layout/fragment_custom_registration" >
+        <action
+            android:id="@+id/navigate_to_baby_dashboard"
+            app:destination="@id/childDashboardFragment" />
+        <action
+            android:id="@+id/navigate_to_landing"
+            app:destination="@id/landingFragment" />
+    </fragment>
 
 </navigation>

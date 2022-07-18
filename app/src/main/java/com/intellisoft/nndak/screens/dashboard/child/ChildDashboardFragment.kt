@@ -239,7 +239,11 @@ class ChildDashboardFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
+        super.onResume()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".screens.dashboard.monitor.BreastFragment">
 
@@ -13,7 +13,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action_new_expression"
-            app:cornerRadius="@dimen/_25sp"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
@@ -21,7 +20,8 @@
             android:gravity="end"
             android:text="@string/new_breast_feeding"
             android:textAllCaps="false"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            app:cornerRadius="@dimen/_25sp" />
     </RelativeLayout>
 
     <View
@@ -40,8 +40,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/tv_positioning"
+            android:text="@string/tv_breast_history"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <include
@@ -50,15 +49,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patient_list"
-            app:layoutManager="LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/_100dp"
             android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/expression_history" />
     </LinearLayout>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/ln_collection"
         android:layout_width="match_parent"
@@ -69,7 +71,12 @@
             android:id="@+id/add_patient_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2.7" />
+            android:layout_weight="2.7"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/inc_positioning"
+            layout="@layout/breast_assessment" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,25 +88,26 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_submit"
-                app:cornerRadius="@dimen/_25dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5dp"
                 android:backgroundTint="@color/dim_red"
-                android:text="@string/action_submit" />
+                android:text="@string/action_submit"
+                app:cornerRadius="@dimen/_25dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_cancel"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:cornerRadius="@dimen/_25dp"
-                app:strokeColor="@color/dim_red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5dp"
-                android:text="@string/action_cancel" />
+                android:text="@string/action_cancel"
+                app:cornerRadius="@dimen/_25dp"
+                app:strokeColor="@color/dim_red" />
 
         </LinearLayout>
 
     </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

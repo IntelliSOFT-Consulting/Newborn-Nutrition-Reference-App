@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
@@ -25,8 +26,10 @@ import com.intellisoft.nndak.adapters.PositioningAdapter
 import com.intellisoft.nndak.databinding.FragmentPositioningBinding
 import com.intellisoft.nndak.databinding.PositioningItemBinding
 import com.intellisoft.nndak.dialogs.MoreExpression
+import com.intellisoft.nndak.dialogs.ViewPositioning
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.PositioningHistory
+import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -35,7 +38,7 @@ import kotlinx.android.synthetic.main.success_dialog.*
 import timber.log.Timber
 
 class PositioningFragment : Fragment() {
-    private lateinit var moreExpression: MoreExpression
+    private lateinit var moreExpression: ViewPositioning
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val viewModel: ScreenerViewModel by viewModels()
@@ -132,6 +135,7 @@ class PositioningFragment : Fragment() {
     private fun loadPositionAssessments() {
         patientDetailsViewModel.getPositioningHistory()
         patientDetailsViewModel.livePositioningHistory.observe(viewLifecycleOwner) { data ->
+
             if (data.isNotEmpty()) {
 
                 val monitoringAdapter = PositioningAdapter(this::clickItem)
@@ -147,25 +151,38 @@ class PositioningFragment : Fragment() {
                 monitoringAdapter.submitList(data)
                 monitoringAdapter.notifyDataSetChanged()
 
-                /*   binding.apply {
-                       incHistory.lnParent.visibility = View.VISIBLE
-                       incHistory.tvhDate.text = "Date"
-                       incHistory.tvhTime.text = "Time"
-                       incHistory.tvhEbm.text = "EBM"
-                       incHistory.tvhDhm.text = "DHM"
-                       incHistory.tvhIv.text = "IV"
-                       incHistory.tvhDeficit.text = "Deficit"
-                       incHistory.tvhVomit.text = "Vomit"
-                       incHistory.tvhDiaper.text = "Diapers Changed"
-                       incHistory.tvhStool.text = "Stool"
-                   }*/
+
+                binding.apply {
+                    incTitle.lnParent.visibility = View.VISIBLE
+                    incTitle.tvhDate.text = "Date"
+                    incTitle.tvhFrequency.text = "Cleaned Hands"
+                    incTitle.tvhTiming.text = "Mother Position"
+                    val seven: ViewGroup.LayoutParams =
+                        LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.7f)
+                    val three: ViewGroup.LayoutParams =
+                        LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.3f)
+                    incTitle.lnParent.weightSum = 4f
+                    incTitle.tvhDate.layoutParams = seven
+                    incTitle.tvhFrequency.layoutParams = three
+                    incTitle.tvhTiming.layoutParams = three
+                    incTitle.tvhView.layoutParams = seven
+
+                    boldText(incTitle.tvhDate)
+                    boldText(incTitle.tvhFrequency)
+                    boldText(incTitle.tvhTiming)
+                }
+            }else{
+                binding.apply {
+
+                }
             }
         }
 
     }
 
-    private fun clickItem(item: PositioningHistory) {
-
+    private fun clickItem(data: PositioningHistory) {
+        moreExpression = ViewPositioning(data)
+        moreExpression.show(childFragmentManager, "Confirm Details")
     }
 
     private fun updateArguments() {
