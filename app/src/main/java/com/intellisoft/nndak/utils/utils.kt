@@ -128,6 +128,15 @@ fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
     }
     return list.reversed()
 }
+fun getFutureHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
+    val list: MutableList<LocalDateTime> = ArrayList()
+    var date = LocalDateTime.now()
+    for (i in 1..times) {
+        list.add(date)
+        date = date.plusHours(interval.toLong())
+    }
+    return list.reversed()
+}
 
 fun formatFeedingTime(values: List<LocalDateTime>): ArrayList<String> {
     val days = ArrayList<String>()
@@ -148,6 +157,8 @@ fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     }
     return list.reversed()
 }
+
+
 
 fun getPastMonthsOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     val list: MutableList<LocalDate> = ArrayList()

@@ -10,12 +10,14 @@ import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
 import com.intellisoft.nndak.utils.Constants.ACTIVE
+import com.intellisoft.nndak.utils.Constants.CURRENT_BABY
 import com.intellisoft.nndak.utils.Constants.DEMO_API_SERVER
 import com.intellisoft.nndak.utils.Constants.DEMO_SERVER
 import com.intellisoft.nndak.utils.Constants.DHM
 import com.intellisoft.nndak.utils.Constants.FEEDINGS
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.MILK_EXPRESSION
+import com.intellisoft.nndak.utils.Constants.ORDER
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
 import com.intellisoft.nndak.utils.Constants.SERVER_URL_DEMO
@@ -181,8 +183,20 @@ class FhirApplication : Application() {
         }
 
 
+        fun updateCurrentOrder(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(ORDER, it)
+                .commit()
+        }
+
+
         fun updateDHM(context: Context, it: String) {
             (context.applicationContext as FhirApplication).editor.putString(DHM, it)
+                .commit()
+        }
+
+
+        fun updateCurrentPatient(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString(CURRENT_BABY, it)
                 .commit()
         }
 
@@ -191,6 +205,20 @@ class FhirApplication : Application() {
                 MILK_EXPRESSION,
                 ""
             )
+        }
+
+        fun getOrder(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                ORDER,
+                ""
+            )
+        }
+
+        fun getCurrentPatient(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                CURRENT_BABY,
+                ""
+            ).toString()
         }
 
         fun getFeedings(context: Context): String? {

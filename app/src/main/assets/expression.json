@@ -1,0 +1,612 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Expression-Frequency",
+      "type": "group",
+      "text": "Enter Expression Details",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Expression-Frequency",
+              "display": "Expression Frequency",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Expression-Frequency",
+          "text": "Frequency of Expression",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "1",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "2",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "3",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "4",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "5",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "6",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "7",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Expression-Frequency",
+                "display": "8",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Timing-Expression",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Timing-Expression",
+              "display": "Timing-Expression",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Timing-Expression",
+          "text": "Timing of Expression",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Timing-Expression",
+                "display": "Hourly",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Timing-Expression",
+                "display": "Two Hourly",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Timing-Expression",
+                "display": "Three Hourly",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Timing-Expression",
+                "display": "Difficulty fitting in their hourly expression",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Breast-Massage",
+      "type": "group",
+      "text": "Stimulating Milk Ejection (Anxiety, uses Breast massage, Skin contact)",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Breast-Massage",
+              "display": "Breast-Massage",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Breast-Massage",
+          "text": "Uses Breast massage",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Breast-Massage",
+                "display": "Yes",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Massage",
+                "display": "No",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Anxious",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Anxious",
+              "display": "Anxious",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Anxious",
+          "text": "Anxious",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Anxious",
+                "display": "Yes",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Anxious",
+                "display": "No",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Skin-Contact",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Skin-Contact",
+              "display": "Skin-Contact",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Skin-Contact",
+          "text": "Skin contact and/being close to baby",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Skin-Contact",
+                "display": "Yes",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Skin-Contact",
+                "display": "No",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Hand-Expression",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Hand-Expression",
+              "display": "Hand-Expression",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Hand-Expression",
+          "text": "Hand Expression",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Hand-Expression",
+                "display": "Confident with technique",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Hand-Expression",
+                "display": "Not confident with technique",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Breast-Condition",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Breast-Condition",
+              "display": "Breast-Condition",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Breast-Condition",
+          "text": "Breast Condition",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Normal Breast",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Engorged Breasts",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Sore Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Cracked Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Bleeding Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Inverted Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Flat Nipples",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Breast-Condition",
+                "display": "Blebs",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "Milk-Volume",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "doneStatus"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Milk-Volume",
+              "display": "Milk-Volume",
+              "system": "http://loinc.org/modified"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Milk-Volume",
+          "text": "Milk Volume",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Milk-Volume",
+                "display": "Gradually increase in 24 Hours",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Milk-Volume",
+                "display": "Slow to increase or Decreasing",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

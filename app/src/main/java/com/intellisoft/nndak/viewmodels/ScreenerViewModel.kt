@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
@@ -10,6 +11,9 @@ import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.charts.ItemOrder
+import com.intellisoft.nndak.data.DispenseData
+import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
 import com.intellisoft.nndak.logic.Logics
@@ -468,11 +472,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     try {
                                         mother.nameFirstRep.family = words[1]
                                         mother.nameFirstRep.addGiven(words[0])
+                                        mother.nameFirstRep.addGiven(words[2])
+
+                                        baby.nameFirstRep.family = "Baby"
+                                        baby.nameFirstRep.addGiven(words[0])
                                     } catch (e: Exception) {
                                         customMessage.postValue(
                                             MessageItem(
                                                 success = false,
-                                                message = "Enter mother's first and last name"
+                                                message = "Enter mother's first middle and last name"
                                             )
                                         )
                                         return@launch
@@ -603,13 +611,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     baby.birthDate = FormatHelper().dateOfBirth(birthDate)
                                 }
 
-                            }
-
-                            "Baby-Name" -> {
-                                val mumsName = extractResponse(inner, "valueString")
-                                val words = mumsName.split("\\s".toRegex()).toTypedArray()
-                                baby.nameFirstRep.family = words[1]
-                                baby.nameFirstRep.addGiven(words[0])
                             }
                             "Baby-Sex" -> {
                                 when (extractResponseCode(inner, "valueCoding")) {
@@ -1628,10 +1629,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
-                    if (resource.hasCode() && !resource.code.hasCoding()) {
-                        return true
-                    }
-                    if (resource.hasValue() && !resource.value.hasPrimitiveValue()) {
+                    if (resource.hasCode() && !resource.code.hasText()) {
                         return true
                     }
 
@@ -1890,7 +1888,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     fun feedingCues(
         questionnaireResponse: QuestionnaireResponse,
         cues: ArrayList<CodingObservation>,
-        patientId: String
+        patientId: String,
+        code: String
     ) {
         viewModelScope.launch {
             val bundle =
@@ -1900,8 +1899,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 )
             val qh = QuestionnaireHelper()
             val context = FhirContext.forR4()
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -1930,10 +1927,20 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         )
                         .request.url = "Observation"
 
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                ASSESSMENT_DATE,
+                                "Assessment Date",
+                                Date().toString()
+                            )
+                        )
+                        .request.url = "Observation"
+
                     val subjectReference = Reference("Patient/$patientId")
 
                     val encounterId = generateUuid()
-                    title = "Feeding Cues"
+                    title = code
                     saveResources(bundle, subjectReference, encounterId, title)
                     customMessage.postValue(
                         MessageItem(
@@ -2428,15 +2435,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (assessDate.isNotEmpty()) {
                         val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
                         if (lessThanNow) {
-                            /* val care = CarePlan()
-                             care.encounter = encounterReference
-                             care.subject = subjectReference
-                             care.status = CarePlan.CarePlanStatus.COMPLETED
-                             care.title = title
-                             care.intent = CarePlan.CarePlanIntent.ORDER
-                             care.created = FormatHelper().generateDate(assessDate)
-                             care.addPartOf(basedOnReference)
-                             saveResourceToDatabase(care)*/
+
 
                             saveFeedingResources(
                                 bundle,
@@ -3010,6 +3009,288 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
         }
     }
+
+    fun updateExpression(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                if (hasMissingRequired(bundle)) {
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Check required fields"
+                        )
+                    )
+                    return@launch
+                }
+
+                val subjectReference = Reference("Patient/$patientId")
+                val encounterId = generateUuid()
+                title = "Expression-Assessment"
+                autoSaveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(
+                    MessageItem(
+                        success = true, message = "Update Successful"
+                    )
+                )
+            } catch (e: Exception) {
+                Timber.e("Test Exception ${e.localizedMessage}")
+                customMessage.postValue(
+                    MessageItem(
+                        success = false, message = "Experienced problems saving data"
+                    )
+                )
+            }
+        }
+    }
+
+    private fun hasMissingRequired(bundle: Bundle): Boolean {
+
+        bundle.entry.forEach {
+            val resource = it.resource
+            Timber.e("Collected Bundle $resource")
+            when (resource) {
+                is Observation -> {
+                    Timber.e("Collected Observation ${resource.code.text}")
+                    if (!resource.hasCode()) {
+                        return true
+
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    private suspend fun autoSaveResources(
+        bundle: Bundle,
+        subjectReference: Reference,
+        encounterId: String,
+        reason: String,
+    ) {
+
+        val encounterReference = Reference("Encounter/$encounterId")
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        resource.valueStringType.value = resource.code.text
+                        resource.issued = Date()
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Condition -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Encounter -> {
+                    resource.subject = subjectReference
+                    resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
+                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
+                    resource.status = Encounter.EncounterStatus.INPROGRESS
+                    resource.period.start = Date()
+                    saveResourceToDatabase(resource)
+                }
+
+            }
+        }
+    }
+
+    fun liveDispensing(
+        questionnaireResponse: QuestionnaireResponse,
+        context: Context,
+        apiService: RestManager,
+        order: ItemOrder,
+        dhmType: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val fh = FhirContext.forR4()
+            val questionnaire =
+                fh.newJsonParser().encodeResourceToString(questionnaireResponse)
+            var type = ""
+            var dispensed = "0"
+            var remarks = ""
+            var typeDHM = ""
+            var volumeD = ""
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+                    val qh = QuestionnaireHelper()
+
+                    val json = JSONObject(questionnaire)
+                    val common = json.getJSONArray("item")
+                    for (i in 0 until common.length()) {
+                        val inner = common.getJSONObject(i)
+                        when (inner.getString("linkId")) {
+
+                            "Volume" -> {
+                                dispensed =
+                                    extractResponse(inner, "valueDecimal")
+                                if (dispensed.isNotEmpty()) {
+                                    volumeD = dispensed
+                                }
+                            }
+                            "DHM-Type" -> {
+                                type = extractResponseCode(inner, "valueCoding")
+
+                                if (type.isNotEmpty()) {
+                                    typeDHM = type
+                                }
+                            }
+                            "Additional-Notes" -> {
+                                val notes = extractResponse(inner, "valueString")
+                                if (notes.isNotEmpty()) {
+                                    remarks = notes
+                                }
+                            }
+                            else -> {
+                                println("Items skipped...")
+                            }
+                        }
+
+                    }
+                    if (type.isNotEmpty()) {
+                        if (dhmType.trim() == type.trim()) {
+                            val stock = DispenseData(
+                                dhmType = typeDHM,
+                                dhmVolume = volumeD,
+                                remarks = remarks,
+                                orderId = order.orderId,
+                                userId = retrieveUser(false)
+                            )
+                            val k = Gson()
+                            Timber.e("Payload ${k.toJson(stock)}")
+                            apiService.dispenseStock(context, stock) {
+                                if (it != null) {
+
+                                    customMessage.postValue(MessageItem(true, "Success"))
+                                } else {
+
+                                    customMessage.postValue(
+                                        MessageItem(
+                                            false,
+                                            "Experienced problems saving data"
+                                        )
+                                    )
+                                }
+                            }
+                        } else {
+                            customMessage.postValue(
+                                MessageItem(
+                                    false,
+                                    "Please check the DHM Type"
+                                )
+                            )
+                        }
+                    } else {
+                        customMessage.postValue(
+                            MessageItem(
+                                false,
+                                "Please Select DHM Type"
+                            )
+                        )
+                    }
+
+                } catch (e: Exception) {
+                    Timber.d("Exception:::: ${e.printStackTrace()}")
+                    customMessage.postValue(
+                        MessageItem(
+                            false,
+                            "Experienced problems saving data"
+                        )
+                    )
+                    return@launch
+
+                }
+
+            }
+        }
+    }
+
+    fun customRegistration(
+        questionnaireResponse: QuestionnaireResponse,
+        baby: Patient,
+        mother: Patient,
+        patientId: String,
+        dataCodes: java.util.ArrayList<CodingObservation>,
+        dataQuantity: java.util.ArrayList<QuantityObservation>
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            val qh = QuestionnaireHelper()
+            dataCodes.forEach {
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            it.code,
+                            it.display,
+                            it.value
+
+                        )
+                    )
+                    .request.url = "Observation"
+
+            }
+            dataQuantity.forEach {
+                bundle.addEntry()
+                    .setResource(
+                        qh.quantityQuestionnaire(
+                            it.code,
+                            it.display,
+                            it.display,
+                            it.value, it.unit
+
+                        )
+                    )
+                    .request.url = "Observation"
+
+            }
+
+            val value = retrieveUser(false)
+
+            bundle.addEntry()
+                .setResource(
+                    qh.codingQuestionnaire(
+                        "Completed By",
+                        value,
+                        value
+                    )
+                )
+                .request.url = "Observation"
+            val encounterId = generateUuid()
+            val subjectReference = Reference("Patient/$patientId")
+            title = "Client Registration"
+            saveResourceToDatabase(resource = baby)
+            saveResourceToDatabase(resource = mother)
+            saveResources(bundle, subjectReference, encounterId, title)
+            customMessage.postValue(MessageItem(true, "Success"))
+        }
+    }
+
+
 }
 
 

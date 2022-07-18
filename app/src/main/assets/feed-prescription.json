@@ -255,7 +255,7 @@
       ],
       "item": [
         {
-          "text": "Enter Types of Feeds",
+          "text": "Enter Types of Feeds and IV Fluids",
           "type": "choice",
           "linkId": "/Feed-Selection",
           "repeats": true,
@@ -275,13 +275,6 @@
             }
           ],
           "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Breast-Feed",
-                "display": "Breast Feed",
-                "system": "http://snomed.info/sct"
-              }
-            },
             {
               "valueCoding": {
                 "code": "EBM",
@@ -309,84 +302,6 @@
                 "display": "IV Fluid and Additives",
                 "system": "http://snomed.info/sct"
               }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "linkId": "Breast-Milk",
-      "type": "group",
-      "text": "Breast Feeding Details",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "Breast-Feed",
-            "display": "Breast Feed",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "decimal",
-          "code": [
-            {
-              "code": "Breast-Milk",
-              "display": "Breast Milk",
-              "system": "http://loinc.org/modified"
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "ml"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 1
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDecimal": 20000
-            }
-          ],
-          "required": true,
-          "linkId": "/Breast-Milk",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Breast Milk (mls)",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
             }
           ]
         }
@@ -549,7 +464,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -570,7 +485,7 @@
           ]
         }
       ]
-    }, 
+    },
     {
       "linkId": "Formula-Type",
       "type": "group",
@@ -823,7 +738,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -922,7 +837,7 @@
               ],
               "valueCoding": {
                 "code": "LA32-8",
-                "display": "Term DHM"
+                "display": "Term"
               }
             },
             {
@@ -934,7 +849,7 @@
               ],
               "valueCoding": {
                 "code": "LA33-6",
-                "display": "Pre Term DHM"
+                "display": "Preterm"
               }
             }
           ]
@@ -1097,7 +1012,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {
@@ -1287,114 +1202,6 @@
       ]
     },
     {
-      "linkId": "IV-Fluid-Route",
-      "type": "group",
-      "enableWhen": [
-        {
-          "question": "/Feed-Selection",
-          "operator": "=",
-          "answerCoding": {
-            "code": "IV Fluid-Additives",
-            "display": "IV Fluid and Additives",
-            "system": "http://snomed.info/sct"
-          }
-        }
-      ],
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "text": "IV Fluid and Additive Details",
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ],
-                "text": "Drop down"
-              }
-            }
-          ],
-          "required": true,
-          "linkId": "/Feeding-Route",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Route",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
-          "answerOption": [
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA32-8",
-                "display": "Cup"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA33-6",
-                "display": "NGT"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA353-6",
-                "display": "OGT"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "linkId": "IV-Fluid-Volume",
       "type": "group",
       "enableWhen": [
@@ -1443,7 +1250,7 @@
           "item": [
             {
               "linkId": "4.1",
-              "text": "Volume (mls)",
+              "text": "24 hr Volume (mls)",
               "type": "display",
               "extension": [
                 {

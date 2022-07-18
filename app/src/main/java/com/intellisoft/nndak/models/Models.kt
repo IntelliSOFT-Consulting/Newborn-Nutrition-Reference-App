@@ -36,6 +36,12 @@ data class CodingObservation(
     val display: String,
     val value: String,
 )
+data class QuantityObservation(
+    val code: String,
+    val display: String,
+    val value: String,
+    val unit: String,
+)
 
 data class BasicThree(
     val lmp: String,
@@ -111,6 +117,23 @@ data class OrdersItem(
     val consentGiven: String? = "",
     val dhmReason: String? = "",
     val code: String? = "",
+)
+
+/**
+ * Expressions History
+ */
+data class ExpressionHistory(
+    val id: String,
+    val resourceId: String,
+    val date: String,
+    val frequency: String,
+    val timing: String,
+    val massage: String,
+    val anxious: String,
+    val skinContact: String,
+    val handExpression: String,
+    val breastCondition: String,
+    val milkVolume: String,
 )
 
 /**
@@ -264,6 +287,38 @@ data class Prescription(
     val additional: String,
     val data: List<FeedDataItem>
 )
+data class FeedingHistory(
+    val date: String,
+    val time: String,
+    val ebm: String,
+    val dhm: String,
+    val iv: String,
+    val deficit: String,
+    val vomit: String,
+    val diaper: String,
+    val stool: String,
+)
+
+data class PositioningHistory(
+    val date: String,
+    val hands: String,
+    val mum: String,
+    val baby: String,
+    val attach: String,
+    val suckle: String
+)
+data class BreastsHistory(
+    val date: String,
+    val interest: String,
+    val cues: String,
+    val sleep: String,
+    val bursts: String,
+    val shortFeed: String,
+    val longSwallow: String,
+    val skin: String,
+    val nipples: String,
+    val shape: String
+)
 
 data class FeedItem(
     val id: String? = "",
@@ -308,4 +363,8 @@ data class FeedDataItem(
     val title: String,
     val value: String,
     val coding: Boolean
+)
+
+data class ScheduleTime(
+    val hour: String,
 )

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -16,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.MainActivity
@@ -31,16 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddPrescriptionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddPrescriptionFragment : Fragment() {
     private lateinit var confirmationDialog: ConfirmationDialog
     private var _binding: FragmentAddPrescriptionBinding? = null
@@ -73,7 +61,7 @@ class AddPrescriptionFragment : Fragment() {
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
         }
-        setHasOptionsMenu(true)
+        this.setHasOptionsMenu(true)
 
         binding.apply {
 
@@ -201,6 +189,7 @@ class AddPrescriptionFragment : Fragment() {
         inflater.inflate(R.menu.hidden_menu, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

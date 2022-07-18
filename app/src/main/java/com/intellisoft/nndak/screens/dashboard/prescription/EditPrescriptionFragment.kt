@@ -340,8 +340,8 @@ class EditPrescriptionFragment : Fragment() {
 
         binding.apply {
 
-            dhmType.tilFre.hint = "DHM Type"
-            dhmConsent.tilFre.hint = "Consent Given?"
+            dhmType.tilFre.hint = getString(R.string._dhm_type)
+            dhmConsent.tilFre.hint = getString(R.string._consent)
             otherSup.tilFre.hint = getString(R.string.app_add)
             otherValue.tilFre.hint = getString(R.string.supp)
             formulaType.tilFre.hint = getString(R.string.type)
@@ -360,7 +360,6 @@ class EditPrescriptionFragment : Fragment() {
              */
             showOptions(ebmRoute.appType, R.menu.route)
             showOptions(dhmRoute.appType, R.menu.route)
-            showOptions(ivRoute.appType, R.menu.route)
             showOptions(formulaRoute.appType, R.menu.route)
 
             /**
@@ -600,7 +599,7 @@ class EditPrescriptionFragment : Fragment() {
                 if (cbFluid.isChecked) {
                     val vol = ivVolume.volume.text.toString()
                     val rou = ivRoute.appType.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(rou)) {
+                    if (checkEmptyData(vol)) {
                         return
                     }
                     feedsList.add(
@@ -611,14 +610,7 @@ class EditPrescriptionFragment : Fragment() {
                             coding = false
                         )
                     )
-                    feedsList.add(
-                        FeedDataItem(
-                            title = "IV Route",
-                            code = IV_ROUTE,
-                            coding = true,
-                            value = rou
-                        )
-                    )
+
                 }
                 if (cbFormula.isChecked) {
                     val vol = formulaVolume.volume.text.toString()

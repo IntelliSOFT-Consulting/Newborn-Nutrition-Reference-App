@@ -22,6 +22,7 @@ import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.DHMStock
@@ -210,25 +211,26 @@ class DhmStockFragment : Fragment() {
         (activity as MainActivity).displayDialog()
         val userId = (activity as MainActivity).retrieveUser(false)
 
-        val stock = DHMStock(unPasteurized = upa, Pasteurized = pa, dhmType = type, userId = userId)
+        val stock = DHMStock(
+            unPasteurized = upa,
+            pasteurized = pa,
+            dhmType = type,
+            userId = userId
+        )
         apiService.addDHMStock(requireContext(), stock) {
-
             (activity as MainActivity).hideDialog()
-
             if (it != null) {
-                val message = it.message
-                val alertDialog: AlertDialog =
-                    this.let {
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.apply {
-                            setTitle("Success")
-                            setMessage(message)
-                            setPositiveButton(getString(android.R.string.yes)) { _, _ ->
-                            }
-                        }
-                        builder.create()
+                val dialog = SweetAlertDialog(activity, SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText("Success!!")
+                    .setContentText(it.message)
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener { d ->
+                        d.dismiss()
+                        NavHostFragment.findNavController(this@DhmStockFragment).navigateUp()
                     }
-                alertDialog.show()
+                dialog.setCancelable(false)
+                dialog
+                    .show()
             } else {
                 Toast.makeText(
                     requireContext(),

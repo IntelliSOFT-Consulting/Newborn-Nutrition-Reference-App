@@ -148,7 +148,11 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
+        super.onResume()
+    }
     private fun updateUI(it: DHMModel) {
 
         binding.apply {

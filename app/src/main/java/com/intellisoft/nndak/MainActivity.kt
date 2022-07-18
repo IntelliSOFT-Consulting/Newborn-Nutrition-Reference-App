@@ -74,6 +74,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun showBottomNavigationView(value: Int) {
+        findViewById<BottomNavigationView>(R.id.navigation).visibility = value
+
+    }
+
     fun dhmAllowed(): Boolean {
 
         val role = retrieveUser(true)
@@ -296,7 +301,7 @@ class MainActivity : AppCompatActivity() {
         val bundle =
             bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "client-registration.json")
         findNavController(R.id.nav_host_fragment).navigate(
-            R.id.registrationFragment,
+            R.id.customRegistrationFragment,
             bundle
         )
     }
@@ -351,22 +356,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sessionTimeOut() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Session Timeout")
-        builder.setMessage("Your session has expired, please login again to proceed")
-        builder.setCancelable(false)
-        builder.setPositiveButton(getString(R.string.refresh)) { dialog, which ->
-            try {
-                FhirApplication.setLoggedIn(this, false)
-                finishAffinity()
-                val i = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(i)
-            } catch (e: Exception) {
-                e.printStackTrace()
+    fun sessionTimeOut() {
+        SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+            .setTitleText("Session Timeout")
+            .setContentText("Your session has expired, please login again to proceed")
+            .setCustomImage(R.drawable.smile)
+            .setConfirmClickListener {
+                it.dismiss()
+                try {
+                    FhirApplication.setLoggedIn(this, false)
+                    finishAffinity()
+                    val i = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(i)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
             }
-        }
-        builder.show()
+
+            .show()
     }
 
 

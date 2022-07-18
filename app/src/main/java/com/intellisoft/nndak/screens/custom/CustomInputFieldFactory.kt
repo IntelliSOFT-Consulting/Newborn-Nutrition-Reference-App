@@ -20,17 +20,17 @@ import com.intellisoft.nndak.R
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.StringType
 
-object CustomNumberPickerFactory : QuestionnaireItemViewHolderFactory(R.layout.custom_layout) {
+/*object CustomNumberPickerFactory : QuestionnaireItemViewHolderFactory(R.layout.custom_layout) {
     override fun getQuestionnaireItemViewHolderDelegate(): QuestionnaireItemViewHolderDelegate =
         object : QuestionnaireItemViewHolderDelegate {
             private lateinit var numberPicker: NumberPicker
             override lateinit var questionnaireItemViewItem: QuestionnaireItemViewItem
 
             override fun init(itemView: View) {
-                /**
+                *//**
                  * Call the [QuestionnaireItemViewHolderDelegate.onAnswerChanged] function when the widget
                  * is interacted with and answer is changed by user input
-                 */
+                 *//*
                 numberPicker = itemView.findViewById(R.id.number_picker)
             }
 
@@ -50,8 +50,7 @@ object CustomNumberPickerFactory : QuestionnaireItemViewHolderFactory(R.layout.c
 
     const val WIDGET_EXTENSION = "http://dummy-widget-type-extension"
     const val WIDGET_TYPE = "number-picker"
-}
-/*
+}*/
 
 object CustomInputFieldFactory :
     QuestionnaireItemViewHolderFactory(R.layout.custom_edittext_layout) {
@@ -129,4 +128,4 @@ object CustomInputFieldFactory :
 
     const val WIDGET_EXTENSION = "http://dummy-widget-type-extension"
     const val WIDGET_TYPE = "number-picker"
-}*/
+}

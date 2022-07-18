@@ -251,7 +251,7 @@ class BabyLactationFragment : Fragment() {
                 populateBarChart(expression)
                 binding.apply {
 
-                    tvTotalExpressed.text = expression.totalFeed
+                    tvTotalExpressed.text = "${expression.totalFeed} mls"
                 }
             }
         }

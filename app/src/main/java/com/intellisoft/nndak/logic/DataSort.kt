@@ -44,7 +44,7 @@ class DataSort {
 
 
         fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
-            var divisor = 0
+        /*    var divisor = 0
             var totalWeight = 0f
             var averageWeight = 0f
             var day = ""
@@ -61,7 +61,7 @@ class DataSort {
                 }
 
             }
-
+*/
             return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: "0.0"

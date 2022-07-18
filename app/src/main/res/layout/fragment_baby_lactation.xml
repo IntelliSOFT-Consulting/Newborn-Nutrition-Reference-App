@@ -63,6 +63,7 @@
                 android:text="@string/action_provide_support"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
+                android:visibility="invisible"
                 app:cornerRadius="@dimen/_25sp" />
         </LinearLayout>
 

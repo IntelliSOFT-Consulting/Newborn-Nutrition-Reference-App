@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.holders.BreastHolder
 import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
@@ -30,6 +31,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_BREASTFEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_WELL
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
+import com.intellisoft.nndak.logic.Logics.Companion.BREASTS_FEEDING
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.BREAST_PROBLEM
 import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
@@ -97,6 +99,7 @@ class PatientDetailsViewModel(
     private val patientId: String
 ) : AndroidViewModel(application) {
     val liveMumChild = MutableLiveData<MotherBabyItem>()
+    val liveAssessmentExpressions = MutableLiveData<List<ExpressionHistory>>()
     val liveOrder = MutableLiveData<OrdersItem>()
     val liveFeeds = MutableLiveData<FeedsDistribution>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
@@ -104,6 +107,9 @@ class PatientDetailsViewModel(
     val liveWeights = MutableLiveData<WeightsData>()
     val liveExpressions = MutableLiveData<MilkExpression>()
     val context: Application = application
+    val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
+    val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
+    val liveBreastHistory = MutableLiveData<List<BreastsHistory>>()
 
 
     fun feedsDistribution() {
@@ -1096,6 +1102,10 @@ class PatientDetailsViewModel(
         return observations.find { it.code == code }?.value ?: "--"
     }
 
+    private fun extractValueDate(observations: List<ObservationItem>, code: String): String {
+        return observations.find { it.code == code }?.effective ?: "--"
+    }
+
     private fun extractQuantity(observations: List<ObservationItem>, code: String): String {
         return observations.find { it.code == code }?.quantity ?: "0"
     }
@@ -1127,7 +1137,11 @@ class PatientDetailsViewModel(
         val def = if (relatedFeeds.isNotEmpty()) {
 
             val parentId = getFeedingInstancesDataModel(context, care.encounterId)
-            parentId.first().deficit
+            try {
+                parentId.first().deficit
+            } catch (e: Exception) {
+                total
+            }
 
         } else {
             total
@@ -1453,6 +1467,214 @@ class PatientDetailsViewModel(
             dhmReason = reason,
             description = dhmVolume,
             status = "active"
+        )
+    }
+
+    fun getAssessmentExpressions() {
+        viewModelScope.launch {
+            liveAssessmentExpressions.value = getExpressionAssessmentDataModel()
+        }
+    }
+
+    private suspend fun getExpressionAssessmentDataModel(): List<ExpressionHistory> {
+        val expressions: MutableList<ExpressionHistory> = mutableListOf()
+        val history = getAllEncounters("Expression-Assessment")
+        if (history.isNotEmpty()) {
+            history.forEach {
+
+                expressions.add(retrieveExpressions(it))
+
+            }
+        }
+
+        return expressions.reversed()
+    }
+
+    private suspend fun retrieveExpressions(it: EncounterItem): ExpressionHistory {
+        val observations = getObservationsPerEncounter(it.id)
+        var frequency = "N/A"
+        var timing = "N/A"
+        var date = "N/A"
+        var massage = "N/A"
+        var anxious = "N/A"
+        var skinContact = "N/A"
+        var handExpression = "N/A"
+        var breastCondition = "N/A"
+        var milkVolume = "N/A"
+        if (observations.isNotEmpty()) {
+            frequency = extractValue(observations, "Expression-Frequency")
+            timing = extractValue(observations, "Timing-Expression")
+            massage = extractValue(observations, "Breast-Massage")
+            anxious = extractValue(observations, "Anxious")
+            skinContact = extractValue(observations, "Skin-Contact")
+            handExpression = extractValue(observations, "Hand-Expression")
+            milkVolume = extractValue(observations, "Milk-Volume")
+            breastCondition = extractValue(observations, "Breast-Condition")
+            date = extractValueDate(observations, "Timing-Expression")
+            if (date.isNotEmpty()) date = try {
+                FormatHelper().getSimpleReverseDate(date)
+            } catch (e: Exception) {
+                date
+            }
+        }
+        return ExpressionHistory(
+            id = it.id,
+            resourceId = it.id,
+            date = date,
+            frequency = "$frequency in 24 hours",
+            timing = timing,
+            massage = massage,
+            anxious = anxious,
+            skinContact = skinContact,
+            handExpression = handExpression,
+            breastCondition = breastCondition,
+            milkVolume = milkVolume,
+        )
+    }
+
+    private suspend fun getAllEncounters(key: String): List<EncounterItem> {
+        val encounters: MutableList<EncounterItem> = mutableListOf()
+        fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                sort(Encounter.DATE, Order.DESCENDING)
+
+            }
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+            .filter { it.code == key }
+            .let { encounters.addAll(it) }
+
+        return encounters.reversed()
+    }
+
+    fun getFeedingHistory() {
+        viewModelScope.launch {
+            liveFeedingHistory.value = getFeedingHistoryDataModel(context)
+        }
+    }
+
+    fun getPositioningHistory() {
+        viewModelScope.launch {
+            livePositioningHistory.value = getPositioningHistoryDataModel(context)
+        }
+    }
+
+    fun getBreastAssessmentHistory() {
+        viewModelScope.launch {
+            liveBreastHistory.value = getBreastHistoryDataModel(context)
+        }
+    }
+
+    private suspend fun getBreastHistoryDataModel(context: Application): List<BreastsHistory> {
+        val history: MutableList<BreastsHistory> = mutableListOf()
+        val feeding = getAllEncounters(BREASTS_FEEDING)
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrieveBreast(it))
+
+            }
+        }
+        return history
+    }
+
+    private suspend fun getFeedingHistoryDataModel(context: Application): List<FeedingHistory> {
+        val history: MutableList<FeedingHistory> = mutableListOf()
+        val feeding = getAllEncounters(FEEDING_MONITORING)
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrieveFeeding(it))
+
+            }
+        }
+        return history
+    }
+
+    private suspend fun getPositioningHistoryDataModel(context: Application): List<PositioningHistory> {
+        val history: MutableList<PositioningHistory> = mutableListOf()
+        val feeding = getAllEncounters("Positioning-Assessment")
+        if (feeding.isNotEmpty()) {
+            feeding.forEach {
+
+                history.add(retrievePositioning(it))
+
+            }
+        }
+        return history
+    }
+
+    private suspend fun retrieveBreast(it: EncounterItem): BreastsHistory {
+        val observations = getObservationsPerEncounter(it.id)
+
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+        val date = try {
+            FormatHelper().getRefinedDateOnly(hour)
+        } catch (e: Exception) {
+            hour
+        }
+
+        return BreastsHistory(
+            date = date,
+            interest = extractValue(observations, "Baby-Interest"),
+            cues = extractValue(observations, "Feeding-Cues"),
+            sleep = extractValue(observations, "Baby-Sleep"),
+            bursts = extractValue(observations, "Bursts"),
+            shortFeed = extractValue(observations, "Short-Feed"),
+            longSwallow = extractValue(observations, "Long-Swallow"),
+            skin = extractValue(observations, "Skin-Tone"),
+            nipples = extractValue(observations, "Nipples"),
+            shape = extractValue(observations, "Shape"),
+
+        )
+    }
+
+    private suspend fun retrievePositioning(it: EncounterItem): PositioningHistory {
+        val observations = getObservationsPerEncounter(it.id)
+
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+        val date = try {
+            FormatHelper().getRefinedDateOnly(hour)
+        } catch (e: Exception) {
+            hour
+        }
+
+        return PositioningHistory(
+            date = date,
+            hands = extractValue(observations, "Hand-Wash"),
+            mum = extractValue(observations, "Mother-Position"),
+            baby = extractValue(observations, "Baby-Position"),
+            attach = extractValue(observations, "Good-Attachment"),
+            suckle = extractValue(observations, "Effective-Suckling"),
+        )
+    }
+
+    private suspend fun retrieveFeeding(it: EncounterItem): FeedingHistory {
+        val observations = getObservationsPerEncounter(it.id)
+        val hour = extractValue(observations, ASSESSMENT_DATE)
+
+        val date = try {
+            FormatHelper().extractDateString(hour.trim())
+        } catch (e: Exception) {
+            hour
+        }
+
+        val time = try {
+            FormatHelper().extractTimeString(hour.trim())
+        } catch (e: Exception) {
+            Timber.e("Date Feeding Exception ${e.localizedMessage}")
+            date
+        }
+        return FeedingHistory(
+            date = date,
+            time = time,
+            ebm = extractValue(observations, EBM_VOLUME),
+            dhm = extractValue(observations, DHM_VOLUME),
+            iv = extractValue(observations, IV_VOLUME),
+            deficit = extractValue(observations, FEEDS_DEFICIT),
+            vomit = extractValue(observations, VOMIT),
+            diaper = extractValue(observations, DIAPER_CHANGED),
+            stool = extractValue(observations, STOOL)
         )
     }
 

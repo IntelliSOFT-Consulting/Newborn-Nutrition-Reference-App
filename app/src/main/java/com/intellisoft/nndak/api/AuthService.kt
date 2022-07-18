@@ -43,7 +43,16 @@ interface AuthService {
 
 
     @Headers("Content-Type: application/json")
-    @POST("dhm-stock")
+    @POST("stock")
     fun addDHMStock(@Body data: DHMStock): Call<AuthResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("stock/order")
+    fun dispenseStock(@Body data: DispenseData): Call<AuthResponse>
+
+
+    @Headers("Content-Type: application/json")
+    @GET("stock/orders")
+    fun loadOrders(): Call<OrderData>
 
 }

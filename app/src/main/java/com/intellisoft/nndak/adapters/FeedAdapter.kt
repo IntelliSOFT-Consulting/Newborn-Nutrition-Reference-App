@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.intellisoft.nndak.databinding.FeedItemViewBinding
+import com.intellisoft.nndak.databinding.ItemBinding
 import com.intellisoft.nndak.databinding.PrescriptionListItemBinding
 import com.intellisoft.nndak.holders.FeedItemViewHolder
 import com.intellisoft.nndak.models.FeedItem
@@ -28,7 +29,7 @@ class FeedAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder {
         return FeedItemViewHolder(
-            FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 

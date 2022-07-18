@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.intellisoft.nndak.charts.ItemOrder
 import com.intellisoft.nndak.databinding.BabyListItemViewBinding
 import com.intellisoft.nndak.databinding.OrderListViewBinding
 import com.intellisoft.nndak.holders.BabyItemViewHolder
@@ -11,21 +12,21 @@ import com.intellisoft.nndak.holders.OrdersItemViewHolder
 import com.intellisoft.nndak.models.OrdersItem
 
 class OrdersAdapter(
-    private var ordersList: ArrayList<OrdersItem>,
-    private val onItemClicked: (OrdersItem) -> Unit
+    private var ordersList: ArrayList<ItemOrder>,
+    private val onItemClicked: (ItemOrder) -> Unit
 ) :
-    ListAdapter<OrdersItem, OrdersItemViewHolder>(OrdersItemDiffCallback()) {
+    ListAdapter<ItemOrder, OrdersItemViewHolder>(OrdersItemDiffCallback()) {
 
-    class OrdersItemDiffCallback : DiffUtil.ItemCallback<OrdersItem>() {
+    class OrdersItemDiffCallback : DiffUtil.ItemCallback<ItemOrder>() {
         override fun areItemsTheSame(
-            oldItem: OrdersItem,
-            newItem: OrdersItem
-        ): Boolean = oldItem.resourceId == newItem.resourceId
+            oldItem: ItemOrder,
+            newItem: ItemOrder
+        ): Boolean = oldItem.orderId == newItem.orderId
 
         override fun areContentsTheSame(
-            oldItem: OrdersItem,
-            newItem: OrdersItem
-        ): Boolean = oldItem.id == newItem.id
+            oldItem: ItemOrder,
+            newItem: ItemOrder
+        ): Boolean = oldItem.orderId == newItem.orderId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersItemViewHolder {

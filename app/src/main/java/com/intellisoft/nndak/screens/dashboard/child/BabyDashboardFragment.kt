@@ -58,7 +58,6 @@ class BabyDashboardFragment : Fragment() {
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: BabyAssessmentFragmentArgs by navArgs()
     private val viewModel: ScreenerViewModel by viewModels()
-    private var bWeight: Int = 0
     private val binding
         get() = _binding!!
 
@@ -107,6 +106,37 @@ class BabyDashboardFragment : Fragment() {
         binding.apply {
             incDetails.pbLoading.visibility = View.VISIBLE
             incDetails.lnBody.visibility = View.GONE
+
+            /**
+             * Three Columns
+             */
+            status.lnParent.weightSum = 3F
+            response.lnParent.weightSum = 3F
+
+            /**
+             * Update Titles
+             */
+            status.appIpNumber.text = getString(R.string.mother_breastfeeding_baby)
+            status.appMotherName.text = getString(R.string.breast_problems)
+            status.appBabyName.text = getString(R.string.mother_contraindicated)
+
+            status.appBabyAge.visibility = View.GONE
+            status.appDhmType.visibility = View.GONE
+            status.appConsent.visibility = View.GONE
+            status.appAction.visibility = View.GONE
+            /**
+             * Update Responses
+             */
+
+            response.appIpNumber.text = null
+            response.appMotherName.text = null
+            response.appBabyName.text = null
+
+            response.appBabyAge.visibility = View.GONE
+            response.appDhmType.visibility = View.GONE
+            response.appConsent.visibility = View.GONE
+            response.appAction.visibility = View.GONE
+
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
@@ -119,9 +149,6 @@ class BabyDashboardFragment : Fragment() {
                     incDetails.lnBody.visibility = View.VISIBLE
                     try {
                         val gest = it.dashboard.gestation ?: ""
-                        val weight = it.birthWeight
-                        val code = weight?.split("\\.".toRegex())?.toTypedArray()
-                        bWeight = code?.get(0)?.toInt()!!
 
                         val status = it.status
                         incDetails.tvBabyName.text = it.babyName
@@ -139,6 +166,10 @@ class BabyDashboardFragment : Fragment() {
                         incDetails.appAdmDate.text = it.dashboard.dateOfAdm ?: ""
 
                         tvMotherMilk.text = it.dashboard.motherMilk ?: ""
+
+                        response.appIpNumber.text = it.assessment.breastfeedingBaby
+                        response.appMotherName.text = it.assessment.breastProblems
+                        response.appBabyName.text = it.assessment.contraindicated
 
 
                         val isSepsis = it.dashboard.neonatalSepsis
@@ -163,6 +194,8 @@ class BabyDashboardFragment : Fragment() {
                             incDetails.appJaundice.visibility = View.GONE
                         }
 
+
+
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -184,6 +217,16 @@ class BabyDashboardFragment : Fragment() {
                 // populateLineChart(it)
 
                 standardCharts(it)
+            }
+        }
+        patientDetailsViewModel.getExpressions()
+        patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
+            if (expression != null) {
+                populateBarChart(expression)
+                binding.apply {
+
+                    tvTotalExpressed.text = "${expression.totalFeed} mls"
+                }
             }
         }
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
@@ -218,7 +261,80 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
+    private fun populateBarChart(it: MilkExpression) {
+
+        val good: ArrayList<BarEntry> = ArrayList()
+        val better: ArrayList<BarEntry> = ArrayList()
+        val best: ArrayList<BarEntry> = ArrayList()
+
+        val intervals = ArrayList<String>()
+        for ((i, entry) in it.data.withIndex()) {
+            intervals.add(entry.time)
+            if (entry.amount.toFloat() < 30) {
+                good.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            } else if (entry.amount.toFloat() < 99) {
+                better.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            } else {
+                best.add(BarEntry(i.toFloat(), entry.amount.toFloat()))
+            }
+        }
+
+        val fluids = BarDataSet(good, "")
+        fluids.setColors(Color.parseColor("#da1e27"))
+        fluids.setDrawValues(false)
+
+        val fluids1 = BarDataSet(better, "")
+        fluids1.setColors(Color.parseColor("#0043cd"))
+        fluids1.setDrawValues(false)
+
+        val fluids2 = BarDataSet(best, "")
+        fluids2.setColors(Color.parseColor("#24a047"))
+        fluids2.setDrawValues(false)
+
+        val data = BarData(fluids, fluids1, fluids2)
+        data.setValueFormatter(LargeValueFormatter())
+
+        binding.apply {
+
+            val xAxis: XAxis = statusChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.setDrawAxisLine(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = -45f
+            xAxis.mAxisMinimum = 1f
+            xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+
+            statusChart.axisLeft.setDrawGridLines(false)
+            statusChart.legend.isEnabled = true
+
+            //remove description label
+            statusChart.description.isEnabled = false
+            statusChart.isDragEnabled = true
+            statusChart.setScaleEnabled(true)
+            statusChart.description.text = "Age (Days)"
+            //add animation
+            statusChart.animateX(1000, Easing.EaseInSine)
+            statusChart.data = data
+
+            val leftAxis: YAxis = statusChart.axisLeft
+            leftAxis.axisMinimum = 0f
+            leftAxis.setDrawGridLines(true)
+            leftAxis.isGranularityEnabled = false
+
+            val rightAxis: YAxis = statusChart.axisRight
+            rightAxis.setDrawGridLines(false)
+            rightAxis.setDrawZeroLine(false)
+            rightAxis.isGranularityEnabled = false
+            rightAxis.isEnabled = false
+
+            //refresh
+            statusChart.invalidate()
+
+        }
+
+    }
     private fun standardCharts(it: WeightsData) {
+        Timber.e("Collected Weights $it")
         try {
             var standard = "boy.json"
             if (it.babyGender == "female") {
@@ -533,7 +649,11 @@ class BabyDashboardFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

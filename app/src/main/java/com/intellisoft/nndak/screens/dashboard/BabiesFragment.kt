@@ -30,7 +30,6 @@ import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabiesBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
-import com.intellisoft.nndak.roomdb.HealthViewModel
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.android.synthetic.main.patient_list_item_view.*
@@ -65,7 +64,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var formatter = FormatHelper()
     private var status: String = "Filter By:"
 
-    private lateinit var healthViewModel: HealthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,7 +135,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             e.printStackTrace()
         }
 
-        healthViewModel = HealthViewModel(requireActivity().application)
 
         mySpinner = binding.mySpinner
 
@@ -273,7 +270,11 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         super.onDestroyView()
         _binding = null
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
