@@ -16,6 +16,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
@@ -54,6 +55,7 @@ class BreastFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private val dataCodes = ArrayList<CodingObservation>()
     private var _binding: FragmentBreastBinding? = null
+    private lateinit var careID: String
     private lateinit var patientId: String
     private var interest: String = "No"
     private var cues: String = "No"
@@ -98,14 +100,16 @@ class BreastFragment : Fragment() {
                         fhirEngine,
                         patientId
                     )
-                )
-                    .get(PatientDetailsViewModel::class.java)
+                ).get(PatientDetailsViewModel::class.java)
 
+            loadActivePrescription()
 
             binding.apply {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
                 actionNewExpression.setOnClickListener {
+                    updateArguments()
+                    addQuestionnaireFragment()
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
@@ -156,6 +160,16 @@ class BreastFragment : Fragment() {
         }
     }
 
+    private fun loadActivePrescription() {
+        patientDetailsViewModel.getCurrentPrescriptions()
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) { data ->
+            if (data.isNotEmpty()) {
+                val it = data.first()
+                careID = it.resourceId.toString()
+            }
+        }
+    }
+
     private fun addQuestionnaireFragment() {
         try {
             val fragment = QuestionnaireFragment()
@@ -193,7 +207,14 @@ class BreastFragment : Fragment() {
 
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-        viewModel.feedingCues(
+
+        val context = FhirContext.forR4()
+
+        val questionnaire =
+            context.newJsonParser()
+                .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+        Timber.e("Questionnaire  $dataCodes")
+        viewModel.customAssessment(
             questionnaireFragment.getQuestionnaireResponse(),
             dataCodes,
             patientId, BREASTS_FEEDING
@@ -271,8 +292,8 @@ class BreastFragment : Fragment() {
     }
 
     private fun clickItem(data: BreastsHistory) {
-               moreExpression = ViewBreastFeeding(data)
-               moreExpression.show(childFragmentManager, "Confirm Details")
+        moreExpression = ViewBreastFeeding(data)
+        moreExpression.show(childFragmentManager, "Confirm Details")
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {

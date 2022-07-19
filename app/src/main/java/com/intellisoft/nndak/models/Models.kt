@@ -288,6 +288,7 @@ data class Prescription(
     val data: List<FeedDataItem>
 )
 data class FeedingHistory(
+    val hour: String,
     val date: String,
     val time: String,
     val ebm: String,

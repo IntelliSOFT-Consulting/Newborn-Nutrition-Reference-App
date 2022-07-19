@@ -106,6 +106,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
                 if (it.isNotEmpty()) {
                     mumBabyList.clear()
+                    adapterList.notifyDataSetChanged()
                     when (status) {
                         "Filter By:" -> {
                             displayComplete(it)
@@ -246,16 +247,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 mumBabyList.add(baby)
             }
         }
-        /*   baby.forEach {
-               val status = it.status
-               if (status.equals(s)) {
-                   mumBabyList.add(it)
-
-               }
-               Timber.e("Selected Status $s  Current $status ${it.babyName} ${it.status}\n" +
-                       "Added $mumBabyList")
-
-           }*/
         binding.apply {
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
@@ -270,11 +261,13 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         super.onResume()
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }

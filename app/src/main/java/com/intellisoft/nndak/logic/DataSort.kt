@@ -6,23 +6,23 @@ import com.intellisoft.nndak.charts.GrowthData
 import com.intellisoft.nndak.charts.GrowthOptions
 import com.intellisoft.nndak.charts.WeightsData
 import com.intellisoft.nndak.helper_class.FormatHelper
-import com.intellisoft.nndak.models.CareItem
-import com.intellisoft.nndak.models.EncounterItem
-import com.intellisoft.nndak.models.ObservationItem
-import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.models.*
 import java.time.LocalDate
 import java.time.Period
 
 class DataSort {
     companion object {
-        fun sortCollectedPrescriptions(data: List<PrescriptionItem>): List<PrescriptionItem> {
 
-            return data.sortedWith(compareBy { it.hour })
-        }
 
         fun sortCollected(data: List<ObservationItem>): List<ObservationItem> {
 
             return data.sortedWith(compareBy { it.effective })
+        }
+
+
+        fun sortHistory(data: List<FeedingHistory>): List<FeedingHistory> {
+
+            return data.sortedWith(compareByDescending { it.hour })
         }
 
         fun sortPrescriptions(data: List<PrescriptionItem>): List<PrescriptionItem> {
@@ -31,37 +31,9 @@ class DataSort {
 
         }
 
-        fun sortCollectedCareEncounter(data: List<EncounterItem>): List<EncounterItem> {
-
-            return data.sortedWith(compareBy { it.value })
-        }
-
-
-        fun sortCollectedCare(data: List<CareItem>): List<CareItem> {
-
-            return data.sortedWith(compareBy { it.created })
-        }
-
 
         fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
-        /*    var divisor = 0
-            var totalWeight = 0f
-            var averageWeight = 0f
-            var day = ""
-            sorted.forEach {
-                day = FormatHelper().getSimpleDate(it.effective)
-                if (day == entry.toString()) {
-                    divisor++
-                    totalWeight += it.quantity.toFloat()
-                }
-                averageWeight = try {
-                    totalWeight / divisor
-                } catch (e: Exception) {
-                    0f
-                }
-
-            }
-*/
+       
             return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: "0.0"

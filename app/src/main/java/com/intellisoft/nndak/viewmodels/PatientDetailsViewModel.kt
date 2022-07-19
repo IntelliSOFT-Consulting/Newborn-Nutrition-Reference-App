@@ -19,6 +19,7 @@ import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
 import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
 import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
+import com.intellisoft.nndak.logic.DataSort.Companion.sortHistory
 import com.intellisoft.nndak.logic.DataSort.Companion.sortPrescriptions
 import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
@@ -290,7 +291,6 @@ class PatientDetailsViewModel(
                         }
 
                     }
-                    Timber.e("Cheza $isWithinRange")
                 } catch (e: Exception) {
                     Timber.e("Cheza Exception ${e.localizedMessage}")
                 }
@@ -441,7 +441,6 @@ class PatientDetailsViewModel(
         val mum = getMother(patientId)
         val mumName = mum.first.toString()
         val mumIp = mum.second.toString()
-
         val babyWell = retrieveCode(BABY_WELL)
         val asphyxia = retrieveCode(ASPHYXIA)
         val jaundice = retrieveCode(JAUNDICE)
@@ -452,7 +451,6 @@ class PatientDetailsViewModel(
         val breastfeeding = retrieveCode(BABY_BREASTFEEDING)
         val mumWell = retrieveCode(MUM_WELL)
         var dDate = retrieveCode(DELIVERY_DATE)
-
         var birthWeight = ""
         var status = ""
         var gestation = ""
@@ -466,6 +464,7 @@ class PatientDetailsViewModel(
         var motherMilk = "0 ml"
         var assessed = false
         val exp = getPatientEncounters()
+        val encounterId = getSingleEncounters("Client Registration")?.id.toString()
         var i: Int = 0
         if (exp.isNotEmpty()) {
             for (element in exp) {
@@ -481,7 +480,6 @@ class PatientDetailsViewModel(
         }
 
         val obs = getObservations()
-
 
         if (obs.isNotEmpty()) {
             for (element in obs) {
@@ -526,14 +524,16 @@ class PatientDetailsViewModel(
                         motherMilk = element.value
                     }
                     GESTATION -> {
-                        val code = element.value.split("\\.".toRegex()).toTypedArray()
+                        val code = element.quantity//.split("\\.".toRegex()).toTypedArray()
+
                         status = try {
-                            if (code[0].toInt() < 37) {
+                            if (code.toDouble() < 37) {
                                 "Preterm"
                             } else {
                                 "Term"
                             }
                         } catch (e: Exception) {
+
                             "Preterm"
                         }
                         gestation = element.value
@@ -559,7 +559,7 @@ class PatientDetailsViewModel(
 
         }
         return MotherBabyItem(
-            patientId,
+            encounterId,
             patientId,
             name,
             mumName,
@@ -1002,7 +1002,6 @@ class PatientDetailsViewModel(
             }
             .take(MAX_RESOURCE_COUNT)
             .map {
-
                 createEncounterItem(
                     it,
                     getApplication<Application>().resources
@@ -1547,6 +1546,17 @@ class PatientDetailsViewModel(
         return encounters.reversed()
     }
 
+    private suspend fun getSingleEncounters(key: String): EncounterItem? {
+        Timber.e("Searching for encounter......")
+        return fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                sort(Encounter.DATE, Order.DESCENDING)
+            }
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+            .firstOrNull { it.code == key }
+    }
+
     fun getFeedingHistory() {
         viewModelScope.launch {
             liveFeedingHistory.value = getFeedingHistoryDataModel(context)
@@ -1570,9 +1580,7 @@ class PatientDetailsViewModel(
         val feeding = getAllEncounters(BREASTS_FEEDING)
         if (feeding.isNotEmpty()) {
             feeding.forEach {
-
                 history.add(retrieveBreast(it))
-
             }
         }
         return history
@@ -1583,12 +1591,10 @@ class PatientDetailsViewModel(
         val feeding = getAllEncounters(FEEDING_MONITORING)
         if (feeding.isNotEmpty()) {
             feeding.forEach {
-
                 history.add(retrieveFeeding(it))
-
             }
         }
-        return history
+        return sortHistory(history)
     }
 
     private suspend fun getPositioningHistoryDataModel(context: Application): List<PositioningHistory> {
@@ -1626,7 +1632,7 @@ class PatientDetailsViewModel(
             nipples = extractValue(observations, "Nipples"),
             shape = extractValue(observations, "Shape"),
 
-        )
+            )
     }
 
     private suspend fun retrievePositioning(it: EncounterItem): PositioningHistory {
@@ -1666,6 +1672,7 @@ class PatientDetailsViewModel(
             date
         }
         return FeedingHistory(
+            hour = hour,
             date = date,
             time = time,
             ebm = extractValue(observations, EBM_VOLUME),

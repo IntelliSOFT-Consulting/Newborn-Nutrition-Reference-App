@@ -180,8 +180,8 @@ class CustomRegistrationFragment : Fragment() {
             }
 
             listenChanges(appMumName, tilMumName, "Enter full name")
-            listenChanges(appParity, tilParity, "Enter 5th min score")
-            listenChanges(appTwoParity, tilTwoParity, "Enter 10th min score")
+            listenChanges(appParity, tilParity, "_")
+            listenChanges(appTwoParity, tilTwoParity, "_")
             listenChanges(appIpNumber, tilIpNumber, "Enter IP Number")
             listenChanges(appPmtct, tilPmtct, "Select Status")
             listenChanges(appMulti, tilMulti, "Select Birth Type")
@@ -190,14 +190,14 @@ class CustomRegistrationFragment : Fragment() {
             listenChanges(appCs, tilCs, "Select reason")
             listenChanges(appVdrl, tilVdrl, "Select VDRL status")
             listenChanges(appSex, tilSex, "Select Baby's sex")
-            listenChanges(appBirthWeight, tilBirthWeight, "Enter birth weight")
-            listenChanges(appGestation, tilGestation, "Enter gestation age")
-            listenChanges(appFiveScore, tilFiveScore, "Enter 5th min score")
-            listenChanges(appTenScore, tilTenScore, "Enter 10th min score")
+            listenMaxChanges(appBirthWeight, tilBirthWeight, "Enter birth weight", 400, 5000)
+            listenMaxChanges(appGestation, tilGestation, "Enter gestation age", 22, 42)
+            listenMaxChanges(appFiveScore, tilFiveScore, "enter score", 0, 10)
+            listenMaxChanges(appTenScore, tilTenScore, "enter score", 1, 10)
             listenChanges(appBba, tilBba, "Select BBA")
-            listenChanges(appHead, tilHead, "Enter head circumference")
+            listenMaxChanges(appHead, tilHead, "Enter head circumference", 0, 50)
             listenChanges(appInter, tilInter, "Enter interventions")
-            listenChanges(appAdmWeight, tilAdmWeight, "Enter Admission weight")
+            listenMaxChanges(appAdmWeight, tilAdmWeight, "Enter Admission weight", 400, 5000)
             listenChanges(appNotes, tilNotes, "Enter remarks")
             listenChanges(appDelDate, tilDelDate, "Select delivery date")
             listenChanges(appDob, tilDob, "Select date of birth")
@@ -231,6 +231,7 @@ class CustomRegistrationFragment : Fragment() {
 
         }
     }
+
 
     private fun showDeliveryOptions(textInputEditText: TextInputEditText, menuItem: Int) {
         textInputEditText.setOnClickListener {
@@ -284,7 +285,7 @@ class CustomRegistrationFragment : Fragment() {
 
 
             if (mumName.isEmpty()) {
-                tilMumName.error = "Please enter mother's name"
+                tilMumName.error = "Enter mother's name"
                 appMumName.requestFocus()
                 return
 
@@ -302,19 +303,19 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (mumIp.isEmpty()) {
-                tilIpNumber.error = "Please enter Ip Number"
+                tilIpNumber.error = "Enter Ip Number"
                 appIpNumber.requestFocus()
                 return
 
             }
             if (pmtct.isEmpty()) {
-                tilPmtct.error = "Please select PMTCT"
+                tilPmtct.error = "Select PMTCT"
                 appPmtct.requestFocus()
                 return
 
             }
             if (multi.isEmpty()) {
-                tilMulti.error = "Please select Pregnancies"
+                tilMulti.error = "Select Pregnancies"
                 appMulti.requestFocus()
                 return
 
@@ -322,7 +323,7 @@ class CustomRegistrationFragment : Fragment() {
             if (isMultiple) {
 
                 if (births.isEmpty()) {
-                    tilBirthType.error = "Please select birth type"
+                    tilBirthType.error = "Select birth type"
                     appBirthType.requestFocus()
                     return
 
@@ -337,45 +338,45 @@ class CustomRegistrationFragment : Fragment() {
             val sex = appSex.text.toString()
 
             if (delDate.isEmpty()) {
-                tilDelDate.error = "Please select delivery date"
+                tilDelDate.error = "Select delivery date"
                 appDelDate.requestFocus()
                 return
 
             }
             if (delTime.isEmpty()) {
-                tilDelTime.error = "Please select delivery time"
+                tilDelTime.error = "Select delivery time"
                 appDelTime.requestFocus()
                 return
 
             }
             if (delMethod.isEmpty()) {
-                tilDelivery.error = "Please select delivery method"
+                tilDelivery.error = "Select delivery method"
                 appDelivery.requestFocus()
                 return
 
             }
             if (isCs) {
                 if (cs.isEmpty()) {
-                    tilCs.error = "Please select CS reason"
+                    tilCs.error = "Select CS reason"
                     appCs.requestFocus()
                     return
 
                 }
             }
             if (vdrl.isEmpty()) {
-                tilVdrl.error = "Please select VDRL"
+                tilVdrl.error = "Select VDRL"
                 appVdrl.requestFocus()
                 return
 
             }
             if (dob.isEmpty()) {
-                tilDob.error = "Please select date of birth"
+                tilDob.error = "Select date of birth"
                 appDob.requestFocus()
                 return
 
             }
             if (sex.isEmpty()) {
-                tilSex.error = "Please select gender"
+                tilSex.error = "Select gender"
                 appSex.requestFocus()
                 return
 
@@ -387,13 +388,13 @@ class CustomRegistrationFragment : Fragment() {
             val bba = appBba.text.toString()
 
             if (bWeight.isEmpty()) {
-                tilBirthWeight.error = "Please enter birth weight"
+                tilBirthWeight.error = "Enter birth weight"
                 appBirthWeight.requestFocus()
                 return
 
             }
             if (gestation.isEmpty()) {
-                tilGestation.error = "Please enter gestation"
+                tilGestation.error = "Enter gestation"
                 appGestation.requestFocus()
                 return
 
@@ -411,7 +412,7 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (bba.isEmpty()) {
-                tilBba.error = "Please select BBA"
+                tilBba.error = "Select BBA"
                 appBba.requestFocus()
                 return
 
@@ -425,41 +426,41 @@ class CustomRegistrationFragment : Fragment() {
 
 
             if (head.isEmpty()) {
-                tilHead.error = "enter head circumference"
+                tilHead.error = "Enter head circumference"
                 appHead.requestFocus()
                 return
 
             }
             if (inter.isEmpty()) {
-                tilInter.error = "enter interventions"
+                tilInter.error = "Enter interventions"
                 appInter.requestFocus()
                 return
 
             }
             if (adWeight.isEmpty()) {
-                tilAdmWeight.error = "enter adm weight"
+                tilAdmWeight.error = "Enter adm weight"
                 appAdmWeight.requestFocus()
                 return
             }
             if (admDate.isEmpty()) {
-                tilAdmDate.error = "select adm date"
+                tilAdmDate.error = "Select adm date"
                 appAdmDate.requestFocus()
                 return
             }
             if (admTime.isEmpty()) {
-                tilAdmTime.error = "Please select adm time"
+                tilAdmTime.error = "Select adm time"
                 appAdmTime.requestFocus()
                 return
             }
             if (remarks.isEmpty()) {
-                tilNotes.error = "Please enter remarks"
+                tilNotes.error = "Enter remarks"
                 appNotes.requestFocus()
                 return
             }
 
             val isValid = FormatHelper().isSimilarDay(delDate, dob)
             if (!isValid) {
-                tilDob.error = "Please enter valid Dob"
+                tilDob.error = "Enter valid Dob"
                 appDob.requestFocus()
                 return
             }
@@ -468,6 +469,32 @@ class CustomRegistrationFragment : Fragment() {
             if (!isAllowed) {
                 tilAdmDate.error = "Please enter valid adm date"
                 appAdmDate.requestFocus()
+                return
+            }
+
+
+            if (!withinRange(appBirthWeight, tilBirthWeight, "Enter weight", 400, 5000)) {
+                tilBirthWeight.requestFocus()
+                return
+            }
+            if (!withinRange(appGestation, tilGestation, "Enter gestation", 22, 42)) {
+                appGestation.requestFocus()
+                return
+            }
+            if (!withinRange(appFiveScore, tilFiveScore, "Enter 5 min score", 0, 10)) {
+                appFiveScore.requestFocus()
+                return
+            }
+            if (!withinRange(appTenScore, tilTenScore, "Enter 10 min score", 1, 10)) {
+                appTenScore.requestFocus()
+                return
+            }
+            if (!withinRange(appHead, tilHead, "Enter circumference", 0, 50)) {
+                appHead.requestFocus()
+                return
+            }
+            if (!withinRange(appAdmWeight, tilAdmWeight, "Enter weight", 400, 5000)) {
+                appAdmWeight.requestFocus()
                 return
             }
 
@@ -525,8 +552,9 @@ class CustomRegistrationFragment : Fragment() {
             val mother = Patient()
             val babyIp = generateUuid()
             try {
+                val mum = mumName.trim()
 
-                val words = mumName.split("\\s".toRegex()).toTypedArray()
+                val words = mum.split("\\s".toRegex()).toTypedArray()
                 val subjectReference = Reference("Patient/$babyIp")
                 mother.nameFirstRep.family = words[2]
                 mother.nameFirstRep.addGiven(words[0])
@@ -569,6 +597,39 @@ class CustomRegistrationFragment : Fragment() {
                 return
             }
         }
+    }
+
+    private fun withinRange(
+        input: TextInputEditText,
+        inputLayout: TextInputLayout,
+        error: String,
+        min: Int,
+        max: Int
+    ): Boolean {
+        try {
+            val value = input.text.toString()
+            if (value.isNotEmpty()) {
+                val parsed = value.toDouble()
+                val minimum = min.toDouble()
+                val maximum = max.toDouble()
+                if (parsed < minimum) {
+                    inputLayout.error = "Minimum allowed is $minimum"
+                    return false
+                } else if (parsed > maximum) {
+                    inputLayout.error = "Maximum allowed is $maximum"
+                    return false
+                } else {
+                    inputLayout.error = null
+                    return true
+                }
+            } else {
+                inputLayout.error = error
+                return false
+            }
+        } catch (e: Exception) {
+            return false
+        }
+
     }
 
     private fun observeResourcesSaveAction(patientId: String) {
@@ -621,30 +682,55 @@ class CustomRegistrationFragment : Fragment() {
     private fun resetFields() {
         binding.apply {
             appMumName.setText("")
+            tilMumName.error = ""
             appParity.setText("")
+            tilParity.error = ""
             appTwoParity.setText("")
+            tilTwoParity.error = ""
             appIpNumber.setText("")
+            tilIpNumber.error = ""
             appPmtct.setText("")
+            tilPmtct.error = ""
             appMulti.setText("")
+            tilMulti.error = ""
             appBirthType.setText("")
+            tilBirthType.error = ""
             appDelivery.setText("")
+            tilDelivery.error = ""
             appCs.setText("")
+            tilCs.error = ""
             appVdrl.setText("")
+            tilVdrl.error = ""
             appSex.setText("")
+            tilSex.error = ""
             appBirthWeight.setText("")
+            tilBirthWeight.error = ""
             appGestation.setText("")
+            tilGestation.error = ""
             appFiveScore.setText("")
+            tilFiveScore.error = ""
             appTenScore.setText("")
+            tilTenScore.error = ""
             appBba.setText("")
+            tilBba.error = ""
             appHead.setText("")
+            tilHead.error = ""
             appInter.setText("")
+            tilInter.error = ""
             appAdmWeight.setText("")
+            tilAdmWeight.error = ""
             appNotes.setText("")
+            tilNotes.error = ""
             appDelDate.setText("")
+            tilDelDate.error = ""
             appDob.setText("")
+            tilDob.error = ""
             appAdmDate.setText("")
+            tilAdmDate.error = ""
             appDelTime.setText("")
+            tilDelTime.error = ""
             appAdmTime.setText("")
+            tilAdmTime.error = ""
         }
     }
 
@@ -688,6 +774,69 @@ class CustomRegistrationFragment : Fragment() {
                             }
                             input.addTextChangedListener(this)
                             inputLayout.error = null
+                        } else {
+                            inputLayout.error = error
+                        }
+                    } catch (e: Exception) {
+
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
+
+                }
+            })
+        }
+    }
+
+    private fun listenMaxChanges(
+        input: TextInputEditText,
+        inputLayout: TextInputLayout,
+        error: String,
+        min: Int,
+        max: Int
+    ) {
+
+        CoroutineScope(Dispatchers.Default).launch {
+            input.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position);
+                            }
+
+                            input.addTextChangedListener(this)
+                            if (input.text.toString().isNotEmpty()) {
+                                val parsed = newValue.toDouble()
+                                val minimum = min.toDouble()
+                                val maximum = max.toDouble()
+                                if (parsed < minimum) {
+                                    inputLayout.error = "Minimum allowed is $minimum"
+                                } else if (parsed > maximum) {
+                                    inputLayout.error = "Maximum allowed is $maximum"
+                                } else {
+                                    inputLayout.error = null
+                                }
+                            } else {
+                                inputLayout.error = null
+                            }
                         } else {
                             inputLayout.error = error
                         }

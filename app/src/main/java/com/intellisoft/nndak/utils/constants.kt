@@ -14,6 +14,7 @@ object Constants {
     const val SYNC_STATE = "PMH"
     const val SYNC_PARAM = "address-postalcode"
     const val ACTIVE = "active"
+    const val RELATED = "related"
     const val WELCOME = "welcome"
     const val LOGIN = "login"
     const val SERVER_URL_DEMO = "server_url_demo"

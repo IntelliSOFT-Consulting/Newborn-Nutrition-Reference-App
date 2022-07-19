@@ -61,7 +61,7 @@
     <string name="action_no">No</string>
     <string name="action_male">Male</string>
     <string name="action_female">Female</string>
-    <string name="action_client">Client Info</string>
+    <string name="action_client">Patient Info</string>
     <string name="maternity_menu">Maternity Registration</string>
     <string name="mother_child_menu">Mother and Child Assessment</string>
     <string name="post_natal_menu">Post Natal Unit</string>
@@ -172,7 +172,7 @@
     <string name="app_complete">Complete</string>
     <string name="app_selection">Please select an option</string>
     <string name="home_babies">Baby\'s Profiles</string>
-    <string name="home_client">Client Registration</string>
+    <string name="home_client">Patient Registration</string>
     <string name="home_menu_dashboard">Human Milk Bank Dashboard</string>
     <string name="app_total_term">Total Term and Preterm DHM Available</string>
     <string name="action_dummy">20</string>
@@ -274,9 +274,9 @@
     <string name="app_confirm">Confirm</string>
     <string name="app_okay_message">Please click confirm to Save Data</string>
     <string name="app_okay_saved">Your data has been saved</string>
-    <string name="app_confirm_message">Please click confirm to Register\n Client and move to Baby\'s Panel</string>
+    <string name="app_confirm_message">Please click confirm to Register\n Patient and move to Baby\'s Panel</string>
     <string name="app_success">Success</string>
-    <string name="app_client_registered">Client has been registered.\nClick okay to start the Baby\'s Assessment</string>
+    <string name="app_client_registered">Patient has been registered.\nClick okay to start the Baby\'s Assessment</string>
     <string name="app_ok">OK</string>
     <string name="app_active">An active Internet Connection is required.</string>
     <string name="action_provide_support">Provide Lactation Support</string>

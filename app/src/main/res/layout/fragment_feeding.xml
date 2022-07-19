@@ -22,26 +22,33 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/tv_current"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_current_prescription"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/inc_prescribe"
-            layout="@layout/prescribe_item" />
+            layout="@layout/prescribe_item"
+            android:visibility="visible" />
 
         <TextView
+            android:id="@+id/tv_hist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_upcoming"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/inc_schedule"
             layout="@layout/schedule_item" />
 
         <TextView
+            android:id="@+id/tv_feeding"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_feeding_history"

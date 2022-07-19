@@ -98,15 +98,7 @@ class BabyMonitoringFragment : Fragment() {
         val tabTabLayout = binding.tabTablayout
         setupViewPager(tabViewpager)
         tabTabLayout.setupWithViewPager(tabViewpager)
-/*
-        updateArguments()
-        onBackPressed()
-        observeResourcesSaveAction()
-        if (savedInstanceState == null) {
-            addQuestionnaireFragment()
-        }*/
 
-        //  promptQues()
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -133,6 +125,7 @@ class BabyMonitoringFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
             if (data != null) {
+                FhirApplication.updateCurrent(requireContext(),data.id)
                 binding.apply {
 
                     incDetails.lnBody.visibility = View.VISIBLE

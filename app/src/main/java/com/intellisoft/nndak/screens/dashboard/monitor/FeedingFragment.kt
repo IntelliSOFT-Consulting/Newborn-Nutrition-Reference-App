@@ -30,7 +30,6 @@ import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.MoreExpression
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.FeedItem
-import com.intellisoft.nndak.models.MessageItem
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.utils.getFutureHoursOnIntervalOf
@@ -110,8 +109,10 @@ class FeedingFragment : Fragment() {
                 this::onSubmitAction,
                 resources.getString(R.string.app_okay_message)
             )
+            updatePrescriptionVisibility(false)
             binding.apply {
                 incHistory.lnParent.visibility = View.GONE
+
             }
 
             loadActivePrescription()
@@ -122,104 +123,11 @@ class FeedingFragment : Fragment() {
             if (savedInstanceState == null) {
                 addQuestionnaireFragment()
             }
+            updateUI()
 
-            listenToChange(binding.control.edDhm)
-            listenToChange(binding.control.edEbm)
-            listenToChange(binding.control.edIv)
-            listenToChange(binding.control.edFormula)
-            binding.apply {
-                lnCollection.visibility = View.GONE
-                lnHistory.visibility = View.VISIBLE
-                disableEditing(control.edDeficit)
-                btnSubmit.setOnClickListener {
+            loadActivePrescription()
+            loadFeedingHistory()
 
-                    val ivVolume = control.edIv.text.toString()
-                    val dhmVolume = control.edDhm.text.toString()
-                    val ebmVolume = control.edEbm.text.toString()
-                    val formulaVolume = control.edFormula.text.toString()
-                    val total = incPrescribe.appTodayTotal.text.toString()
-                    totalV = total.toFloat()
-                    deficit = control.edDeficit.text.toString()
-
-                    if (ivPresent) {
-                        if (ivVolume.isNotEmpty()) {
-                            feedsList.add(
-                                FeedItem(
-                                    type = "IV",
-                                    volume = ivVolume.toDouble().toString()
-                                )
-                            )
-                        } else {
-
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.inputs_missing),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return@setOnClickListener
-                        }
-                    }
-                    if (dhmPresent) {
-                        if (dhmVolume.isNotEmpty()) {
-                            feedsList.add(
-                                FeedItem(
-                                    type = "DHM",
-                                    volume = dhmVolume.toDouble().toString()
-                                )
-                            )
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.inputs_missing),
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            return@setOnClickListener
-
-                        }
-                    }
-                    if (ebmPresent) {
-                        if (ebmVolume.isNotEmpty()) {
-                            feedsList.add(
-                                FeedItem(
-                                    type = "EBM",
-                                    volume = ebmVolume.toDouble().toString()
-                                )
-                            )
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.inputs_missing),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return@setOnClickListener
-                        }
-                    }
-                    if (formulaPresent) {
-                        if (formulaVolume.isNotEmpty()) {
-                            feedsList.add(
-                                FeedItem(
-                                    type = "Formula",
-                                    volume = formulaVolume.toDouble().toString()
-                                )
-                            )
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.inputs_missing),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            return@setOnClickListener
-                        }
-                    }
-                    confirmationDialog.show(childFragmentManager, "Confirm Action")
-                }
-
-                btnCancel.setOnClickListener {
-                    showCancelScreenerQuestionnaireAlertDialog()
-                }
-            }
-            setupFeedingTimes()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -243,6 +151,106 @@ class FeedingFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
+    }
+
+    private fun updateUI() {
+
+        listenToChange(binding.control.edDhm)
+        listenToChange(binding.control.edEbm)
+        listenToChange(binding.control.edIv)
+        listenToChange(binding.control.edFormula)
+        binding.apply {
+            lnCollection.visibility = View.GONE
+            lnHistory.visibility = View.VISIBLE
+            disableEditing(control.edDeficit)
+            btnSubmit.setOnClickListener {
+
+                val ivVolume = control.edIv.text.toString()
+                val dhmVolume = control.edDhm.text.toString()
+                val ebmVolume = control.edEbm.text.toString()
+                val formulaVolume = control.edFormula.text.toString()
+                val total = incPrescribe.appTodayTotal.text.toString()
+                totalV = total.toFloat()
+                deficit = control.edDeficit.text.toString()
+
+                if (ivPresent) {
+                    if (ivVolume.isNotEmpty()) {
+                        feedsList.add(
+                            FeedItem(
+                                type = "IV",
+                                volume = ivVolume.toDouble().toString()
+                            )
+                        )
+                    } else {
+
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
+                }
+                if (dhmPresent) {
+                    if (dhmVolume.isNotEmpty()) {
+                        feedsList.add(
+                            FeedItem(
+                                type = "DHM",
+                                volume = dhmVolume.toDouble().toString()
+                            )
+                        )
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        return@setOnClickListener
+
+                    }
+                }
+                if (ebmPresent) {
+                    if (ebmVolume.isNotEmpty()) {
+                        feedsList.add(
+                            FeedItem(
+                                type = "EBM",
+                                volume = ebmVolume.toDouble().toString()
+                            )
+                        )
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
+                }
+                if (formulaPresent) {
+                    if (formulaVolume.isNotEmpty()) {
+                        feedsList.add(
+                            FeedItem(
+                                type = "Formula",
+                                volume = formulaVolume.toDouble().toString()
+                            )
+                        )
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.inputs_missing),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
+                }
+                confirmationDialog.show(childFragmentManager, "Confirm Action")
+            }
+
+            btnCancel.setOnClickListener {
+                showCancelScreenerQuestionnaireAlertDialog()
+            }
+        }
     }
 
     private fun regulateViews(pr: PrescriptionItem) {
@@ -300,7 +308,7 @@ class FeedingFragment : Fragment() {
         try {
             val code = totalVolume.split("\\.".toRegex()).toTypedArray()
             val rate = getNumericFrequency(frequency)
-            Timber.e("Rate $rate")
+
             val times = 24 / rate.toFloat()
             val j: Float = times
             val k: Float = code[0].toFloat()
@@ -312,7 +320,6 @@ class FeedingFragment : Fragment() {
             total = df.format(totalPerSession).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
-            Timber.e("Feeding Exception ${e.localizedMessage} ")
         }
         return "$total mls"
     }
@@ -324,24 +331,41 @@ class FeedingFragment : Fragment() {
                 val it = data.first()
                 careID = it.resourceId.toString()
                 prescriptionExists = true
+                updatePrescriptionVisibility(true)
                 binding.apply {
-                    // lnCurrent.visibility = View.VISIBLE
-                    availableFeed = it.deficit.toString()
-                    incPrescribe.appTodayTotal.text =
-                        it.deficit
+
+//                    availableFeed = it.deficit.toString()
+                    incPrescribe.appTodayTotal.text = it.deficit
                     incPrescribe.appRoute.text = it.route ?: ""
                     val threeHourly = calculateFeeds(it.totalVolume ?: "0", it.frequency.toString())
+                    availableFeed = threeHourly
+
                     incPrescribe.appThreeHourly.text = threeHourly
                     val breakDown = generateFeedsBreakDown(it)
                     incPrescribe.appThreeHourlyBreak.text = breakDown
                     incPrescribe.tvFrequency.text = "${it.frequency} Feed Volume"
+                    incPrescribe.tvBreakdown.text = "${it.frequency} Feed Breakdown"
                     regulateViews(it)
+                    setupFeedingTimes(it.frequency ?: "3 Hourly")
 
                 }
 
             } else {
                 prescriptionExists = false
 
+            }
+        }
+    }
+
+    private fun updatePrescriptionVisibility(isShow: Boolean) {
+        binding.apply {
+            if (isShow) {
+                tvCurrent.visibility = View.VISIBLE
+                incPrescribe.lnParent.visibility = View.VISIBLE
+            } else {
+
+                tvCurrent.visibility = View.GONE
+                incPrescribe.lnParent.visibility = View.GONE
             }
         }
     }
@@ -386,8 +410,9 @@ class FeedingFragment : Fragment() {
         return ch.toString()
     }
 
-    private fun setupFeedingTimes() {
-        scheduleTimes = createTimingList()
+    private fun setupFeedingTimes(frequency: String) {
+        val freq = getNumericFrequency(frequency)
+        scheduleTimes = createTimingList(freq)
         adapterList = FeedAdapter(this::click)
 
         binding.incSchedule.patientList.apply {
@@ -460,8 +485,10 @@ class FeedingFragment : Fragment() {
                 if (dhm.isNotEmpty() || ebm.isNotEmpty() || iv.isNotEmpty() || formula.isNotEmpty()) {
                     val total = dhm.toFloat() + ebm.toFloat() + iv.toFloat() + formula.toFloat()
                     val def = availableFeed.toDouble() - total
-
-                    control.edDeficit.setText(def.toString())
+                    val df = DecimalFormat("#.##")
+                    df.roundingMode = RoundingMode.DOWN
+                    val rounded = df.format(def)
+                    control.edDeficit.setText(rounded.toString())
                 } else {
                     control.edDeficit.setText("0")
                 }
@@ -476,6 +503,8 @@ class FeedingFragment : Fragment() {
 
     private fun click(item: FeedItem) {
         if (prescriptionExists) {
+            updateArguments()
+            addQuestionnaireFragment()
             resetDisplay(true)
         } else {
             val dialog =
@@ -503,6 +532,7 @@ class FeedingFragment : Fragment() {
                 val questionnaireFragment =
                     childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
                 if (feedsList.isNotEmpty()) {
+
                     viewModel.babyMonitoring(
                         questionnaireFragment.getQuestionnaireResponse(),
                         patientId,
@@ -561,7 +591,7 @@ class FeedingFragment : Fragment() {
                 )
             }
         } catch (e: Exception) {
-            Timber.e("Exception ${e.localizedMessage}")
+            Timber.e("QuestionnaireFragment Exception ${e.localizedMessage}")
         }
     }
 
@@ -591,9 +621,9 @@ class FeedingFragment : Fragment() {
         }
     }
 
-    private fun createTimingList(): ArrayList<FeedItem> {
+    private fun createTimingList(freq: String): ArrayList<FeedItem> {
         val data = ArrayList<FeedItem>()
-        val intervals = getFutureHoursOnIntervalOf(8, 3)
+        val intervals = getFutureHoursOnIntervalOf(8, freq.toInt())
         for ((i, entry) in intervals.reversed().withIndex()) {
             val maxRange = FormatHelper().getRoundedApproxHour(entry.toString())
             data.add(FeedItem(type = maxRange, id = i.toString()))
@@ -603,6 +633,7 @@ class FeedingFragment : Fragment() {
 
     private fun resetDisplay(isCollection: Boolean) {
         updateArguments()
+        addQuestionnaireFragment()
         loadFeedingHistory()
         binding.apply {
             if (isCollection) {

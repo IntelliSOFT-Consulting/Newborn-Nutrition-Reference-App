@@ -83,7 +83,7 @@ class Logics {
         const val VOMIT = "Vomit"
         const val TOTAL_FEEDS = "Total-Feeds"
         const val REMARKS = "Additional-Notes"
-        const val EXPRESSED_MILK = "226790003"
+        const val EXPRESSED_MILK = "62578-0"
 //        const val EXPRESSION_TIME = "80482-3"
         const val EXPRESSION_TIME = "Time-Expressed"
         const val BABY_WELL = "71195-2"

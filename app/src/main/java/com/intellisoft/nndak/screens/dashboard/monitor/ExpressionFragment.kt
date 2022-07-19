@@ -46,6 +46,7 @@ class ExpressionFragment : Fragment() {
     private var _binding: FragmentExpressionBinding? = null
     lateinit var adapterList: ExpressionAdapter
     private lateinit var patientId: String
+    private lateinit var encounterId: String
     private val binding
         get() = _binding!!
 
@@ -65,6 +66,8 @@ class ExpressionFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         try {
+
+            encounterId = FhirApplication.getUpdatedCurrent(requireContext())
             patientId = FhirApplication.getCurrentPatient(requireContext())
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientDetailsViewModel =
@@ -194,7 +197,7 @@ class ExpressionFragment : Fragment() {
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
             viewModel.updateExpression(
-                questionnaireFragment.getQuestionnaireResponse(), patientId
+                questionnaireFragment.getQuestionnaireResponse(), encounterId, patientId
             )
         }
     }

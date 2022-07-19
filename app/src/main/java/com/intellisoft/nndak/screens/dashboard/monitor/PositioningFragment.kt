@@ -50,6 +50,7 @@ class PositioningFragment : Fragment() {
     private var baby: String = "No"
     private var attach: String = "No"
     private var suck: String = "No"
+    private lateinit var encounterId: String
     private val binding
         get() = _binding!!
 
@@ -74,6 +75,8 @@ class PositioningFragment : Fragment() {
             if (savedInstanceState == null) {
                 addQuestionnaireFragment()
             }
+
+            encounterId = FhirApplication.getUpdatedCurrent(requireContext())
             patientId = FhirApplication.getCurrentPatient(requireContext())
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientDetailsViewModel =
@@ -229,7 +232,7 @@ class PositioningFragment : Fragment() {
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
         viewModel.feedingCues(
             questionnaireFragment.getQuestionnaireResponse(),
-            dataCodes,
+            dataCodes,encounterId,
             patientId, "Positioning-Assessment"
         )
     }

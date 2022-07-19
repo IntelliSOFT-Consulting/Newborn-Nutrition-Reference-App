@@ -486,26 +486,13 @@ class EditPrescriptionFragment : Fragment() {
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
-                add(
+                replace(
                     R.id.add_patient_container, fragment,
                     QUESTIONNAIRE_FRAGMENT_TAG
                 )
             }
         } catch (e: Exception) {
             Timber.e("Exception ${e.localizedMessage}")
-        }
-    }
-
-    private fun addQuestionnaireFragment(pair: Pair<String, String>) {
-        Timber.e("First ${pair.first}")
-        val fragment = QuestionnaireFragment()
-        fragment.arguments =
-            bundleOf(
-                QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to pair.first,
-                QuestionnaireFragment.EXTRA_QUESTIONNAIRE_RESPONSE_JSON_STRING to pair.second
-            )
-        childFragmentManager.commit {
-            add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
         }
     }
 
@@ -537,7 +524,7 @@ class EditPrescriptionFragment : Fragment() {
 
         }
 
-        if ( binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
+        if (binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
             binding.apply {
                 feedsList.clear()
 
@@ -690,17 +677,14 @@ class EditPrescriptionFragment : Fragment() {
                     confirmationDialog.show(childFragmentManager, "Confirm Details")
                 } else {
                     if (totalFeedsVolume < aggregateTotal) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please check Total Feeds",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        tliTotal.error = "PLease enter valid volume"
+                        eTotal.requestFocus()
+                        return
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please check Feed Breakdown Volumes",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        tliTotal.error = "PLease enter valid volume"
+                        eTotal.requestFocus()
+                        return
+
                     }
                 }
             }

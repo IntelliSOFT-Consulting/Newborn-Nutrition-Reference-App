@@ -1888,6 +1888,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     fun feedingCues(
         questionnaireResponse: QuestionnaireResponse,
         cues: ArrayList<CodingObservation>,
+        encounter: String,
         patientId: String,
         code: String
     ) {
@@ -1898,8 +1899,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
             val qh = QuestionnaireHelper()
-            val context = FhirContext.forR4()
-
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     cues.forEach {
@@ -1909,7 +1908,83 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     it.code,
                                     it.display,
                                     it.value
+                                )
+                            )
+                            .request.url = "Observation"
 
+                    }
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                "Completed By",
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                ASSESSMENT_DATE,
+                                "Assessment Date",
+                                Date().toString()
+                            )
+                        )
+                        .request.url = "Observation"
+
+                    val subjectReference = Reference("Patient/$patientId")
+                    val basedOnReference = Reference("Encounter/$encounter")
+
+                    val encounterId = generateUuid()
+                    title = code
+                    saveFeedingResources(bundle, subjectReference,basedOnReference, encounterId, title)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true,
+                            message = "Record updated successfully"
+                        )
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    customMessage.postValue(
+                        MessageItem(
+                            success = false,
+                            message = "Experienced problems, please try again"
+                        )
+                    )
+                    return@launch
+                }
+
+            }
+        }
+    }
+
+    fun customAssessment(
+        questionnaireResponse: QuestionnaireResponse,
+        cues: ArrayList<CodingObservation>,
+        patientId: String,
+        code: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+            val qh = QuestionnaireHelper()
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    cues.forEach {
+                        Timber.e("Feed Item ${it.code}")
+                        bundle.addEntry()
+                            .setResource(
+                                qh.codingQuestionnaire(
+                                    it.code,
+                                    it.display,
+                                    it.value
                                 )
                             )
                             .request.url = "Observation"
@@ -2429,7 +2504,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
-                    /*  val encounterReference = Reference("Encounter/$encounterId")*/
                     val basedOnReference = Reference("$careID")
                     title = FEEDING_MONITORING
                     if (assessDate.isNotEmpty()) {
@@ -3010,7 +3084,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
-    fun updateExpression(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+    fun updateExpression(
+        questionnaireResponse: QuestionnaireResponse,
+        encounter: String,
+        patientId: String
+    ) {
         viewModelScope.launch {
             val bundle =
                 ResourceMapper.extract(
@@ -3030,9 +3108,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
 
                 val subjectReference = Reference("Patient/$patientId")
+                val basedOnReference = Reference("Encounter/$encounter")
                 val encounterId = generateUuid()
+                Timber.e("Based On Encounter $encounter\nCurrent $encounterId")
                 title = "Expression-Assessment"
-                autoSaveResources(bundle, subjectReference, encounterId, title)
+                autoSaveResources(bundle, subjectReference, encounterId, basedOnReference, title)
                 customMessage.postValue(
                     MessageItem(
                         success = true, message = "Update Successful"
@@ -3052,14 +3132,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     private fun hasMissingRequired(bundle: Bundle): Boolean {
 
         bundle.entry.forEach {
-            val resource = it.resource
-            Timber.e("Collected Bundle $resource")
-            when (resource) {
+            when (val resource = it.resource) {
                 is Observation -> {
-                    Timber.e("Collected Observation ${resource.code.text}")
+                    if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
+                        return true
+                    }
                     if (!resource.hasCode()) {
                         return true
-
                     }
                 }
             }
@@ -3071,6 +3150,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         bundle: Bundle,
         subjectReference: Reference,
         encounterId: String,
+        basedOnReference: Reference,
         reason: String,
     ) {
 
@@ -3082,9 +3162,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         resource.id = generateUuid()
                         resource.subject = subjectReference
                         resource.encounter = encounterReference
-                        resource.valueStringType.value = resource.code.text
+                        if (!resource.hasValueQuantity()) {
+                            resource.valueStringType.value = resource.code.text
+                        }
                         resource.issued = Date()
                         saveResourceToDatabase(resource)
+
                     }
                 }
                 is Condition -> {
@@ -3102,6 +3185,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.reasonCodeFirstRep.codingFirstRep.code = reason
                     resource.status = Encounter.EncounterStatus.INPROGRESS
                     resource.period.start = Date()
+                    //   resource.partOf = basedOnReference
                     saveResourceToDatabase(resource)
                 }
 

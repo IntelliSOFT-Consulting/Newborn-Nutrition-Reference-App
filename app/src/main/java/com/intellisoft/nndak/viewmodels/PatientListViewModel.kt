@@ -495,14 +495,16 @@ class PatientListViewModel(
                     birthWeight = element.value
                 }
                 if (element.code == GESTATION) {
-                    val code = element.value.split("\\.".toRegex()).toTypedArray()
+                    val code = element.quantity//.split("\\.".toRegex()).toTypedArray()
+
                     status = try {
-                        if (code[0].toInt() < 37) {
+                        if (code.toDouble() < 37) {
                             "Preterm"
                         } else {
                             "Term"
                         }
                     } catch (e: Exception) {
+
                         "Preterm"
                     }
 
@@ -730,11 +732,6 @@ class PatientListViewModel(
         search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
     }
 
-
-    fun loadFeedingTime() {
-
-        viewModelScope.launch { liveFeedsTime.value = retrieveFeedingTimes() }
-    }
 
     private suspend fun retrieveFeedingTimes(): StaticCharts {
         val feeds: MutableList<PieItem> = mutableListOf()
