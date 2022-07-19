@@ -1580,7 +1580,10 @@ class PatientDetailsViewModel(
         val feeding = getAllEncounters(BREASTS_FEEDING)
         if (feeding.isNotEmpty()) {
             feeding.forEach {
-                history.add(retrieveBreast(it))
+                val data = retrieveBreast(it)
+                if (data.date != "--") {
+                    history.add(data)
+                }
             }
         }
         return history
@@ -1591,7 +1594,10 @@ class PatientDetailsViewModel(
         val feeding = getAllEncounters(FEEDING_MONITORING)
         if (feeding.isNotEmpty()) {
             feeding.forEach {
-                history.add(retrieveFeeding(it))
+                val data = retrieveFeeding(it)
+                if (data.date != "--") {
+                    history.add(data)
+                }
             }
         }
         return sortHistory(history)
@@ -1602,9 +1608,10 @@ class PatientDetailsViewModel(
         val feeding = getAllEncounters("Positioning-Assessment")
         if (feeding.isNotEmpty()) {
             feeding.forEach {
-
-                history.add(retrievePositioning(it))
-
+                val data = retrievePositioning(it)
+                if (data.date != "--") {
+                    history.add(data)
+                }
             }
         }
         return history
@@ -1757,8 +1764,7 @@ class PatientDetailsViewModel(
             care: CarePlan,
             resources: Resources
         ): CareItem {
-            val status = care.status
-            Timber.e("Care Status:::: $status")
+
             val date = if (care.hasCreated()) {
                 care.created.toString()
             } else {

@@ -1940,7 +1940,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val encounterId = generateUuid()
                     title = code
-                    saveFeedingResources(bundle, subjectReference,basedOnReference, encounterId, title)
+                    saveFeedingResources(
+                        bundle,
+                        subjectReference,
+                        basedOnReference,
+                        encounterId,
+                        title
+                    )
                     customMessage.postValue(
                         MessageItem(
                             success = true,
@@ -2013,9 +2019,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         .request.url = "Observation"
 
                     val subjectReference = Reference("Patient/$patientId")
-
                     val encounterId = generateUuid()
                     title = code
+                   updateEncounterAssessment(subjectReference,encounterId,title)
+                   
                     saveResources(bundle, subjectReference, encounterId, title)
                     customMessage.postValue(
                         MessageItem(
@@ -2036,6 +2043,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
             }
         }
+    }
+
+    private suspend fun updateEncounterAssessment(
+        subjectReference: Reference,
+        encounterId: String,
+        title: String
+    ) {
+        val encounterReference = Reference("Encounter/$encounterId")
+        val care = CarePlan()
+        care.encounter = encounterReference
+        care.subject = subjectReference
+        care.status = CarePlan.CarePlanStatus.COMPLETED
+        care.title = title
+        care.intent = CarePlan.CarePlanIntent.ORDER
+        care.created = Date()
+        saveResourceToDatabase(care)
     }
 
     fun milkExpressionAssessment(
@@ -3108,11 +3131,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 }
 
                 val subjectReference = Reference("Patient/$patientId")
-                val basedOnReference = Reference("Encounter/$encounter")
                 val encounterId = generateUuid()
-                Timber.e("Based On Encounter $encounter\nCurrent $encounterId")
                 title = "Expression-Assessment"
-                autoSaveResources(bundle, subjectReference, encounterId, basedOnReference, title)
+
+                updateEncounterAssessment(subjectReference,encounterId,title)
+                autoSaveResources(bundle, subjectReference, encounterId, title)
                 customMessage.postValue(
                     MessageItem(
                         success = true, message = "Update Successful"
@@ -3150,7 +3173,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         bundle: Bundle,
         subjectReference: Reference,
         encounterId: String,
-        basedOnReference: Reference,
         reason: String,
     ) {
 
@@ -3185,7 +3207,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     resource.reasonCodeFirstRep.codingFirstRep.code = reason
                     resource.status = Encounter.EncounterStatus.INPROGRESS
                     resource.period.start = Date()
-                    //   resource.partOf = basedOnReference
                     saveResourceToDatabase(resource)
                 }
 

@@ -21,7 +21,6 @@ import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
-import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
@@ -517,7 +516,7 @@ class PatientListViewModel(
             mumName = mother[0].name
             motherIp = mother[0].resourceId
         }
-        val gainRate = calculateWeightGainRate(baby.resourceId)
+        val gainRate = calculateWeightGainRate(baby.resourceId, baby.gender)
 
         return MotherBabyItem(
             id = position.toString(),
@@ -539,12 +538,15 @@ class PatientListViewModel(
 
     }
 
-    private suspend fun calculateWeightGainRate(resourceId: String): String {
-
+    private suspend fun calculateWeightGainRate(resourceId: String, gender: String): String {
+        var standard = "boy.json"
+        if (gender == "female") {
+            standard = "girl.json"
+        }
         var gainRate = "Normal"
         try {
             val it = getWeightsDataModel(resourceId)
-            val jsonFileString = getJsonDataFromAsset("boy.json")
+            val jsonFileString = getJsonDataFromAsset(standard)
 
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type

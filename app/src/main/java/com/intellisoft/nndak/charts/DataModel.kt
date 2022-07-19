@@ -23,7 +23,7 @@ data class FirstFeeding(
 
 data class PercentageFeeds(
     @SerializedName("dhm") val dhm: String,
-    @SerializedName("breastFeeding") val breastFeeding: String,
+    @SerializedName("iv") val iv: String,
     @SerializedName("oral") val oral: String,
     @SerializedName("ebm") val ebm: String,
     @SerializedName("formula") val formula: String,

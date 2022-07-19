@@ -395,7 +395,7 @@ class StatisticsFragment : Fragment() {
     private fun populateFeedsPercentage(percentageFeeds: PercentageFeeds) {
         val pie: MutableList<PieItem> = mutableListOf()
         pie.add(PieItem(percentageFeeds.dhm, "Donated Human Milk", "#1EAF5F"))
-        pie.add(PieItem(percentageFeeds.breastFeeding, "Breastfeeding", "#F65050"))
+        pie.add(PieItem(percentageFeeds.iv, "Iv Fluids", "#F65050"))
         pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
         pie.add(PieItem(percentageFeeds.ebm, "Expressed Breast Milk", "#6C63FF"))
         pie.add(PieItem(percentageFeeds.formula, "Formula", "#BA1B22"))

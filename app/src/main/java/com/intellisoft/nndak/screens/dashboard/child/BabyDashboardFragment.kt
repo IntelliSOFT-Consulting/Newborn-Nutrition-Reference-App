@@ -450,82 +450,6 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
-    /*    private fun populateLineChart(values: WeightsData) {*/
-    private fun populateLineChartOriginal(values: WeightsData, growths: List<GrowthData>) {
-
-        val intervals = ArrayList<String>()
-        val actualEntries: ArrayList<Entry> = ArrayList()
-        val projectedEntries: ArrayList<Entry> = ArrayList()
-        val one: ArrayList<Entry> = ArrayList()
-
-        for ((i, entry) in growths.withIndex()) {
-            intervals.add(entry.age.toString())
-            val option = entry.data[i].option
-            if (option == "one") {
-                one.add(Entry(i.toFloat(), entry.data[i].value.toFloat()))
-            }
-            //  actualEntries.add(Entry(i.toFloat(), entry.data[i]..toFloat()))
-            //  projectedEntries.add(Entry(i.toFloat(), entry.projected.toFloat()))
-        }
-        /*   val actual = LineDataSet(actualEntries, "Actual Weight")*/
-        val actual = LineDataSet(one, "Actual Weight")
-        actual.setColors(Color.parseColor("#4472C4"))
-        actual.setDrawCircleHole(false)
-        actual.setDrawValues(false)
-        actual.setDrawCircles(true)
-        actual.circleRadius = 5f
-        actual.mode = LineDataSet.Mode.CUBIC_BEZIER
-        actual.lineWidth = 5f
-
-        val projected = LineDataSet(projectedEntries, "Projected Weight")
-        projected.setColors(Color.parseColor("#ED7D31"))
-        projected.setDrawCircleHole(false)
-        projected.setDrawValues(false)
-        projected.setDrawCircles(false)
-        projected.mode = LineDataSet.Mode.CUBIC_BEZIER
-        projected.lineWidth = 5f
-
-        val data = LineData(actual, projected)
-        binding.growthChart.axisLeft.setDrawGridLines(false)
-
-        val xAxis: XAxis = binding.growthChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(true)
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.mAxisMinimum = 1f
-        xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-        xAxis.setLabelCount(values.data.size, true)
-
-        binding.growthChart.legend.isEnabled = true
-
-        //remove description label
-        binding.growthChart.description.isEnabled = true
-        binding.growthChart.isDragEnabled = false
-        binding.growthChart.setScaleEnabled(false)
-        binding.growthChart.description.text = "Age (Days)"
-        binding.growthChart.description.setPosition(0f, 10f)
-
-        //add animation
-        binding.growthChart.animateX(1000, Easing.EaseInSine)
-        binding.growthChart.data = data
-        val leftAxis: YAxis = binding.growthChart.axisLeft
-        leftAxis.axisMinimum = 0f
-        leftAxis.mAxisMaximum = 12f
-        leftAxis.labelCount = 6
-        leftAxis.setDrawGridLines(true)
-        leftAxis.isGranularityEnabled = true
-
-
-        val rightAxis: YAxis = binding.growthChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.setDrawZeroLine(false)
-        rightAxis.isGranularityEnabled = false
-        rightAxis.isEnabled = false
-        //refresh
-        binding.growthChart.invalidate()
-
-    }
-
     private fun populateLineChart(values: WeightsData, growths: List<GrowthData>) {
         binding.apply {
             tvCurrentWeight.text = "${values.currentWeight} gm"
@@ -634,7 +558,7 @@ class BabyDashboardFragment : Fragment() {
         actual.setDrawCircleHole(false)
         actual.setDrawValues(false)
         actual.setDrawCircles(false)
-        actual.circleRadius = 0f
+        actual.circleRadius = 1f
         actual.mode = LineDataSet.Mode.CUBIC_BEZIER
         actual.lineWidth = 3f
 

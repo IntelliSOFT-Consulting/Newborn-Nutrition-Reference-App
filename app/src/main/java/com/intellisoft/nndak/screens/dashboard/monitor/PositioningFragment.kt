@@ -21,11 +21,9 @@ import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
-import com.intellisoft.nndak.adapters.MonitoringAdapter
 import com.intellisoft.nndak.adapters.PositioningAdapter
 import com.intellisoft.nndak.databinding.FragmentPositioningBinding
 import com.intellisoft.nndak.databinding.PositioningItemBinding
-import com.intellisoft.nndak.dialogs.MoreExpression
 import com.intellisoft.nndak.dialogs.ViewPositioning
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.PositioningHistory
@@ -33,8 +31,6 @@ import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
-import kotlinx.android.synthetic.main.positioning_item.view.*
-import kotlinx.android.synthetic.main.success_dialog.*
 import timber.log.Timber
 
 class PositioningFragment : Fragment() {
@@ -174,7 +170,7 @@ class PositioningFragment : Fragment() {
                     boldText(incTitle.tvhFrequency)
                     boldText(incTitle.tvhTiming)
                 }
-            }else{
+            } else {
                 binding.apply {
 
                 }
@@ -220,6 +216,7 @@ class PositioningFragment : Fragment() {
         val baby = CodingObservation("Baby-Position", "Baby Position", baby)
         val attach = CodingObservation("Good-Attachment", "Good Attachment", attach)
         val suck = CodingObservation("Effective-Suckling", "Effective Suckling", suck)
+
         dataCodes.addAll(
             listOf(
                 hands, mum, baby, attach, suck
@@ -230,9 +227,9 @@ class PositioningFragment : Fragment() {
 
         val questionnaireFragment =
             childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-        viewModel.feedingCues(
+        viewModel.customAssessment(
             questionnaireFragment.getQuestionnaireResponse(),
-            dataCodes,encounterId,
+            dataCodes,
             patientId, "Positioning-Assessment"
         )
     }
@@ -277,28 +274,32 @@ class PositioningFragment : Fragment() {
 
 
             updateTitleIconDescription(
+                R.drawable.handwashing,
                 incPositioning.dataHands,
                 "Cleaned Hands",
                 getString(R.string.app_cleaned_hands), 0
             )
             updateTitleIconDescription(
+                R.drawable.motherhood,
                 incPositioning.dataMother,
-                "Mother Position",
-                "Mother relaxed, comfortable and pain controlled", 1
+                "Mother Position", "Mother relaxed, comfortable and pain controlled", 1
             )
             updateTitleIconDescription(
+                R.drawable.sitting,
                 incPositioning.dataBaby,
                 "Baby Position",
                 "Baby's nose at the level of the breast\nBaby's tummy and mother's tummy touching\nBaby close skin with the mother\nHead and the trunk in straight line\n Baby's whole body supported",
                 2
             )
             updateTitleIconDescription(
+                R.drawable.pos,
                 incPositioning.dataAttach,
                 "Good attachment (Rename Good attachment)",
                 "Hold Breast using the C-Grip\nStimulate baby to open mouth wide\nMore areola above the nipple\nChin touching breast\nMouth Open (more than 120 Degrees)\nLower Lip turned out",
                 3
             )
             updateTitleIconDescription(
+                R.drawable.pana,
                 incPositioning.dataSuck,
                 "Effectively Suckling",
                 "Baby takes slow deep suckles sometimes pausing and you may be able to see or hear baby swallowing\nNo dimpling\nSuckling is comfortable and pain free for mom",
@@ -308,6 +309,7 @@ class PositioningFragment : Fragment() {
     }
 
     private fun updateTitleIconDescription(
+        icon: Int,
         dataHands: PositioningItemBinding,
         title: String,
         description: String,
@@ -315,6 +317,7 @@ class PositioningFragment : Fragment() {
     ) {
         dataHands.tvTitle.text = title
         dataHands.tvDescription.text = description
+        dataHands.civImage.setImageResource(icon)
         selection(dataHands, index)
 
     }

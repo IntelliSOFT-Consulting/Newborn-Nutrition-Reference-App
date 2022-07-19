@@ -320,8 +320,9 @@ class FeedingFragment : Fragment() {
             total = df.format(totalPerSession).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
+            total = 0.0
         }
-        return "$total mls"
+        return total.toString()
     }
 
     private fun loadActivePrescription() {
@@ -334,8 +335,7 @@ class FeedingFragment : Fragment() {
                 updatePrescriptionVisibility(true)
                 binding.apply {
 
-//                    availableFeed = it.deficit.toString()
-                    incPrescribe.appTodayTotal.text = it.deficit
+                    incPrescribe.appTodayTotal.text = it.totalVolume
                     incPrescribe.appRoute.text = it.route ?: ""
                     val threeHourly = calculateFeeds(it.totalVolume ?: "0", it.frequency.toString())
                     availableFeed = threeHourly

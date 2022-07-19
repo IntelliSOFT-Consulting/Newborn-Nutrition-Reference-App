@@ -213,7 +213,7 @@ class BreastFragment : Fragment() {
         val questionnaire =
             context.newJsonParser()
                 .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
-        Timber.e("Questionnaire  $dataCodes")
+
         viewModel.customAssessment(
             questionnaireFragment.getQuestionnaireResponse(),
             dataCodes,

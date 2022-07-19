@@ -38,7 +38,7 @@ class HistoryActivity : AppCompatActivity() {
         }
         patientId = intent.getStringExtra("patientId").toString()
         careId = intent.getStringExtra("careId").toString()
-        Timber.e("Care Plan $careId")
+
 
         fhirEngine = FhirApplication.fhirEngine(this)
         patientDetailsViewModel =

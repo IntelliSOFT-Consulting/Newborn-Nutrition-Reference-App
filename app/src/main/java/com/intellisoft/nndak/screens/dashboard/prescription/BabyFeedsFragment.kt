@@ -226,11 +226,11 @@ class BabyFeedsFragment : Fragment() {
     }
 
     private fun onPrescriptionItemClick(item: PrescriptionItem) {
-        startActivity(
+     /*   startActivity(
             Intent(requireContext(), HistoryActivity::class.java)
                 .putExtra("careId", item.resourceId)
                 .putExtra("patientId", args.patientId)
-        )
+        )*/
 
     }
 
