@@ -197,6 +197,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun loadOrders() {
+        orderList.clear()
         apiService.loadOrders(requireContext()) {
             if (it != null) {
                 if (it.data.isEmpty()) {

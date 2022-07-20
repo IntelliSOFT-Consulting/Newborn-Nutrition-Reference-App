@@ -89,6 +89,7 @@ data class FeedsData(
     @SerializedName("ivVolume") val ivVolume: String,
     @SerializedName("ebmVolume") val ebmVolume: String,
     @SerializedName("dhmVolume") val dhmVolume: String,
+    @SerializedName("formula") val formula: String,
 )
 
 data class WeightsData(

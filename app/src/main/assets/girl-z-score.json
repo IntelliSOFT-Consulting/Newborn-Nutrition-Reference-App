@@ -1,0 +1,167 @@
+[
+  {
+    "age": 27,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.33"
+      },
+      {
+        "option": "-2",
+        "value": "0.40"
+      },
+      {
+        "option": "-1",
+        "value": " 0.50"
+      },
+      {
+        "option": "0",
+        "value": "0.61"
+      },
+      {
+        "option": "1",
+        "value": "0.75"
+      },
+      {
+        "option": "2",
+        "value": "0.93"
+      },
+      {
+        "option": "3",
+        "value": "1.14"
+      }
+    ]
+  },
+  {
+    "age": "28",
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.42"
+      },
+      {
+        "option": "-2",
+        "value": "0.51"
+      },
+      {
+        "option": "-1",
+        "value": " 0.62"
+      },
+      {
+        "option": "0",
+        "value": "0.76"
+      },
+      {
+        "option": "1",
+        "value": "0.92"
+      },
+      {
+        "option": "2",
+        "value": "1.12"
+      },
+      {
+        "option": "3",
+        "value": "1.37"
+      }
+    ]
+  },
+  {
+    "age": "29",
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.52"
+      },
+      {
+        "option": "-2",
+        "value": "0.63"
+      },
+      {
+        "option": "-1",
+        "value": " 0.76"
+      },
+      {
+        "option": "0",
+        "value": "0.91"
+      },
+      {
+        "option": "1",
+        "value": "1.10"
+      },
+      {
+        "option": "2",
+        "value": "1.33"
+      },
+      {
+        "option": "3",
+        "value": "1.61"
+      }
+    ]
+  },
+  {
+    "age": "30",
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.62"
+      },
+      {
+        "option": "-2",
+        "value": "0.76"
+      },
+      {
+        "option": "-1",
+        "value": " 0.91"
+      },
+      {
+        "option": "0",
+        "value": "1.09"
+      },
+      {
+        "option": "1",
+        "value": "1.30"
+      },
+      {
+        "option": "2",
+        "value": "1.55"
+      },
+      {
+        "option": "3",
+        "value": "1.86"
+      }
+    ]
+  },
+  {
+    "age": "31",
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.75"
+      },
+      {
+        "option": "-2",
+        "value": "0.90"
+      },
+      {
+        "option": "-1",
+        "value": " 1.06"
+      },
+      {
+        "option": "0",
+        "value": "1.27"
+      },
+      {
+        "option": "1",
+        "value": "1.51"
+      },
+      {
+        "option": "2",
+        "value": "1.79"
+      },
+      {
+        "option": "3",
+        "value": "2.13"
+      }
+    ]
+  }
+]

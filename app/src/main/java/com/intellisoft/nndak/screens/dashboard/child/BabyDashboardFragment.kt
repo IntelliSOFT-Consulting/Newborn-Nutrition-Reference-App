@@ -195,7 +195,6 @@ class BabyDashboardFragment : Fragment() {
                         }
 
 
-
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -330,8 +329,8 @@ class BabyDashboardFragment : Fragment() {
         }
 
     }
+
     private fun standardCharts(it: WeightsData) {
-        Timber.e("Collected Weights $it")
         try {
             var standard = "boy.json"
             if (it.babyGender == "female") {
@@ -364,12 +363,13 @@ class BabyDashboardFragment : Fragment() {
     private fun barGraph(it: FeedsDistribution) {
 
         val groupCount = 8
-        val groupSpace = 0.15f
-        val barSpace = 0.05f
-        val barWidth = 0.25f
+        val groupSpace = 0.10f
+        val barSpace = 0.01f
+        val barWidth = 0.20f
         val iv: ArrayList<BarEntry> = ArrayList()
         val ebm: ArrayList<BarEntry> = ArrayList()
         val dhm: ArrayList<BarEntry> = ArrayList()
+        val fm: ArrayList<BarEntry> = ArrayList()
 
         val intervals = ArrayList<String>()
         for ((i, entry) in it.data.withIndex()) {
@@ -377,8 +377,7 @@ class BabyDashboardFragment : Fragment() {
             iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
             ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
             dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
-
-
+            fm.add(BarEntry(i.toFloat(), entry.formula.toFloat()))
         }
 
         val fluids = BarDataSet(iv, "IV")
@@ -393,7 +392,12 @@ class BabyDashboardFragment : Fragment() {
         donor.setColors(Color.parseColor("#A5A5A5"))
         donor.setDrawValues(false)
 
-        val data = BarData(fluids, expressed, donor)
+
+        val form = BarDataSet(fm, "Formula")
+        form.setColors(Color.parseColor("#24a047"))
+        form.setDrawValues(false)
+
+        val data = BarData(fluids, expressed, donor, form)
         data.setValueFormatter(LargeValueFormatter())
 
         binding.apply {
@@ -517,7 +521,7 @@ class BabyDashboardFragment : Fragment() {
         xAxis.setLabelCount(4, true)
         xAxis.setLabelCount(values.data.size, true)
 
-        binding.growthChart.legend.isEnabled = true
+        binding.growthChart.legend.isEnabled = false
 
         //remove description label
         binding.growthChart.description.isEnabled = true
@@ -570,11 +574,13 @@ class BabyDashboardFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         super.onResume()
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

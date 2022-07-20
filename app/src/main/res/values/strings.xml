@@ -376,6 +376,7 @@
     <string name="dhm">DHM</string>
     <string name="iv">IV Fluids</string>
     <string name="volume">Volume mls</string>
+    <string name="menu_one">1 Hourly</string>
     <string name="menu_two">2 Hourly</string>
     <string name="menu_three">3 Hourly</string>
     <string name="menu_cup">Cup</string>

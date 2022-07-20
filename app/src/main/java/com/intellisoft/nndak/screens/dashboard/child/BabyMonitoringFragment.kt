@@ -111,6 +111,7 @@ class BabyMonitoringFragment : Fragment() {
             ).get(PatientDetailsViewModel::class.java)
 
         FhirApplication.updateCurrentPatient(requireContext(), args.patientId)
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
 
         binding.apply {
             breadcrumb.page.text =

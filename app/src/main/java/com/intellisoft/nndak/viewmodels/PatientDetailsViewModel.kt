@@ -255,27 +255,19 @@ class PatientDetailsViewModel(
         val intervals = getPastHoursOnIntervalOf(8, 3)
         val feeds: MutableList<FeedsData> = mutableListOf()
         var totalFeed = 0f
-        var i = 0
-        val exp = getPatientEncounters()
-        if (exp.isNotEmpty()) {
-            for (ex in exp) {
-                if (ex.code == "Milk Expression") {
-                    i++
-                }
-            }
-        }
-        intervals.forEach {
-            feeds.add(loadFeed(it))
-        }
-        feeds.forEach { dd ->
-            val total = dd.dhmVolume.toFloat() + dd.ivVolume.toFloat()
-            +dd.ebmVolume.toFloat() + dd.breastVolume.toFloat()
-            totalFeed += total
-        }
 
+        intervals.forEach {
+            val data = loadFeed(it)
+
+            val total =
+                data.dhmVolume.toFloat() + data.ivVolume.toFloat() + data.ebmVolume.toFloat() + data.formula.toFloat()
+
+            totalFeed += total
+            feeds.add(data)
+        }
         return FeedsDistribution(
             totalFeed = "$totalFeed mls",
-            varianceAmount = "$i",
+            varianceAmount = "0",
             data = feeds
         )
     }
@@ -286,6 +278,7 @@ class PatientDetailsViewModel(
         var ebm = 0f
         var dhm = 0f
         var bm = 0f
+        var fm = 0f
         val hour = FormatHelper().getRoundedHour(it.toString())
         val carePlans = getCompletedCarePlans()
 
@@ -333,6 +326,13 @@ class PatientDetailsViewModel(
                         bmS.forEach {
                             bm += it.quantity.toFloat()
                         }
+                        val fmS = observationsPerCodeEncounter(
+                            FORMULA_VOLUME,
+                            item.encounterId
+                        )
+                        fmS.forEach {
+                            fm += it.quantity.toFloat()
+                        }
 
                     }
                 } catch (e: Exception) {
@@ -346,6 +346,7 @@ class PatientDetailsViewModel(
             ebm = 0f
             dhm = 0f
             bm = 0f
+            fm = 0f
 
         }
 
@@ -354,7 +355,8 @@ class PatientDetailsViewModel(
             breastVolume = bm.toString(),
             ivVolume = iv.toString(),
             ebmVolume = ebm.toString(),
-            dhmVolume = dhm.toString()
+            dhmVolume = dhm.toString(),
+            formula = fm.toString()
         )
     }
 

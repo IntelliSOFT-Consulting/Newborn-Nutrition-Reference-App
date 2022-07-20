@@ -2,6 +2,7 @@ package com.intellisoft.nndak.screens.dashboard.child
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -99,6 +100,11 @@ class BabyAssessmentFragment : Fragment() {
                 .get(PatientDetailsViewModel::class.java)
 
         binding.apply {
+            breadcrumb.page.text =
+                Html.fromHtml("Babies > Baby Profile > <font color=\"#37379B\"> Assess</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
             incDetails.pbLoading.visibility = View.VISIBLE
             incDetails.lnBody.visibility = View.GONE
         }
@@ -107,7 +113,7 @@ class BabyAssessmentFragment : Fragment() {
             this::okClick,
             resources.getString(R.string.app_okay_message)
         )
-
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
@@ -261,7 +267,7 @@ class BabyAssessmentFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-       
+
         SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
             .setTitleText("Are you sure?")
             .setContentText(getString(R.string.cancel_questionnaire_message))

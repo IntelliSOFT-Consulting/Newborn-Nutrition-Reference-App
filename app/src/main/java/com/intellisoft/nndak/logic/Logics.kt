@@ -45,7 +45,7 @@ class Logics {
         const val DHM_STOCK = "DHM Stock"
         const val FEEDING_MONITORING = "Feeding and Monitoring"
         const val BREASTS_FEEDING= "Breast-Feeding-Assessment"
-        const val ADMISSION_WEIGHT = "29463-7"
+        const val ADMISSION_WEIGHT = "3141-9"
         const val CURRENT_WEIGHT = "3141-9"
         const val EBM = "226790003"
         const val FEEDS_TAKEN = "Total-Taken"

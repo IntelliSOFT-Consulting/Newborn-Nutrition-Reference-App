@@ -15,7 +15,6 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
     private val appRoute: TextView = binding.appRoute
     private val appFrequency: TextView = binding.appFrequency
     private val appIvFluids: TextView = binding.appIvFluids
-    private val appBreastMilk: TextView = binding.appBreastMilk
     private val appDhm: TextView = binding.appDhm
     private val appConsent: TextView = binding.appConsent
     private val appConsentDate: TextView = binding.appConsentDate
@@ -35,7 +34,6 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
         this.appRoute.text = patientItem.route
         this.appFrequency.text = patientItem.frequency
         this.appIvFluids.text = patientItem.ivFluids
-        this.appBreastMilk.text = patientItem.breastMilk
         this.appBreast.text = patientItem.ebm
         this.appFormula.text = patientItem.formula
         this.appDhm.text = patientItem.donorMilk
@@ -45,7 +43,5 @@ class PrescriptionItemViewHolder(binding: PrescriptionListItemBinding) :
         this.appAdditionalFeeds.text = patientItem.additionalFeeds
         this.appFeedingSupplements.text = patientItem.supplements
         this.itemView.setOnClickListener { onItemClicked(patientItem) }
-
-
     }
 }

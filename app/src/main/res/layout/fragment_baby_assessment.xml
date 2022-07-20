@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/_100dp"
     android:orientation="vertical"
     tools:context=".screens.dashboard.child.BabyAssessmentFragment">
 
@@ -12,6 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp" />
 
         <include
             android:id="@+id/inc_details"
@@ -47,7 +53,7 @@
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/add_patient_container"
                     android:layout_width="match_parent"
-                    android:layout_height="780dp" />
+                    android:layout_height="880dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -64,8 +70,8 @@
                         android:layout_margin="@dimen/_5dp"
                         android:backgroundTint="@color/dim_red"
                         android:text="@string/action_submit"
-                        app:cornerRadius="@dimen/_25dp"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"
+                        app:cornerRadius="@dimen/_25dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cancel"

@@ -45,6 +45,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.models.FeedDataItem
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.Prescription
@@ -67,7 +68,6 @@ class EditPrescriptionFragment : Fragment() {
     private val args: EditPrescriptionFragmentArgs by navArgs()
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private lateinit var currentWeight: String
-    private lateinit var totalFeeds: String
     private lateinit var feedFrequency: String
     private lateinit var supp: String
     private lateinit var other: String
@@ -150,7 +150,6 @@ class EditPrescriptionFragment : Fragment() {
         binding.apply {
 
             eWeight.setText(it.cWeight.toString())
-            eTotal.setText(it.totalVolume.toString())
             eFrequency.setText(it.frequency.toString())
             otherSup.appFrequency.setText(it.additionalFeeds)
             otherValue.appFrequency.setText(it.supplements)
@@ -348,7 +347,6 @@ class EditPrescriptionFragment : Fragment() {
              * Listeners
              */
             listenChanges(eWeight, tilWeight, "Please enter valid wight value")
-            listenChanges(eTotal, tliTotal, "Please enter valid value")
             listenChanges(bfVolume.volume, bfVolume.tilVolume, "Please enter valid value")
             listenChanges(ebmVolume.volume, ebmVolume.tilVolume, "Please enter valid value")
             listenChanges(formulaVolume.volume, formulaVolume.tilVolume, "Please enter valid value")
@@ -428,7 +426,7 @@ class EditPrescriptionFragment : Fragment() {
 
             val data = Prescription(
                 currentWeight = currentWeight.toDouble().toString(),
-                totalFeeds = totalFeeds.toDouble().toString(),
+                totalFeeds = aggregateTotal.toString(),
                 feedFrequency = feedFrequency,
                 supplements = other,
                 additional = supp,
@@ -501,26 +499,18 @@ class EditPrescriptionFragment : Fragment() {
 
         binding.apply {
             currentWeight = eWeight.text.toString()
-            totalFeeds = eTotal.text.toString()
             supp = otherSup.appFrequency.text.toString()
             other = otherValue.appFrequency.text.toString()
-            totalFeeds = eTotal.text.toString()
             feedFrequency = eFrequency.text.toString()
 
             if (TextUtils.isEmpty(currentWeight)) {
                 tilWeight.error = "Please Enter valid value"
                 return
             }
-
-            if (TextUtils.isEmpty(totalFeeds)) {
-                tliTotal.error = "PLease enter valid volume"
-                return
-            }
             if (TextUtils.isEmpty(feedFrequency)) {
                 tliFrequency.error = "PLease select frequency"
                 return
             }
-            aggregateTotal = totalFeeds.toFloat()
 
         }
 
@@ -673,20 +663,17 @@ class EditPrescriptionFragment : Fragment() {
                         totalFeedsVolume += quantity.toFloat()
                     }
                 }
-                if (totalFeedsVolume == aggregateTotal) {
-                    confirmationDialog.show(childFragmentManager, "Confirm Details")
-                } else {
-                    if (totalFeedsVolume < aggregateTotal) {
-                        tliTotal.error = "PLease enter valid volume"
-                        eTotal.requestFocus()
-                        return
-                    } else {
-                        tliTotal.error = "PLease enter valid volume"
-                        eTotal.requestFocus()
-                        return
+                aggregateTotal = totalFeedsVolume
+                feedsList.add(
+                    FeedDataItem(
+                        title = "Total Feeds",
+                        code = TOTAL_FEEDS,
+                        coding = false,
+                        value = aggregateTotal.toString()
+                    )
+                )
+                confirmationDialog.show(childFragmentManager, "Confirm Details")
 
-                    }
-                }
             }
 
         } else {

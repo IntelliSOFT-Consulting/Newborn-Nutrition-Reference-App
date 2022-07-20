@@ -887,22 +887,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                                 }
                             }
-                            "Total-Feeds" -> {
-                                val total =
-                                    extractResponse(inner, "valueDecimal")
-                                if (total.isNotEmpty()) {
-                                    totalVolume = total.toFloat()
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            TOTAL_FEEDS,
-                                            "Total Feeds",
-                                            "Total Feeds",
-                                            total, "mls"
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
+
                             "Feed-Frequency" -> {
                                 val value =
                                     extractResponseCode(inner, "valueCoding")
@@ -1275,99 +1260,90 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val currentPrescribed =
                         breastVolume + ebmVolume + formulaVolume + ivVolume + dhmVolume
+                    bundle.addEntry().setResource(
+                        qh.quantityQuestionnaire(
+                            TOTAL_FEEDS,
+                            "Total Feeds",
+                            "Total Feeds",
+                            currentPrescribed.toString(), "mls"
+                        )
+                    )
+                        .request.url = "Observation"
 
-                    if (currentPrescribed == totalVolume) {
 
-
-                        val value = retrieveUser(false)
-                        bundle.addEntry()
-                            .setResource(
-                                qh.codingQuestionnaire(
-                                    COMPLETED_BY,
-                                    value,
-                                    value
-                                )
-                            )
-                            .request.url = "Observation"
-
-                        bundle.addEntry().setResource(
+                    val value = retrieveUser(false)
+                    bundle.addEntry()
+                        .setResource(
                             qh.codingQuestionnaire(
-                                PRESCRIPTION_DATE,
-                                "Prescription Date",
-                                date
+                                COMPLETED_BY,
+                                value,
+                                value
                             )
                         )
-                            .request.url = "Observation"
-                        val encounterId = generateUuid()
-                        title = PRESCRIPTION
-                        val encounterReference = Reference("Encounter/$encounterId")
-                        if (feeds.isNotEmpty()) {
-                            if (feeds.contains("DHM")) {
+                        .request.url = "Observation"
 
-                                if (valueConsent.isEmpty()) {
+                    bundle.addEntry().setResource(
+                        qh.codingQuestionnaire(
+                            PRESCRIPTION_DATE,
+                            "Prescription Date",
+                            date
+                        )
+                    )
+                        .request.url = "Observation"
+                    val encounterId = generateUuid()
+                    title = PRESCRIPTION
+                    val encounterReference = Reference("Encounter/$encounterId")
+                    if (feeds.isNotEmpty()) {
+                        if (feeds.contains("DHM")) {
+
+                            if (valueConsent.isEmpty()) {
+                                customMessage.postValue(
+                                    MessageItem(
+                                        success = false,
+                                        message = "Please Select if Consent was Given"
+                                    )
+                                )
+                                return@launch
+                            }
+                            if (valueConsent == "Yes") {
+                                val isValid = FormatHelper().dateLessThanToday(presDate)
+                                if (!isValid) {
                                     customMessage.postValue(
                                         MessageItem(
                                             success = false,
-                                            message = "Please Select if Consent was Given"
+                                            message = "Please Select a valid Date"
                                         )
                                     )
                                     return@launch
                                 }
-                                if (valueConsent == "Yes") {
-                                    val isValid = FormatHelper().dateLessThanToday(presDate)
-                                    if (!isValid) {
-                                        customMessage.postValue(
-                                            MessageItem(
-                                                success = false,
-                                                message = "Please Select a valid Date"
-                                            )
-                                        )
-                                        return@launch
-                                    }
-                                }
-                                val no = NutritionOrder()
-                                no.id = generateUuid()
-                                no.patient = subjectReference
-                                no.encounter = encounterReference
-                                no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
-                                no.dateTime = Date()
-                                no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
-                                saveResourceToDatabase(no)
                             }
-                        }
-                        val care = CarePlan()
-                        care.encounter = encounterReference
-                        care.subject = subjectReference
-                        care.status = CarePlan.CarePlanStatus.ACTIVE
-                        care.title = title
-                        care.intent = CarePlan.CarePlanIntent.ORDER
-                        care.created = Date()
-                        saveResourceToDatabase(care)
-
-                        saveResources(bundle, subjectReference, encounterId, title)
-                        customMessage.postValue(
-                            MessageItem(
-                                success = true,
-                                message = "Prescription Successfully saved"
-                            )
-                        )
-                    } else {
-                        if (currentPrescribed < totalVolume) {
-                            customMessage.postValue(
-                                MessageItem(
-                                    success = false,
-                                    message = "Please check Total Volumes"
-                                )
-                            )
-                        } else {
-                            customMessage.postValue(
-                                MessageItem(
-                                    success = false,
-                                    message = "Please check Feed Breakdown Volumes"
-                                )
-                            )
+                            val no = NutritionOrder()
+                            no.id = generateUuid()
+                            no.patient = subjectReference
+                            no.encounter = encounterReference
+                            no.status = NutritionOrder.NutritionOrderStatus.ACTIVE
+                            no.dateTime = Date()
+                            no.intent = NutritionOrder.NutritiionOrderIntent.ORDER
+                            saveResourceToDatabase(no)
                         }
                     }
+                    val care = CarePlan()
+                    care.encounter = encounterReference
+                    care.subject = subjectReference
+                    care.status = CarePlan.CarePlanStatus.ACTIVE
+                    care.title = title
+                    care.intent = CarePlan.CarePlanIntent.ORDER
+                    care.created = Date()
+                    saveResourceToDatabase(care)
+
+                    saveResources(bundle, subjectReference, encounterId, title)
+                    customMessage.postValue(
+                        MessageItem(
+                            success = true,
+                            message = "Prescription Successfully saved"
+                        )
+                    )
+
 
                 } catch (e: Exception) {
                     Timber.d("Exception:::: ${e.localizedMessage}")
@@ -2021,8 +1997,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val subjectReference = Reference("Patient/$patientId")
                     val encounterId = generateUuid()
                     title = code
-                   updateEncounterAssessment(subjectReference,encounterId,title)
-                   
+                    updateEncounterAssessment(subjectReference, encounterId, title)
+
                     saveResources(bundle, subjectReference, encounterId, title)
                     customMessage.postValue(
                         MessageItem(
@@ -3134,7 +3110,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 val encounterId = generateUuid()
                 title = "Expression-Assessment"
 
-                updateEncounterAssessment(subjectReference,encounterId,title)
+                updateEncounterAssessment(subjectReference, encounterId, title)
                 autoSaveResources(bundle, subjectReference, encounterId, title)
                 customMessage.postValue(
                     MessageItem(

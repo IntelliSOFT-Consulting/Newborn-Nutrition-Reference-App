@@ -31,6 +31,7 @@ import com.intellisoft.nndak.dialogs.MoreExpression
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.utils.getFutureHoursOnIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -399,6 +400,16 @@ class FeedingFragment : Fragment() {
                     incHistory.tvhVomit.text = "Vomit"
                     incHistory.tvhDiaper.text = "Diapers Changed"
                     incHistory.tvhStool.text = "Stool"
+                    boldText(incHistory.tvhDate)
+                    boldText(incHistory.tvhTime)
+                    boldText(incHistory.tvhEbm)
+                    boldText(incHistory.tvhDhm)
+                    boldText(incHistory.tvhIv)
+                    boldText(incHistory.tvhDeficit)
+                    boldText(incHistory.tvhVomit)
+                    boldText(incHistory.tvhDiaper)
+                    boldText(incHistory.tvhStool)
+
                 }
             }
         }
