@@ -100,7 +100,7 @@ class BabyLactationFragment : Fragment() {
                 )
             )
                 .get(PatientDetailsViewModel::class.java)
-//        syncLocal()
+
 
         binding.apply {
             lnParent.visibility = View.GONE
@@ -250,16 +250,11 @@ class BabyLactationFragment : Fragment() {
             if (expression != null) {
                 populateBarChart(expression)
                 binding.apply {
-
                     tvTotalExpressed.text = "${expression.totalFeed} mls"
                 }
             }
         }
-        /* if (isNetworkAvailable(requireContext())) {
-             loadData()
-         } else {
-             syncLocal()
-         }*/
+
 
     }
 

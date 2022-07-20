@@ -281,9 +281,9 @@
           "initial": [
             {
               "valueCoding": {
-                "code": "Volume-Expressed",
+                "code": "62578-0",
                 "display": "Volume Expressed",
-                "system": "http://loinc.org"
+                "system": "http://snomed.info/sct"
               }
             }
           ]

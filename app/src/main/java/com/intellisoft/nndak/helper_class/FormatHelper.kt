@@ -259,6 +259,14 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
 
     }
+    fun getSystemHour(date: String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
 
     fun getRoundedDateHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)

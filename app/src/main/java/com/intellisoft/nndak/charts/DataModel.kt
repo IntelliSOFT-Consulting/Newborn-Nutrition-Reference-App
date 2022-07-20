@@ -74,6 +74,7 @@ data class MilkExpression(
 data class ExpressionData(
     @SerializedName("time") val time: String,
     @SerializedName("amount") val amount: String,
+    @SerializedName("number") val number: String,
 )
 
 data class FeedsDistribution(

@@ -207,15 +207,12 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.tvTotalVolume.text = it.totalFeed
-                binding.tvExpressionNumber.text = it.varianceAmount
                 barGraph(it)
             }
         }
         patientDetailsViewModel.activeBabyWeights()
         patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
             if (it != null) {
-                // populateLineChart(it)
-
                 standardCharts(it)
             }
         }
@@ -226,6 +223,7 @@ class BabyDashboardFragment : Fragment() {
                 binding.apply {
 
                     tvTotalExpressed.text = "${expression.totalFeed} mls"
+                    binding.tvExpressionNumber.text = expression.varianceAmount
                 }
             }
         }
@@ -233,7 +231,6 @@ class BabyDashboardFragment : Fragment() {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     binding.apply {
-                        tvExpressionNumber.text = it.first().expressions
 
                         /**
                          * Calculate Rate

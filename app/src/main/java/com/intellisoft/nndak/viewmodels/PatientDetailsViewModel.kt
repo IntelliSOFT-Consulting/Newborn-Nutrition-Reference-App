@@ -130,15 +130,60 @@ class PatientDetailsViewModel(
         val expressions: MutableList<ExpressionData> = mutableListOf()
         val intervals = getPastHoursOnIntervalOf(8, 3)
         var totalFeed = 0f
+        var ti = 0f
         intervals.forEach {
             val milk = getHourlyExpressions(it.toString())
+            ti += milk.number.toFloat()
             totalFeed += milk.amount.toFloat()
             expressions.add(milk)
         }
-        return MilkExpression(totalFeed = "$totalFeed", varianceAmount = "5", data = expressions)
+        return MilkExpression(
+            totalFeed = "$totalFeed",
+            varianceAmount = ti.toString(),
+            data = expressions
+        )
     }
 
     private suspend fun getHourlyExpressions(time: String): ExpressionData {
+        var quantity = 0f
+        var times = 0f
+        val expressions = observationsPerCode(EXPRESSED_MILK)
+        val sorted = sortCollected(expressions)
+        sorted.forEach {
+            try {
+
+                val feedTime = FormatHelper().getSystemHour(it.effective)
+                val maxRange = FormatHelper().getDateHour(time)
+                val minRange = FormatHelper().getHourRange(maxRange)
+
+                val isWithinRange = FormatHelper().startCurrentEnd(minRange, feedTime, maxRange)
+                if (isWithinRange) {
+                    val qty = it.quantity.toFloat()
+                    quantity += qty
+                    times++
+
+                    /*val amounts = observationsPerCodeEncounter(EXPRESSED_MILK, it.encounterId)
+                    amounts.forEach { data ->
+                        val qty = data.quantity.toFloat()
+                        quantity += qty
+                        times++
+                    }*/
+                }
+            } catch (e: Exception) {
+                Timber.e("Exception ${e.localizedMessage}")
+            }
+        }
+        val refinedTime = FormatHelper().getRoundedHour(time)
+
+        return ExpressionData(
+            time = refinedTime,
+            amount = quantity.toString(),
+            number = times.toString()
+        )
+
+    }
+
+    private suspend fun getHourlyManualExpressions(time: String): ExpressionData {
         var quantity = 0f
         val expressions = observationsPerCode(EXPRESSION_TIME)
         val sorted = sortCollected(expressions)
@@ -156,14 +201,13 @@ class PatientDetailsViewModel(
                         quantity += qty
                     }
                 }
-                Timber.e("Sorted Expressions  Time $feedTime Required $maxRange Min $minRange Within $isWithinRange")
             } catch (e: Exception) {
                 Timber.e("Exception ${e.localizedMessage}")
             }
         }
         val refinedTime = FormatHelper().getRoundedHour(time)
 
-        return ExpressionData(time = refinedTime, amount = quantity.toString())
+        return ExpressionData(time = refinedTime, amount = quantity.toString(), number = "0")
 
     }
 
