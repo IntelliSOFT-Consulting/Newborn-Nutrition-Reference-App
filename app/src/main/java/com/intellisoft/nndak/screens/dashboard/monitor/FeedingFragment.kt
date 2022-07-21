@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
@@ -75,6 +76,7 @@ class FeedingFragment : Fragment() {
     private var ebmPresent: Boolean = true
     private var formulaPresent: Boolean = true
     private var prescriptionExists: Boolean = false
+    private var exitSection: Boolean = true
     private val feedsList: MutableList<FeedItem> = mutableListOf()
     private val binding
         get() = _binding!!
@@ -515,8 +517,11 @@ class FeedingFragment : Fragment() {
     private fun click(item: FeedItem) {
         if (prescriptionExists) {
             updateArguments()
+            clearFields()
             addQuestionnaireFragment()
             resetDisplay(true)
+            exitSection=false
+            Timber.e("App will exit here ....exitSection: $exitSection")
         } else {
             val dialog =
                 SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
@@ -531,6 +536,16 @@ class FeedingFragment : Fragment() {
                     }
             dialog.setCancelable(false)
             dialog.show()
+        }
+    }
+
+    private fun clearFields() {
+        binding.apply {
+            control.edDhm.setText("")
+            control.edEbm.setText("")
+            control.edIv.setText("")
+            control.edFormula.setText("")
+            control.edDeficit.setText("")
         }
     }
 
@@ -574,16 +589,21 @@ class FeedingFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-                resetDisplay(false)
-            }
-            .setCancelText("No")
-            .show()
+        Timber.e("App will exit here ....exitSection: $exitSection")
+        if (exitSection){
+
+        }else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+                    resetDisplay(false)
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun updateArguments() {
@@ -655,6 +675,7 @@ class FeedingFragment : Fragment() {
                 lnCollection.visibility = View.GONE
             }
         }
+
     }
 
     override fun onDestroyView() {

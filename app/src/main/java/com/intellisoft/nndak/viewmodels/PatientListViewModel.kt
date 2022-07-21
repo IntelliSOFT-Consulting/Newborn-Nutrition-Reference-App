@@ -15,7 +15,10 @@ import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
+import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
+import com.intellisoft.nndak.logic.DataSort.Companion.extractWeeklyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.getFormattedIntAge
+import com.intellisoft.nndak.logic.DataSort.Companion.getWeekFromDays
 import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
 import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
@@ -34,6 +37,7 @@ import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
+import com.intellisoft.nndak.utils.getWeeksSoFarIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createNutritionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
@@ -44,7 +48,6 @@ import java.io.IOException
 import java.time.LocalDate
 import java.time.Period
 import java.util.*
-import java.util.stream.*
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -539,9 +542,9 @@ class PatientListViewModel(
     }
 
     private suspend fun calculateWeightGainRate(resourceId: String, gender: String): String {
-        var standard = "boy.json"
+        var standard = "boy-z-score.json"
         if (gender == "female") {
-            standard = "girl.json"
+            standard = "girl-z-score.json"
         }
         var gainRate = "Normal"
         try {
@@ -551,22 +554,29 @@ class PatientListViewModel(
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            val totalDays = calculateGestationDays(it)
-            val chartData = extractDaysData(totalDays, it, growths)
-            val projectWeight = regulateProjection(chartData.projectedWeight)
-            for ((i, entry) in chartData.actualWeight.data.withIndex()) {
-                val equivalent = projectWeight[i].value.toDouble()
-                val cc = entry.actual.toDouble()
-                gainRate = if (cc > equivalent) {
-                    "High"
-                } else if (cc == equivalent) {
-                    "Normal"
-                } else {
-                    "Low"
+            for ((i, entry) in growths.withIndex()) {
+                val start = entry.age
+                val ges = it.gestationAge.toInt()
+                if (start == ges || start > ges) {
+                    val equivalent = extractValueIndex(start, it)
+                    val zeroDeviation = entry.data[3].value.toFloat()
+                    val deviation = equivalent.toFloat() - zeroDeviation
+                    if (equivalent == "0") {
+
+                    } else {
+                        if (deviation < 0) {
+                            gainRate = "Low"
+                        } else if (deviation > 0) {
+                            gainRate = "High"
+                        }
+                    }
+
+                    Timber.d("deviation  $zeroDeviation equivalent $equivalent balance $deviation Rate $gainRate")
                 }
             }
+
         } catch (e: Exception) {
-            Timber.e("Growth Exception ${e.localizedMessage}")
+
         }
         return gainRate
     }
@@ -587,36 +597,40 @@ class PatientListViewModel(
         val weight = pullWeights(resourceId)
         val data = arrayListOf<ActualData>()
         var dayOfLife = 0
+        var weeksLife = 0
         var babyGender = ""
         val gestationAge = retrieveQuantity(resourceId, GESTATION)
         val birthWeight = retrieveQuantity(resourceId, BIRTH_WEIGHT)
-        val lastKnownWeight = retrieveQuantity(resourceId, CURRENT_WEIGHT)
+        var lastKnownWeight = retrieveQuantity(resourceId, CURRENT_WEIGHT)
         patient.let {
             dayOfLife = getFormattedIntAge(it.dob)
             babyGender = it.gender
+            weeksLife = getWeekFromDays(dayOfLife)
 
         }
 
         if (weight.isNotEmpty()) {
-
-            val daysString = getPastDaysOnIntervalOf(dayOfLife + 1, 1)
+            val daysString = getWeeksSoFarIntervalOf(patient.dob, weeksLife + 1, 1)
+            val sorted = sortCollected(weight)
+            lastKnownWeight = sorted.last().quantity
             for ((i, entry) in daysString.withIndex()) {
-                val sorted = sortCollected(weight)
-                var value = extractDailyMeasure(entry, sorted)
+                val added = gestationAge.toFloat() + i.toFloat()
+
+                var value = extractWeeklyMeasure(entry, 6, sorted)
+
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                data.add(ActualData(day = i.toString(), actual = value, projected = value))
+                data.add(ActualData(day = added.toInt(), actual = value, projected = value))
             }
         }
-        val currentWeight = data.lastOrNull()?.actual ?: birthWeight
-
         return WeightsData(
             babyGender = babyGender,
-            currentWeight = currentWeight,
+            currentWeight = lastKnownWeight,
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
-            data = data
+            data = data,
+            weeksLife = weeksLife + 1
         )
     }
 

@@ -355,6 +355,7 @@ data class CareItem(
     val encounterId: String,
     val status: String,
     val created: String,
+    val purpose: String,
 ) {
     override fun toString(): String = resourceId
 }

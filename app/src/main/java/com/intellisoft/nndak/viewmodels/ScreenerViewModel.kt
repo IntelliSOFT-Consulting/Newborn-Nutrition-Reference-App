@@ -2368,6 +2368,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 )
                                     .request.url = "Observation"
                             }
+                            "Formula" -> {
+
+                                bundle.addEntry().setResource(
+                                    qh.quantityQuestionnaire(
+                                        FORMULA_VOLUME,
+                                        "Formula Volume",
+                                        "Formula Volume",
+                                        it.volume.toString(), "mls"
+                                    )
+                                )
+                                    .request.url = "Observation"
+                            }
                             else -> {
                                 println("Skipped Feeds Items")
                             }
@@ -2509,7 +2521,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         val lessThanNow = FormatHelper().dateTimeLessThanNow(assessDate)
                         if (lessThanNow) {
 
-
                             saveFeedingResources(
                                 bundle,
                                 subjectReference,
@@ -2517,7 +2528,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 encounterId,
                                 title
                             )
-                            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
+
+                            updateEncounterAssessment(subjectReference, encounterId, title)
                             customMessage.postValue(
                                 MessageItem(
                                     success = true,
@@ -2535,7 +2547,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     }
 
                 } catch (e: Exception) {
-                    Timber.d("Exception:::: ${e.printStackTrace()}")
+
                     customMessage.postValue(
                         MessageItem(
                             success = false,

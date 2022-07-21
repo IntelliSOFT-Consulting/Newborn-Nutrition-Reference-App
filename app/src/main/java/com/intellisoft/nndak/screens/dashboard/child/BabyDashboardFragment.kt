@@ -28,15 +28,15 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
-import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
-import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
-import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
+import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
 import com.intellisoft.nndak.utils.extractUnits
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
 import java.io.IOException
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -209,12 +209,13 @@ class BabyDashboardFragment : Fragment() {
                 barGraph(it)
             }
         }
-        patientDetailsViewModel.activeBabyWeights()
+        patientDetailsViewModel.activeWeeklyBabyWeights()
         patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
             if (it != null) {
-                standardCharts(it)
+                 standardWeeklyCharts(it)
             }
         }
+//        standardWeeklyCharts()
         patientDetailsViewModel.getExpressions()
         patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
             if (expression != null) {
@@ -330,18 +331,20 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
-    private fun standardCharts(it: WeightsData) {
+
+
+    private fun standardWeeklyCharts(weightsData: WeightsData) {
         try {
-            var standard = "boy.json"
-            if (it.babyGender == "female") {
-                standard = "girl.json"
-            }
+            var standard = "boy-z-score.json"
+              if (weightsData.babyGender == "female") {
+                  standard = "girl-z-score.json"
+              }
             val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            growths.forEachIndexed { idx, growth -> Timber.e("Growth Item $idx:\n$growth") }
-            populateLineChart(it, growths)
+            growths.forEachIndexed { idx, growth -> Timber.e("Growth\n Item $idx:\n$growth") }
+            populateZScoreLineChart(weightsData, growths)
         } catch (e: Exception) {
             Timber.e("Growth Exception ${e.localizedMessage}")
         }
@@ -451,64 +454,56 @@ class BabyDashboardFragment : Fragment() {
 
     }
 
-    private fun populateLineChart(values: WeightsData, growths: List<GrowthData>) {
+
+    private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {
         binding.apply {
             tvCurrentWeight.text = "${values.currentWeight} gm"
         }
-        val totalDays = calculateGestationDays(values)
         val intervals = ArrayList<String>()
         val babyWeight: ArrayList<Entry> = ArrayList()
         val one: ArrayList<Entry> = ArrayList()
+        val two: ArrayList<Entry> = ArrayList()
         val three: ArrayList<Entry> = ArrayList()
         val four: ArrayList<Entry> = ArrayList()
         val five: ArrayList<Entry> = ArrayList()
+        val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
 
-        val chartData = extractDaysData(totalDays, values, growths)
-        val projectWeight = regulateProjection(chartData.projectedWeight)
-
-
-        /**
-         * Refined Weights
-         */
-        /*  for ((i, entry) in chartData.actualWeight.data.withIndex()) {
-              intervals.add(entry.day)
-
-              val equivalent = projectWeight[i].value
-              babyWeight.add(Entry(i.toFloat(), entry.actual.toFloat()))
-              one.add(Entry(i.toFloat(), equivalent.toFloat()))
-              *//*  three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
-            four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
-            five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
-            seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))*//*
-
-
-        }  */
-
         for ((i, entry) in growths.withIndex()) {
+
             intervals.add(entry.age.toString())
-/*
-            val equivalent = projectWeight[i].value
-            Timber.e("Equivalent Weight $equivalent")*/
-            babyWeight.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
-            one.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
-            three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
-            four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
-            five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
-            seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+            val start = entry.age
+            val ges = values.gestationAge.toInt()
+            if (start == ges || start > ges) {
+                val equivalent = extractValueIndex(start, values)
+                if (equivalent == "0") {
+                    babyWeight.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
+                } else {
+                    babyWeight.add(Entry(i.toFloat(), equivalent.toFloat()))
+                }
+                one.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
+                two.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
+                three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
+                four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+                five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
+                six.add(Entry(i.toFloat(), entry.data[5].value.toFloat()))
+                seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+            }
 
         }
 
         val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
-        val dataOne = generateSource(one, "Projected Weight", "#eb975e")
-        val dataThree = generateSource(three, "", "#e3a23c")
-        val dataFour = generateSource(four, "", "#006600")
-        val dataFive = generateSource(five, "", "#ffa20e")
-        val dataSeven = generateSource(seven, "", "#0f0f0f")
+        val dataOne = generateSource(one, "-3", "#000000")
+        val dataTwo = generateSource(two, "-2", "#880d0d")
+        val dataThree = generateSource(three, "-1", "#ffa20e")
+        val dataFour = generateSource(four, "0", "#006600")
+        val dataFive = generateSource(five, "+1", "#ffa20e")
+        val dataSix = generateSource(six, "+2", "#880d0d")
+        val dataSeven = generateSource(seven, "+3", "#000000")
 
         val data = LineData(
-            baby, dataOne, dataThree, dataFour,
-            dataFive, dataSeven
+            baby, dataOne, dataTwo, dataThree, dataFour,
+            dataFive, dataSix, dataSeven
         )
         binding.growthChart.axisLeft.setDrawGridLines(false)
 
@@ -518,16 +513,14 @@ class BabyDashboardFragment : Fragment() {
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.mAxisMinimum = 1f
         xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-        xAxis.setLabelCount(4, true)
-        xAxis.setLabelCount(values.data.size, true)
 
-        binding.growthChart.legend.isEnabled = false
+        binding.growthChart.legend.isEnabled = true
 
         //remove description label
         binding.growthChart.description.isEnabled = true
         binding.growthChart.isDragEnabled = false
         binding.growthChart.setScaleEnabled(false)
-        binding.growthChart.description.text = "Age (Days)"
+        binding.growthChart.description.text = "Age (weeks)"
         binding.growthChart.description.setPosition(0f, 10f)
 
         //add animation
@@ -552,6 +545,8 @@ class BabyDashboardFragment : Fragment() {
 
 
     }
+
+
 
     private fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {
         val actual = LineDataSet(one, label)

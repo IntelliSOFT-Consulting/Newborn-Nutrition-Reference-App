@@ -262,5 +262,14 @@
             android:id="@+id/navigate_to_landing"
             app:destination="@id/landingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/expressionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.monitor.ExpressionFragment"
+        android:label="fragment_expression"
+        tools:layout="@layout/fragment_expression" >
+        <action
+            android:id="@+id/navigate_to_baby_dashboard"
+            app:destination="@id/childDashboardFragment" />
+    </fragment>
 
 </navigation>

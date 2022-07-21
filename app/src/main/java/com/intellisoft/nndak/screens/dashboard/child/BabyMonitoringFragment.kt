@@ -93,7 +93,7 @@ class BabyMonitoringFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-
+        onBackPressed()
         val tabViewpager = binding.tabViewpager
         val tabTabLayout = binding.tabTablayout
         setupViewPager(tabViewpager)
@@ -126,7 +126,7 @@ class BabyMonitoringFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
 
             if (data != null) {
-                FhirApplication.updateCurrent(requireContext(),data.id)
+                FhirApplication.updateCurrent(requireContext(), data.id)
                 binding.apply {
 
                     incDetails.lnBody.visibility = View.VISIBLE
@@ -172,6 +172,25 @@ class BabyMonitoringFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun showCancelScreenerQuestionnaireAlertDialog() {
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Are you sure?")
+            .setContentText(getString(R.string.cancel_questionnaire_message))
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                findNavController().navigateUp()
+            }
+            .setCancelText("No")
+            .show()
+    }
+
+    private fun onBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
+            showCancelScreenerQuestionnaireAlertDialog()
         }
     }
 

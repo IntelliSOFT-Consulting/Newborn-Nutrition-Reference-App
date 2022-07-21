@@ -67,6 +67,7 @@ fun deleteDir(dir: File?): Boolean {
         false
     }
 }
+
 fun boldText(textView: TextView) {
     textView.setTypeface(null, Typeface.BOLD)
 }
@@ -128,6 +129,7 @@ fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
     }
     return list.reversed()
 }
+
 fun getFutureHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
     val list: MutableList<LocalDateTime> = ArrayList()
     var date = LocalDateTime.now()
@@ -158,6 +160,16 @@ fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     return list.reversed()
 }
 
+
+fun getWeeksSoFarIntervalOf(start: String, times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.parse(start)
+    for (i in 1..times) {
+        list.add(date)
+        date = date.plusWeeks(interval.toLong())
+    }
+    return list
+}
 
 
 fun getPastMonthsOnIntervalOf(times: Int, interval: Int): List<LocalDate> {

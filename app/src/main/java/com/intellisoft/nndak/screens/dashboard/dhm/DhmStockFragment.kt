@@ -138,7 +138,11 @@ class DhmStockFragment : Fragment() {
             Timber.e("Exception ${e.localizedMessage}")
         }
     }
+    override fun onResume() {
 
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
     private fun listenToChange(input: TextInputEditText) {
 
         CoroutineScope(Dispatchers.Default).launch {

@@ -97,11 +97,12 @@ data class WeightsData(
     @SerializedName("currentWeight") val currentWeight: String,
     @SerializedName("gestationAge") val gestationAge: String,
     @SerializedName("dayOfLife") val dayOfLife: Int,
+    @SerializedName("weeksLife") val weeksLife: Int,
     @SerializedName("data") val data: List<ActualData>,
 )
 
 data class ActualData(
-    @SerializedName("lifeDay") val day: String,
+    @SerializedName("lifeDay") val day: Int,
     @SerializedName("actual") val actual: String,
     @SerializedName("projected") val projected: String,
 )
@@ -128,6 +129,11 @@ data class ItemOrder(
 data class CombinedGrowth(
     val actualWeight: WeightsData,
     val projectedWeight: List<GrowthOptions>
+)
+
+data class WeeklyGrowth(
+    val cw: List<ActualData>,
+    val pw: List<GrowthData>
 )
 
 data class GrowthData(

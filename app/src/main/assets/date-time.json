@@ -42,12 +42,7 @@
             }
           ],
           "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "[lb_av]"
-              }
-            },
+
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
               "valueCoding": {

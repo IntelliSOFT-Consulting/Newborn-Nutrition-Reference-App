@@ -393,7 +393,7 @@
     <string name="menu_term_fo">Term Formula</string>
     <string name="menu_pre_term">Preterm Formula</string>
     <string name="update">Last Update</string>
-    <string name="app_age">Age (days)</string>
+    <string name="app_age">Age (weeks)</string>
     <string name="there_are_no_update">There are no Updates </string>
     <string name="add_pres">Add new Prescription</string>
     <string name="empty_hist">Feeding and monitoring has not yet taken place</string>

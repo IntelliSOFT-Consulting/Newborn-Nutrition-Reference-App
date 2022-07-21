@@ -7,6 +7,10 @@ import com.intellisoft.nndak.charts.GrowthOptions
 import com.intellisoft.nndak.charts.WeightsData
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
+import timber.log.Timber
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.Normalizer
 import java.time.LocalDate
 import java.time.Period
 
@@ -32,8 +36,51 @@ class DataSort {
         }
 
 
+        fun extractWeeklyMeasure(
+            entry: LocalDate,
+            max: Int,
+            sorted: List<ObservationItem>
+        ): String {
+            val end = entry.plusDays(max.toLong())
+            var total = 0f
+            var count = 0
+            var isWithin = false
+            var current = ""
+            val weeklyLast = ArrayList<String>()
+            try {
+                sorted.forEach {
+
+                    current = FormatHelper().getSimpleDate(it.effective)
+                    isWithin = FormatHelper().startCurrentEndDates(
+                        entry.toString(),
+                        current,
+                        end.toString()
+                    )
+                    if (isWithin) {
+                        weeklyLast.add(it.quantity)
+                        total += it.quantity.toFloat()
+                        count++
+                    }
+                }
+            } catch (e: Exception) {
+
+            }
+            var weekly = total / count
+            if (weekly.toString() == "NaN") {
+                weekly = 0f
+            }
+            val recent = if (weeklyLast.isEmpty()) {
+                "0"
+            } else {
+                weeklyLast.last()
+            }
+
+            return recent
+        }
+
+
         fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
-       
+
             return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
                 ?: "0.0"
@@ -74,7 +121,7 @@ class DataSort {
             return growths.find { it.age.toFloat() == day.toFloat() }!!
         }
 
-          fun calculateGestationDays(values: WeightsData): List<String> {
+        fun calculateGestationDays(values: WeightsData): List<String> {
             val babiesData = ArrayList<String>()
             babiesData.add(values.gestationAge)
             val weeklyGrowth = getWeekFromDays(values.dayOfLife)
@@ -85,7 +132,7 @@ class DataSort {
             return babiesData
         }
 
-        private fun getWeekFromDays(dayOfLife: Int): Int {
+        fun getWeekFromDays(dayOfLife: Int): Int {
             val divisor = 7
 
             val quotient = dayOfLife / divisor
@@ -94,8 +141,28 @@ class DataSort {
             return quotient
 
         }
-          fun regulateProjection(data: List<GrowthOptions>): List<GrowthOptions> {
+
+        fun regulateProjection(data: List<GrowthOptions>): List<GrowthOptions> {
             return data.sortedWith(compareBy { it.value })
+        }
+
+        fun extractValueIndex(start: Int, values: WeightsData): String {
+            values.data.forEach {
+
+                if (it.day == start) {
+                    return convertToKg(it.actual)
+                }
+            }
+            return "0"
+
+        }
+
+        private fun convertToKg(actual: String): String {
+            val value = actual.toFloat()
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.DOWN
+            val rounded = df.format(value / 1000)
+            return rounded.toString()
         }
     }
 }

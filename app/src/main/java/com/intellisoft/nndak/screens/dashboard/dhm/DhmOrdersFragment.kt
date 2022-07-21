@@ -205,16 +205,20 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     binding.pbLoading.visibility = View.GONE
                 }
                 if (it.data.isNotEmpty()) {
-                    binding.empty.cpBgView.visibility = View.GONE
-                    binding.pbLoading.visibility = View.GONE
-                    orderList.clear()
-                    it.data.forEach { order ->
-                        if (order.motherName != "null") {
-                            orderList.add(order)
+                    try {
+                        binding.empty.cpBgView.visibility = View.GONE
+                        binding.pbLoading.visibility = View.GONE
+                        orderList.clear()
+                        it.data.forEach { order ->
+                            if (order.motherName != "null") {
+                                orderList.add(order)
+                            }
                         }
-                    }
-                    adapterList.notifyDataSetChanged()
+                        adapterList.notifyDataSetChanged()
 
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             } else {
                 Toast.makeText(
