@@ -105,6 +105,9 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
+            binding.apply {
+                incTitle.lnParent.visibility = View.GONE
+            }
             loadOrders()
 
 
@@ -125,7 +128,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
         patientListViewModel.patientCount.observe(viewLifecycleOwner) {
-            binding.patientListContainer.patientCount.text = "$it Patient(s)"
+            binding.patientListContainer.patientCount.text = "$it Order(s)"
         }
         searchView = binding.search
         searchView.setOnQueryTextListener(
@@ -199,34 +202,33 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun loadOrders() {
         orderList.clear()
         apiService.loadOrders(requireContext()) {
-            if (it != null) {
-                if (it.data.isEmpty()) {
-                    binding.empty.cpBgView.visibility = View.VISIBLE
-                    binding.pbLoading.visibility = View.GONE
-                }
-                if (it.data.isNotEmpty()) {
-                    try {
-                        binding.empty.cpBgView.visibility = View.GONE
-                        binding.pbLoading.visibility = View.GONE
-                        orderList.clear()
-                        it.data.forEach { order ->
-                            if (order.motherName != "null") {
-                                orderList.add(order)
-                            }
-                        }
-                        adapterList.notifyDataSetChanged()
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+            binding.apply {
+                if (it != null) {
+                    if (it.data.isEmpty()) {
+                        empty.cpBgView.visibility = View.VISIBLE
+                        pbLoading.visibility = View.GONE
                     }
+                    if (it.data.isNotEmpty()) {
+                        try {
+                            empty.cpBgView.visibility = View.GONE
+                            pbLoading.visibility = View.GONE
+                            incTitle.lnParent.visibility = View.VISIBLE
+                            orderList.clear()
+                            it.data.forEach { order ->
+                                if (order.motherName != "null") {
+                                    orderList.add(order)
+                                }
+                            }
+                            adapterList.notifyDataSetChanged()
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                } else {
+                    empty.cpBgView.visibility = View.VISIBLE
+                    pbLoading.visibility = View.GONE
                 }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.problems),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         }
     }
@@ -285,7 +287,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         try {
-            patientListViewModel.reloadOrders()
+            loadOrders()
         } catch (e: Exception) {
 
         }

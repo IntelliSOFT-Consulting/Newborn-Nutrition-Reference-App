@@ -10,7 +10,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
@@ -21,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
@@ -32,7 +30,6 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.UpdatePrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
@@ -43,7 +40,6 @@ import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.models.FeedDataItem
@@ -521,7 +517,12 @@ class EditPrescriptionFragment : Fragment() {
                 if (cbEbm.isChecked) {
                     val vol = ebmVolume.volume.text.toString()
                     val rou = ebmRoute.appType.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(rou)) {
+                    if (checkEmptyData(
+                            vol,
+                            ebmVolume.volume,
+                            ebmVolume.tilVolume
+                        ) || checkEmptyData(rou, ebmRoute.appType, ebmRoute.tilType)
+                    ) {
                         return
                     }
                     feedsList.add(
@@ -545,7 +546,7 @@ class EditPrescriptionFragment : Fragment() {
                 if (cbFluid.isChecked) {
                     val vol = ivVolume.volume.text.toString()
                     val rou = ivRoute.appType.text.toString()
-                    if (checkEmptyData(vol)) {
+                    if (checkEmptyData(vol, ivVolume.volume, ivVolume.tilVolume)) {
                         return
                     }
                     feedsList.add(
@@ -563,8 +564,18 @@ class EditPrescriptionFragment : Fragment() {
                     val rou = formulaRoute.appType.text.toString()
                     val typ = formulaType.appFrequency.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
-                            typ
+                    if (checkEmptyData(
+                            vol,
+                            formulaVolume.volume,
+                            formulaVolume.tilVolume
+                        ) || checkEmptyData(
+                            rou,
+                            formulaRoute.appType,
+                            formulaRoute.tilType
+                        ) || checkEmptyData(
+                            typ,
+                            formulaType.appFrequency,
+                            formulaType.tilFre
                         )
                     ) {
                         return@apply
@@ -603,9 +614,24 @@ class EditPrescriptionFragment : Fragment() {
                     val con = dhmConsent.appFrequency.text.toString()
                     val reason = dhmReason.volume.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
-                            typ
-                        ) || checkEmptyData(con) || checkEmptyData(reason)
+                    if (checkEmptyData(vol, dhmVolume.volume, dhmVolume.tilVolume)
+                        || checkEmptyData(
+                            rou,
+                            dhmRoute.appType,
+                            dhmRoute.tilType
+                        ) || checkEmptyData(
+                            typ,
+                            dhmType.appFrequency,
+                            dhmType.tilFre
+                        ) || checkEmptyData(
+                            con,
+                            dhmConsent.appFrequency,
+                            dhmConsent.tilFre
+                        ) || checkEmptyData(
+                            reason,
+                            dhmReason.volume,
+                            dhmReason.tilReason
+                        )
                     ) {
                         return
                     }
@@ -687,13 +713,14 @@ class EditPrescriptionFragment : Fragment() {
 
     }
 
-    private fun checkEmptyData(vol: String): Boolean {
+    private fun checkEmptyData(
+        vol: String,
+        volume: TextInputEditText,
+        tilVolume: TextInputLayout
+    ): Boolean {
         if (vol.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.inputs_missing),
-                Toast.LENGTH_SHORT
-            ).show()
+            tilVolume.error = getString(R.string.empty_field)
+            volume.requestFocus()
             return true
         }
         return false

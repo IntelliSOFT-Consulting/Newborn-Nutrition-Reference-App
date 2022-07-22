@@ -125,7 +125,7 @@ class ProcessOrderFragment : Fragment() {
     private fun updateUI(it: ItemOrder) {
 
         binding.apply {
-             dhmType = it.dhmType
+            dhmType = it.dhmType
             incTitle.lnParent.weightSum = 5F
             incDetails.appBabyName.text = it.babyName
             incDetails.appMotherName.text = it.motherName
@@ -163,7 +163,11 @@ class ProcessOrderFragment : Fragment() {
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
             viewModel.liveDispensing(
-                questionnaireFragment.getQuestionnaireResponse(),requireContext(),apiService, order, dhmType
+                questionnaireFragment.getQuestionnaireResponse(),
+                requireContext(),
+                apiService,
+                order,
+                dhmType
             )
         }
 
@@ -173,18 +177,21 @@ class ProcessOrderFragment : Fragment() {
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
             if (!it.success) {
-                Toast.makeText(
-                    requireContext(), it.message,
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText(it.message)
+                    .setConfirmClickListener { dialog ->
+                        run {
+                            dialog.dismiss()
+                            findNavController().navigateUp()
+                        }
+                    }.show()
                 (activity as MainActivity).hideDialog()
                 return@observe
             }
             (activity as MainActivity).hideDialog()
             val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
                 .setTitleText("Success")
-                .setContentText(resources.getString(R.string.app_okay_saved))
+                .setContentText(it.message)
                 .setCustomImage(R.drawable.smile)
                 .setConfirmClickListener { sDialog ->
                     run {
@@ -250,6 +257,12 @@ class ProcessOrderFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

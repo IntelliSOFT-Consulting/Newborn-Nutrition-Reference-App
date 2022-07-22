@@ -212,7 +212,7 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.activeWeeklyBabyWeights()
         patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
             if (it != null) {
-                 standardWeeklyCharts(it)
+                standardWeeklyCharts(it)
             }
         }
 //        standardWeeklyCharts()
@@ -227,35 +227,6 @@ class BabyDashboardFragment : Fragment() {
                 }
             }
         }
-        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                if (it.isNotEmpty()) {
-                    binding.apply {
-
-                        /**
-                         * Calculate Rate
-                         */
-                        var total = it.first().totalVolume
-                        var given = it.first().feedsGiven
-                        try {
-                            total = extractUnits(total.toString())
-                            given = extractUnits(given.toString())
-
-                            val percentage = (given.toDouble() / total.toDouble()) * 100
-
-                            tvFeedAverage.text = "${percentage.toInt()} %"
-
-                            Timber.e("Feeds Given $total Taken $given Percentage ${percentage.toInt()}")
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-
-                }
-
-            }
-        }
-
     }
 
     private fun populateBarChart(it: MilkExpression) {
@@ -332,13 +303,12 @@ class BabyDashboardFragment : Fragment() {
     }
 
 
-
     private fun standardWeeklyCharts(weightsData: WeightsData) {
         try {
             var standard = "boy-z-score.json"
-              if (weightsData.babyGender == "female") {
-                  standard = "girl-z-score.json"
-              }
+            if (weightsData.babyGender == "female") {
+                standard = "girl-z-score.json"
+            }
             val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
@@ -356,7 +326,6 @@ class BabyDashboardFragment : Fragment() {
             jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
         } catch (ioException: IOException) {
             ioException.printStackTrace()
-            Timber.e("Growth Exception ${ioException.localizedMessage}")
             return null
         }
         return jsonString
@@ -409,7 +378,7 @@ class BabyDashboardFragment : Fragment() {
             xAxis.setDrawGridLines(false)
             xAxis.setDrawAxisLine(false)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.labelRotationAngle = -45f
+            xAxis.labelRotationAngle = -60f
             xAxis.mAxisMinimum = 0f
 //            xAxis.setCenterAxisLabels(true)
 
@@ -421,7 +390,7 @@ class BabyDashboardFragment : Fragment() {
             //remove description label
             feedsChart.description.isEnabled = false
             feedsChart.isDragEnabled = true
-            feedsChart.setScaleEnabled(true)
+            feedsChart.setScaleEnabled(false)
             feedsChart.description.text = "Age (Days)"
             //add animation
             feedsChart.animateX(1000, Easing.EaseInSine)
@@ -438,14 +407,13 @@ class BabyDashboardFragment : Fragment() {
             rightAxis.isGranularityEnabled = false
             rightAxis.isEnabled = false
 
-
             feedsChart.barData.barWidth = barWidth
             feedsChart.xAxis.axisMaximum =
                 0f + feedsChart.barData.getGroupWidth(
                     groupSpace,
                     barSpace
                 ) * groupCount
-            feedsChart.groupBars(-1f, groupSpace, barSpace)
+            feedsChart.groupBars(0f, groupSpace, barSpace)
 
             //refresh
             feedsChart.invalidate()
@@ -477,7 +445,7 @@ class BabyDashboardFragment : Fragment() {
             if (start == ges || start > ges) {
                 val equivalent = extractValueIndex(start, values)
                 if (equivalent == "0") {
-                    babyWeight.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
+                    babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
                 } else {
                     babyWeight.add(Entry(i.toFloat(), equivalent.toFloat()))
                 }
@@ -545,7 +513,6 @@ class BabyDashboardFragment : Fragment() {
 
 
     }
-
 
 
     private fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {

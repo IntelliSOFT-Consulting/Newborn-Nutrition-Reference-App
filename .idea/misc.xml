@@ -7,6 +7,7 @@
         <entry key="../../.gradle/caches/transforms-3/193e25b5797b1b86462bfa0a849a26cf/transformed/jetified-data-capture-0.1.0-beta03/res/layout/questionnaire_item_header.xml" value="0.178125" />
         <entry key="../../.gradle/caches/transforms-3/934a5461f6d134512450e4b2a594c898/transformed/jetified-library-1.6.2/res/drawable/error_circle.xml" value="0.2685" />
         <entry key="../../.gradle/caches/transforms-3/98c072e175e95053ec1ecaca800dd1da/transformed/jetified-data-capture-0.1.0-beta03/res/drawable/gm_calendar_today_24.xml" value="0.1865" />
+        <entry key="../../.gradle/caches/transforms-3/98c072e175e95053ec1ecaca800dd1da/transformed/jetified-data-capture-0.1.0-beta03/res/drawable/gm_schedule_24.xml" value="0.259" />
         <entry key="../../Android/Sdk/platforms/android-31/data/res/drawable/ic_popup_sync.xml" value="0.272" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_btn.xml" value="0.332" />
         <entry key="..\:/Android/human-milk-bank/app/src/main/res/drawable/bg_tv.xml" value="0.332" />
@@ -87,9 +88,11 @@
         <entry key="app/src/main/res/drawable/border_ring.xml" value="0.261" />
         <entry key="app/src/main/res/drawable/border_ring_default.xml" value="0.261" />
         <entry key="app/src/main/res/drawable/btn_rounded_green.xml" value="0.1545" />
+        <entry key="app/src/main/res/drawable/calendar_today_24.xml" value="0.259" />
         <entry key="app/src/main/res/drawable/default_border.xml" value="0.2685" />
         <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.272" />
         <entry key="app/src/main/res/drawable/line_dash_grey_20.xml" value="0.2545" />
+        <entry key="app/src/main/res/drawable/schedule_24.xml" value="0.1345" />
         <entry key="app/src/main/res/font/poppins.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_bold.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/font/poppins_light.xml" value="0.10598958333333333" />

@@ -3120,7 +3120,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
-                title = "Expression-Assessment"
+                title = EXPRESSIONS
+
+                val value = retrieveUser(false)
+                val qh = QuestionnaireHelper()
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            COMPLETED_BY,
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
 
                 updateEncounterAssessment(subjectReference, encounterId, title)
                 autoSaveResources(bundle, subjectReference, encounterId, title)
@@ -3270,11 +3282,23 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 userId = retrieveUser(false)
                             )
                             val k = Gson()
-                            Timber.e("Payload ${k.toJson(stock)}")
                             apiService.dispenseStock(context, stock) {
                                 if (it != null) {
-
-                                    customMessage.postValue(MessageItem(true, "Success"))
+                                    if (it.status == "success") {
+                                        customMessage.postValue(
+                                            MessageItem(
+                                                success = true,
+                                                message = it.message.toString()
+                                            )
+                                        )
+                                    } else {
+                                        customMessage.postValue(
+                                            MessageItem(
+                                                success = false,
+                                                message = it.error.toString()
+                                            )
+                                        )
+                                    }
                                 } else {
 
                                     customMessage.postValue(

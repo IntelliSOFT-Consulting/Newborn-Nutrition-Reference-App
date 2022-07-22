@@ -289,10 +289,7 @@ class PatientDetailsViewModel(
 
         if (carePlans.isNotEmpty()) {
             carePlans.forEach { item ->
-                Timber.e("Care Plan ${item.purpose}")
-                /**
-                 * Consider Feeding CarePlans
-                 */
+
                 if (item.purpose == FEEDING_MONITORING) {
 
                     try {
@@ -614,7 +611,7 @@ class PatientDetailsViewModel(
 
         }
 
-        val gainRate = calculateWeightGainRate(patientId,patient)
+        val gainRate = calculateWeightGainRate(patientId, patient)
         return MotherBabyItem(
             encounterId,
             patientId,
@@ -675,20 +672,22 @@ class PatientDetailsViewModel(
                 val ges = it.gestationAge.toInt()
                 if (start == ges || start > ges) {
                     val equivalent = extractValueIndex(start, it)
-                    val zeroDeviation = entry.data[3].value.toFloat()
-                    val deviation = equivalent.toFloat() - zeroDeviation
+                    val min = entry.data[1].value.toFloat()
+                    val max = entry.data[5].value.toFloat()
+                    val deviation = equivalent.toFloat()
                     if (equivalent == "0") {
                         //  gainRate = "Normal"
                     } else {
 
-                        if (deviation < 0) {
-                            gainRate = "Low"
-                        } else if (deviation > 0) {
-                            gainRate = "High"
+                        gainRate = if (deviation < min) {
+                            "Low"
+                        } else if (deviation > max) {
+                            "High"
+                        } else {
+                            "Normal"
                         }
                     }
 
-                    Timber.d("deviation $zeroDeviation deviation $deviation equivalent $equivalent Rate $gainRate")
                 }
             }
         } catch (e: Exception) {
@@ -1188,7 +1187,6 @@ class PatientDetailsViewModel(
         return observations.find { it.code == code }?.quantity ?: "0"
     }
 
-    //    private suspend fun prescription(care: EncounterItem): PrescriptionItem {
     private suspend fun prescription(care: CareItem): PrescriptionItem {
         val observations = getReferencedObservations(care.encounterId)
         val feeds: MutableList<FeedItem> = mutableListOf()
@@ -1207,10 +1205,10 @@ class PatientDetailsViewModel(
         var supplements = "N/A"
         var additional = "N/A"
         var consentDate = "N/A"
+        var feedingTime = "N/A"
         var expressions = 0
 
         val givenFeeds = pullFeeds()
-
 
         val def = if (relatedFeeds.isNotEmpty()) {
 
@@ -1235,7 +1233,8 @@ class PatientDetailsViewModel(
         }
         val weight = pullWeights()
         val sort = sortCollected(weight)
-        val cWeight = sort.last().quantity
+        val cWeight = sort.lastOrNull()!!.quantity
+
         val routes = StringBuilder()
         var frequency = "2 Hourly"
         if (observations.isNotEmpty()) {

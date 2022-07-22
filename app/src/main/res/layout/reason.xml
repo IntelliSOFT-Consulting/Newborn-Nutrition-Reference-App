@@ -2,6 +2,7 @@
 <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
+    android:id="@+id/til_reason"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:hint="@string/dhm_reason">

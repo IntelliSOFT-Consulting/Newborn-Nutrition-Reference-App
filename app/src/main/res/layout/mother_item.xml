@@ -21,7 +21,7 @@
             android:orientation="vertical"
             android:paddingRight="@dimen/_15dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_marginTop="@dimen/spacing_mlarge"

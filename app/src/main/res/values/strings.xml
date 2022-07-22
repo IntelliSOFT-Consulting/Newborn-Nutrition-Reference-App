@@ -464,6 +464,7 @@
     <string name="_unknown">Unknown</string>
     <string name="_dhm_type">DHM Type</string>
     <string name="_consent">Consent Given?</string>
+    <string name="empty_field">Missing data</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>
@@ -473,8 +474,8 @@
     </string-array>
     <string-array name="sort">
         <item>Sort By:</item>
-        <item>Name</item>
-        <item>Id</item>
+        <item>Term</item>
+        <item>Preterm</item>
     </string-array>
 
 </resources>

@@ -559,20 +559,21 @@ class PatientListViewModel(
                 val ges = it.gestationAge.toInt()
                 if (start == ges || start > ges) {
                     val equivalent = extractValueIndex(start, it)
-                    val zeroDeviation = entry.data[3].value.toFloat()
-                    val deviation = equivalent.toFloat() - zeroDeviation
+                    val min = entry.data[1].value.toFloat()
+                    val max = entry.data[5].value.toFloat()
+                    val deviation = equivalent.toFloat()
                     if (equivalent == "0") {
-
+                        //  gainRate = "Normal"
                     } else {
-                        if (deviation < 0) {
-                            gainRate = "Low"
-                        } else if (deviation > 0) {
-                            gainRate = "High"
-                        }
-                    }
 
-                    Timber.d("deviation  $zeroDeviation equivalent $equivalent balance $deviation Rate $gainRate")
-                }
+                        gainRate = if (deviation < min) {
+                            "Low"
+                        } else if (deviation > max) {
+                            "High"
+                        } else {
+                            "Normal"
+                        }
+                    } }
             }
 
         } catch (e: Exception) {

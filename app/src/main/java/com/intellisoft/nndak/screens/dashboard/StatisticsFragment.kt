@@ -101,8 +101,6 @@ class StatisticsFragment : Fragment() {
         checkCurrentDevice()
         updateDateSelection()
 
-
-
         if (isNetworkAvailable(requireContext())) {
             loadLiveData()
         } else {
@@ -175,11 +173,13 @@ class StatisticsFragment : Fragment() {
             operation(requireContext())
         }
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
         super.onResume()
     }
+
     private fun updateUI(it: Statistics) {
         checkIfFragmentAttached {
             binding.apply {
@@ -206,8 +206,9 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun loadLiveData() {
-
+        showLoading(true)
         apiService.loadStatistics(requireContext()) {
+            showLoading(false)
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
@@ -225,6 +226,10 @@ class StatisticsFragment : Fragment() {
 
         }
 
+    }
+
+    private fun showLoading(b: Boolean) {
+        binding.loadingProgress.visibility = if (b) View.VISIBLE else View.GONE
     }
 
     private fun populateExpressingTimes(expressingTime: List<ExpressingTime>) {

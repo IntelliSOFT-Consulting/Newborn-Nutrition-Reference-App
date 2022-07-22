@@ -14,6 +14,7 @@ data class AuthResponse(
     @SerializedName("issued") val issued: String?,
     @SerializedName("expires") val expires: String?,
     @SerializedName("message") val message: String?,
+    @SerializedName("error") val error: String?,
     @SerializedName("newUser") val newUser: Boolean?,
     @SerializedName("_reset_url") val _reset_url: String?,
 
