@@ -120,6 +120,7 @@ class FormatHelper {
         val sdf1 = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val currentDate = sdf1.parse(birthDate)
         val newCurrentDate = sdf1.format(currentDate)
+
         val date1 = sdf1.parse(newCurrentDate)
         val date2 = sdf1.parse(d2)
 
@@ -167,9 +168,19 @@ class FormatHelper {
         return formatter.format(date)
     }
 
+
     fun extractDateOnly(date: String): String {
         val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
-        val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy ", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
+
+
+    fun extractDateTime(date: String): String {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()
@@ -178,6 +189,14 @@ class FormatHelper {
     fun extractTimeOnly(date: String): String {
         val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+        return convertedDate?.let { destFormat.format(it) }.toString()
+    }
+
+    fun extractTimeOnlyAM(date: String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("HH:mm a", Locale.ENGLISH)
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()
@@ -212,6 +231,27 @@ class FormatHelper {
 
     fun getRoundedHour(date: String): String {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+        val convertedDate = sourceFormat.parse(date)
+
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = convertedDate
+        calendar[Calendar.MILLISECOND] = 0
+        calendar[Calendar.SECOND] = 0
+        val minutes = calendar[Calendar.MINUTE]
+/*
+        if (minutes < 30) {
+            calendar[Calendar.MINUTE] = 0
+        } else {
+            calendar[Calendar.MINUTE] = 30
+        }*/
+        val time = calendar.time
+        return time.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun getRoundedHourInterval(date: String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
         val convertedDate = sourceFormat.parse(date)
 
@@ -266,6 +306,22 @@ class FormatHelper {
 
         val convertedDate = sourceFormat.parse(date)
         return convertedDate?.let { destFormat.format(it) }.toString()
+
+    }
+
+    fun getSystemHourRounded(date: String): String {
+        val sourceFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("yyyy-MM-dd HH:mm a", Locale.ENGLISH)
+
+        val convertedDate = sourceFormat.parse(date)
+
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = convertedDate
+        calendar[Calendar.MILLISECOND] = 0
+        calendar[Calendar.SECOND] = 0
+        calendar.add(Calendar.MINUTE, 5)
+        val time = calendar.time
+        return time.let { destFormat.format(it) }.toString()
 
     }
 

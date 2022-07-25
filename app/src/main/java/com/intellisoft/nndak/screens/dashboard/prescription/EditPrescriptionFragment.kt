@@ -30,6 +30,7 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.UpdatePrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
+import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
@@ -46,6 +47,7 @@ import com.intellisoft.nndak.models.FeedDataItem
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.Prescription
 import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.utils.showPicker
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -68,6 +70,7 @@ class EditPrescriptionFragment : Fragment() {
     private lateinit var supp: String
     private lateinit var other: String
     private var aggregateTotal: Float = 0f
+    private var isSigned: Boolean = false
 
     private val feedsList: MutableList<FeedDataItem> = mutableListOf()
     private val binding
@@ -149,6 +152,8 @@ class EditPrescriptionFragment : Fragment() {
             eFrequency.setText(it.frequency.toString())
             otherSup.appFrequency.setText(it.additionalFeeds)
             otherValue.appFrequency.setText(it.supplements)
+            dhmSigned.tilFre.hint = "Consent Date"
+
 
             if (it.formula != "N/A") {
                 cbFormula.isChecked = true
@@ -183,9 +188,17 @@ class EditPrescriptionFragment : Fragment() {
                 lnDhmReason.visibility = View.VISIBLE
                 val con = if (it.consent == "Signed") {
                     "Yes"
+
                 } else {
                     "No"
                 }
+                if (con == "Yes") {
+                    isSigned = true
+                }
+
+                showPicker(requireContext(), dhmSigned.appFrequency)
+                dhmSigned.tilFre.visibility = View.VISIBLE
+                dhmSigned.appFrequency.setText(it.consentDate)
                 dhmConsent.appFrequency.setText(con)
                 dhmReason.volume.setText(it.dhmReason)
                 updateVolumeFrequencyRouteType(
@@ -214,6 +227,7 @@ class EditPrescriptionFragment : Fragment() {
 
         regulateViews()
     }
+
 
     private fun regulateViews() {
         binding.apply {
@@ -327,7 +341,7 @@ class EditPrescriptionFragment : Fragment() {
              */
             showOptions(eFrequency, R.menu.menu_frequency)
             showOptions(dhmType.appFrequency, R.menu.menu_in_transaction)
-            showOptions(dhmConsent.appFrequency, R.menu.menu_consent)
+            showOptionsConsent(dhmConsent.appFrequency, R.menu.menu_consent)
             showOptions(otherSup.appFrequency, R.menu.menu_consent)
             showOptions(otherValue.appFrequency, R.menu.menu_supp)
             showOptions(formulaType.appFrequency, R.menu.menu_formula)
@@ -349,6 +363,26 @@ class EditPrescriptionFragment : Fragment() {
             listenChanges(dhmVolume.volume, dhmVolume.tilVolume, "Please enter valid  value")
             listenChanges(ivVolume.volume, ivVolume.tilVolume, "Please enter valid  value")
 
+        }
+    }
+
+    private fun showOptionsConsent(textInputEditText: TextInputEditText, menuItem: Int) {
+        textInputEditText.setOnClickListener {
+            PopupMenu(requireContext(), textInputEditText).apply {
+                menuInflater.inflate(menuItem, menu)
+                setOnMenuItemClickListener { item ->
+                    textInputEditText.setText(item.title)
+                    if (item.title == "Yes") {
+                        binding.dhmSigned.tilFre.visibility = View.VISIBLE
+                        isSigned = true
+                    } else {
+                        binding.dhmSigned.tilFre.visibility = View.GONE
+                        isSigned = false
+                    }
+                    true
+                }
+                show()
+            }
         }
     }
 
@@ -613,6 +647,7 @@ class EditPrescriptionFragment : Fragment() {
                     val typ = dhmType.appFrequency.text.toString()
                     val con = dhmConsent.appFrequency.text.toString()
                     val reason = dhmReason.volume.text.toString()
+                    val date = dhmSigned.appFrequency.text.toString()
 
                     if (checkEmptyData(vol, dhmVolume.volume, dhmVolume.tilVolume)
                         || checkEmptyData(
@@ -639,6 +674,23 @@ class EditPrescriptionFragment : Fragment() {
                         "Signed"
                     } else {
                         "Not Signed"
+                    }
+                    if (isSigned) {
+                        if (checkEmptyData(
+                                date, dhmSigned.appFrequency,
+                                dhmSigned.tilFre
+                            )
+                        ) {
+                            return
+                        }
+                        feedsList.add(
+                            FeedDataItem(
+                                title = "Consent Date",
+                                code = CONSENT_DATE,
+                                coding = true,
+                                value = date
+                            )
+                        )
                     }
                     feedsList.add(
                         FeedDataItem(
@@ -711,6 +763,12 @@ class EditPrescriptionFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
     }
 
     private fun checkEmptyData(

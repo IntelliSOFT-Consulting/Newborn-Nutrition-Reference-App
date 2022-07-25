@@ -313,10 +313,10 @@ class BabyDashboardFragment : Fragment() {
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            growths.forEachIndexed { idx, growth -> Timber.e("Growth\n Item $idx:\n$growth") }
+            growths.forEachIndexed { idx, growth ->  }
             populateZScoreLineChart(weightsData, growths)
         } catch (e: Exception) {
-            Timber.e("Growth Exception ${e.localizedMessage}")
+           e.printStackTrace()
         }
     }
 

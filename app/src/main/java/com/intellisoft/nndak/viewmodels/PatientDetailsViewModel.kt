@@ -15,6 +15,7 @@ import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
 import com.intellisoft.nndak.logic.DataSort.Companion.extractWeeklyMeasure
+import com.intellisoft.nndak.logic.DataSort.Companion.getNumericFrequency
 import com.intellisoft.nndak.logic.DataSort.Companion.getWeekFromDays
 import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
 import com.intellisoft.nndak.logic.DataSort.Companion.sortHistory
@@ -78,11 +79,13 @@ import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
+import com.intellisoft.nndak.utils.getPastHoursOnIntervalOfWithStart
 import com.intellisoft.nndak.utils.getWeeksSoFarIntervalOf
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
@@ -115,9 +118,6 @@ class PatientDetailsViewModel(
         viewModelScope.launch { liveFeeds.value = getFeedsDataModel() }
     }
 
-    fun activeBabyWeights() {
-        viewModelScope.launch { liveWeights.value = getWeightsDataModel() }
-    }
 
     fun activeWeeklyBabyWeights() {
         viewModelScope.launch { liveWeights.value = getWeightsDataModel() }
@@ -172,7 +172,7 @@ class PatientDetailsViewModel(
                     }*/
                 }
             } catch (e: Exception) {
-                Timber.e("Exception ${e.localizedMessage}")
+                e.printStackTrace()
             }
         }
         val refinedTime = FormatHelper().getRoundedHour(time)
@@ -204,7 +204,7 @@ class PatientDetailsViewModel(
                     }
                 }
             } catch (e: Exception) {
-                Timber.e("Exception ${e.localizedMessage}")
+                e.printStackTrace()
             }
         }
         val refinedTime = FormatHelper().getRoundedHour(time)
@@ -244,7 +244,7 @@ class PatientDetailsViewModel(
                 data.add(ActualData(day = added.toInt(), actual = value, projected = value))
             }
         }
-        Timber.e("lastKnownWeight $lastKnownWeight")
+
         return WeightsData(
             babyGender = babyGender,
             currentWeight = lastKnownWeight,
@@ -257,13 +257,24 @@ class PatientDetailsViewModel(
 
 
     private suspend fun getFeedsDataModel(): FeedsDistribution {
-        val intervals = getPastHoursOnIntervalOf(8, 3)
+        val prescription = getActivePrescriptionsDataModel(context)
+        var times = 8
+        var interval = 3
+        var feedingTime = FormatHelper().getTodayDate()
+        if (prescription.isNotEmpty()) {
+            feedingTime = prescription.first().feedingTime
+            val frequency = prescription.first().frequency
+            val intFreq = getNumericFrequency(frequency.toString())
+            interval = intFreq.toInt()
+            times = 24 / interval
+
+        }
+        val intervals = getPastHoursOnIntervalOfWithStart(feedingTime, times, interval)
         val feeds: MutableList<FeedsData> = mutableListOf()
         var totalFeed = 0f
 
         intervals.forEach {
             val data = loadFeed(it)
-
             val total =
                 data.dhmVolume.toFloat() + data.ivVolume.toFloat() + data.ebmVolume.toFloat() + data.formula.toFloat()
 
@@ -277,14 +288,14 @@ class PatientDetailsViewModel(
         )
     }
 
-    private suspend fun loadFeed(it: LocalDateTime): FeedsData {
+    private suspend fun loadFeed(it: String): FeedsData {
 
         var iv = 0f
         var ebm = 0f
         var dhm = 0f
         var bm = 0f
         var fm = 0f
-        val hour = FormatHelper().getRoundedHour(it.toString())
+        val hour = FormatHelper().getRoundedHourInterval(it)
         val carePlans = getCompletedCarePlans()
 
         if (carePlans.isNotEmpty()) {
@@ -295,10 +306,13 @@ class PatientDetailsViewModel(
                     try {
 
                         val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
-                        val currentTime = FormatHelper().getRoundedDateHour(it.toString())
+                        val currentTime = FormatHelper().getSystemHourRounded(it)
                         val maxThree = FormatHelper().getHourRange(currentTime)
+
+
                         val isWithinRange =
                             FormatHelper().startCurrentEnd(maxThree, actualTime, currentTime)
+
                         if (isWithinRange) {
 
                             val iVs = observationsPerCodeEncounter(
@@ -367,68 +381,6 @@ class PatientDetailsViewModel(
         )
     }
 
-    private suspend fun loadFeedCare(it: LocalDateTime): FeedItem {
-
-        var iv = 0f
-        var ebm = 0f
-        var dhm = 0f
-        val hour = FormatHelper().getRoundedHour(it.toString())
-        val carePlans = getCompletedCarePlans()
-        if (carePlans.isNotEmpty()) {
-            carePlans.forEach { item ->
-                val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
-                val currentTime = FormatHelper().getRoundedDateHour(it.toString())
-                try {
-                    val maxThree = FormatHelper().getHourRange(currentTime)
-                    val isWithinRange =
-                        FormatHelper().isWithinRange(actualTime, currentTime, maxThree)
-                    if (isWithinRange) {
-
-                        val iVs = observationsPerCodeEncounter(
-                            IV_VOLUME,
-                            item.encounterId
-                        )
-                        iVs.forEach {
-                            iv += it.quantity.toFloat()
-                        }
-
-                        val eBms = observationsPerCodeEncounter(
-                            EBM_VOLUME,
-                            item.encounterId
-                        )
-
-                        eBms.forEach {
-                            ebm += it.quantity.toFloat()
-                        }
-                        val dhmS = observationsPerCodeEncounter(
-                            DHM_VOLUME,
-                            item.encounterId
-                        )
-                        dhmS.forEach {
-                            dhm += it.quantity.toFloat()
-                        }
-
-                    }
-                    Timber.e("Cheza $isWithinRange")
-                } catch (e: Exception) {
-                    Timber.e("Cheza Exception ${e.localizedMessage}")
-                }
-
-            }
-        } else {
-            iv = 0f
-            ebm = 0f
-            dhm = 0f
-
-        }
-
-        return FeedItem(
-            resourceId = hour,
-            volume = iv.toString(),
-            route = ebm.toString(),
-            frequency = dhm.toString()
-        )
-    }
 
     fun getMumChild() {
 
@@ -734,7 +686,7 @@ class PatientDetailsViewModel(
         if (obs.isNotEmpty()) {
             val sort = sortCollected(obs)
             sort.forEach {
-                Timber.e("Ordered Weight Data${it.quantity}")
+
             }
             data = sort.last().quantity.trim()
         }
@@ -1111,35 +1063,6 @@ class PatientDetailsViewModel(
         return cares
     }
 
-    private suspend fun feedsTaken(care: CareItem): PrescriptionItem {
-        val date = try {
-            FormatHelper().extractCareDateString(care.created)
-        } catch (e: Exception) {
-            care.created
-        }
-        val time = try {
-            FormatHelper().extractCareTimeString(care.created)
-        } catch (e: Exception) {
-            care.created
-        }
-        val observations = getReferencedObservations(care.encounterId)
-        return PrescriptionItem(
-            id = care.resourceId,
-            resourceId = care.resourceId,
-            date = date,
-            time = time,
-            totalVolume = extractValue(observations, FEEDS_TAKEN),
-            route = extractValue(observations, DIAPER_CHANGED),
-            ivFluids = extractValue(observations, IV_VOLUME),
-            breastMilk = extractValue(observations, EBM_VOLUME),
-            donorMilk = extractValue(observations, DHM_VOLUME),
-            consent = extractValue(observations, FEEDS_DEFICIT),
-            dhmReason = extractValue(observations, ADJUST_PRESCRIPTION),
-            supplements = extractValue(observations, VOMIT),
-            consentDate = extractValue(observations, STOOL),
-            additionalFeeds = extractValue(observations, REMARKS),
-        )
-    }
 
     private suspend fun feedsTakenEncounter(care: EncounterItem): PrescriptionItem {
         val observations = getReferencedObservationsEncounter(care.id)
@@ -1155,6 +1078,7 @@ class PatientDetailsViewModel(
             hour
         }
 
+        val feedingTime = explorePrescriptionTime(hour, "3 Hourly")
         return PrescriptionItem(
             id = care.id,
             resourceId = care.id,
@@ -1172,6 +1096,7 @@ class PatientDetailsViewModel(
             supplements = extractValue(observations, VOMIT),
             consentDate = extractValue(observations, STOOL),
             additionalFeeds = extractValue(observations, REMARKS),
+            feedingTime = feedingTime
         )
     }
 
@@ -1205,7 +1130,7 @@ class PatientDetailsViewModel(
         var supplements = "N/A"
         var additional = "N/A"
         var consentDate = "N/A"
-        var feedingTime = "N/A"
+        var hour = "N/A"
         var expressions = 0
 
         val givenFeeds = pullFeeds()
@@ -1332,6 +1257,7 @@ class PatientDetailsViewModel(
                     PRESCRIPTION_DATE -> {
                         date = FormatHelper().extractDateOnly(element.value)
                         time = FormatHelper().extractTimeOnly(element.value)
+                        hour = element.value
                     }
                     FEEDING_FREQUENCY -> {
                         frequency = element.value
@@ -1376,6 +1302,8 @@ class PatientDetailsViewModel(
                 }
             }
         }
+
+        val feedingTime = explorePrescriptionTime(hour, frequency.trim())
         return PrescriptionItem(
             id = care.resourceId,
             resourceId = care.encounterId,
@@ -1399,7 +1327,35 @@ class PatientDetailsViewModel(
             cWeight = cWeight,
             formula = formula,
             deficit = def,
+            feedingTime = feedingTime
         )
+    }
+
+    private suspend fun explorePrescriptionTime(hour: String, frequency: String): String {
+        var startingTime = hour
+        val previousFeeding = getFeedingHistoryDataModel(context)
+        if (previousFeeding.isNotEmpty()) {
+            val feeding = previousFeeding.first().hour.trim()
+            startingTime = FormatHelper().extractDateTime(feeding)
+        }
+        val freq = getNumericFrequency(frequency)
+        return calculateFirstFeedingTime(startingTime, freq)
+
+    }
+
+    private fun calculateFirstFeedingTime(start: String, freq: String): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val date = sdf.parse(start)
+        val calendar: Calendar = GregorianCalendar()
+        calendar.time = date
+        calendar.add(Calendar.HOUR, freq.toInt())
+        val feed = sdf.format(calendar.time)
+        val current = FormatHelper().getTodayDate()
+        val less = FormatHelper().checkDateTime(feed, current)
+        if (less) {
+            return current
+        }
+        return feed
     }
 
     private suspend fun getObservationsPerEncounter(
@@ -1555,7 +1511,7 @@ class PatientDetailsViewModel(
 
     private suspend fun getExpressionAssessmentDataModel(): List<ExpressionHistory> {
         val expressions: MutableList<ExpressionHistory> = mutableListOf()
-        val history = getAllEncounters("Expression-Assessment")
+        val history = getAllEncounters(EXPRESSIONS)
         if (history.isNotEmpty()) {
             history.forEach {
 
@@ -1625,7 +1581,7 @@ class PatientDetailsViewModel(
     }
 
     private suspend fun getSingleEncounters(key: String): EncounterItem? {
-        Timber.e("Searching for encounter......")
+
         return fhirEngine
             .search<Encounter> {
                 filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
@@ -1753,7 +1709,7 @@ class PatientDetailsViewModel(
         val time = try {
             FormatHelper().extractTimeString(hour.trim())
         } catch (e: Exception) {
-            Timber.e("Date Feeding Exception ${e.localizedMessage}")
+            e.printStackTrace()
             date
         }
         return FeedingHistory(

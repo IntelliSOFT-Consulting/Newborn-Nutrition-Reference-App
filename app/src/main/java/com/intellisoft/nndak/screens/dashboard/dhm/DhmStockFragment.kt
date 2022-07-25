@@ -22,6 +22,7 @@ import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -34,6 +35,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.STOCK_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.UNPASTEURIZED
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.disableEditing
+import com.intellisoft.nndak.utils.listenPlainChanges
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,7 +91,11 @@ class DhmStockFragment : Fragment() {
 
             listenToChange(edPasteurized)
             listenToChange(edUnpasteurized)
+            listenMaxChanges(edPasteurized, tilPasteurized, "Enter value ", 1, 50000)
+            listenMaxChanges(edUnpasteurized, tilUnpasteurized, "Enter amount ", 1, 50000)
             disableEditing(edTotal)
+            listenPlainChanges(appType, tilType,"Select Type")
+
 
             appType.setOnClickListener {
                 PopupMenu(requireContext(), appType).apply {
@@ -117,6 +123,68 @@ class DhmStockFragment : Fragment() {
 
     }
 
+    private fun listenMaxChanges(
+        input: TextInputEditText,
+        inputLayout: TextInputLayout,
+        error: String,
+        min: Int,
+        max: Int
+    ) {
+
+        CoroutineScope(Dispatchers.Default).launch {
+            input.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position);
+                            }
+
+                            input.addTextChangedListener(this)
+                            if (input.text.toString().isNotEmpty()) {
+                                val parsed = newValue.toDouble()
+                                val minimum = min.toDouble()
+                                val maximum = max.toDouble()
+                                if (parsed < minimum) {
+                                    inputLayout.error = "Minimum allowed is $minimum"
+                                } else if (parsed > maximum) {
+                                    inputLayout.error = "Maximum allowed is $maximum"
+                                } else {
+                                    inputLayout.error = null
+                                }
+                            } else {
+                                inputLayout.error = null
+                            }
+                        } else {
+                            inputLayout.error = error
+                        }
+                    } catch (e: Exception) {
+
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
+
+                }
+            })
+        }
+    }
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
@@ -138,11 +206,13 @@ class DhmStockFragment : Fragment() {
             Timber.e("Exception ${e.localizedMessage}")
         }
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         super.onResume()
     }
+
     private fun listenToChange(input: TextInputEditText) {
 
         CoroutineScope(Dispatchers.Default).launch {
@@ -315,15 +385,19 @@ class DhmStockFragment : Fragment() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
         type = binding.appType.text.toString()
-        if (TextUtils.isEmpty(pa) || pa == "0"
-            || TextUtils.isEmpty(upa) || upa == "0" || TextUtils.isEmpty(type)
-        ) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.inputs_missing),
-                Toast.LENGTH_SHORT
-            )
-                .show()
+        if (TextUtils.isEmpty(pa) || pa == "0") {
+            binding.edPasteurized.requestFocus()
+            binding.tilPasteurized.error = "Enter value"
+            return
+        }
+        if (TextUtils.isEmpty(upa) || upa == "0") {
+            binding.edUnpasteurized.requestFocus()
+            binding.tilUnpasteurized.error = "Enter value"
+            return
+        }
+        if (TextUtils.isEmpty(type)) {
+            binding.appType.requestFocus()
+            binding.tilType.error = "Select value"
             return
         }
         confirmationDialog.show(childFragmentManager, "Confirm Details")

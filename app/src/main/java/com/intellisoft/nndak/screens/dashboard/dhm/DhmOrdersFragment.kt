@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -106,6 +107,11 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             )
             binding.apply {
+                breadcrumb.page.text =
+                    Html.fromHtml("HMB > <font color=\"#37379B\">Orders</font>")
+                breadcrumb.page.setOnClickListener {
+                    findNavController().navigateUp()
+                }
                 incTitle.lnParent.visibility = View.GONE
             }
             loadOrders()
@@ -125,7 +131,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mySpinner.adapter = adapter
         mySpinner.onItemSelectedListener = this
-
 
         patientListViewModel.patientCount.observe(viewLifecycleOwner) {
             binding.patientListContainer.patientCount.text = "$it Order(s)"
@@ -190,7 +195,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         lifecycleScope.launch {
             mainActivityViewModel.pollState.collect {
-                Timber.d("onViewCreated: pollState Got status $it")
                 // After the sync is successful, update the patients list on the page.
                 if (it is State.Finished) {
                     patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
@@ -202,14 +206,15 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun loadOrders() {
         orderList.clear()
         apiService.loadOrders(requireContext()) {
-            binding.apply {
-                if (it != null) {
-                    if (it.data.isEmpty()) {
-                        empty.cpBgView.visibility = View.VISIBLE
-                        pbLoading.visibility = View.GONE
-                    }
-                    if (it.data.isNotEmpty()) {
-                        try {
+            try {
+                binding.apply {
+                    if (it != null) {
+                        if (it.data.isEmpty()) {
+                            empty.cpBgView.visibility = View.VISIBLE
+                            pbLoading.visibility = View.GONE
+                        }
+                        if (it.data.isNotEmpty()) {
+
                             empty.cpBgView.visibility = View.GONE
                             pbLoading.visibility = View.GONE
                             incTitle.lnParent.visibility = View.VISIBLE
@@ -220,15 +225,14 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                                 }
                             }
                             adapterList.notifyDataSetChanged()
-
-                        } catch (e: Exception) {
-                            e.printStackTrace()
                         }
+                    } else {
+                        empty.cpBgView.visibility = View.VISIBLE
+                        pbLoading.visibility = View.GONE
                     }
-                } else {
-                    empty.cpBgView.visibility = View.VISIBLE
-                    pbLoading.visibility = View.GONE
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

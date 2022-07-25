@@ -15,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
@@ -30,11 +29,12 @@ import com.intellisoft.nndak.databinding.FragmentFeedingBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.dialogs.MoreExpression
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.DataSort.Companion.getNumericFrequency
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.PrescriptionItem
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.utils.disableEditing
-import com.intellisoft.nndak.utils.getFutureHoursOnIntervalOf
+import com.intellisoft.nndak.utils.getFutureHoursOnIntervalOfWithStart
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -56,7 +56,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FeedingFragment : Fragment() {
-    private lateinit var moreExpression: MoreExpression
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val viewModel: ScreenerViewModel by viewModels()
@@ -349,7 +348,7 @@ class FeedingFragment : Fragment() {
                     incPrescribe.tvFrequency.text = "${it.frequency} Feed Volume"
                     incPrescribe.tvBreakdown.text = "${it.frequency} Feed Breakdown"
                     regulateViews(it)
-                    setupFeedingTimes(it.frequency ?: "3 Hourly")
+                    setupFeedingTimes(it.feedingTime, it.frequency ?: "3 Hourly")
 
                 }
 
@@ -417,15 +416,10 @@ class FeedingFragment : Fragment() {
         }
     }
 
-    private fun getNumericFrequency(frequency: String): String {
-        val index = 0
-        val ch = frequency[index]
-        return ch.toString()
-    }
 
-    private fun setupFeedingTimes(frequency: String) {
+    private fun setupFeedingTimes(start: String, frequency: String) {
         val freq = getNumericFrequency(frequency)
-        scheduleTimes = createTimingList(freq)
+        scheduleTimes = createTimingList(start, freq)
         adapterList = FeedAdapter(this::click)
 
         binding.incSchedule.patientList.apply {
@@ -520,8 +514,7 @@ class FeedingFragment : Fragment() {
             clearFields()
             addQuestionnaireFragment()
             resetDisplay(true)
-            exitSection=false
-            Timber.e("App will exit here ....exitSection: $exitSection")
+            exitSection = false
         } else {
             val dialog =
                 SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
@@ -590,9 +583,9 @@ class FeedingFragment : Fragment() {
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
         Timber.e("App will exit here ....exitSection: $exitSection")
-        if (exitSection){
+        if (exitSection) {
 
-        }else {
+        } else {
             SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("Are you sure?")
                 .setContentText(getString(R.string.cancel_questionnaire_message))
@@ -652,12 +645,17 @@ class FeedingFragment : Fragment() {
         }
     }
 
-    private fun createTimingList(freq: String): ArrayList<FeedItem> {
+    private fun createTimingList(start: String, freq: String): ArrayList<FeedItem> {
         val data = ArrayList<FeedItem>()
-        val intervals = getFutureHoursOnIntervalOf(8, freq.toInt())
-        for ((i, entry) in intervals.reversed().withIndex()) {
-            val maxRange = FormatHelper().getRoundedApproxHour(entry.toString())
-            data.add(FeedItem(type = maxRange, id = i.toString()))
+        try {
+            val times = 24 / freq.toFloat()
+            val intervals = getFutureHoursOnIntervalOfWithStart(start,times.toInt(), freq.toInt())
+            for ((i, entry) in intervals.withIndex()) {
+                val maxRange = FormatHelper().extractTimeOnlyAM(entry)
+                data.add(FeedItem(type = maxRange, id = i.toString()))
+            }
+        } catch (e: Exception) {
+
         }
         return data
     }
@@ -666,6 +664,7 @@ class FeedingFragment : Fragment() {
         updateArguments()
         addQuestionnaireFragment()
         loadFeedingHistory()
+        loadActivePrescription()
         binding.apply {
             if (isCollection) {
                 lnHistory.visibility = View.GONE

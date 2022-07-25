@@ -249,6 +249,7 @@ data class PrescriptionItem(
     val cWeight: String? = "",
     val formula: String? = "",
     val deficit: String? = "",
+    val feedingTime: String,
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()

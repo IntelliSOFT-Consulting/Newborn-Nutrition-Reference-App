@@ -34,6 +34,11 @@ class DataSort {
             return data.sortedWith(compareBy { it.hour }).reversed()
 
         }
+          fun getNumericFrequency(frequency: String): String {
+            val index = 0
+            val ch = frequency[index]
+            return ch.toString()
+        }
 
 
         fun extractWeeklyMeasure(

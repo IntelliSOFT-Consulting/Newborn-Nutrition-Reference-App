@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.utils
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -11,6 +12,8 @@ import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
 import android.view.Window
 import android.view.WindowManager
@@ -24,14 +27,19 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
+import timber.log.Timber
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -42,6 +50,76 @@ import java.time.LocalDateTime
 import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
+
+  fun showPicker(context: Context, input: TextInputEditText) {
+    input.setOnClickListener {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { view, myear, mmonth, mdayOfMonth ->
+                val mon = mmonth + 1
+                val msg = "$mdayOfMonth/$mon/$myear"
+                input.setText(msg)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.datePicker.maxDate = Date().time
+        datePickerDialog.show()
+    }
+}
+
+
+fun listenPlainChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this)
+                        inputLayout.error = null
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
 
 fun deleteCache(context: Context) {
     try {
@@ -130,14 +208,44 @@ fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
     return list.reversed()
 }
 
-fun getFutureHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
-    val list: MutableList<LocalDateTime> = ArrayList()
-    var date = LocalDateTime.now()
+
+fun getPastHoursOnIntervalOfWithStart(
+    start: String,
+    times: Int,
+    interval: Int
+): List<String> {
+    val list: MutableList<String> = ArrayList()
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+    val date = sdf.parse(start)
+    val calendar: Calendar = GregorianCalendar()
+    calendar.time = date
+    var feed: String
     for (i in 1..times) {
-        list.add(date)
-        date = date.plusHours(interval.toLong())
+        calendar.add(Calendar.HOUR, -interval)
+        feed = sdf.format(calendar.time)
+        list.add(feed)
     }
     return list.reversed()
+}
+
+fun getFutureHoursOnIntervalOfWithStart(
+    start: String,
+    times: Int,
+    interval: Int
+): List<String> {
+    val list: MutableList<String> = ArrayList()
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+    val date = sdf.parse(start)
+    val calendar: Calendar = GregorianCalendar()
+    calendar.time = date
+    var feed: String
+    val max = times - 1
+    for (i in 0..max) {
+        feed = sdf.format(calendar.time)
+        list.add(feed)
+        calendar.add(Calendar.HOUR, interval)
+    }
+    return list
 }
 
 fun formatFeedingTime(values: List<LocalDateTime>): ArrayList<String> {
