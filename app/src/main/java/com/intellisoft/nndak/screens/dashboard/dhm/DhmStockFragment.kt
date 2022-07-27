@@ -3,6 +3,7 @@ package com.intellisoft.nndak.screens.dashboard.dhm
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
@@ -88,6 +89,12 @@ class DhmStockFragment : Fragment() {
             addQuestionnaireFragment()
         }
         binding.apply {
+
+            breadcrumb.page.text =
+                Html.fromHtml("HMB > <font color=\"#37379B\">Add Stock</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
 
             listenToChange(edPasteurized)
             listenToChange(edUnpasteurized)

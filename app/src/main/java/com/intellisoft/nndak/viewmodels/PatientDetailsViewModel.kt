@@ -255,26 +255,67 @@ class PatientDetailsViewModel(
         )
     }
 
-
     private suspend fun getFeedsDataModel(): FeedsDistribution {
         val prescription = getActivePrescriptionsDataModel(context)
         var times = 8
         var interval = 3
         var feedingTime = FormatHelper().getTodayDate()
-        if (prescription.isNotEmpty()) {
-            feedingTime = prescription.first().feedingTime
-            val frequency = prescription.first().frequency
-            val intFreq = getNumericFrequency(frequency.toString())
-            interval = intFreq.toInt()
-            times = 24 / interval
+          if (prescription.isNotEmpty()) {
+              feedingTime = prescription.first().feedingTime
+              val frequency = prescription.first().frequency
+              val intFreq = getNumericFrequency(frequency.toString())
+              interval = intFreq.toInt()
+              times = 24 / interval
 
+          }
+        val intervals = getPastHoursOnIntervalOfWithStart(feedingTime, times, interval)
+
+        val feeds: MutableList<FeedsData> = mutableListOf()
+        var totalFeed = 0f
+        var i = 0
+        val exp = getPatientEncounters()
+        if (exp.isNotEmpty()) {
+            for (ex in exp) {
+                if (ex.code == "Milk Expression") {
+                    i++
+                }
+            }
         }
+        intervals.forEach {
+            feeds.add(loadFeedCares(it))
+        }
+        feeds.forEach { dd ->
+            val total = dd.dhmVolume.toFloat() + dd.ivVolume.toFloat()
+            +dd.ebmVolume.toFloat() + dd.breastVolume.toFloat()
+            totalFeed += total
+        }
+
+        return FeedsDistribution(
+            totalFeed = "$totalFeed mls",
+            varianceAmount = "$i",
+            data = feeds.reversed()
+        )
+    }
+
+    private suspend fun getFeedsDataModelAlt(): FeedsDistribution {
+        val prescription = getActivePrescriptionsDataModel(context)
+        var times = 8
+        var interval = 3
+        var feedingTime = FormatHelper().getTodayDate()
+        /*  if (prescription.isNotEmpty()) {
+              feedingTime = prescription.first().feedingTime
+              val frequency = prescription.first().frequency
+              val intFreq = getNumericFrequency(frequency.toString())
+              interval = intFreq.toInt()
+              times = 24 / interval
+
+          }*/
         val intervals = getPastHoursOnIntervalOfWithStart(feedingTime, times, interval)
         val feeds: MutableList<FeedsData> = mutableListOf()
         var totalFeed = 0f
 
         intervals.forEach {
-            val data = loadFeed(it)
+            val data = loadFeedCares(it)
             val total =
                 data.dhmVolume.toFloat() + data.ivVolume.toFloat() + data.ebmVolume.toFloat() + data.formula.toFloat()
 
@@ -288,7 +329,94 @@ class PatientDetailsViewModel(
         )
     }
 
-    private suspend fun loadFeed(it: String): FeedsData {
+    private suspend fun loadFeed(it: LocalDateTime): FeedsData {
+
+        var iv = 0f
+        var ebm = 0f
+        var dhm = 0f
+        var bm = 0f
+        var fm = 0f
+        val hour = FormatHelper().getRoundedHour(it.toString())
+        val carePlans = getCompletedCarePlans()
+
+        if (carePlans.isNotEmpty()) {
+            carePlans.forEach { item ->
+
+                try {
+
+                    val actualTime = FormatHelper().getRefinedDatePmAm(item.created)
+                    val currentTime = FormatHelper().getRoundedDateHour(it.toString())
+                    val maxThree = FormatHelper().getHourRange(currentTime)
+                    val isWithinRange =
+                        FormatHelper().startCurrentEnd(maxThree, actualTime, currentTime)
+                    if (isWithinRange) {
+
+                        val iVs = observationsPerCodeEncounter(
+                            IV_VOLUME,
+                            item.encounterId
+                        )
+                        iVs.forEach {
+                            iv += it.quantity.toFloat()
+                        }
+
+                        val eBms = observationsPerCodeEncounter(
+                            EBM_VOLUME,
+                            item.encounterId
+                        )
+
+                        eBms.forEach {
+                            ebm += it.quantity.toFloat()
+                        }
+
+                        val dhmS = observationsPerCodeEncounter(
+                            DHM_VOLUME,
+                            item.encounterId
+                        )
+                        dhmS.forEach {
+                            dhm += it.quantity.toFloat()
+                        }
+
+                        val bmS = observationsPerCodeEncounter(
+                            BREAST_MILK,
+                            item.encounterId
+                        )
+                        bmS.forEach {
+                            bm += it.quantity.toFloat()
+                        }
+                        val fmS = observationsPerCodeEncounter(
+                            FORMULA_VOLUME,
+                            item.encounterId
+                        )
+                        fmS.forEach {
+                            fm += it.quantity.toFloat()
+                        }
+
+                    }
+                } catch (e: Exception) {
+                    Timber.e("Cheza Exception ${e.localizedMessage}")
+                }
+
+
+            }
+        } else {
+            iv = 0f
+            ebm = 0f
+            dhm = 0f
+            bm = 0f
+            fm = 0f
+
+        }
+
+        return FeedsData(
+            time = hour,
+            breastVolume = bm.toString(),
+            ivVolume = iv.toString(),
+            ebmVolume = ebm.toString(),
+            dhmVolume = dhm.toString(), formula = fm.toString()
+        )
+    }
+
+    private suspend fun loadFeedCares(it: String): FeedsData {
 
         var iv = 0f
         var ebm = 0f

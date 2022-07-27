@@ -3142,7 +3142,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                 )
             } catch (e: Exception) {
-                Timber.e("Test Exception ${e.localizedMessage}")
+                e.printStackTrace()
                 customMessage.postValue(
                     MessageItem(
                         success = false, message = "Experienced problems saving data"
@@ -3187,6 +3187,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         if (!resource.hasValueQuantity()) {
                             resource.valueStringType.value = resource.code.text
                         }
+
                         resource.issued = Date()
                         saveResourceToDatabase(resource)
 

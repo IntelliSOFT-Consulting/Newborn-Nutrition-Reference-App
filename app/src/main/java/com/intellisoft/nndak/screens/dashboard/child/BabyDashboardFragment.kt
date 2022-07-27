@@ -215,7 +215,6 @@ class BabyDashboardFragment : Fragment() {
                 standardWeeklyCharts(it)
             }
         }
-//        standardWeeklyCharts()
         patientDetailsViewModel.getExpressions()
         patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
             if (expression != null) {
@@ -313,10 +312,10 @@ class BabyDashboardFragment : Fragment() {
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            growths.forEachIndexed { idx, growth ->  }
+            growths.forEachIndexed { idx, growth -> }
             populateZScoreLineChart(weightsData, growths)
         } catch (e: Exception) {
-           e.printStackTrace()
+            e.printStackTrace()
         }
     }
 
@@ -332,7 +331,7 @@ class BabyDashboardFragment : Fragment() {
     }
 
 
-    private fun barGraph(it: FeedsDistribution) {
+    private fun barGraphAlt(it: FeedsDistribution) {
 
         val groupCount = 8
         val groupSpace = 0.10f
@@ -346,6 +345,7 @@ class BabyDashboardFragment : Fragment() {
         val intervals = ArrayList<String>()
         for ((i, entry) in it.data.withIndex()) {
             intervals.add(entry.time)
+
             iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
             ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
             dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
@@ -373,55 +373,142 @@ class BabyDashboardFragment : Fragment() {
         data.setValueFormatter(LargeValueFormatter())
 
         binding.apply {
-            feedsChart.data = data
-            val xAxis: XAxis = feedsChart.xAxis
-            xAxis.setDrawGridLines(false)
-            xAxis.setDrawAxisLine(false)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.labelRotationAngle = -60f
-            xAxis.mAxisMinimum = 0f
-//            xAxis.setCenterAxisLabels(true)
+            try {
+                feedsChart.data = data
+                val xAxis: XAxis = feedsChart.xAxis
+                xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(false)
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.labelRotationAngle = -60f
+                xAxis.mAxisMinimum = 0f
 
-            xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+                xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+                xAxis.setLabelCount(groupCount, true)
+                feedsChart.axisLeft.setDrawGridLines(false)
+                feedsChart.legend.isEnabled = true
 
-            feedsChart.axisLeft.setDrawGridLines(false)
-            feedsChart.legend.isEnabled = true
+                //remove description label
+                feedsChart.description.isEnabled = false
+                feedsChart.isDragEnabled = false
+                feedsChart.setScaleEnabled(false)
+                feedsChart.description.text = "Age (Days)"
+                //add animation
+                feedsChart.animateX(1000, Easing.EaseInSine)
+                feedsChart.data = data
 
-            //remove description label
-            feedsChart.description.isEnabled = false
-            feedsChart.isDragEnabled = true
-            feedsChart.setScaleEnabled(false)
-            feedsChart.description.text = "Age (Days)"
-            //add animation
-            feedsChart.animateX(1000, Easing.EaseInSine)
-            feedsChart.data = data
+                val leftAxis: YAxis = feedsChart.axisLeft
+                leftAxis.axisMinimum = 0f
+                leftAxis.setDrawGridLines(true)
+                leftAxis.isGranularityEnabled = false
 
-            val leftAxis: YAxis = feedsChart.axisLeft
-            leftAxis.axisMinimum = 0f
-            leftAxis.setDrawGridLines(true)
-            leftAxis.isGranularityEnabled = false
+                val rightAxis: YAxis = feedsChart.axisRight
+                rightAxis.setDrawGridLines(false)
+                rightAxis.setDrawZeroLine(false)
+                rightAxis.isGranularityEnabled = false
+                rightAxis.isEnabled = false
 
-            val rightAxis: YAxis = feedsChart.axisRight
-            rightAxis.setDrawGridLines(false)
-            rightAxis.setDrawZeroLine(false)
-            rightAxis.isGranularityEnabled = false
-            rightAxis.isEnabled = false
+                feedsChart.barData.barWidth = barWidth
+                feedsChart.xAxis.axisMaximum =
+                    0f + feedsChart.barData.getGroupWidth(
+                        groupSpace,
+                        barSpace
+                    ) * groupCount
+                feedsChart.groupBars(0f, groupSpace, barSpace)
 
-            feedsChart.barData.barWidth = barWidth
-            feedsChart.xAxis.axisMaximum =
-                0f + feedsChart.barData.getGroupWidth(
-                    groupSpace,
-                    barSpace
-                ) * groupCount
-            feedsChart.groupBars(0f, groupSpace, barSpace)
-
-            //refresh
-            feedsChart.invalidate()
-
+                //refresh
+                feedsChart.invalidate()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
     }
 
+    private fun barGraph(it: FeedsDistribution) {
+
+        val groupCount = it.data.size
+        val groupSpace = 0.15f
+        val barSpace = 0.05f
+        val barWidth = 0.25f
+        val iv: ArrayList<BarEntry> = ArrayList()
+        val ebm: ArrayList<BarEntry> = ArrayList()
+        val dhm: ArrayList<BarEntry> = ArrayList()
+
+        val intervals = ArrayList<String>()
+        for ((i, entry) in it.data.withIndex()) {
+            intervals.add(entry.time)
+            iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
+            ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
+            dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
+        }
+        val fluids = BarDataSet(iv, "IV")
+        fluids.setColors(Color.parseColor("#4472C4"))
+        fluids.setDrawValues(false)
+
+        val expressed = BarDataSet(ebm, "EBM")
+        expressed.setColors(Color.parseColor("#ED7D31"))
+        expressed.setDrawValues(false)
+
+        val donor = BarDataSet(dhm, "DHM")
+        donor.setColors(Color.parseColor("#A5A5A5"))
+        donor.setDrawValues(false)
+
+        val data = BarData(fluids, expressed, donor)
+        data.setValueFormatter(LargeValueFormatter())
+
+        binding.apply {
+            try {
+                feedsChart.data = data
+                val xAxis: XAxis = feedsChart.xAxis
+                xAxis.setDrawGridLines(false)
+                xAxis.setDrawAxisLine(false)
+                xAxis.position = XAxis.XAxisPosition.BOTTOM
+                xAxis.labelRotationAngle = -90f
+                xAxis.mAxisMinimum = 0f
+
+                xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+
+                feedsChart.axisLeft.setDrawGridLines(false)
+                feedsChart.legend.isEnabled = true
+
+                //remove description label
+                feedsChart.description.isEnabled = false
+                feedsChart.isDragEnabled = true
+                feedsChart.setScaleEnabled(true)
+                feedsChart.description.text = "Age (Days)"
+                //add animation
+                feedsChart.animateX(1000, Easing.EaseInSine)
+                feedsChart.data = data
+
+                val leftAxis: YAxis = feedsChart.axisLeft
+                leftAxis.axisMinimum = 0f
+                leftAxis.setDrawGridLines(true)
+                leftAxis.isGranularityEnabled = false
+
+                val rightAxis: YAxis = feedsChart.axisRight
+                rightAxis.setDrawGridLines(false)
+                rightAxis.setDrawZeroLine(false)
+                rightAxis.isGranularityEnabled = false
+                rightAxis.isEnabled = false
+
+
+                feedsChart.barData.barWidth = barWidth
+                feedsChart.xAxis.axisMaximum =
+                    0f + feedsChart.barData.getGroupWidth(
+                        groupSpace,
+                        barSpace
+                    ) * groupCount
+                feedsChart.groupBars(-1f, groupSpace, barSpace)
+
+                //refresh
+                feedsChart.invalidate()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+
+    }
 
     private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {
         binding.apply {

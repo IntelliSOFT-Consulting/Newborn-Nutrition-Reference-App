@@ -154,6 +154,12 @@ class AddPrescriptionFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
+
     private fun onSubmitAction() {
 
         confirmationDialog.show(childFragmentManager, "Confirm Details")

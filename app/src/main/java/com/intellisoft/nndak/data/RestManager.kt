@@ -52,7 +52,6 @@ class RestManager {
         getService(context).loginUser(data).enqueue(
             object : Callback<AuthResponse> {
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
                 }
 
@@ -101,7 +100,6 @@ class RestManager {
         getService(context).resetPassword(data).enqueue(
             object : Callback<AuthResponse> {
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -124,7 +122,6 @@ class RestManager {
         getService(context).addDHMStock(data).enqueue(
             object : Callback<AuthResponse> {
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -148,7 +145,6 @@ class RestManager {
         getService(context).dispenseStock(data).enqueue(
             object : Callback<AuthResponse> {
                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -157,7 +153,6 @@ class RestManager {
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
-                    Timber.e("onResponse $response")
                     if (response.isSuccessful) {
                         onResult(response.body())
                     } else {
@@ -172,7 +167,6 @@ class RestManager {
         getService(context).loadStatistics().enqueue(
             object : Callback<Statistics> {
                 override fun onFailure(call: Call<Statistics>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -195,7 +189,6 @@ class RestManager {
         getService(context).loadOrders().enqueue(
             object : Callback<OrderData> {
                 override fun onFailure(call: Call<OrderData>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
 
                 }
@@ -218,7 +211,6 @@ class RestManager {
         getService(context).loadDonorMilk().enqueue(
             object : Callback<DHMModel> {
                 override fun onFailure(call: Call<DHMModel>, t: Throwable) {
-                    Timber.e("onFailure " + t.localizedMessage)
                     onResult(null)
                 }
 
@@ -300,33 +292,6 @@ class RestManager {
                 }
             }
         )
-    }
-
-    fun loadHistory(
-        context: Context,
-        careId: String,
-        patientId: String,
-        onResult: (WeightsData?) -> Unit
-    ) {
-
-        /*   getService(context).loadHistory(careId,patientId).enqueue(
-               object : Callback<WeightsData> {
-                   override fun onFailure(call: Call<WeightsData>, t: Throwable) {
-                       onResult(null)
-                   }
-
-                   override fun onResponse(
-                       call: Call<WeightsData>,
-                       response: Response<WeightsData>
-                   ) {
-                       if (response.isSuccessful) {
-                           onResult(response.body())
-                       } else {
-                           onResult(null)
-                       }
-                   }
-               }
-           )*/
     }
 
 

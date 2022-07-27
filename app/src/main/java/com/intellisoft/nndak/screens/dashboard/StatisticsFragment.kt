@@ -212,15 +212,14 @@ class StatisticsFragment : Fragment() {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                Timber.e("Local Sync Dara $json")
                 try {
                     FhirApplication.updateStatistics(requireContext(), json)
                     updateUI(it)
                 } catch (e: Exception) {
-
+e.printStackTrace()
                 }
             } else {
-                Timber.e("Failed to Load Data")
+
                 syncLocalData()
             }
 
@@ -401,7 +400,7 @@ class StatisticsFragment : Fragment() {
         val pie: MutableList<PieItem> = mutableListOf()
         pie.add(PieItem(percentageFeeds.dhm, "Donated Human Milk", "#1EAF5F"))
         pie.add(PieItem(percentageFeeds.iv, "Iv Fluids", "#F65050"))
-        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
+//        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
         pie.add(PieItem(percentageFeeds.ebm, "Expressed Breast Milk", "#6C63FF"))
         pie.add(PieItem(percentageFeeds.formula, "Formula", "#BA1B22"))
 

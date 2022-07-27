@@ -151,7 +151,7 @@
     <fragment
         android:id="@+id/editPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
-        android:label="EditPrescriptionFragment"
+        android:label="@string/action_edit_exp"
         tools:layout="@layout/update_prescription">
         <argument
             android:name="patient_id"
@@ -265,7 +265,7 @@
     <fragment
         android:id="@+id/expressionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.monitor.ExpressionFragment"
-        android:label="fragment_expression"
+        android:label="@string/action_expression"
         tools:layout="@layout/fragment_expression" >
         <action
             android:id="@+id/navigate_to_baby_dashboard"

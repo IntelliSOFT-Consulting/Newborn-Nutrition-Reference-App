@@ -51,8 +51,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
-    private lateinit var fhirEngine: FhirEngine
-    private lateinit var patientListViewModel: PatientListViewModel
     private val apiService = RestManager()
     private val binding
         get() = _binding!!
@@ -136,14 +134,13 @@ class HomeFragment : Fragment() {
             if (it != null) {
                 val gson = Gson()
                 val json = gson.toJson(it)
-                Timber.e("Local Sync Dara $json")
                 try {
                     FhirApplication.updateDHM(requireContext(), json)
                     updateUI(it)
                 } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             } else {
-                Timber.e("Failed to Load Data")
                 syncLocalData()
             }
         }
@@ -173,13 +170,12 @@ class HomeFragment : Fragment() {
         val data = FhirApplication.getDHM(requireContext())
         if (data != null) {
             val gson = Gson()
-            Timber.e("Local Sync Dara $data")
             try {
                 val it: DHMModel = gson.fromJson(data, DHMModel::class.java)
                 updateUI(it)
 
             } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
+                e.printStackTrace()
             }
         }
     }
@@ -191,8 +187,6 @@ class HomeFragment : Fragment() {
 
         if (values.isNotEmpty()) {
             val dayNames = formatDays(values)
-            Timber.e("Days $dayNames")
-            Timber.e("Values Count ${values.size}")
 
             val preterm: ArrayList<Entry> = ArrayList()
             val term: ArrayList<Entry> = ArrayList()

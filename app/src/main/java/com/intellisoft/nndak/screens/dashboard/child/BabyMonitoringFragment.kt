@@ -216,6 +216,7 @@ class BabyMonitoringFragment : Fragment() {
         adapter.addFragment(feeding, "Record Feeding")
 
         viewpager.adapter = adapter
+        viewpager.currentItem = 3
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

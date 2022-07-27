@@ -51,7 +51,7 @@ import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
 
-  fun showPicker(context: Context, input: TextInputEditText) {
+fun showPicker(context: Context, input: TextInputEditText) {
     input.setOnClickListener {
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR)
@@ -225,7 +225,7 @@ fun getPastHoursOnIntervalOfWithStart(
         feed = sdf.format(calendar.time)
         list.add(feed)
     }
-    return list.reversed()
+    return list
 }
 
 fun getFutureHoursOnIntervalOfWithStart(

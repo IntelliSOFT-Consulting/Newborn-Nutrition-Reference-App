@@ -465,6 +465,8 @@
     <string name="_dhm_type">DHM Type</string>
     <string name="_consent">Consent Given?</string>
     <string name="empty_field">Missing data</string>
+    <string name="action_expression">Milk Expression</string>
+    <string name="action_edit_exp">Edit Prescription</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

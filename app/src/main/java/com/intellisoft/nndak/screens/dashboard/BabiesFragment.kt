@@ -96,7 +96,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapterList.submitList(mumBabyList)
             binding.pbLoading.visibility = View.VISIBLE
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
-                Timber.d("Submitting " + it.count() + " patient records")
+
                 if (it.isEmpty()) {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
@@ -234,7 +234,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
             } else {
-
                 imgEmpty.visibility = View.GONE
             }
         }
@@ -247,6 +246,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
         binding.apply {
+            binding.pbLoading.visibility = View.GONE
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
             } else {
@@ -262,7 +262,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onResume() {
-
         (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         super.onResume()
     }

@@ -89,7 +89,7 @@ class ExpressionFragment : Fragment() {
 
 
             updateArguments()
-          /*  onBackPressed()*/
+            onBackPressed()
             if (savedInstanceState == null) {
                 addQuestionnaireFragment()
             }
@@ -106,7 +106,7 @@ class ExpressionFragment : Fragment() {
                     onSubmitAction()
                 }
                 btnCancel.setOnClickListener {
-                  //  showCancelScreenerQuestionnaireAlertDialog()
+                     showCancelScreenerQuestionnaireAlertDialog()
                 }
             }
             patientDetailsViewModel.getAssessmentExpressions()
@@ -199,7 +199,6 @@ class ExpressionFragment : Fragment() {
         }
     }
 
-/*
     private fun showCancelScreenerQuestionnaireAlertDialog() {
         SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
             .setTitleText("Are you sure?")
@@ -207,17 +206,17 @@ class ExpressionFragment : Fragment() {
             .setConfirmText("Yes")
             .setConfirmClickListener { d ->
                 d.dismiss()
-                findNavController().navigate(ExpressionFragmentDirections.navigateToBabyDashboard(patientId))
+//                findNavController().navigate(ExpressionFragmentDirections.navigateToBabyDashboard(patientId))
             }
             .setCancelText("No")
             .show()
-    }*/
+    }
 
-  /*  private fun onBackPressed() {
+    private fun onBackPressed() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             showCancelScreenerQuestionnaireAlertDialog()
         }
-    }*/
+    }
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "expression.json")

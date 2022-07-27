@@ -157,13 +157,12 @@ class BabyFeedsFragment : Fragment() {
 
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
-            Timber.d("Prescriptions has " + it.count() + " records")
+
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
                 binding.tvHeader.visibility = View.VISIBLE
                 val value = it.first().resourceId.toString()
                 careId = value
-                Timber.e("Found Reference $careId")
                 adapter.submitList(it.subList(0, 1))
             }
             if (it.isEmpty()) {

@@ -373,6 +373,11 @@ class FormatHelper {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         return sourceFormat.parse(date)
     }
+    fun generateDateTime(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val date = Date()
+        return formatter.format(date)
+    }
 
     fun getHourRange(date: String): String {
 

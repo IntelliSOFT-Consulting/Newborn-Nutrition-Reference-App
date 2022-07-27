@@ -41,6 +41,8 @@ class BabyItemViewHolder(binding: BabyListItemViewBinding) :
         }
         if (patientItem.gainRate == "Low") {
             this.appRateGain.setTextColor(ColorStateList.valueOf(Color.parseColor("#c62828")))
+        }else{
+            this.appRateGain.setTextColor(ColorStateList.valueOf(Color.parseColor("#24A047")))
         }
 
     }
