@@ -213,6 +213,17 @@ class FormatHelper {
         return destFormat.parse(date)
 
     }
+    fun convertStringDate(date: String): Date? {
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        return destFormat.parse(date)
+
+    }
+    fun convertStringDateAuto(date: String): Date? {
+        val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
+        val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val convertedDate = sourceFormat.parse(date)
+        return destFormat.parse(convertedDate?.let { destFormat.format(it) }.toString())
+    }
 
     fun dateOfBirthCustom(date: String): Date? {
         val destFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)

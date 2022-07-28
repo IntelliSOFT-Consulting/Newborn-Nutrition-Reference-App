@@ -277,7 +277,7 @@ class BabyDashboardFragment : Fragment() {
             //remove description label
             statusChart.description.isEnabled = false
             statusChart.isDragEnabled = true
-            statusChart.setScaleEnabled(true)
+            statusChart.setScaleEnabled(false)
             statusChart.description.text = "Age (Days)"
             //add animation
             statusChart.animateX(1000, Easing.EaseInSine)
@@ -474,7 +474,7 @@ class BabyDashboardFragment : Fragment() {
                 //remove description label
                 feedsChart.description.isEnabled = false
                 feedsChart.isDragEnabled = true
-                feedsChart.setScaleEnabled(true)
+                feedsChart.setScaleEnabled(false)
                 feedsChart.description.text = "Age (Days)"
                 //add animation
                 feedsChart.animateX(1000, Easing.EaseInSine)
@@ -505,9 +505,7 @@ class BabyDashboardFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
-
     }
 
     private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {

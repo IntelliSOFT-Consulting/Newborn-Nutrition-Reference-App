@@ -177,14 +177,17 @@ class ProcessOrderFragment : Fragment() {
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
             if (!it.success) {
-                SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
+                val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
                     .setTitleText(it.message)
                     .setConfirmClickListener { dialog ->
                         run {
                             dialog.dismiss()
                             findNavController().navigateUp()
                         }
-                    }.show()
+                    }
+                dialog.setCancelable(false)
+                dialog.show()
+
                 (activity as MainActivity).hideDialog()
                 return@observe
             }
