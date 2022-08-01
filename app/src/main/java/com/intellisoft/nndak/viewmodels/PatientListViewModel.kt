@@ -62,9 +62,6 @@ class PatientListViewModel(
 
     private val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
-    val liveFeedsTime = MutableLiveData<StaticCharts>()
-    val liveOrders = MutableLiveData<List<OrdersItem>>()
-    val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
     val patientCount = MutableLiveData<Long>()
     val context: Application = application
 
@@ -76,20 +73,9 @@ class PatientListViewModel(
         updateMumAndBabyCount(
             { getMumSearchResults("", location) },
             { count("", location) })
-        updateOrdersCount(
-            { getOrdersSearchResults("", location) },
-            { count("", location) })
-        updateDhmDashboardCount(
-            { getDhmDashboardSearchResults("", location) },
-            { count("", location) })
     }
 
-    fun reloadOrders() {
 
-        updateOrdersCount(
-            { getOrdersSearchResults("", location) },
-            { count("", location) })
-    }
 
     fun searchPatientsByName(nameQuery: String) {
         updatePatientListAndPatientCount(
@@ -100,13 +86,6 @@ class PatientListViewModel(
             { getMumSearchResults(nameQuery, location) },
             { count("", location) })
 
-        updateOrdersCount(
-            { getOrdersSearchResults(nameQuery, location) },
-            { count("", location) })
-
-        updateDhmDashboardCount(
-            { getDhmDashboardSearchResults(nameQuery, location) },
-            { count("", location) })
     }
 
     /**
@@ -130,32 +109,6 @@ class PatientListViewModel(
     ) {
         viewModelScope.launch {
             liveMotherBaby.value = search()
-            patientCount.value = count()
-        }
-    }
-
-
-    private fun updateOrdersCount(
-        search: suspend () -> List<OrdersItem>,
-        count: suspend () -> Long
-    ) {
-        viewModelScope.launch {
-            liveOrders.value = search()
-            patientCount.value = count()
-        }
-    }
-
-    /**
-     * DHM Dashboard Data
-     */
-
-
-    private fun updateDhmDashboardCount(
-        search: suspend () -> DHMDashboardItem,
-        count: suspend () -> Long
-    ) {
-        viewModelScope.launch {
-            liveDHMDashboard.value = search()
             patientCount.value = count()
         }
     }

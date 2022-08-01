@@ -145,16 +145,19 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
         super.onResume()
     }
+
     private fun updateUI(it: DHMModel) {
 
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
-            tvVolumeAvailable.text = it.dhmVolume
+            tvVolumeAvailable.text = it.dhmVolume.parsteurized
+            tvVolumeUnp.text = it.dhmVolume.unParsteurized
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength

@@ -416,7 +416,6 @@ class FeedingFragment : Fragment() {
         }
     }
 
-
     private fun setupFeedingTimes(start: String, frequency: String) {
         val freq = getNumericFrequency(frequency)
         scheduleTimes = createTimingList(start, freq)
@@ -582,9 +581,9 @@ class FeedingFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        Timber.e("App will exit here ....exitSection: $exitSection")
         if (exitSection) {
 
+            (activity as MainActivity).openDashboard(patientId)
         } else {
             SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("Are you sure?")
@@ -592,6 +591,7 @@ class FeedingFragment : Fragment() {
                 .setConfirmText("Yes")
                 .setConfirmClickListener { d ->
                     d.dismiss()
+                    Timber.e("Cancel Screener Questionnaire FeedingFragment")
                     resetDisplay(false)
                 }
                 .setCancelText("No")

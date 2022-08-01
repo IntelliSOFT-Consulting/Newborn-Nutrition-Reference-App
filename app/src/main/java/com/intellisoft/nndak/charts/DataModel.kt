@@ -51,13 +51,17 @@ data class ExpressingTime(
  * */
 data class DHMModel(
     @SerializedName("dhmInfants") val dhmInfants: String,
-    @SerializedName("dhmVolume") val dhmVolume: String,
+    @SerializedName("dhmVolume") val dhmVolume: DHMCategory,
     @SerializedName("dhmAverage") val dhmAverage: String,
     @SerializedName("fullyReceiving") val fullyReceiving: String,
     @SerializedName("dhmLength") val dhmLength: String,
     @SerializedName("data") val data: List<DHMData>,
 )
 
+data class DHMCategory(
+    @SerializedName("unParsteurized") val unParsteurized: String,
+    @SerializedName("parsteurized") val parsteurized: String,
+)
 data class DHMData(
     @SerializedName("day") val day: String,
     @SerializedName("preterm") val preterm: String,

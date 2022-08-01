@@ -225,7 +225,7 @@ fun getPastHoursOnIntervalOfWithStart(
         feed = sdf.format(calendar.time)
         list.add(feed)
     }
-    return list
+    return list.reversed()
 }
 
 fun getFutureHoursOnIntervalOfWithStart(

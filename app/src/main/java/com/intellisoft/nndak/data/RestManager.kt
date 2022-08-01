@@ -20,7 +20,7 @@ class RestManager {
 
     private fun getService(context: Context): AuthService {
         val base = FhirApplication.getServerURL(context)
-        Timber.e(base)
+
         // Initialize ApiService if not initialized yet
         if (!::apiService.isInitialized) {
             val retrofit = base?.let {
@@ -218,7 +218,6 @@ class RestManager {
                     call: Call<DHMModel>,
                     response: Response<DHMModel>
                 ) {
-                    Timber.e("onResponse ${response.body()}")
                     if (response.isSuccessful) {
                         onResult(response.body())
                     } else {

@@ -47,6 +47,7 @@ class ExpressionFragment : Fragment() {
     private var _binding: FragmentExpressionBinding? = null
     lateinit var adapterList: ExpressionAdapter
     private lateinit var patientId: String
+    private var exitSection: Boolean = true
     private lateinit var encounterId: String
     private val binding
         get() = _binding!!
@@ -98,6 +99,7 @@ class ExpressionFragment : Fragment() {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
                 actionNewExpression.setOnClickListener {
+                    exitSection = false
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
@@ -106,7 +108,7 @@ class ExpressionFragment : Fragment() {
                     onSubmitAction()
                 }
                 btnCancel.setOnClickListener {
-                     showCancelScreenerQuestionnaireAlertDialog()
+                    showCancelScreenerQuestionnaireAlertDialog()
                 }
             }
             patientDetailsViewModel.getAssessmentExpressions()
@@ -200,16 +202,21 @@ class ExpressionFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-//                findNavController().navigate(ExpressionFragmentDirections.navigateToBabyDashboard(patientId))
-            }
-            .setCancelText("No")
-            .show()
+        if (exitSection) {
+
+            (activity as MainActivity).openDashboard(patientId)
+        } else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+                    exitSection = true
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun onBackPressed() {

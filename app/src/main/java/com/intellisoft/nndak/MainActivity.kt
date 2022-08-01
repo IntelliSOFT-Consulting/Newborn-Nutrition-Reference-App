@@ -241,6 +241,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun openDashboard(patientId: String) {
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.navigate(R.id.childDashboardFragment, bundleOf("patient_id" to patientId))
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun openNavigationDrawer() {
@@ -297,7 +301,7 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-    private fun openRegistration() {
+    fun openRegistration() {
         val bundle =
             bundleOf(RegistrationFragment.QUESTIONNAIRE_FILE_PATH_KEY to "client-registration.json")
         findNavController(R.id.nav_host_fragment).navigate(
@@ -357,7 +361,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sessionTimeOut() {
-        SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+        val dialog = SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
             .setTitleText("Session Timeout")
             .setContentText("Your session has expired, please login again to proceed")
             .setCustomImage(R.drawable.smile)
@@ -373,8 +377,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-
-            .show()
+        dialog.setCancelable(false)
+        dialog.show()
     }
 
 

@@ -56,6 +56,7 @@ class BreastFragment : Fragment() {
     private val dataCodes = ArrayList<CodingObservation>()
     private var _binding: FragmentBreastBinding? = null
     private lateinit var careID: String
+    private var exitSection: Boolean = true
     private lateinit var patientId: String
     private var interest: String = "No"
     private var cues: String = "No"
@@ -110,6 +111,7 @@ class BreastFragment : Fragment() {
                 actionNewExpression.setOnClickListener {
                     updateArguments()
                     addQuestionnaireFragment()
+                    exitSection = false
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
@@ -292,21 +294,28 @@ class BreastFragment : Fragment() {
     }
 
     private fun clickItem(data: BreastsHistory) {
+
         moreExpression = ViewBreastFeeding(data)
         moreExpression.show(childFragmentManager, "Confirm Details")
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-                resetDisplay()
-            }
-            .setCancelText("No")
-            .show()
+        if (exitSection) {
+
+            (activity as MainActivity).openDashboard(patientId)
+        } else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+
+                    resetDisplay()
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun dataMapping() {
@@ -436,12 +445,11 @@ class BreastFragment : Fragment() {
                 }
             }
 
-
         }
     }
 
     private fun resetDisplay() {
-
+        exitSection = true
         binding.apply {
             actionNewExpression.visibility = View.VISIBLE
             lnHistory.visibility = View.VISIBLE

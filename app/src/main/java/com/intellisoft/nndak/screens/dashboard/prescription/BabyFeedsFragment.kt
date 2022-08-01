@@ -168,12 +168,13 @@ class BabyFeedsFragment : Fragment() {
             if (it.isEmpty()) {
                 binding.incEmpty.cpBgView.visibility = View.VISIBLE
                 binding.incEmpty.cpTitle.text = getString(R.string.add_pres)
+            } else {
+
+                binding.incEmpty.cpBgView.visibility = View.GONE
+                binding.incEmpty.cpTitle.visibility = View.GONE
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
-            binding.incEmpty.cpBgView.visibility = View.GONE
-            binding.incEmpty.cpTitle.visibility = View.GONE
-
         }
 
         binding.apply {
@@ -225,11 +226,11 @@ class BabyFeedsFragment : Fragment() {
     }
 
     private fun onPrescriptionItemClick(item: PrescriptionItem) {
-     /*   startActivity(
-            Intent(requireContext(), HistoryActivity::class.java)
-                .putExtra("careId", item.resourceId)
-                .putExtra("patientId", args.patientId)
-        )*/
+        /*   startActivity(
+               Intent(requireContext(), HistoryActivity::class.java)
+                   .putExtra("careId", item.resourceId)
+                   .putExtra("patientId", args.patientId)
+           )*/
 
     }
 

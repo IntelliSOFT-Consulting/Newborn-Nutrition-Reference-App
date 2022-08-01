@@ -182,6 +182,7 @@ class BabyMonitoringFragment : Fragment() {
             .setConfirmText("Yes")
             .setConfirmClickListener { d ->
                 d.dismiss()
+                Timber.e("Cancel Screener Questionnaire BabyMonitoringFragment")
                 findNavController().navigateUp()
             }
             .setCancelText("No")

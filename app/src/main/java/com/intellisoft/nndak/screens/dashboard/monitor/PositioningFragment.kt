@@ -46,6 +46,7 @@ class PositioningFragment : Fragment() {
     private var baby: String = "No"
     private var attach: String = "No"
     private var suck: String = "No"
+    private var exitSection: Boolean = true
     private lateinit var encounterId: String
     private val binding
         get() = _binding!!
@@ -93,6 +94,7 @@ class PositioningFragment : Fragment() {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
                 actionNewExpression.setOnClickListener {
+                    exitSection = false
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
@@ -364,20 +366,25 @@ class PositioningFragment : Fragment() {
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-                resetDisplay()
-            }
-            .setCancelText("No")
-            .show()
+        if (exitSection) {
+
+            (activity as MainActivity).openDashboard(patientId)
+        } else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+                    resetDisplay()
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun resetDisplay() {
-
+        exitSection = true
         binding.apply {
             actionNewExpression.visibility = View.VISIBLE
             lnHistory.visibility = View.VISIBLE

@@ -260,14 +260,14 @@ class PatientDetailsViewModel(
         var times = 8
         var interval = 3
         var feedingTime = FormatHelper().getTodayDate()
-          if (prescription.isNotEmpty()) {
-              feedingTime = prescription.first().feedingTime
-              val frequency = prescription.first().frequency
-              val intFreq = getNumericFrequency(frequency.toString())
-              interval = intFreq.toInt()
-              times = 24 / interval
+        if (prescription.isNotEmpty()) {
+            feedingTime = prescription.first().feedingTime
+            val frequency = prescription.first().frequency
+            val intFreq = getNumericFrequency(frequency.toString())
+            interval = intFreq.toInt()
+            times = 24 / interval
 
-          }
+        }
         val intervals = getPastHoursOnIntervalOfWithStart(feedingTime, times, interval)
 
         val feeds: MutableList<FeedsData> = mutableListOf()
@@ -1473,6 +1473,7 @@ class PatientDetailsViewModel(
 
     private fun calculateFirstFeedingTime(start: String, freq: String): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+
         val date = sdf.parse(start)
         val calendar: Calendar = GregorianCalendar()
         calendar.time = date
@@ -1483,6 +1484,7 @@ class PatientDetailsViewModel(
         if (less) {
             return current
         }
+
         return feed
     }
 

@@ -203,7 +203,7 @@
     <string name="app_baby_name">Baby\'s Name</string>
     <string name="app_mother_name">Mother\'s Name</string>
     <string name="app_ip_number">IP Number</string>
-    <string name="app_birth_weight">Birth Weight (gm)</string>
+    <string name="app_birth_weight">Birth Weight</string>
     <string name="app_status">Status</string>
     <string name="app_rate_gain">Rate of Weight Gain</string>
     <string name="app_dashboard">Dashboard</string>
@@ -266,7 +266,8 @@
     <string name="action_preterm">Preterm Babies</string>
     <string name="action_term">Term Babies</string>
     <string name="action_average_days">Average days to fully receiving mothers milk</string>
-    <string name="action_total_dhm">Total Volume of DHM available</string>
+    <string name="action_total_dhm">Pasteurized DHM</string>
+    <string name="action_total_un">Unpasteurized DHM</string>
     <string name="action_average_dhm">Avg. volume of DHM use per day</string>
     <string name="action_infants">Infants fully receiving DHM</string>
     <string name="action_dhm_length">Average length of DHM use</string>

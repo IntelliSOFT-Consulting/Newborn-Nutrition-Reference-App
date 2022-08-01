@@ -1605,7 +1605,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueQuantity() && !resource.valueQuantity.hasValueElement()) {
                         return true
                     }
-                    if (resource.hasCode() && !resource.code.hasText()) {
+                    if (resource.hasValueCodeableConcept() && !resource.valueCodeableConcept.hasCoding()) {
                         return true
                     }
 
@@ -2181,109 +2181,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     }
 
-    fun babyMonitoringCues(
-        questionnaireResponse: QuestionnaireResponse,
-        cues: FeedingCuesTips,
-        patientId: String
-    ) {
-        viewModelScope.launch {
-            val bundle =
-                ResourceMapper.extract(
-                    questionnaireResource,
-                    questionnaireResponse
-                )
-            val context = FhirContext.forR4()
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-
-
-                    /**
-                     * Extract Observations, Patient Data
-                     */
-                    val qh = QuestionnaireHelper()
-
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Proper-Positioning",
-                            "Proper Positioning",
-                            cues.latch
-                        )
-                    )
-                        .request.url = "Observation"
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Stimulated-Nipples",
-                            "Stimulated Nipples",
-                            cues.readiness
-                        )
-                    )
-                        .request.url = "Observation"
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Early-Latching",
-                            "Early Latching",
-                            cues.steady
-                        )
-                    )
-                        .request.url = "Observation"
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Manual-Drops",
-                            "Manual Drops",
-                            cues.audible
-                        )
-                    )
-                        .request.url = "Observation"
-                    bundle.addEntry().setResource(
-                        qh.codingQuestionnaire(
-                            "Baby-Awakens",
-                            "Baby Awakens",
-                            cues.chocking
-                        )
-                    )
-                        .request.url = "Observation"
-
-
-                    val value = retrieveUser(false)
-
-                    bundle.addEntry()
-                        .setResource(
-                            qh.codingQuestionnaire(
-                                "Completed By",
-                                value,
-                                value
-                            )
-                        )
-                        .request.url = "Observation"
-
-                    val encounterId = generateUuid()
-                    val subjectReference = Reference("Patient/$patientId")
-                    title = "Baby Assessment"
-                    saveResources(bundle, subjectReference, encounterId, title)
-                    generateRiskAssessmentResource(bundle, subjectReference, encounterId)
-                    customMessage.postValue(
-                        MessageItem(
-                            success = true,
-                            message = "Update successful"
-                        )
-                    )
-
-                } catch (e: Exception) {
-                    Timber.d("Exception:::: ${e.printStackTrace()}")
-                    customMessage.postValue(
-                        MessageItem(
-                            success = false,
-                            message = "Experienced problems, please try again"
-                        )
-                    )
-                    return@launch
-                }
-            }
-        }
-    }
 
     fun babyMonitoring(
         questionnaireResponse: QuestionnaireResponse,
@@ -2304,8 +2201,19 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
+            if (isRequiredFieldMissing(bundle)) {
+                customMessage.postValue(
+                    MessageItem(
+                        success = false,
+                        message = "Please check required fields"
+                    )
+                )
+                return@launch
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
                 try {
+
                     val qh = QuestionnaireHelper()
                     val taken = totalV - deficit.toFloat()
                     bundle.addEntry().setResource(
@@ -2391,22 +2299,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     for (i in 0 until common.length()) {
                         val inner = common.getJSONObject(i)
                         when (inner.getString("linkId")) {
-                            "Current-Weight" -> {
-                                val code = extractResponse(inner, "valueDecimal")
-                                if (code.isNotEmpty()) {
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            CURRENT_WEIGHT,
-                                            "Current Weight",
-                                            "Current Weight",
-                                            code,
-                                            "gm"
 
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
                             "Assessment-Date" -> {
                                 assessDate = extractResponse(inner, "valueDateTime")
                                 if (assessDate.isNotEmpty()) {
@@ -2449,22 +2342,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         .request.url = "Observation"
                                 }
                             }
-                            "Diaper-Changed" -> {
-                                val value =
-                                    extractResponse(inner, "valueDecimal")
-                                if (value.isNotEmpty()) {
 
-                                    bundle.addEntry().setResource(
-                                        qh.quantityQuestionnaire(
-                                            DIAPER_CHANGED,
-                                            "Diaper Changed",
-                                            "Diaper Changed",
-                                            value, "pcs"
-                                        )
-                                    )
-                                        .request.url = "Observation"
-                                }
-                            }
                             "Adjust-Prescription" -> {
                                 val value = extractResponseCode(inner, "valueCoding")
                                 if (value.isNotEmpty()) {
