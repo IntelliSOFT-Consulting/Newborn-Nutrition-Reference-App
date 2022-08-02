@@ -157,13 +157,11 @@ class StatisticsFragment : Fragment() {
         val data = FhirApplication.getStatistics(requireContext())
         if (data != null) {
             val gson = Gson()
-            Timber.e("Local Sync Dara $data")
             try {
                 val it: Statistics = gson.fromJson(data, Statistics::class.java)
                 updateUI(it)
 
             } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
             }
         }
     }

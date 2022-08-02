@@ -49,21 +49,13 @@ import timber.log.Timber
 
 
 class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var fhirEngine: FhirEngine
-    private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
     private var _binding: FragmentDhmOrdersBinding? = null
     private val apiService = RestManager()
     private val binding
         get() = _binding!!
-    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private lateinit var mySpinner: Spinner
-
-    private var formatter = FormatHelper()
-
-    private var filterData: String? = null
-
     private val orderList = ArrayList<ItemOrder>()
     lateinit var adapterList: OrdersAdapter
 
@@ -84,15 +76,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             setDisplayHomeAsUpEnabled(true)
         }
         try {
-            fhirEngine = FhirApplication.fhirEngine(requireContext())
-            patientListViewModel =
-                ViewModelProvider(
-                    this,
-                    PatientListViewModel.PatientListViewModelFactory(
-                        requireActivity().application,
-                        fhirEngine, "0"
-                    )
-                ).get(PatientListViewModel::class.java)
+
 
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
             adapterList = OrdersAdapter(orderList, this::onOrderClick)
@@ -132,19 +116,16 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mySpinner.adapter = adapter
         mySpinner.onItemSelectedListener = this
 
-        patientListViewModel.patientCount.observe(viewLifecycleOwner) {
-            binding.patientListContainer.patientCount.text = "$it Order(s)"
-        }
         searchView = binding.search
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
+                    adapterList.filter.filter(newText)
                     return true
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    patientListViewModel.searchPatientsByName(query)
+                    adapterList.filter.filter(query)
                     return true
                 }
             }
@@ -193,14 +174,6 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
-        lifecycleScope.launch {
-            mainActivityViewModel.pollState.collect {
-                // After the sync is successful, update the patients list on the page.
-                if (it is State.Finished) {
-                    patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
-                }
-            }
-        }
     }
 
     private fun loadOrders() {
@@ -272,8 +245,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     FhirApplication.updateCurrentOrder(requireContext(), json)
 
                     findNavController().navigate(
-                        DhmOrdersFragmentDirections.navigateToProcessing(
-                        ),
+                        DhmOrdersFragmentDirections.navigateToProcessing(),
                     )
                 } catch (e: Exception) {
 
@@ -309,8 +281,29 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        filterData = formatter.getSearchQuery(text, requireContext())
+        filterRecords(text)
 
+
+    }
+
+    private fun filterRecords(text: String) {
+        when(text) {
+            "Sort By:" -> {
+                adapterList.filter.filter("")
+            }
+            "Term" -> {
+                adapterList.filter.filter("Term")
+            }
+            "Signed" -> {
+                adapterList.filter.filter("Signed")
+            }
+            "Unsigned" -> {
+                adapterList.filter.filter("Not Signed")
+            }
+            "Preterm" -> {
+                adapterList.filter.filter("Preterm")
+            }
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

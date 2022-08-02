@@ -479,6 +479,8 @@
         <item>Sort By:</item>
         <item>Term</item>
         <item>Preterm</item>
+        <item>Signed</item>
+        <item>UnSigned</item>
     </string-array>
 
 </resources>

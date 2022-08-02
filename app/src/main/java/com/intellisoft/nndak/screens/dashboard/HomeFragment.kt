@@ -153,7 +153,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(it: DHMModel) {
-
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
             tvVolumeAvailable.text = it.dhmVolume.parsteurized
@@ -161,11 +160,8 @@ class HomeFragment : Fragment() {
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength
-
         }
-
         populateData(it.data)
-
     }
 
     private fun syncLocalData() {

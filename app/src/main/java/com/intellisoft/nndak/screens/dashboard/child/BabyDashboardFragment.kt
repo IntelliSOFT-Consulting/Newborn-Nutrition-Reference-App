@@ -205,8 +205,12 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.feedsDistribution()
         patientDetailsViewModel.liveFeeds.observe(viewLifecycleOwner) {
             if (it != null) {
-                binding.tvTotalVolume.text = it.totalFeed
                 barGraph(it)
+                binding.apply {
+
+                    tvTotalVolume.text = it.totalFeed
+                    tvMotherMilk.text =it.varianceAmount
+                }
             }
         }
         patientDetailsViewModel.activeWeeklyBabyWeights()
@@ -220,8 +224,6 @@ class BabyDashboardFragment : Fragment() {
             if (expression != null) {
                 populateBarChart(expression)
                 binding.apply {
-
-                    tvTotalExpressed.text = "${expression.totalFeed} mls"
                     binding.tvExpressionNumber.text = expression.varianceAmount
                 }
             }

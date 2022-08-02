@@ -259,6 +259,7 @@ class PatientDetailsViewModel(
         val prescription = getActivePrescriptionsDataModel(context)
         var times = 8
         var interval = 3
+        var i = "0 mls"
         var feedingTime = FormatHelper().getTodayDate()
         if (prescription.isNotEmpty()) {
             feedingTime = prescription.first().feedingTime
@@ -266,21 +267,14 @@ class PatientDetailsViewModel(
             val intFreq = getNumericFrequency(frequency.toString())
             interval = intFreq.toInt()
             times = 24 / interval
+            i = prescription.first().ebm.toString()
 
         }
         val intervals = getPastHoursOnIntervalOfWithStart(feedingTime, times, interval)
 
         val feeds: MutableList<FeedsData> = mutableListOf()
         var totalFeed = 0f
-        var i = 0
-        val exp = getPatientEncounters()
-        if (exp.isNotEmpty()) {
-            for (ex in exp) {
-                if (ex.code == "Milk Expression") {
-                    i++
-                }
-            }
-        }
+
         intervals.forEach {
             feeds.add(loadFeedCares(it))
         }
@@ -292,7 +286,7 @@ class PatientDetailsViewModel(
 
         return FeedsDistribution(
             totalFeed = "$totalFeed mls",
-            varianceAmount = "$i",
+            varianceAmount = i,
             data = feeds.reversed()
         )
     }

@@ -196,7 +196,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         lifecycleScope.launch {
             mainActivityViewModel.pollState.collect {
-                Timber.d("onViewCreated: pollState Got status $it")
                 // After the sync is successful, update the patients list on the page.
                 if (it is State.Finished) {
                     patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
