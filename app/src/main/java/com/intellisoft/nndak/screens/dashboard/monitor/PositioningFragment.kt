@@ -1,14 +1,20 @@
 package com.intellisoft.nndak.screens.dashboard.monitor
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -28,6 +34,7 @@ import com.intellisoft.nndak.dialogs.ViewPositioning
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.PositioningHistory
 import com.intellisoft.nndak.utils.boldText
+import com.intellisoft.nndak.utils.controlRadio
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -41,11 +48,11 @@ class PositioningFragment : Fragment() {
     private var _binding: FragmentPositioningBinding? = null
     private lateinit var patientId: String
     private val dataCodes = ArrayList<CodingObservation>()
-    private var hands: String = "No"
-    private var mum: String = "No"
-    private var baby: String = "No"
-    private var attach: String = "No"
-    private var suck: String = "No"
+    private lateinit var hands: String
+    private var mum: String = ""
+    private var baby: String = ""
+    private var attach: String = ""
+    private var suck: String = ""
     private var exitSection: Boolean = true
     private lateinit var encounterId: String
     private val binding
@@ -89,7 +96,7 @@ class PositioningFragment : Fragment() {
 
             updateDataFields()
             loadPositionAssessments()
-
+            handleClicks()
             binding.apply {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
@@ -98,6 +105,7 @@ class PositioningFragment : Fragment() {
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
+                    clearViews()
                 }
                 btnSubmit.setOnClickListener {
                     updateDataFields()
@@ -132,6 +140,27 @@ class PositioningFragment : Fragment() {
         (activity as MainActivity).setDrawerEnabled(true)
 
     }
+
+    private fun clearViews() {
+        binding.apply {
+            incPositioning.dataHands.rbGroup.clearCheck()
+            incPositioning.dataMother.rbGroup.clearCheck()
+            incPositioning.dataBaby.rbGroup.clearCheck()
+            incPositioning.dataAttach.rbGroup.clearCheck()
+            incPositioning.dataSuck.rbGroup.clearCheck()
+        }
+    }
+
+    private fun handleClicks() {
+        binding.apply {
+            controlRadio(incPositioning.dataHands)
+            controlRadio(incPositioning.dataMother)
+            controlRadio(incPositioning.dataBaby)
+            controlRadio(incPositioning.dataAttach)
+            controlRadio(incPositioning.dataSuck)
+        }
+    }
+
 
     private fun loadPositionAssessments() {
         patientDetailsViewModel.getPositioningHistory()
@@ -213,27 +242,60 @@ class PositioningFragment : Fragment() {
     }
 
     private fun onSubmitAction() {
-        val hands = CodingObservation("Hand-Wash", "Hands Washed", hands)
-        val mum = CodingObservation("Mother-Position", "Mother Position", mum)
-        val baby = CodingObservation("Baby-Position", "Baby Position", baby)
-        val attach = CodingObservation("Good-Attachment", "Good Attachment", attach)
-        val suck = CodingObservation("Effective-Suckling", "Effective Suckling", suck)
+        if (validateErrors()) {
+            val hands = CodingObservation("Hand-Wash", "Hands Washed", hands)
+            val mum = CodingObservation("Mother-Position", "Mother Position", mum)
+            val baby = CodingObservation("Baby-Position", "Baby Position", baby)
+            val attach = CodingObservation("Good-Attachment", "Good Attachment", attach)
+            val suck = CodingObservation("Effective-Suckling", "Effective Suckling", suck)
 
-        dataCodes.addAll(
-            listOf(
-                hands, mum, baby, attach, suck
+            dataCodes.addAll(
+                listOf(
+                    hands, mum, baby, attach, suck
+                )
             )
-        )
-        (activity as MainActivity).displayDialog()
-        observeResourcesSaveAction()
+            (activity as MainActivity).displayDialog()
+            observeResourcesSaveAction()
 
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-        viewModel.customAssessment(
-            questionnaireFragment.getQuestionnaireResponse(),
-            dataCodes,
-            patientId, "Positioning-Assessment"
-        )
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+            viewModel.customAssessment(
+                questionnaireFragment.getQuestionnaireResponse(),
+                dataCodes,
+                patientId, "Positioning-Assessment"
+            )
+        }
+    }
+
+    private fun validateErrors(): Boolean {
+        binding.apply {
+            if (hands.isEmpty() || hands == "") {
+                showErrorView(incPositioning.dataHands.tvError, "Select Cleaned Hands")
+                return false
+            }
+            if (mum.isEmpty() || mum == "") {
+                showErrorView(incPositioning.dataMother.tvError, "Select Mother's position")
+                return false
+            }
+            if (baby.isEmpty() || baby == "") {
+                showErrorView(incPositioning.dataBaby.tvError, "Select Baby's position")
+                return false
+            }
+            if (attach.isEmpty() || attach == "") {
+                showErrorView(incPositioning.dataAttach.tvError, "Select attachment")
+                return false
+            }
+            if (suck.isEmpty() || suck == "") {
+                showErrorView(incPositioning.dataSuck.tvError, "Select suckling")
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun showErrorView(tvError: TextView, s: String) {
+        tvError.visibility = View.VISIBLE
+        tvError.text = s
     }
 
     private fun observeResourcesSaveAction() {
@@ -329,36 +391,46 @@ class PositioningFragment : Fragment() {
             0 -> {
                 hands = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
             1 -> {
                 mum = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
             2 -> {
                 baby = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
             3 -> {
                 attach = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
             4 -> {
                 suck = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
 

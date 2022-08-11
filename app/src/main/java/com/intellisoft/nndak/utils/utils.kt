@@ -15,6 +15,7 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
@@ -29,6 +30,7 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.databinding.PositioningItemBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
@@ -73,6 +75,44 @@ fun showPicker(context: Context, input: TextInputEditText) {
     }
 }
 
+fun controlRadio(dataHands: PositioningItemBinding) {
+    dataHands.rbYes.setOnCheckedChangeListener { _, isChecked ->
+        dataHands.tvError.visibility = View.GONE
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbYes.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#00C853"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbYes.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#BDBDBD"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        }
+    }
+    dataHands.rbNo.setOnCheckedChangeListener { _, isChecked ->
+        dataHands.tvError.visibility = View.GONE
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbNo.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#A8001E"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbNo.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#BDBDBD"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        }
+    }
+}
 
 fun listenPlainChanges(
     input: TextInputEditText,

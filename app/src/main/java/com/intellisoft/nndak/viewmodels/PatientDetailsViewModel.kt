@@ -1851,6 +1851,7 @@ class PatientDetailsViewModel(
     }
 
 
+
     companion object {
         /**
          * Creates ObservationItem objects with displayable values from the Fhir Observation objects.

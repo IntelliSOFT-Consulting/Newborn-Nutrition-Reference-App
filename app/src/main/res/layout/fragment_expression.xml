@@ -38,10 +38,13 @@
         android:visibility="gone">
 
         <TextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:text="@string/tv_history"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
 
         <include
             android:id="@+id/inc_title"

@@ -33,6 +33,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.BREASTS_FEEDING
 import com.intellisoft.nndak.models.BreastsHistory
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.boldText
+import com.intellisoft.nndak.utils.controlRadio
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -104,7 +105,7 @@ class BreastFragment : Fragment() {
                 ).get(PatientDetailsViewModel::class.java)
 
             loadActivePrescription()
-
+            handleClicks()
             binding.apply {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
@@ -149,6 +150,22 @@ class BreastFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
+
+    }
+
+    private fun handleClicks() {
+        binding.apply {
+            controlRadio(incPositioning.dataInterest)
+            controlRadio(incPositioning.dataCues)
+            controlRadio(incPositioning.dataSleep)
+            controlRadio(incPositioning.dataBursts)
+            controlRadio(incPositioning.dataShortFeed)
+            controlRadio(incPositioning.dataLongSwallow)
+            controlRadio(incPositioning.dataNormalSkin)
+            controlRadio(incPositioning.dataNipples)
+            controlRadio(incPositioning.dataShape)
+        }
+
 
     }
 

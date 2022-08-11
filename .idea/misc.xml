@@ -111,6 +111,7 @@
         <entry key="app/src/main/res/layout/activity_history.xml" value="0.10829207920792079" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/activity_pin_lock.xml" value="0.1656534954407295" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.14505208333333333" />
         <entry key="app/src/main/res/layout/add_patient_fragment.xml" value="0.1703125" />

@@ -468,6 +468,8 @@
     <string name="empty_field">Missing data</string>
     <string name="action_expression">Milk Expression</string>
     <string name="action_edit_exp">Edit Prescription</string>
+    <string name="action_forgot_pin">Forgot Pin</string>
+    <string name="required_error_msg">required</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

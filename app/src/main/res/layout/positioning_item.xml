@@ -60,6 +60,7 @@
                         android:textAppearance="?attr/textAppearanceBody2" />
 
                     <RadioGroup
+                        android:id="@+id/rb_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -75,9 +76,16 @@
                             android:id="@+id/rb_no"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
                             android:text="@string/no" />
                     </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tv_error"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/required_error_msg"
+                        android:textColor="@color/dim_red"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

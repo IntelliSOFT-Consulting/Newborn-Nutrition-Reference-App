@@ -28,6 +28,7 @@ import com.google.android.fhir.sync.State
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.intellisoft.nndak.auth.LoginActivity
+import com.intellisoft.nndak.auth.PinLockActivity
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
@@ -361,24 +362,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sessionTimeOut() {
-        val dialog = SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-            .setTitleText("Session Timeout")
-            .setContentText("Your session has expired, please login again to proceed")
-            .setCustomImage(R.drawable.smile)
-            .setConfirmClickListener {
-                it.dismiss()
-                try {
-                    FhirApplication.setLoggedIn(this, false)
-                    finishAffinity()
-                    val i = Intent(this@MainActivity, LoginActivity::class.java)
-                    startActivity(i)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+        finishAffinity()
+        val i = Intent(this@MainActivity, PinLockActivity::class.java)
+        startActivity(i)
+        /*  val dialog = SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+              .setTitleText("Session Timeout")
+              .setContentText("Your session has expired, please login again to proceed")
+              .setCustomImage(R.drawable.smile)
+              .setConfirmClickListener {
+                  it.dismiss()
+                  try {
+                      FhirApplication.setLoggedIn(this, false)
+                      finishAffinity()
+                      val i = Intent(this@MainActivity, LoginActivity::class.java)
+                      startActivity(i)
+                  } catch (e: Exception) {
+                      e.printStackTrace()
+                  }
 
-            }
-        dialog.setCancelable(false)
-        dialog.show()
+              }
+          dialog.setCancelable(false)
+          dialog.show()*/
     }
 
 

@@ -31,13 +31,13 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentBabyAssessmentBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Observation
 import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
@@ -205,9 +205,13 @@ class BabyAssessmentFragment : Fragment() {
            findNavController().navigateUp()
        }*/
 
+    fun fhir_patient() {
+
+    }
+
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = CustomQuestionnaireFragment()
+            val fragment = QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
