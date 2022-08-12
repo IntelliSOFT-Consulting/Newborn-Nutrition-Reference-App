@@ -44,6 +44,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.DHM_STOCK
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_DETAILS
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.EFFECTIVE_EXPRESSION
@@ -1642,154 +1643,15 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     }
 
     /**
-     * APGAR Score
-     */
-    private suspend fun generateApgarAssessmentResource(
-        bundle: Bundle,
-        subjectReference: Reference,
-        encounterId: String,
-        total: Int
-    ) {
-        val riskProbability = getProbability(total)
-        riskProbability?.let { rProbability ->
-            val riskAssessment =
-                RiskAssessment().apply {
-                    id = generateUuid()
-                    subject = subjectReference
-                    encounter = Reference("Encounter/$encounterId")
-                    addPrediction().apply {
-                        qualitativeRisk =
-                            CodeableConcept().apply {
-                                addCoding().updateRiskProbability(
-                                    rProbability
-                                )
-                            }
-                    }
-                    occurrence = DateTimeType.now()
-                }
-            saveResourceToDatabase(riskAssessment)
-        }
-
-    }
-
-    private fun getProbability(
-        total: Int
-    ): RiskProbability? {
-        if (total <= 3) return RiskProbability.HIGH else if (total in 4..6) return RiskProbability.MODERATE else if (total > 6) return RiskProbability.LOW
-        return null
-    }
-
-    /**
      * Mother's Health
      */
 
 
-    private suspend fun generateRiskAssessmentResource(
-        bundle: Bundle,
-        subjectReference: Reference,
-        encounterId: String
-    ) {
-        val spO2 = getSpO2(bundle)
-        spO2?.let {
-            val isSymptomPresent = isSymptomPresent(bundle)
-            val isComorbidityPresent = isComorbidityPresent(bundle)
-            val riskProbability =
-                getRiskProbability(isSymptomPresent, isComorbidityPresent, it)
-            riskProbability?.let { rProbability ->
-                val riskAssessment =
-                    RiskAssessment().apply {
-                        id = generateUuid()
-                        subject = subjectReference
-                        encounter = Reference("Encounter/$encounterId")
-                        addPrediction().apply {
-                            qualitativeRisk =
-                                CodeableConcept().apply {
-                                    addCoding().updateRiskProbability(
-                                        rProbability
-                                    )
-                                }
-                        }
-                        occurrence = DateTimeType.now()
-                    }
-                saveResourceToDatabase(riskAssessment)
-            }
-        }
-    }
 
-    private fun getRiskProbability(
-        isSymptomPresent: Boolean,
-        isComorbidityPresent: Boolean,
-        spO2: BigDecimal
-    ): RiskProbability? {
-        if (spO2 < BigDecimal(90)) {
-            return RiskProbability.HIGH
-        } else if (spO2 >= BigDecimal(90) && spO2 < BigDecimal(94)) {
-            return RiskProbability.MODERATE
-        } else if (isSymptomPresent) {
-            return RiskProbability.MODERATE
-        } else if (spO2 >= BigDecimal(94) && isComorbidityPresent) {
-            return RiskProbability.MODERATE
-        } else if (spO2 >= BigDecimal(94) && !isComorbidityPresent) {
-            return RiskProbability.LOW
-        }
-        return null
-    }
 
-    private fun Coding.updateRiskProbability(riskProbability: RiskProbability) {
-        code = riskProbability.toCode()
-        display = riskProbability.display
-    }
 
-    private fun getSpO2(bundle: Bundle): BigDecimal? {
-        return bundle
-            .entry
-            .asSequence()
-            .filter { it.resource is Observation }
-            .map { it.resource as Observation }
-            .filter {
-                it.hasCode() && it.code.hasCoding() && it.code.coding.first().code.equals(
-                    Logics.SPO2
-                )
-            }
-            .map { it.valueQuantity.value }
-            .firstOrNull()
-    }
 
-    private fun isSymptomPresent(bundle: Bundle): Boolean {
-        val count =
-            bundle
-                .entry
-                .filter { it.resource is Observation }
-                .map { it.resource as Observation }
-                .filter { it.hasCode() && it.code.hasCoding() }
-                .flatMap { it.code.coding }
-                .map { it.code }
-                .filter { isSymptomPresent(it) }
-                .count()
-        return count > 0
-    }
 
-    private fun isSymptomPresent(symptom: String): Boolean {
-        return Logics.symptoms.contains(symptom)
-    }
-
-    private fun isComorbidityPresent(bundle: Bundle): Boolean {
-        val count =
-            bundle
-                .entry
-                .filter { it.resource is Condition }
-                .map { it.resource as Condition }
-                .filter { it.hasCode() && it.code.hasCoding() }
-                .flatMap { it.code.coding }
-                .map { it.code }
-                .filter { isComorbidityPresent(it) }
-                .count()
-        return count > 0
-    }
-
-    private fun isComorbidityPresent(comorbidity: String): Boolean {
-        return Logics.comorbidities.contains(comorbidity)
-    }
 
     fun breastFeeding(
         questionnaireResponse: QuestionnaireResponse, breastFeeding: String,
@@ -2141,7 +2003,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             val subjectReference = Reference("Patient/$patientId")
                             title = EXPRESSIONS
                             saveResources(bundle, subjectReference, encounterId, title)
-                            generateRiskAssessmentResource(bundle, subjectReference, encounterId)
                             customMessage.postValue(
                                 MessageItem(
                                     success = true,
@@ -2745,7 +2606,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                 val subjectReference = Reference("Patient/$patientId")
                 val encounterId = generateUuid()
-                title = EXPRESSIONS
+                title = encounter
 
                 val value = retrieveUser(false)
                 val qh = QuestionnaireHelper()
@@ -2997,6 +2858,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         patientId: String,
         dataCodes: java.util.ArrayList<CodingObservation>,
         dataQuantity: java.util.ArrayList<QuantityObservation>
+
     ) {
         viewModelScope.launch {
             val bundle =
@@ -3005,56 +2867,127 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
 
-            val qh = QuestionnaireHelper()
-            dataCodes.forEach {
+            try {
+                val qh = QuestionnaireHelper()
+                dataCodes.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.value
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+                dataQuantity.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.display,
+                                it.value, it.unit
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+
+                val value = retrieveUser(false)
+
                 bundle.addEntry()
                     .setResource(
                         qh.codingQuestionnaire(
-                            it.code,
-                            it.display,
-                            it.value
-
+                            "Completed By",
+                            value,
+                            value
                         )
                     )
                     .request.url = "Observation"
-
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = "Client Registration"
+                saveResourceToDatabase(resource = baby)
+                saveResourceToDatabase(resource = mother)
+                saveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(MessageItem(true, "Success"))
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
             }
-            dataQuantity.forEach {
-                bundle.addEntry()
-                    .setResource(
-                        qh.quantityQuestionnaire(
-                            it.code,
-                            it.display,
-                            it.display,
-                            it.value, it.unit
-
-                        )
-                    )
-                    .request.url = "Observation"
-
-            }
-
-            val value = retrieveUser(false)
-
-            bundle.addEntry()
-                .setResource(
-                    qh.codingQuestionnaire(
-                        "Completed By",
-                        value,
-                        value
-                    )
-                )
-                .request.url = "Observation"
-            val encounterId = generateUuid()
-            val subjectReference = Reference("Patient/$patientId")
-            title = "Client Registration"
-            saveResourceToDatabase(resource = baby)
-            saveResourceToDatabase(resource = mother)
-            saveResources(bundle, subjectReference, encounterId, title)
-            customMessage.postValue(MessageItem(true, "Success"))
         }
     }
 
+    fun handleDischarge(
+        questionnaireResponse: QuestionnaireResponse,
+        dataCodes: ArrayList<CodingObservation>,
+        dataQuantity: ArrayList<QuantityObservation>,
+        patientId: String
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+          try {
+              val qh = QuestionnaireHelper()
+              dataCodes.forEach {
+                  bundle.addEntry()
+                      .setResource(
+                          qh.codingQuestionnaire(
+                              it.code,
+                              it.display,
+                              it.value
+
+                          )
+                      )
+                      .request.url = "Observation"
+
+              }
+              dataQuantity.forEach {
+                  bundle.addEntry()
+                      .setResource(
+                          qh.quantityQuestionnaire(
+                              it.code,
+                              it.display,
+                              it.display,
+                              it.value,
+                              it.unit
+
+                          )
+                      )
+                      .request.url = "Observation"
+
+              }
+
+              val value = retrieveUser(false)
+
+              bundle.addEntry()
+                  .setResource(
+                      qh.codingQuestionnaire(
+                          "Completed By",
+                          value,
+                          value
+                      )
+                  )
+                  .request.url = "Observation"
+              val encounterId = generateUuid()
+              val subjectReference = Reference("Patient/$patientId")
+              title = DISCHARGE_DETAILS
+              saveResources(bundle, subjectReference, encounterId, title)
+              customMessage.postValue(MessageItem(true, "Success"))
+          }catch (e: Exception){
+              Timber.d("Exception:::: ${e.printStackTrace()}")
+              customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
+          }
+        }
+    }
 
 }
 

@@ -166,7 +166,7 @@
     <string name="starting">First Timer</string>
     <string name="existing">Existing</string>
     <string name="action_assessment">Assess Child</string>
-    <string name="action_discharge">Discharge Details</string>
+    <string name="action_discharge">Discharge Baby</string>
     <string name="header_encounters">Medical Visits</string>
     <string name="app_partial">Partial</string>
     <string name="app_complete">Complete</string>
@@ -215,14 +215,14 @@
     <string name="menu_notification">Notifications</string>
     <string name="menu_guide">Guide</string>
     <string name="app_baby_well">Baby is well</string>
-    <string name="app_gestation">Gestation (wks)</string>
+    <string name="app_gestation">Gestation</string>
     <string name="app_asphyxia">Asphyxia</string>
     <string name="app_birth_date">Date of Birth</string>
     <string name="app_neonatal_sepsis">Neonatal Sepsis</string>
     <string name="app_adm_date">Date of Adm</string>
     <string name="app_jaundice">Jaundice</string>
     <string name="app_life_day">Day of life</string>
-    <string name="app_mum_ip">Mother\'s IP No</string>
+    <string name="app_mum_ip">Mother\'s IP</string>
     <string name="app_baby_curve">Baby\'s Growth Curve</string>
     <string name="app_current_weight">Current Weight</string>
     <string name="app_compared_weight">Compared to Initial weight</string>
@@ -470,6 +470,28 @@
     <string name="action_edit_exp">Edit Prescription</string>
     <string name="action_forgot_pin">Forgot Pin</string>
     <string name="required_error_msg">required</string>
+    <string name="app_term_dhm">Term DHM</string>
+    <string name="app_pre_term_dhm">Preterm DHM</string>
+    <string name="app_discharge">Fill in discharge details</string>
+    <string name="app_discharge_date">Discharge Date</string>
+    <string name="app_discharge_weight">Discharge Weight</string>
+    <string name="app_discharge_outcome">Outcome</string>
+    <string name="app_discharge_alive">If Alive</string>
+    <string name="dead">Dead</string>
+    <string name="alive">Alive</string>
+    <string name="referred">Referred</string>
+    <string name="absconded">Absconded</string>
+    <string name="discharged">Discharged</string>
+    <string name="app_discharge_date_error">Select date</string>
+    <string name="app_outcome_error">Select outcome</string>
+    <string name="app_discharge_reason_error">Select reason</string>
+    <string name="app_discharge_weight_error">Enter weight</string>
+    <string name="app_discharge_height_error">Enter reasons</string>
+    <string name="app_discharge_history">Discharge Details</string>
+    <string name="app_outcome">Outcome</string>
+    <string name="action_readmit">Readmit Baby</string>
+    <string name="app_weight">Discharge Weight</string>
+    <string name="app_remarks">Doctor\'s Notes</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>

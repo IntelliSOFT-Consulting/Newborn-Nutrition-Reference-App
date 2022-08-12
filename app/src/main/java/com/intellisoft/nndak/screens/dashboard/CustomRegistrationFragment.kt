@@ -49,6 +49,8 @@ import com.intellisoft.nndak.logic.Logics.Companion.VDRL
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.QuantityObservation
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
+import com.intellisoft.nndak.utils.showOptions
+import com.intellisoft.nndak.utils.showPicker
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.android.synthetic.main.fragment_custom_registration.*
 import kotlinx.coroutines.CoroutineScope
@@ -123,27 +125,7 @@ class CustomRegistrationFragment : Fragment() {
         }
     }
 
-    private fun showPicker(input: TextInputEditText) {
-        input.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val year = cal.get(Calendar.YEAR)
-            val month = cal.get(Calendar.MONTH)
-            val day = cal.get(Calendar.DAY_OF_MONTH)
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { view, myear, mmonth, mdayOfMonth ->
-                    val mon = mmonth + 1
-                    val msg = "$mdayOfMonth/$mon/$myear"
-                    input.setText(msg)
-                },
-                year,
-                month,
-                day
-            )
-            datePickerDialog.datePicker.maxDate = Date().time
-            datePickerDialog.show()
-        }
-    }
+
 
     private fun showTimePicker(input: TextInputEditText) {
         input.setOnClickListener {
@@ -208,21 +190,21 @@ class CustomRegistrationFragment : Fragment() {
             /**
              * Dropdowns
              */
-            showOptions(appPmtct, R.menu.pmtct)
+            showOptions(requireContext(),appPmtct, R.menu.pmtct)
             showMultiOptions(appMulti, R.menu.yesno)
             showDeliveryOptions(appDelivery, R.menu.delivery)
-            showOptions(appBirthType, R.menu.birthtypes)
-            showOptions(appCs, R.menu.reasons)
-            showOptions(appVdrl, R.menu.pmtct)
-            showOptions(appSex, R.menu.sex)
-            showOptions(appBba, R.menu.yesno)
+            showOptions(requireContext(),appBirthType, R.menu.birthtypes)
+            showOptions(requireContext(),appCs, R.menu.reasons)
+            showOptions(requireContext(),appVdrl, R.menu.pmtct)
+            showOptions(requireContext(),appSex, R.menu.sex)
+            showOptions(requireContext(),appBba, R.menu.yesno)
 
             /**
              * Date pickers
              */
-            showPicker(appDelDate)
-            showPicker(appDob)
-            showPicker(appAdmDate)
+            showPicker(requireContext(),appDelDate)
+            showPicker(requireContext(),appDob)
+            showPicker(requireContext(),appAdmDate)
             /**
              * Time Pickers
              */
@@ -738,18 +720,6 @@ class CustomRegistrationFragment : Fragment() {
         return UUID.randomUUID().toString()
     }
 
-    private fun showOptions(textInputEditText: TextInputEditText, menuItem: Int) {
-        textInputEditText.setOnClickListener {
-            PopupMenu(requireContext(), textInputEditText).apply {
-                menuInflater.inflate(menuItem, menu)
-                setOnMenuItemClickListener { item ->
-                    textInputEditText.setText(item.title)
-                    true
-                }
-                show()
-            }
-        }
-    }
 
     private fun listenChanges(
         input: TextInputEditText,

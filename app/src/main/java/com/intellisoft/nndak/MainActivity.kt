@@ -32,6 +32,7 @@ import com.intellisoft.nndak.auth.PinLockActivity
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.databinding.ActivityMainBinding
+import com.intellisoft.nndak.databinding.BabyItemBinding
 import com.intellisoft.nndak.dialogs.CustomProgressDialog
 import com.intellisoft.nndak.logic.Logics.Companion.ADMINISTRATOR
 import com.intellisoft.nndak.logic.Logics.Companion.DEPUTY_NURSE_MANAGER
@@ -39,6 +40,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.DOCTOR
 import com.intellisoft.nndak.logic.Logics.Companion.HEAD_OF_DEPARTMENT
 import com.intellisoft.nndak.logic.Logics.Companion.HMB_ASSISTANT
 import com.intellisoft.nndak.logic.Logics.Companion.NURSING_OFFICER_IN_CHARGE
+import com.intellisoft.nndak.models.MotherBabyItem
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment
 import com.intellisoft.nndak.utils.isNetworkAvailable
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
@@ -53,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
-    private val TAG = javaClass.name
     private val viewModel: MainActivityViewModel by viewModels()
     private var exit = false
 
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 
     fun showBottomNavigationView(value: Int) {
         findViewById<BottomNavigationView>(R.id.navigation).visibility = value
@@ -247,7 +249,6 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.childDashboardFragment, bundleOf("patient_id" to patientId))
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun openNavigationDrawer() {
         binding.drawer.openDrawer(GravityCompat.START)
         viewModel.updateLastSyncTimestamp()
@@ -365,32 +366,12 @@ class MainActivity : AppCompatActivity() {
         finishAffinity()
         val i = Intent(this@MainActivity, PinLockActivity::class.java)
         startActivity(i)
-        /*  val dialog = SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-              .setTitleText("Session Timeout")
-              .setContentText("Your session has expired, please login again to proceed")
-              .setCustomImage(R.drawable.smile)
-              .setConfirmClickListener {
-                  it.dismiss()
-                  try {
-                      FhirApplication.setLoggedIn(this, false)
-                      finishAffinity()
-                      val i = Intent(this@MainActivity, LoginActivity::class.java)
-                      startActivity(i)
-                  } catch (e: Exception) {
-                      e.printStackTrace()
-                  }
 
-              }
-          dialog.setCancelable(false)
-          dialog.show()*/
     }
-
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
     }
-
 
     private fun observeSyncState() {
         lifecycleScope.launch {
@@ -425,5 +406,57 @@ class MainActivity : AppCompatActivity() {
 
     fun navigate(resource: Int) {
         findNavController(R.id.nav_host_fragment).navigate(resource)
+    }
+
+    companion object {
+
+        fun updateBabyMum(incDetails: BabyItemBinding, data: MotherBabyItem) {
+            try {
+                incDetails.pbLoading.visibility = View.GONE
+                incDetails.lnBody.visibility = View.VISIBLE
+
+                val gest = data.dashboard.gestation ?: ""
+                val status = data.status
+                incDetails.tvBabyName.text = data.babyName
+                incDetails.tvMumName.text = data.motherName
+                incDetails.appBirthWeight.text = data.birthWeight
+                incDetails.appGestation.text = "$gest-$status"
+                incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
+                incDetails.appMumIp.text = data.motherIp
+                incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
+
+                incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
+                incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
+                incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
+
+                incDetails.appNeonatalSepsis.text = data.dashboard.neonatalSepsis ?: ""
+                incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
+                incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
+
+
+                val isSepsis = data.dashboard.neonatalSepsis
+                val isAsphyxia = data.dashboard.asphyxia
+                val isJaundice = data.dashboard.jaundice
+                if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
+                    incDetails.lnConditions.visibility = View.VISIBLE
+                }
+                if (isSepsis != "Yes") {
+                    incDetails.appNeonatalSepsis.visibility = View.GONE
+                    incDetails.tvNeonatalSepsis.visibility = View.GONE
+                }
+
+                if (isAsphyxia != "Yes") {
+                    incDetails.appAsphyxia.visibility = View.GONE
+                    incDetails.tvAsphyxia.visibility = View.GONE
+                }
+
+                if (isJaundice != "Yes") {
+                    incDetails.tvJaundice.visibility = View.GONE
+                    incDetails.appJaundice.visibility = View.GONE
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
     }
 }

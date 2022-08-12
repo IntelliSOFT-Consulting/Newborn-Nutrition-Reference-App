@@ -2,6 +2,7 @@ package com.intellisoft.nndak.utils
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -22,6 +23,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -73,6 +76,133 @@ fun showPicker(context: Context, input: TextInputEditText) {
         datePickerDialog.datePicker.maxDate = Date().time
         datePickerDialog.show()
     }
+}
+  fun listenMaxChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String,
+    min: Int,
+    max: Int
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+
+                        input.addTextChangedListener(this)
+                        if (input.text.toString().isNotEmpty()) {
+                            val parsed = newValue.toDouble()
+                            val minimum = min.toDouble()
+                            val maximum = max.toDouble()
+                            if (parsed < minimum) {
+                                inputLayout.error = "Minimum allowed is $minimum"
+                            } else if (parsed > maximum) {
+                                inputLayout.error = "Maximum allowed is $maximum"
+                            } else {
+                                inputLayout.error = null
+                            }
+                        } else {
+                            inputLayout.error = null
+                        }
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
+
+fun listenChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this)
+                        inputLayout.error = null
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
+
+fun showOptions(context: Context, textInputEditText: TextInputEditText, menuItem: Int) {
+    textInputEditText.setOnClickListener {
+        PopupMenu(context, textInputEditText).apply {
+            menuInflater.inflate(menuItem, menu)
+            setOnMenuItemClickListener { item ->
+                textInputEditText.setText(item.title)
+                true
+            }
+            show()
+        }
+    }
+}
+
+fun showErrorView(tvError: TextView, s: String) {
+    tvError.visibility = View.VISIBLE
+    tvError.text = s
 }
 
 fun controlRadio(dataHands: PositioningItemBinding) {

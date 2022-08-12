@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Build
 import androidx.lifecycle.*
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.get
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
@@ -44,6 +45,11 @@ import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_DATE
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_DETAILS
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_NOTES
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_OUTCOME
+import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.EBM
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
@@ -100,6 +106,8 @@ class PatientDetailsViewModel(
     private val fhirEngine: FhirEngine,
     private val patientId: String
 ) : AndroidViewModel(application) {
+
+    val customMessage = MutableLiveData<MessageItem>()
     val liveMumChild = MutableLiveData<MotherBabyItem>()
     val liveAssessmentExpressions = MutableLiveData<List<ExpressionHistory>>()
     val liveOrder = MutableLiveData<OrdersItem>()
@@ -112,6 +120,7 @@ class PatientDetailsViewModel(
     val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
     val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
     val liveBreastHistory = MutableLiveData<List<BreastsHistory>>()
+    val liveDischargeDetails = MutableLiveData<List<DischargeItem>>()
 
 
     fun feedsDistribution() {
@@ -1715,6 +1724,26 @@ class PatientDetailsViewModel(
             .firstOrNull { it.code == key }
     }
 
+    private suspend fun getEncounterPerCode(key: String): List<EncounterItem> {
+        val encounters: MutableList<EncounterItem> = mutableListOf()
+        fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                filter(Encounter.REASON_CODE, {
+                    value = of(Coding().apply {
+                        code = key
+                    })
+                })
+                sort(Encounter.DATE, Order.DESCENDING)
+
+            }
+            .map { createEncounterItem(it, getApplication<Application>().resources) }
+            .filter { it.status == Encounter.EncounterStatus.INPROGRESS.toString() }
+            .let { encounters.addAll(it) }
+
+        return encounters.reversed()
+    }
+
     fun getFeedingHistory() {
         viewModelScope.launch {
             liveFeedingHistory.value = getFeedingHistoryDataModel(context)
@@ -1850,6 +1879,64 @@ class PatientDetailsViewModel(
         )
     }
 
+    fun getDischargeDetails() {
+        viewModelScope.launch {
+            liveDischargeDetails.value = getDischargeDetailsDataModel(context)
+        }
+    }
+
+    private suspend fun getDischargeDetailsDataModel(context: Application): List<DischargeItem> {
+        val discharge: MutableList<DischargeItem> = mutableListOf()
+        val dischargeEncounters = getEncounterPerCode(DISCHARGE_DETAILS)
+        if (dischargeEncounters.isNotEmpty()) {
+            dischargeEncounters.forEach {
+                val data = retrieveDischarge(it)
+                if (data.date != "--") {
+                    discharge.add(data)
+                }
+            }
+        }
+        return discharge
+
+    }
+
+    private suspend fun retrieveDischarge(it: EncounterItem): DischargeItem {
+        val observations = getObservationsPerEncounter(it.id)
+        return DischargeItem(
+            resourceId = it.id,
+            date = extractValue(observations, DISCHARGE_DATE),
+            outcome = extractValue(observations, DISCHARGE_OUTCOME),
+            reason = extractValue(observations, DISCHARGE_REASON),
+            weight = extractValue(observations, CURRENT_WEIGHT),
+            notes = extractValue(observations, DISCHARGE_NOTES)
+        )
+    }
+
+    fun readmitBaby(resourceId: String) {
+        viewModelScope.launch {
+            try {
+                val encounter = fhirEngine.get<Encounter>(resourceId)
+                encounter.status = Encounter.EncounterStatus.FINISHED
+                fhirEngine.update(encounter.copy())
+                customMessage.postValue(
+                    MessageItem(
+                        success = true,
+                        message = "Baby readmitted successfully"
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                customMessage.postValue(
+                    MessageItem(
+                        success = false,
+                        message = "Error encountered while readmitting baby"
+                    )
+                )
+                return@launch
+            }
+
+        }
+    }
 
 
     companion object {
@@ -1949,7 +2036,11 @@ class PatientDetailsViewModel(
             } else {
                 ""
             }
-            val status = encounter.status ?: Encounter.EncounterStatus.INPROGRESS
+            val status = if (encounter.hasStatus()) {
+                encounter.status
+            } else {
+                Encounter.EncounterStatus.INPROGRESS
+            }
             val part = encounter.partOf.reference ?: ""
             return EncounterItem(
                 encounter.logicalId,

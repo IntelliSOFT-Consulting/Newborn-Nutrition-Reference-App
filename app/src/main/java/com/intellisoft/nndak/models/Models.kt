@@ -36,6 +36,7 @@ data class CodingObservation(
     val display: String,
     val value: String,
 )
+
 data class QuantityObservation(
     val code: String,
     val display: String,
@@ -288,6 +289,7 @@ data class Prescription(
     val additional: String,
     val data: List<FeedDataItem>
 )
+
 data class FeedingHistory(
     val hour: String,
     val date: String,
@@ -309,6 +311,7 @@ data class PositioningHistory(
     val attach: String,
     val suckle: String
 )
+
 data class BreastsHistory(
     val date: String,
     val interest: String,
@@ -370,4 +373,13 @@ data class FeedDataItem(
 
 data class ScheduleTime(
     val hour: String,
+)
+
+data class DischargeItem(
+    val resourceId: String,
+    val date: String,
+    val outcome: String,
+    val reason: String,
+    val weight: String,
+    val notes: String
 )

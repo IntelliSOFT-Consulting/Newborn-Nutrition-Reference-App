@@ -129,6 +129,7 @@
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/custom_number_picker_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/dialog_expression_success.xml" value="0.10375412541254125" />
+        <entry key="app/src/main/res/layout/discharge_history.xml" value="0.25" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/empty.xml" value="0.25" />
         <entry key="app/src/main/res/layout/encounter_list_item_view.xml" value="0.1" />
@@ -148,13 +149,14 @@
         <entry key="app/src/main/res/layout/fragment_baby_monitoring.xml" value="0.1747112211221122" />
         <entry key="app/src/main/res/layout/fragment_breast.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/fragment_breast_feeding.xml" value="0.1703125" />
-        <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.1296875" />
+        <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_cues.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.10891089108910891" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/fragment_dhm_orders.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_stock.xml" value="0.16848958333333333" />
+        <entry key="app/src/main/res/layout/fragment_discharge.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_edit_baby.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/fragment_expression.xml" value="0.15944719471947194" />
         <entry key="app/src/main/res/layout/fragment_feeding.xml" value="0.1703125" />
@@ -230,11 +232,13 @@
         <entry key="app/src/main/res/menu/menu_in_transaction.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/menu_supp.xml" value="0.15963541666666667" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.15390625" />
+        <entry key="app/src/main/res/menu/outcome.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/menu/pmtct.xml" value="0.1" />
         <entry key="app/src/main/res/menu/post_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/reasons.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/route.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/sex.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/status.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/menu/yesno.xml" value="0.1" />
       </map>
     </option>

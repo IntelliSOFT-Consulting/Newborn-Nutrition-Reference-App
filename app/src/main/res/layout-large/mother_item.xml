@@ -43,7 +43,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_150dp"
         android:layout_weight="1.5"
         app:cardCornerRadius="6dp"
         app:cardElevation="2dp"
@@ -73,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_ip_number"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -98,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_delivery_method"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -123,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_delivery_date"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -148,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_mother_status"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -180,7 +181,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_parity"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -205,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_pmctc_status"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -230,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/menu_multiple"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />
@@ -255,7 +256,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_mum_location"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:autoSizeTextType="uniform" />

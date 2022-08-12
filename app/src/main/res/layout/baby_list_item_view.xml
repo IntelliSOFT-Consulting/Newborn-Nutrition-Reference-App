@@ -50,8 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_ip_number"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textStyle="bold"
-                    app:autoSizeTextType="uniform" />
+                    android:textStyle="bold"  />
             </LinearLayout>
 
             <LinearLayout

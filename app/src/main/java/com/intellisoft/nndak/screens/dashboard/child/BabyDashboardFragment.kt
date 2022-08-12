@@ -24,6 +24,7 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
+import com.intellisoft.nndak.MainActivity.Companion.updateBabyMum
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
@@ -140,65 +141,9 @@ class BabyDashboardFragment : Fragment() {
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-
-                binding.apply {
-                    incDetails.pbLoading.visibility = View.GONE
-                    incDetails.lnBody.visibility = View.VISIBLE
-                    try {
-                        val gest = it.dashboard.gestation ?: ""
-
-                        val status = it.status
-                        incDetails.tvBabyName.text = it.babyName
-                        incDetails.tvMumName.text = it.motherName
-                        incDetails.appBirthWeight.text = it.birthWeight
-                        incDetails.appGestation.text = "$gest-$status"
-                        incDetails.appApgarScore.text = it.dashboard.apgarScore ?: ""
-                        incDetails.appMumIp.text = it.motherIp
-                        incDetails.appBabyWell.text = it.dashboard.babyWell ?: ""
-                        incDetails.appAsphyxia.text = it.dashboard.asphyxia ?: ""
-                        incDetails.appNeonatalSepsis.text = it.dashboard.neonatalSepsis ?: ""
-                        incDetails.appJaundice.text = it.dashboard.jaundice ?: ""
-                        incDetails.appBirthDate.text = it.dashboard.dateOfBirth ?: ""
-                        incDetails.appLifeDay.text = it.dashboard.dayOfLife ?: ""
-                        incDetails.appAdmDate.text = it.dashboard.dateOfAdm ?: ""
-
-                        tvMotherMilk.text = it.dashboard.motherMilk ?: ""
-
-                        response.appIpNumber.text = it.assessment.breastfeedingBaby
-                        response.appMotherName.text = it.assessment.breastProblems
-                        response.appBabyName.text = it.assessment.contraindicated
-
-
-                        val isSepsis = it.dashboard.neonatalSepsis
-                        val isAsphyxia = it.dashboard.asphyxia
-                        val isJaundice = it.dashboard.jaundice
-
-                        if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
-                            incDetails.lnConditions.visibility = View.VISIBLE
-                        }
-                        if (isSepsis != "Yes") {
-                            incDetails.appNeonatalSepsis.visibility = View.GONE
-                            incDetails.tvNeonatalSepsis.visibility = View.GONE
-                        }
-
-                        if (isAsphyxia != "Yes") {
-                            incDetails.appAsphyxia.visibility = View.GONE
-                            incDetails.tvAsphyxia.visibility = View.GONE
-                        }
-
-                        if (isJaundice != "Yes") {
-                            incDetails.tvJaundice.visibility = View.GONE
-                            incDetails.appJaundice.visibility = View.GONE
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {data->
+            if (data != null) {
+                updateBabyMum(binding.incDetails, data)
             }
         }
 
@@ -597,8 +542,6 @@ class BabyDashboardFragment : Fragment() {
         rightAxis.isEnabled = false
         //refresh
         binding.growthChart.invalidate()
-
-
     }
 
 
@@ -610,7 +553,7 @@ class BabyDashboardFragment : Fragment() {
         actual.setDrawCircles(false)
         actual.circleRadius = 1f
         actual.mode = LineDataSet.Mode.CUBIC_BEZIER
-        actual.lineWidth = 3f
+        actual.lineWidth = 2f
 
         return actual
     }

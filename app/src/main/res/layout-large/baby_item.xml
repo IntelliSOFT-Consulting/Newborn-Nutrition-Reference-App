@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_baby_well"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -111,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_birth_date"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -136,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_adm_date"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -161,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_life_day"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -193,7 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_gestation"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -218,7 +218,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_birth_weight"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -242,7 +242,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/menu_apgar_score"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -267,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_mum_ip"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
@@ -302,7 +302,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_asphyxia"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -326,7 +326,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_neonatal_sepsis"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -350,7 +350,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="@string/app_jaundice"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 

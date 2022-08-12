@@ -1,0 +1,104 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "Discharge-Date",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "Discharge-Date"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "8.0.0",
+          "type": "dateTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "linkId": "Outcome",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "Outcome"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "choice",
+          "code": [
+            {
+              "code": "Discharge-Outcome",
+              "display": "Discharge Outcome",
+              "system": "http://snomed.info/sct"
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ],
+                "text": "Drop down"
+              }
+            }
+          ],
+          "required": true,
+          "linkId": "/Discharge-Outcome",
+          "text": "Discharge Outcome",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Discharge-Outcome",
+                "display": "Alive",
+                "system": "http://snomed.info/sct"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Discharge-Outcome",
+                "display": "Dead",
+                "system": "http://snomed.info/sct"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

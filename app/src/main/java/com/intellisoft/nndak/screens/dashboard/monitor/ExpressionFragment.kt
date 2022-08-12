@@ -26,6 +26,8 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ExpressionAdapter
 import com.intellisoft.nndak.databinding.FragmentExpressionBinding
 import com.intellisoft.nndak.dialogs.MoreExpression
+import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
 import com.intellisoft.nndak.models.ExpressionHistory
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -196,7 +198,7 @@ class ExpressionFragment : Fragment() {
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
             viewModel.updateExpression(
-                questionnaireFragment.getQuestionnaireResponse(), encounterId, patientId
+                questionnaireFragment.getQuestionnaireResponse(), EXPRESSIONS, patientId
             )
         }
     }

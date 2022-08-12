@@ -206,21 +206,24 @@ class StatisticsFragment : Fragment() {
     private fun loadLiveData() {
         showLoading(true)
         apiService.loadStatistics(requireContext()) {
-            showLoading(false)
-            if (it != null) {
-                val gson = Gson()
-                val json = gson.toJson(it)
-                try {
-                    FhirApplication.updateStatistics(requireContext(), json)
-                    updateUI(it)
-                } catch (e: Exception) {
-e.printStackTrace()
-                }
-            } else {
+          try {
+              showLoading(false)
+              if (it != null) {
+                  val gson = Gson()
+                  val json = gson.toJson(it)
+                  try {
+                      FhirApplication.updateStatistics(requireContext(), json)
+                      updateUI(it)
+                  } catch (e: Exception) {
+                      e.printStackTrace()
+                  }
+              } else {
 
-                syncLocalData()
-            }
-
+                  syncLocalData()
+              }
+          } catch (e: Exception) {
+              e.printStackTrace()
+          }
         }
 
     }

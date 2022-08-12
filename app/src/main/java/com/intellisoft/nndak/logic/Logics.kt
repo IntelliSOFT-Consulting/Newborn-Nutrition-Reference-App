@@ -43,7 +43,7 @@ class Logics {
         const val DHM_DISPENSING = "DHM Dispensing"
         const val DHM_STOCK = "DHM Stock"
         const val FEEDING_MONITORING = "Feeding and Monitoring"
-        const val BREASTS_FEEDING= "Breast-Feeding-Assessment"
+        const val BREASTS_FEEDING = "Breast-Feeding-Assessment"
         const val ADMISSION_WEIGHT = "3141-9"
         const val CURRENT_WEIGHT = "3141-9"
         const val EBM = "226790003"
@@ -120,33 +120,14 @@ class Logics {
         const val WITHIN_ONE = "46556-7"
 
         /**
-         * Stock Data
+         * Discharge Details
          */
-        const val PASTEURIZED = "Pasteurized"
-        const val UNPASTEURIZED = "Un-Pasteurized"
-        const val STOCK_TYPE = "DHM-Stock-Type"
-
-
-        /**
-         * 104-9 Code
-         * 2hr 3hr 2hr 3hr 1hr 2hr value
-         * 3 2 1 count
-         */
-
-
-        const val SPO2 = "59408-5"
-
-        val comorbidities: Set<String> =
-            setOf(
-                ASTHMA,
-                LUNG_DISEASE,
-                DEPRESSION,
-                DIABETES,
-                HYPER_TENSION,
-                HEART_DISEASE,
-                HIGH_BLOOD_LIPIDS
-            )
-        val symptoms: Set<String> = setOf(FEVER, SHORTNESS_BREATH, COUGH, LOSS_OF_SMELL)
+        const val DISCHARGE_DATE = "Discharge-Date"
+        const val DISCHARGE_OUTCOME = "Discharge-Outcome"
+        const val DISCHARGE_REASON = "Discharge-Reason"
+        const val DISCHARGE_DETAILS = "Client Discharge"
+        const val DISCHARGE_ALIVE = "Discharge-Alive"
+        const val DISCHARGE_NOTES = "Discharge-Notes"
 
 
     }

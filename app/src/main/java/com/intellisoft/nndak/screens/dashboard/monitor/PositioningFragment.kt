@@ -35,6 +35,7 @@ import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.models.PositioningHistory
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.utils.controlRadio
+import com.intellisoft.nndak.utils.showErrorView
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -291,11 +292,6 @@ class PositioningFragment : Fragment() {
             }
         }
         return true
-    }
-
-    private fun showErrorView(tvError: TextView, s: String) {
-        tvError.visibility = View.VISIBLE
-        tvError.text = s
     }
 
     private fun observeResourcesSaveAction() {

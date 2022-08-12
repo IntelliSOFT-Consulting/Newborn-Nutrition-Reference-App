@@ -29,6 +29,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
+import com.intellisoft.nndak.MainActivity.Companion.updateBabyMum
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ViewPagerAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyMonitoringBinding
@@ -119,58 +120,16 @@ class BabyMonitoringFragment : Fragment() {
             breadcrumb.page.setOnClickListener {
                 findNavController().navigateUp()
             }
+            incDetails.pbLoading.visibility = View.VISIBLE
+            incDetails.lnBody.visibility = View.GONE
 
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
-
             if (data != null) {
                 FhirApplication.updateCurrent(requireContext(), data.id)
-                binding.apply {
-
-                    incDetails.lnBody.visibility = View.VISIBLE
-                    incDetails.pbLoading.visibility = View.GONE
-
-                    val gest = data.dashboard.gestation ?: ""
-                    val status = data.status
-                    incDetails.tvBabyName.text = data.babyName
-                    incDetails.tvMumName.text = data.motherName
-                    incDetails.appBirthWeight.text = data.birthWeight
-                    incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = data.motherIp
-                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text =
-                        data.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
-
-
-                    val isSepsis = data.dashboard.neonatalSepsis
-                    val isAsphyxia = data.dashboard.asphyxia
-                    val isJaundice = data.dashboard.jaundice
-                    if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
-                        incDetails.lnConditions.visibility = View.VISIBLE
-                    }
-                    if (isSepsis != "Yes") {
-                        incDetails.appNeonatalSepsis.visibility = View.GONE
-                        incDetails.tvNeonatalSepsis.visibility = View.GONE
-                    }
-
-                    if (isAsphyxia != "Yes") {
-                        incDetails.appAsphyxia.visibility = View.GONE
-                        incDetails.tvAsphyxia.visibility = View.GONE
-                    }
-
-                    if (isJaundice != "Yes") {
-                        incDetails.tvJaundice.visibility = View.GONE
-                        incDetails.appJaundice.visibility = View.GONE
-                    }
-                }
+                updateBabyMum(binding.incDetails, data)
             }
         }
     }

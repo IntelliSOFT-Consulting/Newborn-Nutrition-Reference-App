@@ -31,9 +31,6 @@ import com.intellisoft.nndak.data.DHMStock
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics.Companion.PASTEURIZED
-import com.intellisoft.nndak.logic.Logics.Companion.STOCK_TYPE
-import com.intellisoft.nndak.logic.Logics.Companion.UNPASTEURIZED
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.disableEditing
 import com.intellisoft.nndak.utils.listenPlainChanges
@@ -59,8 +56,10 @@ class DhmStockFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var pa: String
     private lateinit var upa: String
-    private lateinit var type: String
     private lateinit var totalDhm: String
+    private lateinit var prepa: String
+    private lateinit var preupa: String
+    private lateinit var pretotalDhm: String
     val stockList = ArrayList<CodingObservation>()
     private val apiService = RestManager()
     private val binding
@@ -98,22 +97,15 @@ class DhmStockFragment : Fragment() {
 
             listenToChange(edPasteurized)
             listenToChange(edUnpasteurized)
-            listenMaxChanges(edPasteurized, tilPasteurized, "Enter value ", 1, 50000)
-            listenMaxChanges(edUnpasteurized, tilUnpasteurized, "Enter amount ", 1, 50000)
+            listenToChange(edPrePasteurized)
+            listenToChange(edPreUnpasteurized)
+            listenMaxChanges(edPasteurized, tilPasteurized, "Enter value", 1, 50000)
+            listenMaxChanges(edUnpasteurized, tilUnpasteurized, "Enter amount", 1, 50000)
+            listenMaxChanges(edPrePasteurized, tilPrePasteurized, "Enter value", 1, 50000)
+            listenMaxChanges(edPreUnpasteurized, tilPreUnpasteurized, "Enter amount", 1, 50000)
             disableEditing(edTotal)
-            listenPlainChanges(appType, tilType,"Select Type")
+            disableEditing(edPreTotal)
 
-
-            appType.setOnClickListener {
-                PopupMenu(requireContext(), appType).apply {
-                    menuInflater.inflate(R.menu.menu_in_transaction, menu)
-                    setOnMenuItemClickListener { item ->
-                        appType.setText(item.title)
-                        true
-                    }
-                    show()
-                }
-            }
 
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -267,6 +259,10 @@ class DhmStockFragment : Fragment() {
     private fun calculateTotals() {
         try {
             binding.apply {
+
+                /**
+                 * Calculate total Term
+                 */
                 pa = edPasteurized.text.toString()
                 upa = edUnpasteurized.text.toString()
                 if (pa.isNotEmpty() && upa.isNotEmpty()) {
@@ -277,6 +273,21 @@ class DhmStockFragment : Fragment() {
                     edTotal.setText(total.toString())
                 } else {
                     edTotal.setText("0")
+                }
+
+                /**
+                 * Calculate total Preterm
+                 */
+                prepa = edPrePasteurized.text.toString()
+                preupa = edPreUnpasteurized.text.toString()
+                if (prepa.isNotEmpty() && preupa.isNotEmpty()) {
+                    val total = prepa.toFloat() + preupa.toFloat()
+
+                    pretotalDhm = total.toString()
+
+                    edPreTotal.setText(total.toString())
+                } else {
+                    edPreTotal.setText("0")
                 }
 
             }
@@ -295,7 +306,8 @@ class DhmStockFragment : Fragment() {
         val stock = DHMStock(
             unPasteurized = upa,
             pasteurized = pa,
-            dhmType = type,
+            PretermPasteurized = prepa,
+            PretermunPasteurized = preupa,
             userId = userId
         )
         apiService.addDHMStock(requireContext(), stock) {
@@ -320,41 +332,6 @@ class DhmStockFragment : Fragment() {
                 )
                     .show()
             }
-        }
-    }
-
-    private fun okClickFhir() {
-        confirmationDialog.dismiss()
-        (activity as MainActivity).displayDialog()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val pasteurized = CodingObservation(
-                PASTEURIZED,
-                "Pasteurized",
-                pa
-            )
-
-            val unpasteurized = CodingObservation(
-                UNPASTEURIZED,
-                "Un-Pasteurized",
-                upa
-            )
-
-            val milkType = CodingObservation(
-                STOCK_TYPE,
-                "DHM-Stock-Type",
-                type
-            )
-
-            stockList.addAll(listOf(pasteurized, unpasteurized, milkType))
-
-            viewModel.updateStock(
-                questionnaireFragment.getQuestionnaireResponse(),
-                stockList
-            )
         }
     }
 
@@ -391,7 +368,9 @@ class DhmStockFragment : Fragment() {
     private fun onSubmitAction() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
-        type = binding.appType.text.toString()
+        prepa = binding.edPrePasteurized.text.toString()
+        preupa = binding.edPreUnpasteurized.text.toString()
+
         if (TextUtils.isEmpty(pa) || pa == "0") {
             binding.edPasteurized.requestFocus()
             binding.tilPasteurized.error = "Enter value"
@@ -402,11 +381,19 @@ class DhmStockFragment : Fragment() {
             binding.tilUnpasteurized.error = "Enter value"
             return
         }
-        if (TextUtils.isEmpty(type)) {
-            binding.appType.requestFocus()
-            binding.tilType.error = "Select value"
+
+        if (TextUtils.isEmpty(prepa) || prepa == "0") {
+            binding.edPrePasteurized.requestFocus()
+            binding.tilPrePasteurized.error = "Enter value"
             return
         }
+
+        if (TextUtils.isEmpty(preupa) || preupa == "0") {
+            binding.edPreUnpasteurized.requestFocus()
+            binding.tilPreUnpasteurized.error = "Enter value"
+            return
+        }
+
         confirmationDialog.show(childFragmentManager, "Confirm Details")
 
     }
