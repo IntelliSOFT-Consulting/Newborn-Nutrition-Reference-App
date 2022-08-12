@@ -15,6 +15,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
@@ -25,6 +26,8 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ExpressionAdapter
 import com.intellisoft.nndak.databinding.FragmentExpressionBinding
 import com.intellisoft.nndak.dialogs.MoreExpression
+import com.intellisoft.nndak.logic.Logics
+import com.intellisoft.nndak.logic.Logics.Companion.EXPRESSIONS
 import com.intellisoft.nndak.models.ExpressionHistory
 import com.intellisoft.nndak.utils.boldText
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -46,6 +49,8 @@ class ExpressionFragment : Fragment() {
     private var _binding: FragmentExpressionBinding? = null
     lateinit var adapterList: ExpressionAdapter
     private lateinit var patientId: String
+    private var exitSection: Boolean = true
+    private lateinit var encounterId: String
     private val binding
         get() = _binding!!
 
@@ -65,6 +70,8 @@ class ExpressionFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
         }
         try {
+
+            encounterId = FhirApplication.getUpdatedCurrent(requireContext())
             patientId = FhirApplication.getCurrentPatient(requireContext())
             fhirEngine = FhirApplication.fhirEngine(requireContext())
             patientDetailsViewModel =
@@ -94,6 +101,7 @@ class ExpressionFragment : Fragment() {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
                 actionNewExpression.setOnClickListener {
+                    exitSection = false
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
@@ -169,10 +177,6 @@ class ExpressionFragment : Fragment() {
                 }
             )
 
-        binding.apply {
-
-
-        }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
@@ -194,23 +198,27 @@ class ExpressionFragment : Fragment() {
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
             viewModel.updateExpression(
-                questionnaireFragment.getQuestionnaireResponse(), patientId
+                questionnaireFragment.getQuestionnaireResponse(), EXPRESSIONS, patientId
             )
         }
     }
 
-
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-                resetDisplay()
-            }
-            .setCancelText("No")
-            .show()
+        if (exitSection) {
+
+            (activity as MainActivity).openDashboard(patientId)
+        } else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+                    exitSection = true
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun onBackPressed() {

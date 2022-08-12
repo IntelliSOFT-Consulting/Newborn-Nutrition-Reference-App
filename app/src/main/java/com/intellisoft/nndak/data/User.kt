@@ -14,6 +14,7 @@ data class AuthResponse(
     @SerializedName("issued") val issued: String?,
     @SerializedName("expires") val expires: String?,
     @SerializedName("message") val message: String?,
+    @SerializedName("error") val error: String?,
     @SerializedName("newUser") val newUser: Boolean?,
     @SerializedName("_reset_url") val _reset_url: String?,
 
@@ -43,7 +44,8 @@ data class SessionData(
 data class DHMStock(
     @SerializedName("pasteurized") val pasteurized: String,
     @SerializedName("unPasteurized") val unPasteurized: String,
-    @SerializedName("dhmType") val dhmType: String,
+    @SerializedName("PretermPasteurized") val PretermPasteurized: String,
+    @SerializedName("PretermunPasteurized") val PretermunPasteurized: String,
     @SerializedName("userId") val userId: String
 
 )
@@ -53,6 +55,7 @@ data class DispenseData(
     @SerializedName("dhmVolume") val dhmVolume: String,
     @SerializedName("remarks") val remarks: String,
     @SerializedName("userId") val userId: String,
-    @SerializedName("orderId") val orderId: String
+    @SerializedName("orderId") val orderId: String,
+    @SerializedName("category") val category: String
 
 )

@@ -18,7 +18,8 @@
         style="?attr/textAppearanceSubtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_closing_stock" />
+        android:text="@string/app_closing_stock"
+        android:textColor="@color/colorPrimary" />
 
     <TextView
         style="?attr/textAppearanceBody2"
@@ -27,20 +28,28 @@
         android:layout_marginTop="@dimen/_15dp"
         android:text="@string/app_closing" />
 
-    <LinearLayout
+    <TextView
+        style="?attr/textAppearanceSubtitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15dp"
+        android:text="@string/app_term_dhm"
+        android:textColor="@color/colorPrimary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="visible"
-        android:weightSum="2">
+        android:weightSum="3">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_pasteurized"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:hint="@string/app_pasteurized">
 
@@ -55,11 +64,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_unpasteurized"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:hint="@string/app_unpasteurized">
 
@@ -73,35 +83,76 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        android:weightSum="2">
-
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:hint="@string/app_dhm_type">
+            android:hint="@string/app_total">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/app_type"
+                android:id="@+id/ed_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:textColorHint="#757575"
+                android:textSize="12sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <TextView
+        style="?attr/textAppearanceSubtitle1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15dp"
+        android:text="@string/app_pre_term_dhm"
+        android:textColor="@color/colorPrimary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="3">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_pre_pasteurized"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:hint="@string/app_pasteurized">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_pre_pasteurized"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColorHint="#757575"
+                android:textSize="12sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_pre_unpasteurized"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:hint="@string/app_unpasteurized">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_pre_unpasteurized"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:textColorHint="#757575"
                 android:textSize="12sp" />
@@ -112,13 +163,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:hint="@string/app_total">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_total"
+                android:id="@+id/ed_pre_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"

@@ -36,6 +36,7 @@ data class CodingObservation(
     val display: String,
     val value: String,
 )
+
 data class QuantityObservation(
     val code: String,
     val display: String,
@@ -249,6 +250,7 @@ data class PrescriptionItem(
     val cWeight: String? = "",
     val formula: String? = "",
     val deficit: String? = "",
+    val feedingTime: String,
     val feed: List<FeedItem>? = null
 ) {
     override fun toString(): String = resourceId.toString()
@@ -287,7 +289,9 @@ data class Prescription(
     val additional: String,
     val data: List<FeedDataItem>
 )
+
 data class FeedingHistory(
+    val hour: String,
     val date: String,
     val time: String,
     val ebm: String,
@@ -307,6 +311,7 @@ data class PositioningHistory(
     val attach: String,
     val suckle: String
 )
+
 data class BreastsHistory(
     val date: String,
     val interest: String,
@@ -354,6 +359,7 @@ data class CareItem(
     val encounterId: String,
     val status: String,
     val created: String,
+    val purpose: String,
 ) {
     override fun toString(): String = resourceId
 }
@@ -367,4 +373,13 @@ data class FeedDataItem(
 
 data class ScheduleTime(
     val hour: String,
+)
+
+data class DischargeItem(
+    val resourceId: String,
+    val date: String,
+    val outcome: String,
+    val reason: String,
+    val weight: String,
+    val notes: String
 )

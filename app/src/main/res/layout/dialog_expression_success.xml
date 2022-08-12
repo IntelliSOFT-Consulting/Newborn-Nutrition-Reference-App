@@ -45,11 +45,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:drawableEnd="@drawable/ic_close_vd_white_24"
-                            android:drawableTint="@color/dim_red"
                             android:gravity="end"
                             android:text="@string/close"
-                            android:textColor="@color/dim_red" />
+                            android:textColor="@color/dim_red"
+                            app:drawableTint="@color/dim_red"
+                            app:drawableEndCompat="@drawable/ic_baseline_cancel_24" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -60,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_15dp"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/hist"
                     android:textStyle="bold" />
 

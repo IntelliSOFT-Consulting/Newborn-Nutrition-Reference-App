@@ -3,6 +3,7 @@ package com.intellisoft.nndak.screens.dashboard.dhm
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
@@ -22,6 +23,7 @@ import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
@@ -29,11 +31,9 @@ import com.intellisoft.nndak.data.DHMStock
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics.Companion.PASTEURIZED
-import com.intellisoft.nndak.logic.Logics.Companion.STOCK_TYPE
-import com.intellisoft.nndak.logic.Logics.Companion.UNPASTEURIZED
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.disableEditing
+import com.intellisoft.nndak.utils.listenPlainChanges
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,8 +56,10 @@ class DhmStockFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var pa: String
     private lateinit var upa: String
-    private lateinit var type: String
     private lateinit var totalDhm: String
+    private lateinit var prepa: String
+    private lateinit var preupa: String
+    private lateinit var pretotalDhm: String
     val stockList = ArrayList<CodingObservation>()
     private val apiService = RestManager()
     private val binding
@@ -87,20 +89,23 @@ class DhmStockFragment : Fragment() {
         }
         binding.apply {
 
+            breadcrumb.page.text =
+                Html.fromHtml("HMB > <font color=\"#37379B\">Add Stock</font>")
+            breadcrumb.page.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
             listenToChange(edPasteurized)
             listenToChange(edUnpasteurized)
+            listenToChange(edPrePasteurized)
+            listenToChange(edPreUnpasteurized)
+            listenMaxChanges(edPasteurized, tilPasteurized, "Enter value", 1, 50000)
+            listenMaxChanges(edUnpasteurized, tilUnpasteurized, "Enter amount", 1, 50000)
+            listenMaxChanges(edPrePasteurized, tilPrePasteurized, "Enter value", 1, 50000)
+            listenMaxChanges(edPreUnpasteurized, tilPreUnpasteurized, "Enter amount", 1, 50000)
             disableEditing(edTotal)
+            disableEditing(edPreTotal)
 
-            appType.setOnClickListener {
-                PopupMenu(requireContext(), appType).apply {
-                    menuInflater.inflate(R.menu.menu_in_transaction, menu)
-                    setOnMenuItemClickListener { item ->
-                        appType.setText(item.title)
-                        true
-                    }
-                    show()
-                }
-            }
 
             btnSubmit.setOnClickListener {
                 onSubmitAction()
@@ -117,6 +122,68 @@ class DhmStockFragment : Fragment() {
 
     }
 
+    private fun listenMaxChanges(
+        input: TextInputEditText,
+        inputLayout: TextInputLayout,
+        error: String,
+        min: Int,
+        max: Int
+    ) {
+
+        CoroutineScope(Dispatchers.Default).launch {
+            input.addTextChangedListener(object : TextWatcher {
+
+                override fun afterTextChanged(editable: Editable) {
+                    try {
+                        if (editable.toString().isNotEmpty()) {
+                            val newValue = editable.toString()
+                            input.removeTextChangedListener(this)
+                            val position: Int = input.selectionEnd
+                            input.setText(newValue)
+                            if (position > (input.text?.length ?: 0)) {
+                                input.text?.let { input.setSelection(it.length) }
+                            } else {
+                                input.setSelection(position);
+                            }
+
+                            input.addTextChangedListener(this)
+                            if (input.text.toString().isNotEmpty()) {
+                                val parsed = newValue.toDouble()
+                                val minimum = min.toDouble()
+                                val maximum = max.toDouble()
+                                if (parsed < minimum) {
+                                    inputLayout.error = "Minimum allowed is $minimum"
+                                } else if (parsed > maximum) {
+                                    inputLayout.error = "Maximum allowed is $maximum"
+                                } else {
+                                    inputLayout.error = null
+                                }
+                            } else {
+                                inputLayout.error = null
+                            }
+                        } else {
+                            inputLayout.error = error
+                        }
+                    } catch (e: Exception) {
+
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence, start: Int,
+                    count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence, start: Int,
+                    before: Int, count: Int
+                ) {
+
+                }
+            })
+        }
+    }
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "dhm-stock.json")
@@ -137,6 +204,12 @@ class DhmStockFragment : Fragment() {
         } catch (e: Exception) {
             Timber.e("Exception ${e.localizedMessage}")
         }
+    }
+
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
     }
 
     private fun listenToChange(input: TextInputEditText) {
@@ -186,6 +259,10 @@ class DhmStockFragment : Fragment() {
     private fun calculateTotals() {
         try {
             binding.apply {
+
+                /**
+                 * Calculate total Term
+                 */
                 pa = edPasteurized.text.toString()
                 upa = edUnpasteurized.text.toString()
                 if (pa.isNotEmpty() && upa.isNotEmpty()) {
@@ -196,6 +273,21 @@ class DhmStockFragment : Fragment() {
                     edTotal.setText(total.toString())
                 } else {
                     edTotal.setText("0")
+                }
+
+                /**
+                 * Calculate total Preterm
+                 */
+                prepa = edPrePasteurized.text.toString()
+                preupa = edPreUnpasteurized.text.toString()
+                if (prepa.isNotEmpty() && preupa.isNotEmpty()) {
+                    val total = prepa.toFloat() + preupa.toFloat()
+
+                    pretotalDhm = total.toString()
+
+                    edPreTotal.setText(total.toString())
+                } else {
+                    edPreTotal.setText("0")
                 }
 
             }
@@ -214,7 +306,8 @@ class DhmStockFragment : Fragment() {
         val stock = DHMStock(
             unPasteurized = upa,
             pasteurized = pa,
-            dhmType = type,
+            PretermPasteurized = prepa,
+            PretermunPasteurized = preupa,
             userId = userId
         )
         apiService.addDHMStock(requireContext(), stock) {
@@ -239,41 +332,6 @@ class DhmStockFragment : Fragment() {
                 )
                     .show()
             }
-        }
-    }
-
-    private fun okClickFhir() {
-        confirmationDialog.dismiss()
-        (activity as MainActivity).displayDialog()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val questionnaireFragment =
-                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-
-            val pasteurized = CodingObservation(
-                PASTEURIZED,
-                "Pasteurized",
-                pa
-            )
-
-            val unpasteurized = CodingObservation(
-                UNPASTEURIZED,
-                "Un-Pasteurized",
-                upa
-            )
-
-            val milkType = CodingObservation(
-                STOCK_TYPE,
-                "DHM-Stock-Type",
-                type
-            )
-
-            stockList.addAll(listOf(pasteurized, unpasteurized, milkType))
-
-            viewModel.updateStock(
-                questionnaireFragment.getQuestionnaireResponse(),
-                stockList
-            )
         }
     }
 
@@ -310,18 +368,32 @@ class DhmStockFragment : Fragment() {
     private fun onSubmitAction() {
         pa = binding.edPasteurized.text.toString()
         upa = binding.edUnpasteurized.text.toString()
-        type = binding.appType.text.toString()
-        if (TextUtils.isEmpty(pa) || pa == "0"
-            || TextUtils.isEmpty(upa) || upa == "0" || TextUtils.isEmpty(type)
-        ) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.inputs_missing),
-                Toast.LENGTH_SHORT
-            )
-                .show()
+        prepa = binding.edPrePasteurized.text.toString()
+        preupa = binding.edPreUnpasteurized.text.toString()
+
+        if (TextUtils.isEmpty(pa) || pa == "0") {
+            binding.edPasteurized.requestFocus()
+            binding.tilPasteurized.error = "Enter value"
             return
         }
+        if (TextUtils.isEmpty(upa) || upa == "0") {
+            binding.edUnpasteurized.requestFocus()
+            binding.tilUnpasteurized.error = "Enter value"
+            return
+        }
+
+        if (TextUtils.isEmpty(prepa) || prepa == "0") {
+            binding.edPrePasteurized.requestFocus()
+            binding.tilPrePasteurized.error = "Enter value"
+            return
+        }
+
+        if (TextUtils.isEmpty(preupa) || preupa == "0") {
+            binding.edPreUnpasteurized.requestFocus()
+            binding.tilPreUnpasteurized.error = "Enter value"
+            return
+        }
+
         confirmationDialog.show(childFragmentManager, "Confirm Details")
 
     }

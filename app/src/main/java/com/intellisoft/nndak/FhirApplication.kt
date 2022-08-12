@@ -18,6 +18,7 @@ import com.intellisoft.nndak.utils.Constants.FEEDINGS
 import com.intellisoft.nndak.utils.Constants.LOGIN
 import com.intellisoft.nndak.utils.Constants.MILK_EXPRESSION
 import com.intellisoft.nndak.utils.Constants.ORDER
+import com.intellisoft.nndak.utils.Constants.RELATED
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
 import com.intellisoft.nndak.utils.Constants.SERVER_URL_DEMO
@@ -106,6 +107,10 @@ class FhirApplication : Application() {
             (context.applicationContext as FhirApplication).editor.putBoolean(LOGIN, b).commit()
         }
 
+        fun updateCurrent(context: Context, b: String) {
+            (context.applicationContext as FhirApplication).editor.putString(RELATED, b).commit()
+        }
+
         fun setDashboardActive(context: Context, b: String) {
             (context.applicationContext as FhirApplication).editor.putString(ACTIVE, b).commit()
         }
@@ -113,6 +118,12 @@ class FhirApplication : Application() {
         fun getDashboardActive(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 ACTIVE,
+                ""
+            ).toString()
+        }
+        fun getUpdatedCurrent(context: Context): String {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                RELATED,
                 ""
             ).toString()
         }

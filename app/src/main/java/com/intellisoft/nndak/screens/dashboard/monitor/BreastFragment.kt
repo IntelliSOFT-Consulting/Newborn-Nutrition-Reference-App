@@ -16,6 +16,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
@@ -32,6 +33,8 @@ import com.intellisoft.nndak.logic.Logics.Companion.BREASTS_FEEDING
 import com.intellisoft.nndak.models.BreastsHistory
 import com.intellisoft.nndak.models.CodingObservation
 import com.intellisoft.nndak.utils.boldText
+import com.intellisoft.nndak.utils.controlRadio
+import com.intellisoft.nndak.utils.showErrorView
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -54,16 +57,19 @@ class BreastFragment : Fragment() {
     private val viewModel: ScreenerViewModel by viewModels()
     private val dataCodes = ArrayList<CodingObservation>()
     private var _binding: FragmentBreastBinding? = null
+    private lateinit var careID: String
+    private var exitSection: Boolean = true
     private lateinit var patientId: String
-    private var interest: String = "No"
-    private var cues: String = "No"
-    private var sleep: String = "No"
-    private var bursts: String = "No"
-    private var shortFeed: String = "No"
-    private var longSwallow: String = "No"
-    private var skin: String = "No"
-    private var nipples: String = "No"
-    private var shape: String = "No"
+    private lateinit var interest: String
+    private lateinit var cues: String
+    private lateinit var sleep: String
+    private lateinit var bursts: String
+    private lateinit var shortFeed: String
+    private lateinit var longSwallow: String
+    private lateinit var skin: String
+    private lateinit var nipples: String
+    private lateinit var shape: String
+
     private val binding
         get() = _binding!!
 
@@ -98,17 +104,21 @@ class BreastFragment : Fragment() {
                         fhirEngine,
                         patientId
                     )
-                )
-                    .get(PatientDetailsViewModel::class.java)
+                ).get(PatientDetailsViewModel::class.java)
 
-
+            loadActivePrescription()
+            handleClicks()
             binding.apply {
                 lnCollection.visibility = View.GONE
                 lnHistory.visibility = View.VISIBLE
                 actionNewExpression.setOnClickListener {
+                    updateArguments()
+                    addQuestionnaireFragment()
+                    exitSection = false
                     actionNewExpression.visibility = View.GONE
                     lnCollection.visibility = View.VISIBLE
                     lnHistory.visibility = View.GONE
+                    resetViews()
                 }
                 btnSubmit.setOnClickListener {
                     dataMapping()
@@ -146,6 +156,36 @@ class BreastFragment : Fragment() {
 
     }
 
+    private fun resetViews() {
+        binding.apply {
+            incPositioning.dataInterest.rbGroup.clearCheck()
+            incPositioning.dataCues.rbGroup.clearCheck()
+            incPositioning.dataSleep.rbGroup.clearCheck()
+            incPositioning.dataBursts.rbGroup.clearCheck()
+            incPositioning.dataShortFeed.rbGroup.clearCheck()
+            incPositioning.dataLongSwallow.rbGroup.clearCheck()
+            incPositioning.dataNormalSkin.rbGroup.clearCheck()
+            incPositioning.dataNipples.rbGroup.clearCheck()
+            incPositioning.dataShape.rbGroup.clearCheck()
+        }
+    }
+
+    private fun handleClicks() {
+        binding.apply {
+            controlRadio(incPositioning.dataInterest)
+            controlRadio(incPositioning.dataCues)
+            controlRadio(incPositioning.dataSleep)
+            controlRadio(incPositioning.dataBursts)
+            controlRadio(incPositioning.dataShortFeed)
+            controlRadio(incPositioning.dataLongSwallow)
+            controlRadio(incPositioning.dataNormalSkin)
+            controlRadio(incPositioning.dataNipples)
+            controlRadio(incPositioning.dataShape)
+        }
+
+
+    }
+
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "breast-feeding.json")
     }
@@ -153,6 +193,16 @@ class BreastFragment : Fragment() {
     private fun onBackPressed() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             showCancelScreenerQuestionnaireAlertDialog()
+        }
+    }
+
+    private fun loadActivePrescription() {
+        patientDetailsViewModel.getCurrentPrescriptions()
+        patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) { data ->
+            if (data.isNotEmpty()) {
+                val it = data.first()
+                careID = it.resourceId.toString()
+            }
         }
     }
 
@@ -173,32 +223,41 @@ class BreastFragment : Fragment() {
     }
 
     private fun onSubmitAction() {
-
-        val interest = CodingObservation("Baby-Interest", "Baby Interest", interest)
-        val cues = CodingObservation("Feeding-Cues", "Feeding Cues", cues)
-        val sleep = CodingObservation("Baby-Sleep", "Baby Sleep", sleep)
-        val bursts = CodingObservation("Bursts", "Bursts", bursts)
-        val shortFeed = CodingObservation("Short-Feed", "Short Feed", shortFeed)
-        val longSwallow = CodingObservation("Long-Swallow", "Long Swallow", longSwallow)
-        val skin = CodingObservation("Skin-Tone", "Skin Tone", skin)
-        val nipples = CodingObservation("Nipples", "Nipples", nipples)
-        val shape = CodingObservation("Shape", "Shape", shape)
-        dataCodes.addAll(
-            listOf(
-                interest, cues, sleep, bursts, shortFeed, longSwallow, skin, nipples, shape
+        if (validFields()) {
+            val interest = CodingObservation("Baby-Interest", "Baby Interest", interest)
+            val cues = CodingObservation("Feeding-Cues", "Feeding Cues", cues)
+            val sleep = CodingObservation("Baby-Sleep", "Baby Sleep", sleep)
+            val bursts = CodingObservation("Bursts", "Bursts", bursts)
+            val shortFeed = CodingObservation("Short-Feed", "Short Feed", shortFeed)
+            val longSwallow = CodingObservation("Long-Swallow", "Long Swallow", longSwallow)
+            val skin = CodingObservation("Skin-Tone", "Skin Tone", skin)
+            val nipples = CodingObservation("Nipples", "Nipples", nipples)
+            val shape = CodingObservation("Shape", "Shape", shape)
+            dataCodes.addAll(
+                listOf(
+                    interest, cues, sleep, bursts, shortFeed, longSwallow, skin, nipples, shape
+                )
             )
-        )
-        (activity as MainActivity).displayDialog()
-        observeResourcesSaveAction()
+            (activity as MainActivity).displayDialog()
+            observeResourcesSaveAction()
 
-        val questionnaireFragment =
-            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
-        viewModel.feedingCues(
-            questionnaireFragment.getQuestionnaireResponse(),
-            dataCodes,
-            patientId, BREASTS_FEEDING
-        )
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+            val context = FhirContext.forR4()
+
+            val questionnaire =
+                context.newJsonParser()
+                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
+
+            viewModel.customAssessment(
+                questionnaireFragment.getQuestionnaireResponse(),
+                dataCodes,
+                patientId, BREASTS_FEEDING
+            )
+        }
     }
+
 
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
@@ -271,21 +330,28 @@ class BreastFragment : Fragment() {
     }
 
     private fun clickItem(data: BreastsHistory) {
-               moreExpression = ViewBreastFeeding(data)
-               moreExpression.show(childFragmentManager, "Confirm Details")
+
+        moreExpression = ViewBreastFeeding(data)
+        moreExpression.show(childFragmentManager, "Confirm Details")
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
-        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Are you sure?")
-            .setContentText(getString(R.string.cancel_questionnaire_message))
-            .setConfirmText("Yes")
-            .setConfirmClickListener { d ->
-                d.dismiss()
-                resetDisplay()
-            }
-            .setCancelText("No")
-            .show()
+        if (exitSection) {
+
+            (activity as MainActivity).openDashboard(patientId)
+        } else {
+            SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText(getString(R.string.cancel_questionnaire_message))
+                .setConfirmText("Yes")
+                .setConfirmClickListener { d ->
+                    d.dismiss()
+
+                    resetDisplay()
+                }
+                .setCancelText("No")
+                .show()
+        }
     }
 
     private fun dataMapping() {
@@ -349,78 +415,145 @@ class BreastFragment : Fragment() {
 
     }
 
+    private fun validFields(): Boolean {
+        binding.apply {
+            if (interest.isEmpty() || interest == "") {
+                showErrorView(incPositioning.dataInterest.tvError, "Selected if interested")
+                return false
+            }
+            if (cues.isEmpty() || cues == "") {
+                showErrorView(incPositioning.dataCues.tvError, "Selected if cues")
+                return false
+            }
+            if (sleep.isEmpty() || sleep == "") {
+                showErrorView(incPositioning.dataSleep.tvError, "Selected if sleep")
+                return false
+            }
+            if (bursts.isEmpty() || bursts == "") {
+                showErrorView(incPositioning.dataBursts.tvError, "Selected if bursts")
+                return false
+            }
+            if (shortFeed.isEmpty() || shortFeed == "") {
+                showErrorView(incPositioning.dataShortFeed.tvError, "Selected if short feed")
+                return false
+            }
+            if (longSwallow.isEmpty() || longSwallow == "") {
+                showErrorView(incPositioning.dataLongSwallow.tvError, "Selected if long swallow")
+                return false
+            }
+            if (skin.isEmpty() || skin == "") {
+                showErrorView(incPositioning.dataNormalSkin.tvError, "Selected if normal skin")
+                return false
+            }
+            if (nipples.isEmpty() || nipples == "") {
+                showErrorView(incPositioning.dataNipples.tvError, "Selected if nipples")
+                return false
+            }
+            if (shape.isEmpty() || shape == "") {
+                showErrorView(incPositioning.dataShape.tvError, "Selected if shape")
+                return false
+            }
+        }
+        return true
+    }
+
     private fun selection(dataHands: PositioningItemBinding, index: Int) {
         when (index) {
             0 -> {
                 interest = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
             }
             1 -> {
                 cues = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             2 -> {
                 sleep = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             3 -> {
                 bursts = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             4 -> {
                 shortFeed = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             5 -> {
                 longSwallow = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             6 -> {
                 skin = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             7 -> {
                 nipples = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
+
             }
             8 -> {
                 shape = if (dataHands.rbYes.isChecked) {
                     "Yes"
-                } else {
+                } else if (dataHands.rbNo.isChecked) {
                     "No"
+                } else {
+                    ""
                 }
-            }
 
+            }
 
         }
     }
 
     private fun resetDisplay() {
-
+        exitSection = true
         binding.apply {
             actionNewExpression.visibility = View.VISIBLE
             lnHistory.visibility = View.VISIBLE

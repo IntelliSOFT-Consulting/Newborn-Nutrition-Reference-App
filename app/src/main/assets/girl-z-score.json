@@ -1,0 +1,1256 @@
+[
+  {
+    "age": 27,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.33"
+      },
+      {
+        "option": "-2",
+        "value": "0.40"
+      },
+      {
+        "option": "-1",
+        "value": " 0.50"
+      },
+      {
+        "option": "0",
+        "value": "0.61"
+      },
+      {
+        "option": "1",
+        "value": "0.75"
+      },
+      {
+        "option": "2",
+        "value": "0.93"
+      },
+      {
+        "option": "3",
+        "value": "1.14"
+      }
+    ]
+  },
+  {
+    "age": 28,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.42"
+      },
+      {
+        "option": "-2",
+        "value": "0.51"
+      },
+      {
+        "option": "-1",
+        "value": " 0.62"
+      },
+      {
+        "option": "0",
+        "value": "0.76"
+      },
+      {
+        "option": "1",
+        "value": "0.92"
+      },
+      {
+        "option": "2",
+        "value": "1.12"
+      },
+      {
+        "option": "3",
+        "value": "1.37"
+      }
+    ]
+  },
+  {
+    "age": 29,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.52"
+      },
+      {
+        "option": "-2",
+        "value": "0.63"
+      },
+      {
+        "option": "-1",
+        "value": " 0.76"
+      },
+      {
+        "option": "0",
+        "value": "0.91"
+      },
+      {
+        "option": "1",
+        "value": "1.10"
+      },
+      {
+        "option": "2",
+        "value": "1.33"
+      },
+      {
+        "option": "3",
+        "value": "1.61"
+      }
+    ]
+  },
+  {
+    "age": 30,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.62"
+      },
+      {
+        "option": "-2",
+        "value": "0.76"
+      },
+      {
+        "option": "-1",
+        "value": " 0.91"
+      },
+      {
+        "option": "0",
+        "value": "1.09"
+      },
+      {
+        "option": "1",
+        "value": "1.30"
+      },
+      {
+        "option": "2",
+        "value": "1.55"
+      },
+      {
+        "option": "3",
+        "value": "1.86"
+      }
+    ]
+  },
+  {
+    "age": 31,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.75"
+      },
+      {
+        "option": "-2",
+        "value": "0.90"
+      },
+      {
+        "option": "-1",
+        "value": " 1.06"
+      },
+      {
+        "option": "0",
+        "value": "1.27"
+      },
+      {
+        "option": "1",
+        "value": "1.51"
+      },
+      {
+        "option": "2",
+        "value": "1.79"
+      },
+      {
+        "option": "3",
+        "value": "2.13"
+      }
+    ]
+  },
+  {
+    "age": 32,
+    "data": [
+      {
+        "option": "-3",
+        "value": "0.88"
+      },
+      {
+        "option": "-2",
+        "value": "1.04"
+      },
+      {
+        "option": "-1",
+        "value": "1.23"
+      },
+      {
+        "option": "0",
+        "value": "1.46"
+      },
+      {
+        "option": "1",
+        "value": "1.72"
+      },
+      {
+        "option": "2",
+        "value": "2.03"
+      },
+      {
+        "option": "3",
+        "value": "2.40"
+      }
+    ]
+  },
+  {
+    "age": 33,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.02"
+      },
+      {
+        "option": "-2",
+        "value": "1.20"
+      },
+      {
+        "option": "-1",
+        "value": "1.41"
+      },
+      {
+        "option": "0",
+        "value": "1.65"
+      },
+      {
+        "option": "1",
+        "value": "1.94"
+      },
+      {
+        "option": "2",
+        "value": "2.29"
+      },
+      {
+        "option": "3",
+        "value": "2.69"
+      }
+    ]
+  },
+  {
+    "age": 34,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.16"
+      },
+      {
+        "option": "-2",
+        "value": "1.36"
+      },
+      {
+        "option": "-1",
+        "value": "1.59"
+      },
+      {
+        "option": "0",
+        "value": "1.86"
+      },
+      {
+        "option": "1",
+        "value": "2.17"
+      },
+      {
+        "option": "2",
+        "value": "2.55"
+      },
+      {
+        "option": "3",
+        "value": "2.98"
+      }
+    ]
+  },
+  {
+    "age": 35,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.30"
+      },
+      {
+        "option": "-2",
+        "value": "1.52"
+      },
+      {
+        "option": "-1",
+        "value": "1.77"
+      },
+      {
+        "option": "0",
+        "value": "2.07"
+      },
+      {
+        "option": "1",
+        "value": "2.41"
+      },
+      {
+        "option": "2",
+        "value": "2.81"
+      },
+      {
+        "option": "3",
+        "value": "3.27"
+      }
+    ]
+  },
+  {
+    "age": 36,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.45"
+      },
+      {
+        "option": "-2",
+        "value": "1.69"
+      },
+      {
+        "option": "-1",
+        "value": "1.96"
+      },
+      {
+        "option": "0",
+        "value": "2.28"
+      },
+      {
+        "option": "1",
+        "value": "2.65"
+      },
+      {
+        "option": "2",
+        "value": "3.08"
+      },
+      {
+        "option": "3",
+        "value": "3.57"
+      }
+    ]
+  },
+  {
+    "age": 37,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.60"
+      },
+      {
+        "option": "-2",
+        "value": "1.86"
+      },
+      {
+        "option": "-1",
+        "value": "2.15"
+      },
+      {
+        "option": "0",
+        "value": "2.49"
+      },
+      {
+        "option": "1",
+        "value": "2.89"
+      },
+      {
+        "option": "2",
+        "value": "3.34"
+      },
+      {
+        "option": "3",
+        "value": "3.87"
+      }
+    ]
+  },
+  {
+    "age": 38,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.75"
+      },
+      {
+        "option": "-2",
+        "value": "2.03"
+      },
+      {
+        "option": "-1",
+        "value": "2.34"
+      },
+      {
+        "option": "0",
+        "value": "2.71"
+      },
+      {
+        "option": "1",
+        "value": "3.13"
+      },
+      {
+        "option": "2",
+        "value": "3.61"
+      },
+      {
+        "option": "3",
+        "value": "4.17"
+      }
+    ]
+  },
+  {
+    "age": 39,
+    "data": [
+      {
+        "option": "-3",
+        "value": "1.91"
+      },
+      {
+        "option": "-2",
+        "value": "2.20"
+      },
+      {
+        "option": "-1",
+        "value": "2.53"
+      },
+      {
+        "option": "0",
+        "value": "2.92"
+      },
+      {
+        "option": "1",
+        "value": "3.37"
+      },
+      {
+        "option": "2",
+        "value": "3.88"
+      },
+      {
+        "option": "3",
+        "value": "4.48"
+      }
+    ]
+  },
+  {
+    "age": 40,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.06"
+      },
+      {
+        "option": "-2",
+        "value": "2.37"
+      },
+      {
+        "option": "-1",
+        "value": "2.72"
+      },
+      {
+        "option": "0",
+        "value": "3.13"
+      },
+      {
+        "option": "1",
+        "value": "3.61"
+      },
+      {
+        "option": "2",
+        "value": "4.15"
+      },
+      {
+        "option": "3",
+        "value": "4.77"
+      }
+    ]
+  },
+  {
+    "age": 41,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.21"
+      },
+      {
+        "option": "-2",
+        "value": "2.54"
+      },
+      {
+        "option": "-1",
+        "value": "2.91"
+      },
+      {
+        "option": "0",
+        "value": "3.35"
+      },
+      {
+        "option": "1",
+        "value": "3.84"
+      },
+      {
+        "option": "2",
+        "value": "4.41"
+      },
+      {
+        "option": "3",
+        "value": "5.07"
+      }
+    ]
+  },
+  {
+    "age": 42,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.36"
+      },
+      {
+        "option": "-2",
+        "value": "2.70"
+      },
+      {
+        "option": "-1",
+        "value": "3.10"
+      },
+      {
+        "option": "0",
+        "value": "3.55"
+      },
+      {
+        "option": "1",
+        "value": "4.08"
+      },
+      {
+        "option": "2",
+        "value": "4.68"
+      },
+      {
+        "option": "3",
+        "value": "5.36"
+      }
+    ]
+  },
+  {
+    "age": 43,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.50"
+      },
+      {
+        "option": "-2",
+        "value": "2.87"
+      },
+      {
+        "option": "-1",
+        "value": "3.28"
+      },
+      {
+        "option": "0",
+        "value": "3.76"
+      },
+      {
+        "option": "1",
+        "value": "4.31"
+      },
+      {
+        "option": "2",
+        "value": "4.93"
+      },
+      {
+        "option": "3",
+        "value": "5.65"
+      }
+    ]
+  },
+  {
+    "age": 44,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.65"
+      },
+      {
+        "option": "-2",
+        "value": "3.03"
+      },
+      {
+        "option": "-1",
+        "value": "3.47"
+      },
+      {
+        "option": "0",
+        "value": "3.96"
+      },
+      {
+        "option": "1",
+        "value": "4.54"
+      },
+      {
+        "option": "2",
+        "value": "5.19"
+      },
+      {
+        "option": "3",
+        "value": "5.94"
+      }
+    ]
+  },
+  {
+    "age": 45,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.79"
+      },
+      {
+        "option": "-2",
+        "value": "3.19"
+      },
+      {
+        "option": "-1",
+        "value": "3.64"
+      },
+      {
+        "option": "0",
+        "value": "4.16"
+      },
+      {
+        "option": "1",
+        "value": "4.76"
+      },
+      {
+        "option": "2",
+        "value": "5.44"
+      },
+      {
+        "option": "3",
+        "value": "6.22"
+      }
+    ]
+  },
+  {
+    "age": 46,
+    "data": [
+      {
+        "option": "-3",
+        "value": "2.93"
+      },
+      {
+        "option": "-2",
+        "value": "3.34"
+      },
+      {
+        "option": "-1",
+        "value": "3.82"
+      },
+      {
+        "option": "0",
+        "value": "4.36"
+      },
+      {
+        "option": "1",
+        "value": "4.98"
+      },
+      {
+        "option": "2",
+        "value": "5.69"
+      },
+      {
+        "option": "3",
+        "value": "6.49"
+      }
+    ]
+  },
+  {
+    "age": 47,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.06"
+      },
+      {
+        "option": "-2",
+        "value": "3.50"
+      },
+      {
+        "option": "-1",
+        "value": "3.99"
+      },
+      {
+        "option": "0",
+        "value": "4.55"
+      },
+      {
+        "option": "1",
+        "value": "5.19"
+      },
+      {
+        "option": "2",
+        "value": "5.93"
+      },
+      {
+        "option": "3",
+        "value": "6.76"
+      }
+    ]
+  },
+  {
+    "age": 48,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.20"
+      },
+      {
+        "option": "-2",
+        "value": "3.64"
+      },
+      {
+        "option": "-1",
+        "value": "4.16"
+      },
+      {
+        "option": "0",
+        "value": "4.74"
+      },
+      {
+        "option": "1",
+        "value": "5.40"
+      },
+      {
+        "option": "2",
+        "value": "6.16"
+      },
+      {
+        "option": "3",
+        "value": "7.03"
+      }
+    ]
+  },
+  {
+    "age": 49,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.32"
+      },
+      {
+        "option": "-2",
+        "value": "3.79"
+      },
+      {
+        "option": "-1",
+        "value": "4.32"
+      },
+      {
+        "option": "0",
+        "value": "4.92"
+      },
+      {
+        "option": "1",
+        "value": "5.61"
+      },
+      {
+        "option": "2",
+        "value": "6.39"
+      },
+      {
+        "option": "3",
+        "value": "7.28"
+      }
+    ]
+  },
+  {
+    "age": 50,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.45"
+      },
+      {
+        "option": "-2",
+        "value": "3.93"
+      },
+      {
+        "option": "-1",
+        "value": "4.48"
+      },
+      {
+        "option": "0",
+        "value": "5.10"
+      },
+      {
+        "option": "1",
+        "value": "5.81"
+      },
+      {
+        "option": "2",
+        "value": "6.62"
+      },
+      {
+        "option": "3",
+        "value": "7.54"
+      }
+    ]
+  },
+  {
+    "age": 51,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.57"
+      },
+      {
+        "option": "-2",
+        "value": "4.07"
+      },
+      {
+        "option": "-1",
+        "value": "4.63"
+      },
+      {
+        "option": "0",
+        "value": "5.27"
+      },
+      {
+        "option": "1",
+        "value": "6.00"
+      },
+      {
+        "option": "2",
+        "value": "6.83"
+      },
+      {
+        "option": "3",
+        "value": "7.78"
+      }
+    ]
+  },
+  {
+    "age": 52,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.69"
+      },
+      {
+        "option": "-2",
+        "value": "4.20"
+      },
+      {
+        "option": "-1",
+        "value": "4.78"
+      },
+      {
+        "option": "0",
+        "value": "5.44"
+      },
+      {
+        "option": "1",
+        "value": "6.19"
+      },
+      {
+        "option": "2",
+        "value": "7.05"
+      },
+      {
+        "option": "3",
+        "value": "8.02"
+      }
+    ]
+  },
+  {
+    "age": 53,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.80"
+      },
+      {
+        "option": "-2",
+        "value": "4.33"
+      },
+      {
+        "option": "-1",
+        "value": "4.92"
+      },
+      {
+        "option": "0",
+        "value": "5.60"
+      },
+      {
+        "option": "1",
+        "value": "6.38"
+      },
+      {
+        "option": "2",
+        "value": "7.26"
+      },
+      {
+        "option": "3",
+        "value": "8.26"
+      }
+    ]
+  },
+  {
+    "age": 54,
+    "data": [
+      {
+        "option": "-3",
+        "value": "3.91"
+      },
+      {
+        "option": "-2",
+        "value": "4.45"
+      },
+      {
+        "option": "-1",
+        "value": "5.07"
+      },
+      {
+        "option": "0",
+        "value": "5.76"
+      },
+      {
+        "option": "1",
+        "value": "6.56"
+      },
+      {
+        "option": "2",
+        "value": "7.46"
+      },
+      {
+        "option": "3",
+        "value": "8.48"
+      }
+    ]
+  },
+  {
+    "age": 55,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.02"
+      },
+      {
+        "option": "-2",
+        "value": "4.57"
+      },
+      {
+        "option": "-1",
+        "value": "5.20"
+      },
+      {
+        "option": "0",
+        "value": "5.92"
+      },
+      {
+        "option": "1",
+        "value": "6.73"
+      },
+      {
+        "option": "2",
+        "value": "7.65"
+      },
+      {
+        "option": "3",
+        "value": "8.71"
+      }
+    ]
+  },
+  {
+    "age": 56,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.12"
+      },
+      {
+        "option": "-2",
+        "value": "4.69"
+      },
+      {
+        "option": "-1",
+        "value": "5.33"
+      },
+      {
+        "option": "0",
+        "value": "6.07"
+      },
+      {
+        "option": "1",
+        "value": "6.90"
+      },
+      {
+        "option": "2",
+        "value": "7.85"
+      },
+      {
+        "option": "3",
+        "value": "8.92"
+      }
+    ]
+  },
+  {
+    "age": 57,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.23"
+      },
+      {
+        "option": "-2",
+        "value": "4.80"
+      },
+      {
+        "option": "-1",
+        "value": "5.46"
+      },
+      {
+        "option": "0",
+        "value": "6.21"
+      },
+      {
+        "option": "1",
+        "value": "7.06"
+      },
+      {
+        "option": "2",
+        "value": "8.03"
+      },
+      {
+        "option": "3",
+        "value": "9.13"
+      }
+    ]
+  },
+  {
+    "age": 58,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.32"
+      },
+      {
+        "option": "-2",
+        "value": "4.91"
+      },
+      {
+        "option": "-1",
+        "value": "5.59"
+      },
+      {
+        "option": "0",
+        "value": "6.35"
+      },
+      {
+        "option": "1",
+        "value": "7.22"
+      },
+      {
+        "option": "2",
+        "value": "8.21"
+      },
+      {
+        "option": "3",
+        "value": "9.34"
+      }
+    ]
+  },
+  {
+    "age": 59,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.42"
+      },
+      {
+        "option": "-2",
+        "value": "5.02"
+      },
+      {
+        "option": "-1",
+        "value": "5.71"
+      },
+      {
+        "option": "0",
+        "value": "6.49"
+      },
+      {
+        "option": "1",
+        "value": "7.38"
+      },
+      {
+        "option": "2",
+        "value": "8.39"
+      },
+      {
+        "option": "3",
+        "value": "9.54"
+      }
+    ]
+  },
+  {
+    "age": 60,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.51"
+      },
+      {
+        "option": "-2",
+        "value": "5.12"
+      },
+      {
+        "option": "-1",
+        "value": "5.82"
+      },
+      {
+        "option": "0",
+        "value": "6.62"
+      },
+      {
+        "option": "1",
+        "value": "7.53"
+      },
+      {
+        "option": "2",
+        "value": "8.56"
+      },
+      {
+        "option": "3",
+        "value": "9.73"
+      }
+    ]
+  },
+  {
+    "age": 61,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.59"
+      },
+      {
+        "option": "-2",
+        "value": "5.22"
+      },
+      {
+        "option": "-1",
+        "value": "5.94"
+      },
+      {
+        "option": "0",
+        "value": "6.75"
+      },
+      {
+        "option": "1",
+        "value": "7.67"
+      },
+      {
+        "option": "2",
+        "value": "8.72"
+      },
+      {
+        "option": "3",
+        "value": "9.92"
+      }
+    ]
+  },
+  {
+    "age": 62,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.68"
+      },
+      {
+        "option": "-2",
+        "value": "5.32"
+      },
+      {
+        "option": "-1",
+        "value": "6.05"
+      },
+      {
+        "option": "0",
+        "value": "6.87"
+      },
+      {
+        "option": "1",
+        "value": "7.81"
+      },
+      {
+        "option": "2",
+        "value": "8.88"
+      },
+      {
+        "option": "3",
+        "value": "10.10"
+      }
+    ]
+  },
+  {
+    "age": 63,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.76"
+      },
+      {
+        "option": "-2",
+        "value": "5.41"
+      },
+      {
+        "option": "-1",
+        "value": "6.15"
+      },
+      {
+        "option": "0",
+        "value": "6.99"
+      },
+      {
+        "option": "1",
+        "value": "7.95"
+      },
+      {
+        "option": "2",
+        "value": "9.04"
+      },
+      {
+        "option": "3",
+        "value": "10.28"
+      }
+    ]
+  },
+  {
+    "age": 64,
+    "data": [
+      {
+        "option": "-3",
+        "value": "4.84"
+      },
+      {
+        "option": "-2",
+        "value": "5.50"
+      },
+      {
+        "option": "-1",
+        "value": "6.25"
+      },
+      {
+        "option": "0",
+        "value": "7.11"
+      },
+      {
+        "option": "1",
+        "value": "8.08"
+      },
+      {
+        "option": "2",
+        "value": "9.19"
+      },
+      {
+        "option": "3",
+        "value": "10.45"
+      }
+    ]
+  }
+]

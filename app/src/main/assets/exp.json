@@ -1,0 +1,114 @@
+{
+  "title": "Screener",
+  "status": "active",
+  "version": "0.0.1",
+  "publisher": "Kiprotich Japheth (jkiprotich@intellisoftkenya.com)",
+  "resourceType": "Questionnaire",
+  "subjectType": [
+    "Encounter"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Encounter",
+        "name": "encounter"
+      }
+    }
+  ],
+  "item": [
+    {
+      "text": "",
+      "type": "group",
+      "linkId": "7.0.0",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+          "valueExpression": {
+            "language": "application/x-fhir-query",
+            "expression": "Observation",
+            "name": "heart"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "7.2.0",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
+          "item": [
+            {
+              "text": "Volume expressed (mls)",
+              "type": "decimal",
+              "linkId": "7.2.1",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 1
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 1000
+                }
+              ]
+            },
+            {
+              "linkId": "7.2.2",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "mls"
+                }
+              ]
+            },
+            {
+              "linkId": "7.2.3",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "http://unitsofmeasure.org"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "7.3.0",
+          "type": "choice",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueCoding": {
+                "code": "62578-0",
+                "display": "Volume Expressed",
+                "system": "http://loinc.org"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

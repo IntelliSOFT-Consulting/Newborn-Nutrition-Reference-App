@@ -24,7 +24,6 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentRegistrationBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.screens.custom.CustomQuestionnaireFragment
 import com.intellisoft.nndak.utils.generateUuid
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -163,7 +162,7 @@ class RegistrationFragment : Fragment() {
 
     private fun addQuestionnaireFragment() {
         try {
-            val fragment = CustomQuestionnaireFragment()
+            val fragment = QuestionnaireFragment()
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {

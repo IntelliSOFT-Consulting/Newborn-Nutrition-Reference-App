@@ -23,7 +23,7 @@ data class FirstFeeding(
 
 data class PercentageFeeds(
     @SerializedName("dhm") val dhm: String,
-    @SerializedName("breastFeeding") val breastFeeding: String,
+    @SerializedName("iv") val iv: String,
     @SerializedName("oral") val oral: String,
     @SerializedName("ebm") val ebm: String,
     @SerializedName("formula") val formula: String,
@@ -51,13 +51,17 @@ data class ExpressingTime(
  * */
 data class DHMModel(
     @SerializedName("dhmInfants") val dhmInfants: String,
-    @SerializedName("dhmVolume") val dhmVolume: String,
+    @SerializedName("dhmVolume") val dhmVolume: DHMCategory,
     @SerializedName("dhmAverage") val dhmAverage: String,
     @SerializedName("fullyReceiving") val fullyReceiving: String,
     @SerializedName("dhmLength") val dhmLength: String,
     @SerializedName("data") val data: List<DHMData>,
 )
 
+data class DHMCategory(
+    @SerializedName("unParsteurized") val unParsteurized: String,
+    @SerializedName("parsteurized") val parsteurized: String,
+)
 data class DHMData(
     @SerializedName("day") val day: String,
     @SerializedName("preterm") val preterm: String,
@@ -74,6 +78,7 @@ data class MilkExpression(
 data class ExpressionData(
     @SerializedName("time") val time: String,
     @SerializedName("amount") val amount: String,
+    @SerializedName("number") val number: String,
 )
 
 data class FeedsDistribution(
@@ -88,6 +93,7 @@ data class FeedsData(
     @SerializedName("ivVolume") val ivVolume: String,
     @SerializedName("ebmVolume") val ebmVolume: String,
     @SerializedName("dhmVolume") val dhmVolume: String,
+    @SerializedName("formula") val formula: String,
 )
 
 data class WeightsData(
@@ -95,11 +101,12 @@ data class WeightsData(
     @SerializedName("currentWeight") val currentWeight: String,
     @SerializedName("gestationAge") val gestationAge: String,
     @SerializedName("dayOfLife") val dayOfLife: Int,
+    @SerializedName("weeksLife") val weeksLife: Int,
     @SerializedName("data") val data: List<ActualData>,
 )
 
 data class ActualData(
-    @SerializedName("lifeDay") val day: String,
+    @SerializedName("lifeDay") val day: Int,
     @SerializedName("actual") val actual: String,
     @SerializedName("projected") val projected: String,
 )
@@ -126,6 +133,11 @@ data class ItemOrder(
 data class CombinedGrowth(
     val actualWeight: WeightsData,
     val projectedWeight: List<GrowthOptions>
+)
+
+data class WeeklyGrowth(
+    val cw: List<ActualData>,
+    val pw: List<GrowthData>
 )
 
 data class GrowthData(

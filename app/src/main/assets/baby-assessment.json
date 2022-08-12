@@ -38,7 +38,7 @@
             {
               "code": "50786-3",
               "display": "Assessment Date Time",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "required": true,
@@ -67,7 +67,7 @@
             {
               "code": "3141-9",
               "display": "Current Weight",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -139,7 +139,7 @@
             {
               "code": "71195-2",
               "display": "Baby is Well",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -238,7 +238,7 @@
             {
               "code": "45735-8",
               "display": "Asphyxia",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -329,7 +329,7 @@
             {
               "code": "45736-6",
               "display": "Jaundice",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -420,7 +420,7 @@
             {
               "code": "45755-8",
               "display": "Neonatal Sepsis",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -511,7 +511,7 @@
             {
               "code": "Breast-Problem",
               "display": "Does mother have any breast problems?",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -606,7 +606,7 @@
             {
               "code": "Mother-Well",
               "display": "Is the Mother Well?",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -676,7 +676,7 @@
             {
               "code": "45766-6",
               "display": "Other Conditions",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "required": true,
@@ -726,7 +726,7 @@
             {
               "code": "46556-7",
               "display": "Has baby been fed within 1 Hour after Birth?",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -806,7 +806,7 @@
             {
               "code": "4658856-7",
               "display": "If not, when was baby's first feed?",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -888,7 +888,7 @@
             {
               "code": "46557-5",
               "display": "Type of feed",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "extension": [
@@ -1039,7 +1039,7 @@
             {
               "code": "Additional-Notes",
               "display": "Additional-Notes",
-              "system": "http://loinc.org/modified"
+              "system": "http://snomed.info/sct"
             }
           ],
           "required": true,

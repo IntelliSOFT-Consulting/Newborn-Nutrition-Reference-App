@@ -29,7 +29,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_mum_name"
@@ -39,7 +40,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="22dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:hint="@string/app_mum_name">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,6 +119,14 @@
 
             </LinearLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_ip_number"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -138,13 +147,6 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_pmtct"
@@ -169,6 +171,12 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_multi"
@@ -223,7 +231,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_del_date"
@@ -241,7 +250,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
-                    android:drawableEnd="@drawable/gm_calendar_today_24"
+                    android:drawableEnd="@drawable/calendar_today_24"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
@@ -266,7 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
-                    android:drawableEnd="@drawable/gm_schedule_24"
+                    android:drawableEnd="@drawable/schedule_24"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
@@ -274,6 +283,13 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_delivery"
@@ -298,13 +314,7 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_cs"
@@ -330,6 +340,13 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_vdrl"
@@ -368,7 +385,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_dob"
@@ -386,8 +403,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
-                    android:focusable="false"
                     android:drawableEnd="@drawable/gm_calendar_today_24"
+                    android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
@@ -418,6 +435,13 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_birth_weight"
@@ -439,14 +463,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_gestation"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -466,6 +482,14 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_five_score"
@@ -513,7 +537,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_bba"
@@ -559,6 +583,15 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_inter"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -579,14 +612,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_adm_weight"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -606,6 +631,13 @@
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_adm_date"
@@ -623,8 +655,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
-                    android:focusable="false"
                     android:drawableEnd="@drawable/gm_calendar_today_24"
+                    android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
@@ -648,8 +680,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
-                    android:focusable="false"
                     android:drawableEnd="@drawable/gm_schedule_24"
+                    android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
@@ -663,7 +695,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="2">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_notes"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ln_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="false"
@@ -70,9 +71,9 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_breakdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:text="@string/app_three_hourly_break"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />

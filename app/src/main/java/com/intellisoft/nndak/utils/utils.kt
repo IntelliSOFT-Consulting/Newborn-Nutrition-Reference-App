@@ -1,6 +1,8 @@
 package com.intellisoft.nndak.utils
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -11,27 +13,38 @@ import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.databinding.PositioningItemBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
+import timber.log.Timber
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URISyntaxException
@@ -42,6 +55,241 @@ import java.time.LocalDateTime
 import java.time.Period
 import java.util.*
 import java.util.regex.Pattern
+
+fun showPicker(context: Context, input: TextInputEditText) {
+    input.setOnClickListener {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { view, myear, mmonth, mdayOfMonth ->
+                val mon = mmonth + 1
+                val msg = "$mdayOfMonth/$mon/$myear"
+                input.setText(msg)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.datePicker.maxDate = Date().time
+        datePickerDialog.show()
+    }
+}
+  fun listenMaxChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String,
+    min: Int,
+    max: Int
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+
+                        input.addTextChangedListener(this)
+                        if (input.text.toString().isNotEmpty()) {
+                            val parsed = newValue.toDouble()
+                            val minimum = min.toDouble()
+                            val maximum = max.toDouble()
+                            if (parsed < minimum) {
+                                inputLayout.error = "Minimum allowed is $minimum"
+                            } else if (parsed > maximum) {
+                                inputLayout.error = "Maximum allowed is $maximum"
+                            } else {
+                                inputLayout.error = null
+                            }
+                        } else {
+                            inputLayout.error = null
+                        }
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
+
+fun listenChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this)
+                        inputLayout.error = null
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
+
+fun showOptions(context: Context, textInputEditText: TextInputEditText, menuItem: Int) {
+    textInputEditText.setOnClickListener {
+        PopupMenu(context, textInputEditText).apply {
+            menuInflater.inflate(menuItem, menu)
+            setOnMenuItemClickListener { item ->
+                textInputEditText.setText(item.title)
+                true
+            }
+            show()
+        }
+    }
+}
+
+fun showErrorView(tvError: TextView, s: String) {
+    tvError.visibility = View.VISIBLE
+    tvError.text = s
+}
+
+fun controlRadio(dataHands: PositioningItemBinding) {
+    dataHands.rbYes.setOnCheckedChangeListener { _, isChecked ->
+        dataHands.tvError.visibility = View.GONE
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbYes.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#00C853"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbYes.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#BDBDBD"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        }
+    }
+    dataHands.rbNo.setOnCheckedChangeListener { _, isChecked ->
+        dataHands.tvError.visibility = View.GONE
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbNo.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#A8001E"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dataHands.rbNo.buttonDrawable?.setColorFilter(
+                    Color.parseColor("#BDBDBD"),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+        }
+    }
+}
+
+fun listenPlainChanges(
+    input: TextInputEditText,
+    inputLayout: TextInputLayout,
+    error: String
+) {
+
+    CoroutineScope(Dispatchers.Default).launch {
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(editable: Editable) {
+                try {
+                    if (editable.toString().isNotEmpty()) {
+                        val newValue = editable.toString()
+                        input.removeTextChangedListener(this)
+                        val position: Int = input.selectionEnd
+                        input.setText(newValue)
+                        if (position > (input.text?.length ?: 0)) {
+                            input.text?.let { input.setSelection(it.length) }
+                        } else {
+                            input.setSelection(position);
+                        }
+                        input.addTextChangedListener(this)
+                        inputLayout.error = null
+                    } else {
+                        inputLayout.error = error
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+
+            }
+        })
+    }
+}
 
 fun deleteCache(context: Context) {
     try {
@@ -67,6 +315,7 @@ fun deleteDir(dir: File?): Boolean {
         false
     }
 }
+
 fun boldText(textView: TextView) {
     textView.setTypeface(null, Typeface.BOLD)
 }
@@ -128,14 +377,45 @@ fun getPastHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
     }
     return list.reversed()
 }
-fun getFutureHoursOnIntervalOf(times: Int, interval: Int): List<LocalDateTime> {
-    val list: MutableList<LocalDateTime> = ArrayList()
-    var date = LocalDateTime.now()
+
+
+fun getPastHoursOnIntervalOfWithStart(
+    start: String,
+    times: Int,
+    interval: Int
+): List<String> {
+    val list: MutableList<String> = ArrayList()
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+    val date = sdf.parse(start)
+    val calendar: Calendar = GregorianCalendar()
+    calendar.time = date
+    var feed: String
     for (i in 1..times) {
-        list.add(date)
-        date = date.plusHours(interval.toLong())
+        calendar.add(Calendar.HOUR, -interval)
+        feed = sdf.format(calendar.time)
+        list.add(feed)
     }
-    return list.reversed()
+    return list
+}
+
+fun getFutureHoursOnIntervalOfWithStart(
+    start: String,
+    times: Int,
+    interval: Int
+): List<String> {
+    val list: MutableList<String> = ArrayList()
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+    val date = sdf.parse(start)
+    val calendar: Calendar = GregorianCalendar()
+    calendar.time = date
+    var feed: String
+    val max = times - 1
+    for (i in 0..max) {
+        feed = sdf.format(calendar.time)
+        list.add(feed)
+        calendar.add(Calendar.HOUR, interval)
+    }
+    return list
 }
 
 fun formatFeedingTime(values: List<LocalDateTime>): ArrayList<String> {
@@ -158,6 +438,16 @@ fun getPastDaysOnIntervalOf(times: Int, interval: Int): List<LocalDate> {
     return list.reversed()
 }
 
+
+fun getWeeksSoFarIntervalOf(start: String, times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.parse(start)
+    for (i in 1..times) {
+        list.add(date)
+        date = date.plusWeeks(interval.toLong())
+    }
+    return list
+}
 
 
 fun getPastMonthsOnIntervalOf(times: Int, interval: Int): List<LocalDate> {

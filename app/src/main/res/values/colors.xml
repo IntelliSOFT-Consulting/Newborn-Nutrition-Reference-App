@@ -7,6 +7,8 @@
     <color name="colorStatusBar">@color/colorPrimary</color>
     <color name="low_risk">#388e3c</color>
     <color name="low_risk_background">#e8f5e9</color>
+    <color name="black">@color/colorPrimary</color>
+    <color name="app_color">@color/colorPrimary</color>
     <color name="moderate_risk">#DD2C00</color>
     <color name="moderate_risk_background">#fff8e1</color>
     <color name="high_risk">#c62828</color>

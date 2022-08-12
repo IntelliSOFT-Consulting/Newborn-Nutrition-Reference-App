@@ -10,7 +10,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
@@ -21,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ca.uhn.fhir.context.FhirContext
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
@@ -32,7 +30,7 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.databinding.UpdatePrescriptionBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics.Companion.BREAST_MILK
+import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
@@ -43,12 +41,13 @@ import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.FORMULA_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.IV_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.IV_VOLUME
+import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.models.FeedDataItem
 import com.intellisoft.nndak.models.FeedItem
 import com.intellisoft.nndak.models.Prescription
 import com.intellisoft.nndak.models.PrescriptionItem
+import com.intellisoft.nndak.utils.showPicker
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -67,11 +66,11 @@ class EditPrescriptionFragment : Fragment() {
     private val args: EditPrescriptionFragmentArgs by navArgs()
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private lateinit var currentWeight: String
-    private lateinit var totalFeeds: String
     private lateinit var feedFrequency: String
     private lateinit var supp: String
     private lateinit var other: String
     private var aggregateTotal: Float = 0f
+    private var isSigned: Boolean = false
 
     private val feedsList: MutableList<FeedDataItem> = mutableListOf()
     private val binding
@@ -150,18 +149,12 @@ class EditPrescriptionFragment : Fragment() {
         binding.apply {
 
             eWeight.setText(it.cWeight.toString())
-            eTotal.setText(it.totalVolume.toString())
             eFrequency.setText(it.frequency.toString())
             otherSup.appFrequency.setText(it.additionalFeeds)
             otherValue.appFrequency.setText(it.supplements)
+            dhmSigned.tilFre.hint = "Consent Date"
 
-            if (it.breastMilk != "N/A") {
-                cbBreast.isChecked = true
-                tvBreast.visibility = View.VISIBLE
-                lnBrestMilk.visibility = View.VISIBLE
-                updateVolumeFrequency(bfVolume.volume, it.feed, BREAST_MILK)
 
-            }
             if (it.formula != "N/A") {
                 cbFormula.isChecked = true
                 tvFormula.visibility = View.VISIBLE
@@ -195,9 +188,17 @@ class EditPrescriptionFragment : Fragment() {
                 lnDhmReason.visibility = View.VISIBLE
                 val con = if (it.consent == "Signed") {
                     "Yes"
+
                 } else {
                     "No"
                 }
+                if (con == "Yes") {
+                    isSigned = true
+                }
+
+                showPicker(requireContext(), dhmSigned.appFrequency)
+                dhmSigned.tilFre.visibility = View.VISIBLE
+                dhmSigned.appFrequency.setText(it.consentDate)
                 dhmConsent.appFrequency.setText(con)
                 dhmReason.volume.setText(it.dhmReason)
                 updateVolumeFrequencyRouteType(
@@ -227,19 +228,9 @@ class EditPrescriptionFragment : Fragment() {
         regulateViews()
     }
 
+
     private fun regulateViews() {
         binding.apply {
-
-            cbBreast.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    tvBreast.visibility = View.VISIBLE
-                    lnBrestMilk.visibility = View.VISIBLE
-                } else {
-                    tvBreast.visibility = View.GONE
-                    lnBrestMilk.visibility = View.GONE
-                }
-                feedsList.clear()
-            }
 
             cbFormula.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
@@ -350,7 +341,7 @@ class EditPrescriptionFragment : Fragment() {
              */
             showOptions(eFrequency, R.menu.menu_frequency)
             showOptions(dhmType.appFrequency, R.menu.menu_in_transaction)
-            showOptions(dhmConsent.appFrequency, R.menu.menu_consent)
+            showOptionsConsent(dhmConsent.appFrequency, R.menu.menu_consent)
             showOptions(otherSup.appFrequency, R.menu.menu_consent)
             showOptions(otherValue.appFrequency, R.menu.menu_supp)
             showOptions(formulaType.appFrequency, R.menu.menu_formula)
@@ -366,13 +357,32 @@ class EditPrescriptionFragment : Fragment() {
              * Listeners
              */
             listenChanges(eWeight, tilWeight, "Please enter valid wight value")
-            listenChanges(eTotal, tliTotal, "Please enter valid value")
             listenChanges(bfVolume.volume, bfVolume.tilVolume, "Please enter valid value")
             listenChanges(ebmVolume.volume, ebmVolume.tilVolume, "Please enter valid value")
             listenChanges(formulaVolume.volume, formulaVolume.tilVolume, "Please enter valid value")
             listenChanges(dhmVolume.volume, dhmVolume.tilVolume, "Please enter valid  value")
             listenChanges(ivVolume.volume, ivVolume.tilVolume, "Please enter valid  value")
 
+        }
+    }
+
+    private fun showOptionsConsent(textInputEditText: TextInputEditText, menuItem: Int) {
+        textInputEditText.setOnClickListener {
+            PopupMenu(requireContext(), textInputEditText).apply {
+                menuInflater.inflate(menuItem, menu)
+                setOnMenuItemClickListener { item ->
+                    textInputEditText.setText(item.title)
+                    if (item.title == "Yes") {
+                        binding.dhmSigned.tilFre.visibility = View.VISIBLE
+                        isSigned = true
+                    } else {
+                        binding.dhmSigned.tilFre.visibility = View.GONE
+                        isSigned = false
+                    }
+                    true
+                }
+                show()
+            }
         }
     }
 
@@ -446,7 +456,7 @@ class EditPrescriptionFragment : Fragment() {
 
             val data = Prescription(
                 currentWeight = currentWeight.toDouble().toString(),
-                totalFeeds = totalFeeds.toDouble().toString(),
+                totalFeeds = aggregateTotal.toString(),
                 feedFrequency = feedFrequency,
                 supplements = other,
                 additional = supp,
@@ -504,7 +514,7 @@ class EditPrescriptionFragment : Fragment() {
             fragment.arguments =
                 bundleOf(QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to viewModel.questionnaire)
             childFragmentManager.commit {
-                add(
+                replace(
                     R.id.add_patient_container, fragment,
                     QUESTIONNAIRE_FRAGMENT_TAG
                 )
@@ -514,68 +524,39 @@ class EditPrescriptionFragment : Fragment() {
         }
     }
 
-    private fun addQuestionnaireFragment(pair: Pair<String, String>) {
-        Timber.e("First ${pair.first}")
-        val fragment = QuestionnaireFragment()
-        fragment.arguments =
-            bundleOf(
-                QuestionnaireFragment.EXTRA_QUESTIONNAIRE_JSON_STRING to pair.first,
-                QuestionnaireFragment.EXTRA_QUESTIONNAIRE_RESPONSE_JSON_STRING to pair.second
-            )
-        childFragmentManager.commit {
-            add(R.id.add_patient_container, fragment, QUESTIONNAIRE_FRAGMENT_TAG)
-        }
-    }
-
 
     private fun onSubmitAction() {
 
         binding.apply {
             currentWeight = eWeight.text.toString()
-            totalFeeds = eTotal.text.toString()
             supp = otherSup.appFrequency.text.toString()
             other = otherValue.appFrequency.text.toString()
-            totalFeeds = eTotal.text.toString()
             feedFrequency = eFrequency.text.toString()
 
             if (TextUtils.isEmpty(currentWeight)) {
                 tilWeight.error = "Please Enter valid value"
                 return
             }
-
-            if (TextUtils.isEmpty(totalFeeds)) {
-                tliTotal.error = "PLease enter valid volume"
-                return
-            }
             if (TextUtils.isEmpty(feedFrequency)) {
                 tliFrequency.error = "PLease select frequency"
                 return
             }
-            aggregateTotal = totalFeeds.toFloat()
 
         }
 
-        if (binding.cbBreast.isChecked || binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
+        if (binding.cbEbm.isChecked || binding.cbFormula.isChecked || binding.cbDhm.isChecked || binding.cbFluid.isChecked) {
             binding.apply {
                 feedsList.clear()
-                if (cbBreast.isChecked) {
-                    val vol = bfVolume.volume.text.toString()
-                    if (checkEmptyData(vol)) {
-                        return
-                    }
-                    feedsList.add(
-                        FeedDataItem(
-                            code = BREAST_MILK,
-                            title = "Breast Volume",
-                            value = vol.toDouble().toString(),
-                            coding = false
-                        )
-                    )
-                }
+
                 if (cbEbm.isChecked) {
                     val vol = ebmVolume.volume.text.toString()
                     val rou = ebmRoute.appType.text.toString()
-                    if (checkEmptyData(vol) || checkEmptyData(rou)) {
+                    if (checkEmptyData(
+                            vol,
+                            ebmVolume.volume,
+                            ebmVolume.tilVolume
+                        ) || checkEmptyData(rou, ebmRoute.appType, ebmRoute.tilType)
+                    ) {
                         return
                     }
                     feedsList.add(
@@ -599,7 +580,7 @@ class EditPrescriptionFragment : Fragment() {
                 if (cbFluid.isChecked) {
                     val vol = ivVolume.volume.text.toString()
                     val rou = ivRoute.appType.text.toString()
-                    if (checkEmptyData(vol)) {
+                    if (checkEmptyData(vol, ivVolume.volume, ivVolume.tilVolume)) {
                         return
                     }
                     feedsList.add(
@@ -617,8 +598,18 @@ class EditPrescriptionFragment : Fragment() {
                     val rou = formulaRoute.appType.text.toString()
                     val typ = formulaType.appFrequency.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
-                            typ
+                    if (checkEmptyData(
+                            vol,
+                            formulaVolume.volume,
+                            formulaVolume.tilVolume
+                        ) || checkEmptyData(
+                            rou,
+                            formulaRoute.appType,
+                            formulaRoute.tilType
+                        ) || checkEmptyData(
+                            typ,
+                            formulaType.appFrequency,
+                            formulaType.tilFre
                         )
                     ) {
                         return@apply
@@ -656,10 +647,26 @@ class EditPrescriptionFragment : Fragment() {
                     val typ = dhmType.appFrequency.text.toString()
                     val con = dhmConsent.appFrequency.text.toString()
                     val reason = dhmReason.volume.text.toString()
+                    val date = dhmSigned.appFrequency.text.toString()
 
-                    if (checkEmptyData(vol) || checkEmptyData(rou) || checkEmptyData(
-                            typ
-                        ) || checkEmptyData(con) || checkEmptyData(reason)
+                    if (checkEmptyData(vol, dhmVolume.volume, dhmVolume.tilVolume)
+                        || checkEmptyData(
+                            rou,
+                            dhmRoute.appType,
+                            dhmRoute.tilType
+                        ) || checkEmptyData(
+                            typ,
+                            dhmType.appFrequency,
+                            dhmType.tilFre
+                        ) || checkEmptyData(
+                            con,
+                            dhmConsent.appFrequency,
+                            dhmConsent.tilFre
+                        ) || checkEmptyData(
+                            reason,
+                            dhmReason.volume,
+                            dhmReason.tilReason
+                        )
                     ) {
                         return
                     }
@@ -667,6 +674,23 @@ class EditPrescriptionFragment : Fragment() {
                         "Signed"
                     } else {
                         "Not Signed"
+                    }
+                    if (isSigned) {
+                        if (checkEmptyData(
+                                date, dhmSigned.appFrequency,
+                                dhmSigned.tilFre
+                            )
+                        ) {
+                            return
+                        }
+                        feedsList.add(
+                            FeedDataItem(
+                                title = "Consent Date",
+                                code = CONSENT_DATE,
+                                coding = true,
+                                value = date
+                            )
+                        )
                     }
                     feedsList.add(
                         FeedDataItem(
@@ -717,23 +741,17 @@ class EditPrescriptionFragment : Fragment() {
                         totalFeedsVolume += quantity.toFloat()
                     }
                 }
-                if (totalFeedsVolume == aggregateTotal) {
-                    confirmationDialog.show(childFragmentManager, "Confirm Details")
-                } else {
-                    if (totalFeedsVolume < aggregateTotal) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please check Total Feeds",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Please check Feed Breakdown Volumes",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                aggregateTotal = totalFeedsVolume
+                feedsList.add(
+                    FeedDataItem(
+                        title = "Total Feeds",
+                        code = TOTAL_FEEDS,
+                        coding = false,
+                        value = aggregateTotal.toString()
+                    )
+                )
+                confirmationDialog.show(childFragmentManager, "Confirm Details")
+
             }
 
         } else {
@@ -747,13 +765,20 @@ class EditPrescriptionFragment : Fragment() {
 
     }
 
-    private fun checkEmptyData(vol: String): Boolean {
+    override fun onResume() {
+
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
+        super.onResume()
+    }
+
+    private fun checkEmptyData(
+        vol: String,
+        volume: TextInputEditText,
+        tilVolume: TextInputLayout
+    ): Boolean {
         if (vol.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.inputs_missing),
-                Toast.LENGTH_SHORT
-            ).show()
+            tilVolume.error = getString(R.string.empty_field)
+            volume.requestFocus()
             return true
         }
         return false

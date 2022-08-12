@@ -101,8 +101,6 @@ class StatisticsFragment : Fragment() {
         checkCurrentDevice()
         updateDateSelection()
 
-
-
         if (isNetworkAvailable(requireContext())) {
             loadLiveData()
         } else {
@@ -159,13 +157,11 @@ class StatisticsFragment : Fragment() {
         val data = FhirApplication.getStatistics(requireContext())
         if (data != null) {
             val gson = Gson()
-            Timber.e("Local Sync Dara $data")
             try {
                 val it: Statistics = gson.fromJson(data, Statistics::class.java)
                 updateUI(it)
 
             } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
             }
         }
     }
@@ -175,11 +171,13 @@ class StatisticsFragment : Fragment() {
             operation(requireContext())
         }
     }
+
     override fun onResume() {
 
         (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
         super.onResume()
     }
+
     private fun updateUI(it: Statistics) {
         checkIfFragmentAttached {
             binding.apply {
@@ -206,25 +204,32 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun loadLiveData() {
-
+        showLoading(true)
         apiService.loadStatistics(requireContext()) {
-            if (it != null) {
-                val gson = Gson()
-                val json = gson.toJson(it)
-                Timber.e("Local Sync Dara $json")
-                try {
-                    FhirApplication.updateStatistics(requireContext(), json)
-                    updateUI(it)
-                } catch (e: Exception) {
+          try {
+              showLoading(false)
+              if (it != null) {
+                  val gson = Gson()
+                  val json = gson.toJson(it)
+                  try {
+                      FhirApplication.updateStatistics(requireContext(), json)
+                      updateUI(it)
+                  } catch (e: Exception) {
+                      e.printStackTrace()
+                  }
+              } else {
 
-                }
-            } else {
-                Timber.e("Failed to Load Data")
-                syncLocalData()
-            }
-
+                  syncLocalData()
+              }
+          } catch (e: Exception) {
+              e.printStackTrace()
+          }
         }
 
+    }
+
+    private fun showLoading(b: Boolean) {
+        binding.loadingProgress.visibility = if (b) View.VISIBLE else View.GONE
     }
 
     private fun populateExpressingTimes(expressingTime: List<ExpressingTime>) {
@@ -395,8 +400,8 @@ class StatisticsFragment : Fragment() {
     private fun populateFeedsPercentage(percentageFeeds: PercentageFeeds) {
         val pie: MutableList<PieItem> = mutableListOf()
         pie.add(PieItem(percentageFeeds.dhm, "Donated Human Milk", "#1EAF5F"))
-        pie.add(PieItem(percentageFeeds.breastFeeding, "Breastfeeding", "#F65050"))
-        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
+        pie.add(PieItem(percentageFeeds.iv, "Iv Fluids", "#F65050"))
+//        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
         pie.add(PieItem(percentageFeeds.ebm, "Expressed Breast Milk", "#6C63FF"))
         pie.add(PieItem(percentageFeeds.formula, "Formula", "#BA1B22"))
 

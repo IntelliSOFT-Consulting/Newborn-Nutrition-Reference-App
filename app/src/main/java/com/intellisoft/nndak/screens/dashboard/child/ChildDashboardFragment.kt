@@ -36,7 +36,6 @@ class ChildDashboardFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private var _binding: FragmentChildDashboardBinding? = null
-    var editMenuItem: MenuItem? = null
     private val binding
         get() = _binding!!
 
@@ -86,7 +85,6 @@ class ChildDashboardFragment : Fragment() {
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {
 
             if (it != null) {
-                editMenuItem?.isEnabled = true
                 binding.apply {
                     incDetails.lnBody.visibility = View.VISIBLE
                     incDetails.pbLoading.visibility = View.GONE
@@ -153,6 +151,13 @@ class ChildDashboardFragment : Fragment() {
                     )
                 )
             }
+            lnBabyDischarge.setOnClickListener {
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToDischarge(
+                        args.patientId
+                    )
+                )
+            }
         }
     }
 
@@ -183,10 +188,12 @@ class ChildDashboardFragment : Fragment() {
                     lnBabyFeeding.isEnabled = false
                     lnBabyMonitoring.isEnabled = false
                     lnBabyLactation.isEnabled = false
+                    lnBabyDischarge.isEnabled = false
                     dimOption(imgDashboard, "#94C4C4C4")
                     dimOption(imgFeeds, "#94C4C4C4")
                     dimOption(imgMonitor, "#94C4C4C4")
                     dimOption(imgLactation, "#94C4C4C4")
+                    dimOption(imgDischarge, "#94C4C4C4")
                 }
 
             } catch (e: Exception) {
@@ -214,19 +221,13 @@ class ChildDashboardFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.details_options_menu, menu)
-        editMenuItem = menu.findItem(R.id.menu_patient_edit)
+        inflater.inflate(R.menu.hidden_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 (requireActivity() as MainActivity).openNavigationDrawer()
-                true
-            }
-            R.id.menu_patient_edit -> {
-                findNavController()
-                    .navigate(ChildDashboardFragmentDirections.navigateToEditBaby(args.patientId))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -244,6 +245,7 @@ class ChildDashboardFragment : Fragment() {
         (requireActivity() as MainActivity).showBottomNavigationView(View.VISIBLE)
         super.onResume()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

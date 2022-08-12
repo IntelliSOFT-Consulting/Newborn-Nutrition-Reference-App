@@ -127,7 +127,7 @@ class ViewBreastFeeding(
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            tvHeader.text = getString(R.string.pos_history)
+            tvHeader.text = getString(R.string.tv_breast_history)
             firstLayer.tvhDate.text = getString(R.string._date)
             firstLayer.tvhFrequency.text = getString(R.string._interest)
             firstLayer.tvhTiming.text = getString(R.string._cues)

@@ -17,6 +17,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
+import com.intellisoft.nndak.MainActivity.Companion.updateBabyMum
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.PrescriptionAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyFeedsBinding
@@ -97,55 +98,7 @@ class BabyFeedsFragment : Fragment() {
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
-
-            if (data != null) {
-                binding.apply {
-
-                    incDetails.pbLoading.visibility = View.GONE
-                    incDetails.lnBody.visibility = View.VISIBLE
-
-                    val gest = data.dashboard.gestation ?: ""
-                    val status = data.status
-                    incDetails.tvBabyName.text = data.babyName
-                    incDetails.tvMumName.text = data.motherName
-                    incDetails.appBirthWeight.text = data.birthWeight
-                    incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = data.motherIp
-                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text =
-                        data.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
-
-                    val isSepsis = data.dashboard.neonatalSepsis
-                    val isAsphyxia = data.dashboard.asphyxia
-                    val isJaundice = data.dashboard.jaundice
-                    if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
-                        incDetails.lnConditions.visibility = View.VISIBLE
-                    }
-
-                    if (isSepsis != "Yes") {
-                        incDetails.appNeonatalSepsis.visibility = View.GONE
-                        incDetails.tvNeonatalSepsis.visibility = View.GONE
-                    }
-
-                    if (isAsphyxia != "Yes") {
-                        incDetails.appAsphyxia.visibility = View.GONE
-                        incDetails.tvAsphyxia.visibility = View.GONE
-                    }
-
-                    if (isJaundice != "Yes") {
-                        incDetails.tvJaundice.visibility = View.GONE
-                        incDetails.appJaundice.visibility = View.GONE
-                    }
-
-
-                }
-            }
+            updateBabyMum(binding.incDetails, data)
         }
 
         /**
@@ -157,24 +110,24 @@ class BabyFeedsFragment : Fragment() {
 
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.livePrescriptionsData.observe(viewLifecycleOwner) {
-            Timber.d("Prescriptions has " + it.count() + " records")
+
             if (it.isNotEmpty()) {
                 binding.actionUpdatePrescription.visibility = View.VISIBLE
                 binding.tvHeader.visibility = View.VISIBLE
                 val value = it.first().resourceId.toString()
                 careId = value
-                Timber.e("Found Reference $careId")
                 adapter.submitList(it.subList(0, 1))
             }
             if (it.isEmpty()) {
                 binding.incEmpty.cpBgView.visibility = View.VISIBLE
                 binding.incEmpty.cpTitle.text = getString(R.string.add_pres)
+            } else {
+
+                binding.incEmpty.cpBgView.visibility = View.GONE
+                binding.incEmpty.cpTitle.visibility = View.GONE
             }
 
             binding.pbLoadingTwo.visibility = View.GONE
-            binding.incEmpty.cpBgView.visibility = View.GONE
-            binding.incEmpty.cpTitle.visibility = View.GONE
-
         }
 
         binding.apply {
@@ -226,11 +179,11 @@ class BabyFeedsFragment : Fragment() {
     }
 
     private fun onPrescriptionItemClick(item: PrescriptionItem) {
-        startActivity(
-            Intent(requireContext(), HistoryActivity::class.java)
-                .putExtra("careId", item.resourceId)
-                .putExtra("patientId", args.patientId)
-        )
+        /*   startActivity(
+               Intent(requireContext(), HistoryActivity::class.java)
+                   .putExtra("careId", item.resourceId)
+                   .putExtra("patientId", args.patientId)
+           )*/
 
     }
 

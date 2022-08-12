@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
@@ -48,21 +49,13 @@ import timber.log.Timber
 
 
 class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var fhirEngine: FhirEngine
-    private lateinit var patientListViewModel: PatientListViewModel
     private lateinit var searchView: SearchView
     private var _binding: FragmentDhmOrdersBinding? = null
     private val apiService = RestManager()
     private val binding
         get() = _binding!!
-    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private lateinit var mySpinner: Spinner
-
-    private var formatter = FormatHelper()
-
-    private var filterData: String? = null
-
     private val orderList = ArrayList<ItemOrder>()
     lateinit var adapterList: OrdersAdapter
 
@@ -83,15 +76,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
             setDisplayHomeAsUpEnabled(true)
         }
         try {
-            fhirEngine = FhirApplication.fhirEngine(requireContext())
-            patientListViewModel =
-                ViewModelProvider(
-                    this,
-                    PatientListViewModel.PatientListViewModelFactory(
-                        requireActivity().application,
-                        fhirEngine, "0"
-                    )
-                ).get(PatientListViewModel::class.java)
+
 
             val recyclerView: RecyclerView = binding.patientListContainer.patientList
             adapterList = OrdersAdapter(orderList, this::onOrderClick)
@@ -105,6 +90,14 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     setDrawable(ColorDrawable(Color.LTGRAY))
                 }
             )
+            binding.apply {
+                breadcrumb.page.text =
+                    Html.fromHtml("HMB > <font color=\"#37379B\">Orders</font>")
+                breadcrumb.page.setOnClickListener {
+                    findNavController().navigateUp()
+                }
+                incTitle.lnParent.visibility = View.GONE
+            }
             loadOrders()
 
 
@@ -123,20 +116,16 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mySpinner.adapter = adapter
         mySpinner.onItemSelectedListener = this
 
-
-        patientListViewModel.patientCount.observe(viewLifecycleOwner) {
-            binding.patientListContainer.patientCount.text = "$it Patient(s)"
-        }
         searchView = binding.search
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-
+                    adapterList.filter.filter(newText)
                     return true
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    patientListViewModel.searchPatientsByName(query)
+                    adapterList.filter.filter(query)
                     return true
                 }
             }
@@ -185,43 +174,38 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
-        lifecycleScope.launch {
-            mainActivityViewModel.pollState.collect {
-                Timber.d("onViewCreated: pollState Got status $it")
-                // After the sync is successful, update the patients list on the page.
-                if (it is State.Finished) {
-                    patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
-                }
-            }
-        }
     }
 
     private fun loadOrders() {
+        orderList.clear()
         apiService.loadOrders(requireContext()) {
-            if (it != null) {
-                if (it.data.isEmpty()) {
-                    binding.empty.cpBgView.visibility = View.VISIBLE
-                    binding.pbLoading.visibility = View.GONE
-                }
-                if (it.data.isNotEmpty()) {
-                    binding.empty.cpBgView.visibility = View.GONE
-                    binding.pbLoading.visibility = View.GONE
-                    orderList.clear()
-                    it.data.forEach { order ->
-                        if (order.motherName != "null") {
-                            orderList.add(order)
+            try {
+                binding.apply {
+                    if (it != null) {
+                        if (it.data.isEmpty()) {
+                            empty.cpBgView.visibility = View.VISIBLE
+                            pbLoading.visibility = View.GONE
                         }
-                    }
-                    adapterList.notifyDataSetChanged()
+                        if (it.data.isNotEmpty()) {
 
+                            empty.cpBgView.visibility = View.GONE
+                            pbLoading.visibility = View.GONE
+                            incTitle.lnParent.visibility = View.VISIBLE
+                            orderList.clear()
+                            it.data.forEach { order ->
+                                if (order.motherName != "null") {
+                                    orderList.add(order)
+                                }
+                            }
+                            adapterList.notifyDataSetChanged()
+                        }
+                    } else {
+                        empty.cpBgView.visibility = View.VISIBLE
+                        pbLoading.visibility = View.GONE
+                    }
                 }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.problems),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -261,8 +245,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     FhirApplication.updateCurrentOrder(requireContext(), json)
 
                     findNavController().navigate(
-                        DhmOrdersFragmentDirections.navigateToProcessing(
-                        ),
+                        DhmOrdersFragmentDirections.navigateToProcessing(),
                     )
                 } catch (e: Exception) {
 
@@ -280,7 +263,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         try {
-            patientListViewModel.reloadOrders()
+            loadOrders()
         } catch (e: Exception) {
 
         }
@@ -298,8 +281,29 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        filterData = formatter.getSearchQuery(text, requireContext())
+        filterRecords(text)
 
+
+    }
+
+    private fun filterRecords(text: String) {
+        when(text) {
+            "Sort By:" -> {
+                adapterList.filter.filter("")
+            }
+            "Term" -> {
+                adapterList.filter.filter("Term")
+            }
+            "Signed" -> {
+                adapterList.filter.filter("Signed")
+            }
+            "Unsigned" -> {
+                adapterList.filter.filter("Not Signed")
+            }
+            "Preterm" -> {
+                adapterList.filter.filter("Preterm")
+            }
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

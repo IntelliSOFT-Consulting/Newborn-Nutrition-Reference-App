@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_baby_name"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
 
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_mother_name"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
 
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_ip_number"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
@@ -62,25 +62,28 @@
                 android:orientation="vertical"
                 android:padding="2dp">
 
-                <TextView  android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_baby_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
+                    android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
 
-                <TextView  android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_mother_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
+                    android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
 
-                <TextView  android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_ip_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
+                    android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 
@@ -96,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_birth_weight"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
 
@@ -105,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_status"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
 
@@ -114,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_rate_gain"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
@@ -126,27 +129,30 @@
                 android:orientation="vertical"
                 android:padding="2dp">
 
-                <TextView  android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_birth_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
+                     android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
 
-                <TextView   android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="@color/dim_red"
+                    android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
 
-                <TextView   android:textSize="16sp"
+                <TextView
                     android:id="@+id/app_rate_gain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="@color/dim_green"
+                    android:textSize="16sp"
                     app:autoSizeTextType="uniform" />
             </LinearLayout>
 

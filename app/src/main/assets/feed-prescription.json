@@ -91,72 +91,6 @@
       ]
     },
     {
-      "linkId": "Total-Feeds",
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
-          "valueExpression": {
-            "language": "application/x-fhir-query",
-            "expression": "Observation",
-            "name": "doneStatus"
-          }
-        }
-      ],
-      "item": [
-        {
-          "type": "decimal",
-          "code": [
-            {
-              "code": "Total-Feeds",
-              "display": "Total-Feeds",
-              "system": "http://loinc.org/modified"
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "ml"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 1
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDecimal": 20000
-            }
-          ],
-          "required": true,
-          "linkId": "/Total-Feeds",
-          "item": [
-            {
-              "linkId": "4.1",
-              "text": "Total Feeds Volume (mls)",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "linkId": "Feed-Frequency",
       "type": "group",
       "extension": [
@@ -213,24 +147,18 @@
           ],
           "answerOption": [
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
+              "valueCoding": {
+                "code": "LA32-8",
+                "display": "1 Hourly"
+              }
+            },
+            {
               "valueCoding": {
                 "code": "LA32-8",
                 "display": "2 Hourly"
               }
             },
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
               "valueCoding": {
                 "code": "LA33-6",
                 "display": "3 Hourly"
@@ -1204,6 +1132,7 @@
     {
       "linkId": "IV-Fluid-Volume",
       "type": "group",
+      "text": "IV Fluid Details",
       "enableWhen": [
         {
           "question": "/Feed-Selection",

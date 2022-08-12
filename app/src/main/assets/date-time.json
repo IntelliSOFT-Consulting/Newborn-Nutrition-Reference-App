@@ -19,7 +19,8 @@
   ],
   "item": [
     {
-      "linkId": "Current-Weight",
+      "linkId": "Weight",
+      "text": "",
       "type": "group",
       "extension": [
         {
@@ -27,64 +28,105 @@
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "doneStatus"
+            "name": "expressedVolume"
           }
         }
       ],
       "item": [
         {
-          "type": "decimal",
-          "code": [
-            {
-              "code": "3141-9",
-              "display": "Current Weight",
-              "system": "http://loinc.org/modified"
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "[lb_av]"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "gm"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 400
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDecimal": 5000
-            }
-          ],
-          "required": true,
-          "linkId": "/3141-9",
+          "linkId": "7.2.0",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
-              "linkId": "4.1",
-              "text": "Current Weight (gm)",
-              "type": "display",
+              "type": "decimal",
+              "linkId": "7.2.1",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 400
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 5000
+                }
+              ],
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "Current Weight (gm)",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
                       }
-                    ],
-                    "text": "Flyover"
-                  }
+                    }
+                  ]
                 }
               ]
+            },
+            {
+              "linkId": "7.2.2",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "gm"
+                }
+              ]
+            },
+            {
+              "linkId": "7.2.3",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "http://unitsofmeasure.org"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "7.3.0",
+          "type": "choice",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueCoding": {
+                "code": "3141-9",
+                "display": "Current Weight",
+                "system": "http://snomed.info/sct"
+              }
             }
           ]
         }
@@ -274,73 +316,114 @@
       ]
     },
     {
-      "linkId": "Diaper-Changed",
-      "type": "group",
+      "linkId": "Diaper-Change",
       "text": "",
+      "type": "group",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
           "valueExpression": {
             "language": "application/x-fhir-query",
             "expression": "Observation",
-            "name": "doneStatus"
+            "name": "diaperChange"
           }
         }
       ],
       "item": [
         {
-          "type": "decimal",
-          "code": [
-            {
-              "code": "50786-3",
-              "display": "Diaper-Changed",
-              "system": "http://loinc.org/modified"
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "[lb_av]"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unitOption",
-              "valueCoding": {
-                "display": "kg"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDecimal": 0
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDecimal": 20
-            }
-          ],
-          "required": true,
-          "linkId": "/Diaper-Changed",
+          "linkId": "diaperChange",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity",
           "item": [
             {
-              "linkId": "4.1",
-              "text": "No. of Diapers Changed",
-              "type": "display",
+              "type": "decimal",
+              "linkId": "diaperChange-value",
+              "required": true,
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.value",
               "extension": [
                 {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
+                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+                  "valueDecimal": 0
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueDecimal": 50
+                }
+              ],
+              "item": [
+                {
+                  "linkId": "4.1",
+                  "text": "No. of Diaper Changed",
+                  "type": "display",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "flyover",
+                            "display": "Fly-over"
+                          }
+                        ],
+                        "text": "Flyover"
                       }
-                    ],
-                    "text": "Flyover"
-                  }
+                    }
+                  ]
                 }
               ]
+            },
+            {
+              "linkId": "diaperChange-unit",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.code",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "pcs"
+                }
+              ]
+            },
+            {
+              "linkId": "diaperChange-system",
+              "type": "string",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.valueQuantity.system",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                  "valueBoolean": true
+                }
+              ],
+              "initial": [
+                {
+                  "valueString": "http://unitsofmeasure.org"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "diaperChange-code",
+          "type": "choice",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Observation#Observation.code",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueCoding": {
+                "code": "Diaper-Changed",
+                "display": "Diaper Changed",
+                "system": "http://snomed.info/sct"
+              }
             }
           ]
         }

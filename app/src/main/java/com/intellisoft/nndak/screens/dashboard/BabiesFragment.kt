@@ -11,9 +11,9 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -33,10 +33,8 @@ import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.viewmodels.MainActivityViewModel
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.android.synthetic.main.patient_list_item_view.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +53,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var _binding: FragmentBabiesBinding? = null
     lateinit var adapterList: BabyItemAdapter
     private var mumBabyList = ArrayList<MotherBabyItem>()
+    var count = 0
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -97,7 +96,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapterList.submitList(mumBabyList)
             binding.pbLoading.visibility = View.VISIBLE
             patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
-                Timber.d("Submitting " + it.count() + " patient records")
+
                 if (it.isEmpty()) {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
@@ -106,6 +105,7 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
                 if (it.isNotEmpty()) {
                     mumBabyList.clear()
+                    adapterList.notifyDataSetChanged()
                     when (status) {
                         "Filter By:" -> {
                             displayComplete(it)
@@ -196,7 +196,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         lifecycleScope.launch {
             mainActivityViewModel.pollState.collect {
-                Timber.d("onViewCreated: pollState Got status $it")
                 // After the sync is successful, update the patients list on the page.
                 if (it is State.Finished) {
                     patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
@@ -234,7 +233,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
             } else {
-
                 imgEmpty.visibility = View.GONE
             }
         }
@@ -246,17 +244,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 mumBabyList.add(baby)
             }
         }
-        /*   baby.forEach {
-               val status = it.status
-               if (status.equals(s)) {
-                   mumBabyList.add(it)
-
-               }
-               Timber.e("Selected Status $s  Current $status ${it.babyName} ${it.status}\n" +
-                       "Added $mumBabyList")
-
-           }*/
         binding.apply {
+            binding.pbLoading.visibility = View.GONE
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
             } else {
@@ -270,11 +259,12 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         super.onDestroyView()
         _binding = null
     }
-    override fun onResume() {
 
+    override fun onResume() {
         (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
         super.onResume()
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
     }

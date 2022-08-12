@@ -39,6 +39,7 @@ class HistoryActivity : AppCompatActivity() {
         patientId = intent.getStringExtra("patientId").toString()
         careId = intent.getStringExtra("careId").toString()
 
+
         fhirEngine = FhirApplication.fhirEngine(this)
         patientDetailsViewModel =
             ViewModelProvider(

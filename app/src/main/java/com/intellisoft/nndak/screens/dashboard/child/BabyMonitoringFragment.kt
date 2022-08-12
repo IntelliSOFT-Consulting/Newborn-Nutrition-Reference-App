@@ -29,6 +29,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
+import com.intellisoft.nndak.MainActivity.Companion.updateBabyMum
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.adapters.ViewPagerAdapter
 import com.intellisoft.nndak.databinding.FragmentBabyMonitoringBinding
@@ -93,20 +94,12 @@ class BabyMonitoringFragment : Fragment() {
         }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
-
+        onBackPressed()
         val tabViewpager = binding.tabViewpager
         val tabTabLayout = binding.tabTablayout
         setupViewPager(tabViewpager)
         tabTabLayout.setupWithViewPager(tabViewpager)
-/*
-        updateArguments()
-        onBackPressed()
-        observeResourcesSaveAction()
-        if (savedInstanceState == null) {
-            addQuestionnaireFragment()
-        }*/
 
-        //  promptQues()
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -119,6 +112,7 @@ class BabyMonitoringFragment : Fragment() {
             ).get(PatientDetailsViewModel::class.java)
 
         FhirApplication.updateCurrentPatient(requireContext(), args.patientId)
+        (requireActivity() as MainActivity).showBottomNavigationView(View.GONE)
 
         binding.apply {
             breadcrumb.page.text =
@@ -126,58 +120,37 @@ class BabyMonitoringFragment : Fragment() {
             breadcrumb.page.setOnClickListener {
                 findNavController().navigateUp()
             }
+            incDetails.pbLoading.visibility = View.VISIBLE
+            incDetails.lnBody.visibility = View.GONE
 
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
-
             if (data != null) {
-                binding.apply {
-
-                    incDetails.lnBody.visibility = View.VISIBLE
-                    incDetails.pbLoading.visibility = View.GONE
-
-                    val gest = data.dashboard.gestation ?: ""
-                    val status = data.status
-                    incDetails.tvBabyName.text = data.babyName
-                    incDetails.tvMumName.text = data.motherName
-                    incDetails.appBirthWeight.text = data.birthWeight
-                    incDetails.appGestation.text = "$gest-$status"
-                    incDetails.appApgarScore.text = data.dashboard.apgarScore ?: ""
-                    incDetails.appMumIp.text = data.motherIp
-                    incDetails.appBabyWell.text = data.dashboard.babyWell ?: ""
-                    incDetails.appAsphyxia.text = data.dashboard.asphyxia ?: ""
-                    incDetails.appNeonatalSepsis.text =
-                        data.dashboard.neonatalSepsis ?: ""
-                    incDetails.appJaundice.text = data.dashboard.jaundice ?: ""
-                    incDetails.appBirthDate.text = data.dashboard.dateOfBirth ?: ""
-                    incDetails.appLifeDay.text = data.dashboard.dayOfLife ?: ""
-                    incDetails.appAdmDate.text = data.dashboard.dateOfAdm ?: ""
-
-
-                    val isSepsis = data.dashboard.neonatalSepsis
-                    val isAsphyxia = data.dashboard.asphyxia
-                    val isJaundice = data.dashboard.jaundice
-                    if (isSepsis == "Yes" || isAsphyxia == "Yes" || isJaundice == "Yes") {
-                        incDetails.lnConditions.visibility = View.VISIBLE
-                    }
-                    if (isSepsis != "Yes") {
-                        incDetails.appNeonatalSepsis.visibility = View.GONE
-                        incDetails.tvNeonatalSepsis.visibility = View.GONE
-                    }
-
-                    if (isAsphyxia != "Yes") {
-                        incDetails.appAsphyxia.visibility = View.GONE
-                        incDetails.tvAsphyxia.visibility = View.GONE
-                    }
-
-                    if (isJaundice != "Yes") {
-                        incDetails.tvJaundice.visibility = View.GONE
-                        incDetails.appJaundice.visibility = View.GONE
-                    }
-                }
+                FhirApplication.updateCurrent(requireContext(), data.id)
+                updateBabyMum(binding.incDetails, data)
             }
+        }
+    }
+
+    private fun showCancelScreenerQuestionnaireAlertDialog() {
+        SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Are you sure?")
+            .setContentText(getString(R.string.cancel_questionnaire_message))
+            .setConfirmText("Yes")
+            .setConfirmClickListener { d ->
+                d.dismiss()
+                Timber.e("Cancel Screener Questionnaire BabyMonitoringFragment")
+                findNavController().navigateUp()
+            }
+            .setCancelText("No")
+            .show()
+    }
+
+    private fun onBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
+            showCancelScreenerQuestionnaireAlertDialog()
         }
     }
 
@@ -203,6 +176,7 @@ class BabyMonitoringFragment : Fragment() {
         adapter.addFragment(feeding, "Record Feeding")
 
         viewpager.adapter = adapter
+        viewpager.currentItem = 3
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

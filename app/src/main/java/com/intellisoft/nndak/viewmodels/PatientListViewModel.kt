@@ -15,13 +15,15 @@ import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.logic.DataSort.Companion.calculateGestationDays
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDailyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.extractDaysData
+import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
+import com.intellisoft.nndak.logic.DataSort.Companion.extractWeeklyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.getFormattedIntAge
+import com.intellisoft.nndak.logic.DataSort.Companion.getWeekFromDays
 import com.intellisoft.nndak.logic.DataSort.Companion.regulateProjection
 import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.BABY_ASSESSMENT
 import com.intellisoft.nndak.logic.Logics.Companion.BIRTH_WEIGHT
-import com.intellisoft.nndak.logic.Logics.Companion.CONSENT_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
@@ -35,6 +37,7 @@ import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
+import com.intellisoft.nndak.utils.getWeeksSoFarIntervalOf
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createEncounterItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createNutritionItem
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createObservationItem
@@ -45,7 +48,6 @@ import java.io.IOException
 import java.time.LocalDate
 import java.time.Period
 import java.util.*
-import java.util.stream.*
 
 /**
  * The ViewModel helper class for PatientItemRecyclerViewAdapter, that is responsible for preparing
@@ -60,9 +62,6 @@ class PatientListViewModel(
 
     private val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
-    val liveFeedsTime = MutableLiveData<StaticCharts>()
-    val liveOrders = MutableLiveData<List<OrdersItem>>()
-    val liveDHMDashboard = MutableLiveData<DHMDashboardItem>()
     val patientCount = MutableLiveData<Long>()
     val context: Application = application
 
@@ -74,20 +73,9 @@ class PatientListViewModel(
         updateMumAndBabyCount(
             { getMumSearchResults("", location) },
             { count("", location) })
-        updateOrdersCount(
-            { getOrdersSearchResults("", location) },
-            { count("", location) })
-        updateDhmDashboardCount(
-            { getDhmDashboardSearchResults("", location) },
-            { count("", location) })
     }
 
-    fun reloadOrders() {
 
-        updateOrdersCount(
-            { getOrdersSearchResults("", location) },
-            { count("", location) })
-    }
 
     fun searchPatientsByName(nameQuery: String) {
         updatePatientListAndPatientCount(
@@ -98,13 +86,6 @@ class PatientListViewModel(
             { getMumSearchResults(nameQuery, location) },
             { count("", location) })
 
-        updateOrdersCount(
-            { getOrdersSearchResults(nameQuery, location) },
-            { count("", location) })
-
-        updateDhmDashboardCount(
-            { getDhmDashboardSearchResults(nameQuery, location) },
-            { count("", location) })
     }
 
     /**
@@ -128,32 +109,6 @@ class PatientListViewModel(
     ) {
         viewModelScope.launch {
             liveMotherBaby.value = search()
-            patientCount.value = count()
-        }
-    }
-
-
-    private fun updateOrdersCount(
-        search: suspend () -> List<OrdersItem>,
-        count: suspend () -> Long
-    ) {
-        viewModelScope.launch {
-            liveOrders.value = search()
-            patientCount.value = count()
-        }
-    }
-
-    /**
-     * DHM Dashboard Data
-     */
-
-
-    private fun updateDhmDashboardCount(
-        search: suspend () -> DHMDashboardItem,
-        count: suspend () -> Long
-    ) {
-        viewModelScope.launch {
-            liveDHMDashboard.value = search()
             patientCount.value = count()
         }
     }
@@ -495,14 +450,16 @@ class PatientListViewModel(
                     birthWeight = element.value
                 }
                 if (element.code == GESTATION) {
-                    val code = element.value.split("\\.".toRegex()).toTypedArray()
+                    val code = element.quantity//.split("\\.".toRegex()).toTypedArray()
+
                     status = try {
-                        if (code[0].toInt() < 37) {
+                        if (code.toDouble() < 37) {
                             "Preterm"
                         } else {
                             "Term"
                         }
                     } catch (e: Exception) {
+
                         "Preterm"
                     }
 
@@ -515,7 +472,7 @@ class PatientListViewModel(
             mumName = mother[0].name
             motherIp = mother[0].resourceId
         }
-        val gainRate = calculateWeightGainRate(baby.resourceId)
+        val gainRate = calculateWeightGainRate(baby.resourceId, baby.gender)
 
         return MotherBabyItem(
             id = position.toString(),
@@ -537,32 +494,43 @@ class PatientListViewModel(
 
     }
 
-    private suspend fun calculateWeightGainRate(resourceId: String): String {
-
+    private suspend fun calculateWeightGainRate(resourceId: String, gender: String): String {
+        var standard = "boy-z-score.json"
+        if (gender == "female") {
+            standard = "girl-z-score.json"
+        }
         var gainRate = "Normal"
         try {
             val it = getWeightsDataModel(resourceId)
-            val jsonFileString = getJsonDataFromAsset("boy.json")
+            val jsonFileString = getJsonDataFromAsset(standard)
 
             val gson = Gson()
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            val totalDays = calculateGestationDays(it)
-            val chartData = extractDaysData(totalDays, it, growths)
-            val projectWeight = regulateProjection(chartData.projectedWeight)
-            for ((i, entry) in chartData.actualWeight.data.withIndex()) {
-                val equivalent = projectWeight[i].value.toDouble()
-                val cc = entry.actual.toDouble()
-                gainRate = if (cc > equivalent) {
-                    "High"
-                } else if (cc == equivalent) {
-                    "Normal"
-                } else {
-                    "Low"
-                }
+            for ((i, entry) in growths.withIndex()) {
+                val start = entry.age
+                val ges = it.gestationAge.toInt()
+                if (start == ges || start > ges) {
+                    val equivalent = extractValueIndex(start, it)
+                    val min = entry.data[1].value.toFloat()
+                    val max = entry.data[5].value.toFloat()
+                    val deviation = equivalent.toFloat()
+                    if (equivalent == "0") {
+                        //  gainRate = "Normal"
+                    } else {
+
+                        gainRate = if (deviation < min) {
+                            "Low"
+                        } else if (deviation > max) {
+                            "High"
+                        } else {
+                            "Normal"
+                        }
+                    } }
             }
+
         } catch (e: Exception) {
-            Timber.e("Growth Exception ${e.localizedMessage}")
+
         }
         return gainRate
     }
@@ -583,36 +551,40 @@ class PatientListViewModel(
         val weight = pullWeights(resourceId)
         val data = arrayListOf<ActualData>()
         var dayOfLife = 0
+        var weeksLife = 0
         var babyGender = ""
         val gestationAge = retrieveQuantity(resourceId, GESTATION)
         val birthWeight = retrieveQuantity(resourceId, BIRTH_WEIGHT)
-        val lastKnownWeight = retrieveQuantity(resourceId, CURRENT_WEIGHT)
+        var lastKnownWeight = retrieveQuantity(resourceId, CURRENT_WEIGHT)
         patient.let {
             dayOfLife = getFormattedIntAge(it.dob)
             babyGender = it.gender
+            weeksLife = getWeekFromDays(dayOfLife)
 
         }
 
         if (weight.isNotEmpty()) {
-
-            val daysString = getPastDaysOnIntervalOf(dayOfLife + 1, 1)
+            val daysString = getWeeksSoFarIntervalOf(patient.dob, weeksLife + 1, 1)
+            val sorted = sortCollected(weight)
+            lastKnownWeight = sorted.last().quantity
             for ((i, entry) in daysString.withIndex()) {
-                val sorted = sortCollected(weight)
-                var value = extractDailyMeasure(entry, sorted)
+                val added = gestationAge.toFloat() + i.toFloat()
+
+                var value = extractWeeklyMeasure(entry, 6, sorted)
+
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                data.add(ActualData(day = i.toString(), actual = value, projected = value))
+                data.add(ActualData(day = added.toInt(), actual = value, projected = value))
             }
         }
-        val currentWeight = data.lastOrNull()?.actual ?: birthWeight
-
         return WeightsData(
             babyGender = babyGender,
-            currentWeight = currentWeight,
+            currentWeight = lastKnownWeight,
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
-            data = data
+            data = data,
+            weeksLife = weeksLife + 1
         )
     }
 
@@ -730,11 +702,6 @@ class PatientListViewModel(
         search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
     }
 
-
-    fun loadFeedingTime() {
-
-        viewModelScope.launch { liveFeedsTime.value = retrieveFeedingTimes() }
-    }
 
     private suspend fun retrieveFeedingTimes(): StaticCharts {
         val feeds: MutableList<PieItem> = mutableListOf()

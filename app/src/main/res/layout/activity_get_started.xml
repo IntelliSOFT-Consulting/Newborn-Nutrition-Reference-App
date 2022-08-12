@@ -77,7 +77,7 @@
 
     <ImageView
         android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_marginBottom="4dp"
         android:src="@drawable/path"

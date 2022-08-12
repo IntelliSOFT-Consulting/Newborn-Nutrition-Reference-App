@@ -81,6 +81,9 @@
         <action
             android:id="@+id/navigate_to_edit_baby"
             app:destination="@id/editBabyFragment" />
+        <action
+            android:id="@+id/navigate_to_discharge"
+            app:destination="@id/dischargeFragment" />
     </fragment>
     <fragment
         android:id="@+id/babyDashboardFragment"
@@ -151,7 +154,7 @@
     <fragment
         android:id="@+id/editPrescriptionFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.prescription.EditPrescriptionFragment"
-        android:label="EditPrescriptionFragment"
+        android:label="@string/action_edit_exp"
         tools:layout="@layout/update_prescription">
         <argument
             android:name="patient_id"
@@ -254,13 +257,31 @@
         android:id="@+id/customRegistrationFragment"
         android:name="com.intellisoft.nndak.screens.dashboard.CustomRegistrationFragment"
         android:label="@string/home_client"
-        tools:layout="@layout/fragment_custom_registration" >
+        tools:layout="@layout/fragment_custom_registration">
         <action
             android:id="@+id/navigate_to_baby_dashboard"
             app:destination="@id/childDashboardFragment" />
         <action
             android:id="@+id/navigate_to_landing"
             app:destination="@id/landingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expressionFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.monitor.ExpressionFragment"
+        android:label="@string/action_expression"
+        tools:layout="@layout/fragment_expression">
+        <action
+            android:id="@+id/navigate_to_baby_dashboard"
+            app:destination="@id/childDashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dischargeFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.discharge.DischargeFragment"
+        android:label="@string/action_discharge"
+        tools:layout="@layout/fragment_discharge">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
     </fragment>
 
 </navigation>
