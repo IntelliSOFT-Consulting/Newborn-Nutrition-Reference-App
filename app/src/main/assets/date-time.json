@@ -135,7 +135,7 @@
     {
       "linkId": "Vomit",
       "type": "group",
-      "text": "Monitoring",
+      "text": "Enter Monitoring data",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",

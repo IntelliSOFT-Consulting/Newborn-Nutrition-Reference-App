@@ -51,18 +51,19 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_tablayout"
+            style="@style/TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/dim_red"
+            android:contentDescription="@string/_burst"
             app:tabIndicatorHeight="3dp"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/dim_red" />
+            app:tabMode="scrollable" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/tab_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/_burst" />
 
     </LinearLayout>
 

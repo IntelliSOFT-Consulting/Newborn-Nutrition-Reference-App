@@ -6,16 +6,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorStatusBar</item>
-<!--        <item name="fontFamily">@font/regular</item>-->
-        <item name="questionnaire_theme">@style/Theme.MyQuestionnaire</item>
+        <item name="fontFamily">@font/regular</item>
+<!--        <item name="questionnaire_theme">@style/Theme.MyQuestionnaire</item>-->
     </style>
 
-    <style name="Theme.MyQuestionnaire" parent="Theme.Questionnaire">
-        <item name="questionnaireQuestionTextStyle">@color/colorPrimary</item>
-        <item name="questionnaireTextInputEditTextStyle">@color/colorPrimaryDark</item>
-        <item name="questionnaireDropDownTextStyle">@color/colorPrimary</item>
+<!--    <style name="Theme.MyQuestionnaire" parent="Theme.Questionnaire">-->
+<!--        <item name="questionnaireQuestionTextStyle">@color/colorPrimary</item>-->
+<!--        <item name="questionnaireTextInputEditTextStyle">@color/colorPrimaryDark</item>-->
+<!--        <item name="questionnaireDropDownTextStyle">@color/colorPrimary</item>-->
 
-    </style>
+<!--    </style>-->
 
     <style name="CustomDialogTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -66,5 +66,15 @@
         <item name="android:backgroundTint">@color/colorPrimary</item>
     </style>
 
+    <style name="TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/dim_red</item>
+        <item name="tabSelectedTextColor">@color/dim_red</item>
+        <item name="tabTextAppearance">@style/TabLayoutTextAppearance</item>
+    </style>
 
+    <style name="TabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 </resources>

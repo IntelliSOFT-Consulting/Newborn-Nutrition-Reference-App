@@ -83,7 +83,7 @@
                             android:id="@+id/app_parity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
+                            android:inputType="textCapSentences"
                             android:textColorHint="#757575"
                             android:textSize="12sp" />
 
@@ -110,7 +110,7 @@
                             android:id="@+id/app_two_parity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
+                            android:inputType="textCapSentences"
                             android:textSize="12sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>

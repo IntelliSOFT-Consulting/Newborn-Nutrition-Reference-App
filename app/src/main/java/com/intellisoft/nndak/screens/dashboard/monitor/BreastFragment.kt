@@ -51,7 +51,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class BreastFragment : Fragment() {
-    private lateinit var moreExpression: ViewBreastFeeding
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val viewModel: ScreenerViewModel by viewModels()
@@ -105,7 +104,7 @@ class BreastFragment : Fragment() {
                         patientId
                     )
                 ).get(PatientDetailsViewModel::class.java)
-
+            resetDisplay()
             loadActivePrescription()
             handleClicks()
             binding.apply {
@@ -148,9 +147,6 @@ class BreastFragment : Fragment() {
                 }
             )
 
-        binding.apply {
-
-        }
         setHasOptionsMenu(true)
         (activity as MainActivity).setDrawerEnabled(true)
 
@@ -244,11 +240,6 @@ class BreastFragment : Fragment() {
             val questionnaireFragment =
                 childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
 
-            val context = FhirContext.forR4()
-
-            val questionnaire =
-                context.newJsonParser()
-                    .encodeResourceToString(questionnaireFragment.getQuestionnaireResponse())
 
             viewModel.customAssessment(
                 questionnaireFragment.getQuestionnaireResponse(),
@@ -257,7 +248,6 @@ class BreastFragment : Fragment() {
             )
         }
     }
-
 
     private fun observeResourcesSaveAction() {
         viewModel.customMessage.observe(viewLifecycleOwner) {
@@ -330,9 +320,64 @@ class BreastFragment : Fragment() {
     }
 
     private fun clickItem(data: BreastsHistory) {
+        binding.apply {
+            actionNewExpression.visibility = View.GONE
+            lnCollection.visibility = View.VISIBLE
+            lnHistory.visibility = View.GONE
+            btnCancel.visibility = View.GONE
+            btnSubmit.visibility = View.GONE
+            exitSection = false
 
+            if (data.interest.trim() == "Yes") {
+                incPositioning.dataInterest.rbYes.isChecked = true
+            } else {
+                incPositioning.dataInterest.rbNo.isChecked = true
+            }
+            if (data.cues.trim() == "Yes") {
+                incPositioning.dataCues.rbYes.isChecked = true
+            } else {
+                incPositioning.dataCues.rbNo.isChecked = true
+            }
+            if (data.sleep.trim() == "Yes") {
+                incPositioning.dataSleep.rbYes.isChecked = true
+            } else {
+                incPositioning.dataSleep.rbNo.isChecked = true
+            }
+            if (data.bursts.trim() == "Yes") {
+                incPositioning.dataBursts.rbYes.isChecked = true
+            } else {
+                incPositioning.dataBursts.rbNo.isChecked = true
+            }
+            if (data.shortFeed.trim() == "Yes") {
+                incPositioning.dataShortFeed.rbYes.isChecked = true
+            } else {
+                incPositioning.dataShortFeed.rbNo.isChecked = true
+            }
+            if (data.longSwallow.trim() == "Yes") {
+                incPositioning.dataLongSwallow.rbYes.isChecked = true
+            } else {
+                incPositioning.dataLongSwallow.rbNo.isChecked = true
+            }
+            if (data.skin.trim() == "Yes") {
+                incPositioning.dataNormalSkin.rbYes.isChecked = true
+            } else {
+                incPositioning.dataNormalSkin.rbNo.isChecked = true
+            }
+            if (data.nipples.trim() == "Yes") {
+                incPositioning.dataNipples.rbYes.isChecked = true
+            } else {
+                incPositioning.dataNipples.rbNo.isChecked = true
+            }
+            if (data.shape.trim() == "Yes") {
+                incPositioning.dataShape.rbYes.isChecked = true
+            } else {
+                incPositioning.dataShape.rbNo.isChecked = true
+            }
+
+        }
+/*
         moreExpression = ViewBreastFeeding(data)
-        moreExpression.show(childFragmentManager, "Confirm Details")
+        moreExpression.show(childFragmentManager, "Confirm Details")*/
     }
 
     private fun showCancelScreenerQuestionnaireAlertDialog() {
@@ -346,7 +391,6 @@ class BreastFragment : Fragment() {
                 .setConfirmText("Yes")
                 .setConfirmClickListener { d ->
                     d.dismiss()
-
                     resetDisplay()
                 }
                 .setCancelText("No")
@@ -399,7 +443,6 @@ class BreastFragment : Fragment() {
             )
         }
     }
-
 
     private fun updateTitleIconDescription(
         dataHands: PositioningItemBinding,
@@ -565,6 +608,11 @@ class BreastFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        resetDisplay()
+        super.onResume()
     }
 
     companion object {

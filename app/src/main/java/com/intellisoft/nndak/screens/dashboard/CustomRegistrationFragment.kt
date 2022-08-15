@@ -73,9 +73,6 @@ class CustomRegistrationFragment : Fragment() {
     private val dataQuantity = ArrayList<QuantityObservation>()
     private var isMultiple = false
     private var isCs = false
-    private lateinit var mCalendar: Calendar
-    private lateinit var mSdf: SimpleDateFormat
-    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
