@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_date"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_time"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_total_feed_volume"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_route"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_frequency"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_iv_fluids"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -166,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_formula"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -187,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/menu_dhm"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -208,7 +208,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_consent"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_consent_date"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -258,7 +258,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_breast"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_dhm_reason"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -312,7 +312,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_additional"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView
@@ -333,7 +333,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/app_feeding_supplements"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textAppearance="?attr/textAppearanceBody2"
                     android:textStyle="bold" />
 
                 <TextView

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import com.google.android.material.textfield.TextInputEditText
 import com.intellisoft.nndak.FhirApplication
+import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityGetStartedBinding
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
@@ -28,6 +29,10 @@ class GetStartedActivity : AppCompatActivity() {
                 val i = Intent(this@GetStartedActivity, LoginActivity::class.java)
                 startActivity(i)
                 finish()
+                this@GetStartedActivity.overridePendingTransition(
+                    R.anim.anim_slide_in_left,
+                    R.anim.anim_slide_out_left
+                )
             }
         }
 

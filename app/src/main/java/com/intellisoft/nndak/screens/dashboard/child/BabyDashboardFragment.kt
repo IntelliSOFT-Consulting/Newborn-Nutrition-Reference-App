@@ -169,7 +169,7 @@ class BabyDashboardFragment : Fragment() {
             if (expression != null) {
                 populateBarChart(expression)
                 binding.apply {
-                    binding.tvExpressionNumber.text = expression.varianceAmount
+                    tvTotalExpressed.text = expression.totalFeed
                 }
             }
         }

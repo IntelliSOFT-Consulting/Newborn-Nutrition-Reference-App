@@ -2,6 +2,7 @@ package com.intellisoft.nndak.charts
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.intellisoft.nndak.data.Stock
 
 data class Statistics(
     @SerializedName("totalBabies") val totalBabies: String,
@@ -59,8 +60,8 @@ data class DHMModel(
 )
 
 data class DHMCategory(
-    @SerializedName("unParsteurized") val unParsteurized: String,
-    @SerializedName("parsteurized") val parsteurized: String,
+    @SerializedName("preterm") val preterm: Stock,
+    @SerializedName("term") val term: Stock,
 )
 data class DHMData(
     @SerializedName("day") val day: String,
@@ -135,10 +136,6 @@ data class CombinedGrowth(
     val projectedWeight: List<GrowthOptions>
 )
 
-data class WeeklyGrowth(
-    val cw: List<ActualData>,
-    val pw: List<GrowthData>
-)
 
 data class GrowthData(
     val age: Int,

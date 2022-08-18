@@ -20,18 +20,19 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.4"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/login"
         android:visibility="visible"
+        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationLoadingProgressBar"
-        android:contentDescription="@string/app_name" />
+        app:layout_constraintTop_toBottomOf="@id/locationLoadingProgressBar" />
 
     <TextView
         android:id="@+id/organization_name"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signin_now"
@@ -42,10 +43,11 @@
 
     <TextView
         android:id="@+id/client_name"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_login"
-        android:textSize="18sp"
+        android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/organization_name" />
@@ -70,7 +72,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:hint="@string/action_username" >
+            android:hint="@string/action_username">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eMail"
@@ -179,12 +181,12 @@
         android:id="@+id/button"
         android:layout_width="100dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/path"
-        app:layout_constraintHeight_percent="0.03"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.03"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/app_name" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

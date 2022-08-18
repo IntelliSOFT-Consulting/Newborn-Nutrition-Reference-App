@@ -42,13 +42,17 @@ data class SessionData(
 )
 
 data class DHMStock(
-    @SerializedName("pasteurized") val pasteurized: String,
-    @SerializedName("unPasteurized") val unPasteurized: String,
-    @SerializedName("PretermPasteurized") val PretermPasteurized: String,
-    @SerializedName("PretermunPasteurized") val PretermunPasteurized: String,
+    @SerializedName("preterm") val preterm: Stock,
+    @SerializedName("term") val term: Stock,
     @SerializedName("userId") val userId: String
 
 )
+
+data class Stock(
+    @SerializedName("pasteurized") val pasteurized: String,
+    @SerializedName("unPasteurized") val unPasteurized: String,
+
+    )
 
 data class DispenseData(
     @SerializedName("dhmType") val dhmType: String,

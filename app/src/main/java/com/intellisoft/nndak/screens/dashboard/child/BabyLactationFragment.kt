@@ -254,11 +254,7 @@ class BabyLactationFragment : Fragment() {
                 }
             }
         }
-
-
     }
-
-
     private fun validatePermission(): Boolean {
 
         val role = (requireActivity() as MainActivity).retrieveUser(true)
@@ -301,13 +297,10 @@ class BabyLactationFragment : Fragment() {
         val data = FhirApplication.getExpressions(requireContext())
         if (data != null) {
             val gson = Gson()
-
-            Timber.e("Local Sync Dara $data")
             try {
                 val it: MilkExpression = gson.fromJson(data, MilkExpression::class.java)
                 populateBarChart(it)
             } catch (e: Exception) {
-                Timber.e("Local Sync Error ${e.localizedMessage}")
             }
         }
     }

@@ -390,7 +390,7 @@ fun getPastHoursOnIntervalOfWithStart(
     val calendar: Calendar = GregorianCalendar()
     calendar.time = date
     var feed: String
-    for (i in 1..times) {
+    for (i in 0..times) {
         calendar.add(Calendar.HOUR, -interval)
         feed = sdf.format(calendar.time)
         list.add(feed)
