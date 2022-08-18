@@ -99,6 +99,7 @@
         <entry key="app/src/main/res/font/poppins_medium.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/layout-large/baby_item.xml" value="0.178125" />
         <entry key="app/src/main/res/layout-large/baby_list_item_view.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout-large/fragment_custom_registration.xml" value="0.1" />
         <entry key="app/src/main/res/layout-large/fragment_statistics.xml" value="0.178125" />
         <entry key="app/src/main/res/layout-large/mother_item.xml" value="0.15260416666666668" />
         <entry key="app/src/main/res/layout-large/prescribe_item.xml" value="0.178125" />
@@ -244,4 +245,7 @@
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
 </project>

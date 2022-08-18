@@ -165,6 +165,10 @@ class LoginActivity : AppCompatActivity() {
                         MainActivity::class.java
                     ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
+                this@LoginActivity.overridePendingTransition(
+                    R.anim.anim_slide_in_left,
+                    R.anim.anim_slide_out_left
+                )
 
             } else {
                 Toast.makeText(this, "Invalid Credentials, please try again", Toast.LENGTH_SHORT)
@@ -188,7 +192,6 @@ class LoginActivity : AppCompatActivity() {
             super.onBackPressed()
             return
         }
-
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
         Handler(Looper.getMainLooper()).postDelayed(Runnable {

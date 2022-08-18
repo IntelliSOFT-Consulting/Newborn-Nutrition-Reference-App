@@ -39,7 +39,6 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
                     app:autoSizeTextType="uniform" />
 
                 <TextView
@@ -48,7 +47,6 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceBody2"
-                    android:textSize="18sp"
                     app:autoSizeTextType="uniform" />
 
             </LinearLayout>
@@ -87,7 +85,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_baby_well"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -96,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -112,7 +109,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_birth_date"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -121,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -137,7 +133,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_adm_date"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -146,7 +141,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -162,7 +157,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_life_day"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -171,7 +165,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>
@@ -194,7 +188,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_gestation"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -203,7 +196,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -219,7 +212,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_birth_weight"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -228,7 +220,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -243,7 +235,6 @@
                             android:layout_height="wrap_content"
                             android:text="@string/menu_apgar_score"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -252,7 +243,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
 
@@ -268,7 +259,6 @@
                             android:layout_marginTop="3dp"
                             android:text="@string/app_mum_ip"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="18sp"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 
@@ -277,7 +267,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="16sp"
+
                             app:autoSizeTextType="uniform" />
                     </LinearLayout>
                 </LinearLayout>

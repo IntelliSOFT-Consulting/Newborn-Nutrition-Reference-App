@@ -19,6 +19,7 @@ import com.intellisoft.nndak.logic.DataSort.Companion.extractWeeklyMeasure
 import com.intellisoft.nndak.logic.DataSort.Companion.getNumericFrequency
 import com.intellisoft.nndak.logic.DataSort.Companion.getWeekFromDays
 import com.intellisoft.nndak.logic.DataSort.Companion.sortCollected
+import com.intellisoft.nndak.logic.DataSort.Companion.sortCollectedEncounters
 import com.intellisoft.nndak.logic.DataSort.Companion.sortHistory
 import com.intellisoft.nndak.logic.DataSort.Companion.sortPrescriptions
 import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
@@ -1646,14 +1647,13 @@ class PatientDetailsViewModel(
         val expressions: MutableList<ExpressionHistory> = mutableListOf()
         val history = getAllEncounters(EXPRESSIONS)
         if (history.isNotEmpty()) {
-            history.forEach {
-
+            val sortedEncounters = sortCollectedEncounters(history)
+            sortedEncounters.forEach {
                 expressions.add(retrieveExpressions(it))
-
             }
         }
 
-        return expressions.reversed()
+        return expressions
     }
 
     private suspend fun retrieveExpressions(it: EncounterItem): ExpressionHistory {
@@ -1912,7 +1912,33 @@ class PatientDetailsViewModel(
         )
     }
 
-    fun readmitBaby(resourceId: String) {
+
+    suspend fun readmitBaby(resourceId: String) {
+
+//            val key = ADMISSION_WEIGHT
+//            fhirEngine.search<Observation> {
+//                filter(Observation.CODE, {
+//                    value = of(Coding().apply {
+//                        system = "http://snomed.info/sct"
+//                        code = key
+//                    })
+//                })
+//                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
+//                sort(Observation.DATE, Order.DESCENDING)
+//            }
+//                .take(5)
+//                .map {
+//                    it.value
+//                }
+//                .let {
+//                    Timber.e("----", "----")
+//                   it.forEach{data->
+//                       Timber.e("----", data.c))
+//
+//                   }
+//                    // return it.toString()
+//                }
+
         viewModelScope.launch {
             try {
                 val encounter = fhirEngine.get<Encounter>(resourceId)
@@ -1937,7 +1963,6 @@ class PatientDetailsViewModel(
 
         }
     }
-
 
     companion object {
         /**

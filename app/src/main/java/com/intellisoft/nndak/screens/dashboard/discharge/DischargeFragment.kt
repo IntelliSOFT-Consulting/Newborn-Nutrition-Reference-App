@@ -174,7 +174,10 @@ class DischargeFragment : Fragment() {
             incHistory.actionReadmit.setOnClickListener {
                 if (resourceId.isNotEmpty()) {
                     observeAdmitSaveAction()
-                    patientDetailsViewModel.readmitBaby(resourceId)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        patientDetailsViewModel.readmitBaby(resourceId)
+                    }
 
                 }
             }
@@ -318,18 +321,22 @@ class DischargeFragment : Fragment() {
                 (activity as MainActivity).hideDialog()
                 return@observe
             }
-            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                .setTitleText("Success")
-                .setContentText(it.message)
-                .setCustomImage(R.drawable.smile)
-                .setConfirmClickListener { sDialog ->
-                    run {
-                        sDialog.dismiss()
-                        findNavController().navigateUp()
-                    }
-                }
-            dialog.setCancelable(false)
-            dialog.show()
+
+               val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                   .setTitleText("Success")
+                   .setContentText(it.message)
+                   .setCustomImage(R.drawable.smile)
+                   .setConfirmClickListener { sDialog ->
+                       run {
+                           sDialog.dismiss()
+                           try {  findNavController().navigateUp()}catch (e: Exception){
+                               e.printStackTrace()
+                           }
+                       }
+                   }
+               dialog.setCancelable(false)
+               dialog.show()
+
         }
     }
 

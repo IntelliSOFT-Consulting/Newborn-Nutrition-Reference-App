@@ -418,7 +418,7 @@
     <string name="tv_positioning">Positioning Support History</string>
     <string name="new_breast_feeding">New Breast Feeding Assessment</string>
     <string name="app_upcoming">"Click the Upcoming Feeding Schedules to feed "</string>
-    <string name="app_enter_feeding">Enter Feeding Details</string>
+    <string name="app_enter_feeding">Enter Amount taken</string>
     <string name="app_feeding_history">Feeding History</string>
     <string name="app_cleaned_hands">Cleaned hands (Do not wash breast for purpose of breastfeeding)</string>
     <string name="app_cleaned">Cleaned Hands</string>

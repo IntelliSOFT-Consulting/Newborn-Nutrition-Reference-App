@@ -405,7 +405,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.5"
-                    app:srcCompat="@drawable/feeding"
+                    app:srcCompat="@drawable/bed"
                     app:tint="@color/dim_red" />
 
                 <TextView

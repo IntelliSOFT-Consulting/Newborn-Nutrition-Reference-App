@@ -1,18 +1,17 @@
 package com.intellisoft.nndak.auth
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.andrognito.pinlockview.IndicatorDots
 import com.andrognito.pinlockview.PinLockListener
 import com.andrognito.pinlockview.PinLockView
 import com.google.gson.Gson
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
+import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
@@ -44,6 +43,10 @@ class PinLockActivity : AppCompatActivity() {
                 finishAffinity()
                 val intent = Intent(this@PinLockActivity, LoginActivity::class.java)
                 startActivity(intent)
+                this@PinLockActivity.overridePendingTransition(
+                    R.anim.anim_slide_in_left,
+                    R.anim.anim_slide_out_left
+                )
             }
         }
     }
@@ -75,6 +78,10 @@ class PinLockActivity : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
+                    this@PinLockActivity.overridePendingTransition(
+                        R.anim.anim_slide_in_left,
+                        R.anim.anim_slide_out_left
+                    )
                 } else {
                     Toast.makeText(this, "Invalid PIN", Toast.LENGTH_SHORT).show()
                 }

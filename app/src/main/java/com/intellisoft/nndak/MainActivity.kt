@@ -366,7 +366,10 @@ class MainActivity : AppCompatActivity() {
         finishAffinity()
         val i = Intent(this@MainActivity, PinLockActivity::class.java)
         startActivity(i)
-
+        this@MainActivity.overridePendingTransition(
+            R.anim.anim_slide_in_left,
+            R.anim.anim_slide_out_left
+        )
     }
 
     private fun showToast(message: String) {

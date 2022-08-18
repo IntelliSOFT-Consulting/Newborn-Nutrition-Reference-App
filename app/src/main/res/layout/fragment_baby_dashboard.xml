@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_baby_curve"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/growth_chart"
@@ -99,6 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_current_weight"
+                            android:textSize="@dimen/_12dp"
                             android:textAppearance="?attr/textAppearanceBody2" />
 
                         <LinearLayout
@@ -161,6 +162,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_mothers_milk"
                             android:textAlignment="center"
+                            android:textSize="@dimen/_12dp"
                             android:textAppearance="?attr/textAppearanceBody2" />
 
                     </LinearLayout>
@@ -194,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_distribution"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:textAppearance="?attr/textAppearanceSubtitle1"  />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/feeds_chart"
@@ -237,6 +239,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_daily_feeds"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_12dp"
                             android:textAppearance="?attr/textAppearanceBody2" />
 
                         <LinearLayout
@@ -293,15 +297,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/app_zero"
-
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="@dimen/_20sp" />
+                            android:textSize="@dimen/_18sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/app_expressions"
                             android:textAlignment="center"
+                            android:textSize="@dimen/_12dp"
                             android:textAppearance="?attr/textAppearanceBody2" />
 
                     </LinearLayout>
@@ -330,7 +334,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_10"
                     android:text="@string/app_lactation_status"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
                     android:textStyle="bold" />
 
                 <View
@@ -384,7 +388,7 @@
                                 android:layout_marginTop="@dimen/_15dp"
                                 android:text="@string/volume_milk"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                                android:textAppearance="?attr/textAppearanceSubtitle1"  />
 
                             <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/status_chart"
@@ -420,7 +424,6 @@
                                     android:id="@+id/tv_total_expressed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-
                                     android:textAppearance="?attr/textAppearanceSubtitle1"
                                     android:textSize="@dimen/_20sp" />
 
@@ -428,7 +431,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/app_total_expressed"
-
+                                    android:textSize="@dimen/_12dp"
                                     android:textAppearance="?attr/textAppearanceBody2" />
 
                                 <LinearLayout

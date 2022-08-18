@@ -23,6 +23,11 @@ class DataSort {
             return data.sortedWith(compareBy { it.effective })
         }
 
+        fun sortCollectedEncounters(data: List<EncounterItem>): List<EncounterItem> {
+
+            return data.sortedWith(compareBy { it.effective })
+        }
+
 
         fun sortHistory(data: List<FeedingHistory>): List<FeedingHistory> {
 

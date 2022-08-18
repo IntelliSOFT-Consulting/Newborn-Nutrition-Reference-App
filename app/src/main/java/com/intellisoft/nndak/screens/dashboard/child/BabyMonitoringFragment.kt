@@ -175,6 +175,7 @@ class BabyMonitoringFragment : Fragment() {
         adapter.addFragment(breast, "Assess Breastfeeding")
         adapter.addFragment(feeding, "Record Feeding")
 
+        viewpager.offscreenPageLimit = 3
         viewpager.adapter = adapter
         viewpager.currentItem = 3
     }

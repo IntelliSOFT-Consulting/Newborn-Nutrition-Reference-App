@@ -77,8 +77,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         try {
 
-
-            val recyclerView: RecyclerView = binding.patientListContainer.patientList
+            val recyclerView: RecyclerView = binding.patientList
             adapterList = OrdersAdapter(orderList, this::onOrderClick)
             recyclerView.adapter = adapterList
             adapterList.submitList(orderList)
@@ -97,6 +96,9 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     findNavController().navigateUp()
                 }
                 incTitle.lnParent.visibility = View.GONE
+                swipeRefresh.setOnRefreshListener {
+                    loadOrders()
+                }
             }
             loadOrders()
 
@@ -178,18 +180,19 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun loadOrders() {
         orderList.clear()
+        binding.swipeRefresh.isRefreshing = true
         apiService.loadOrders(requireContext()) {
             try {
                 binding.apply {
                     if (it != null) {
                         if (it.data.isEmpty()) {
                             empty.cpBgView.visibility = View.VISIBLE
-                            pbLoading.visibility = View.GONE
+                            swipeRefresh.isRefreshing = false
                         }
                         if (it.data.isNotEmpty()) {
 
                             empty.cpBgView.visibility = View.GONE
-                            pbLoading.visibility = View.GONE
+                            swipeRefresh.isRefreshing = false
                             incTitle.lnParent.visibility = View.VISIBLE
                             orderList.clear()
                             it.data.forEach { order ->
@@ -201,7 +204,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         }
                     } else {
                         empty.cpBgView.visibility = View.VISIBLE
-                        pbLoading.visibility = View.GONE
+                        swipeRefresh.isRefreshing = false
                     }
                 }
             } catch (e: Exception) {
@@ -287,7 +290,7 @@ class DhmOrdersFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun filterRecords(text: String) {
-        when(text) {
+        when (text) {
             "Sort By:" -> {
                 adapterList.filter.filter("")
             }

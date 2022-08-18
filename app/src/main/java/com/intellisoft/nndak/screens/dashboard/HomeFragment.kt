@@ -155,8 +155,8 @@ class HomeFragment : Fragment() {
     private fun updateUI(it: DHMModel) {
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
-            tvVolumeAvailable.text = it.dhmVolume.parsteurized
-            tvVolumeUnp.text = it.dhmVolume.unParsteurized
+            tvVolumeAvailable.text = it.dhmVolume.preterm.pasteurized
+            tvVolumeUnp.text = it.dhmVolume.preterm.unPasteurized
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength

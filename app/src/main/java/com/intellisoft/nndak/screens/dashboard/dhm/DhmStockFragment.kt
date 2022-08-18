@@ -29,6 +29,7 @@ import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.DHMStock
 import com.intellisoft.nndak.data.RestManager
+import com.intellisoft.nndak.data.Stock
 import com.intellisoft.nndak.databinding.FragmentDhmStockBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
 import com.intellisoft.nndak.models.CodingObservation
@@ -304,12 +305,18 @@ class DhmStockFragment : Fragment() {
         val userId = (activity as MainActivity).retrieveUser(false)
 
         val stock = DHMStock(
-            unPasteurized = upa,
-            pasteurized = pa,
-            PretermPasteurized = prepa,
-            PretermunPasteurized = preupa,
+            term = Stock(
+                pasteurized = pa,
+                unPasteurized = upa,
+            ),
+            preterm = Stock(
+                pasteurized = prepa,
+                unPasteurized = preupa,
+            ),
             userId = userId
         )
+
+        Timber.e("stock: $stock")
         apiService.addDHMStock(requireContext(), stock) {
             (activity as MainActivity).hideDialog()
             if (it != null) {

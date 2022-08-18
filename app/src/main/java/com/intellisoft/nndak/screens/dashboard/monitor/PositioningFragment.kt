@@ -324,15 +324,7 @@ class PositioningFragment : Fragment() {
 
     private fun updateDataFields() {
 
-        /**
-         * Title,Description & Icon
-         */
         binding.apply {
-            /**
-             * Radio Clicks
-             */
-
-
             updateTitleIconDescription(
                 R.drawable.handwashing,
                 incPositioning.dataHands,
@@ -348,7 +340,7 @@ class PositioningFragment : Fragment() {
                 R.drawable.sitting,
                 incPositioning.dataBaby,
                 "Baby Position",
-                "Baby's nose at the level of the breast\nBaby's tummy and mother's tummy touching\nBaby close skin with the mother\nHead and the trunk in straight line\n Baby's whole body supported",
+                "Baby's nose at the level of the breast\nBaby's tummy and mother's tummy touching\nBaby close skin with the mother\nHead and the trunk in straight line\nBaby's whole body supported",
                 2
             )
             updateTitleIconDescription(

@@ -63,5 +63,6 @@
     <dimen name="icon_container_height">128dp</dimen>
     <dimen name="_3dp">3dp</dimen>
     <dimen name="_1dp">1dp</dimen>
+    <dimen name="_12dp">12sp</dimen>
 
 </resources>
