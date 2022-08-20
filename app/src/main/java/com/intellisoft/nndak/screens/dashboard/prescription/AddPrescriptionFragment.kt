@@ -130,6 +130,7 @@ class AddPrescriptionFragment : Fragment() {
     }
 
     private fun updateArguments() {
+//        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "image-question.json")
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "feed-prescription.json")
     }
 
@@ -149,9 +150,6 @@ class AddPrescriptionFragment : Fragment() {
         }
     }
 
-    private fun handleClick(item: FeedItem) {
-
-    }
 
     override fun onResume() {
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.*
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
-import com.google.android.fhir.logicalId
+import com.google.android.fhir.get
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.search
 import com.google.gson.Gson
@@ -16,7 +16,6 @@ import com.intellisoft.nndak.data.DispenseData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.data.User
 import com.intellisoft.nndak.helper_class.*
-import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.logic.Logics.Companion.ADDITIONAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.ADJUST_PRESCRIPTION
 import com.intellisoft.nndak.logic.Logics.Companion.ADMISSION_DATE
@@ -37,13 +36,11 @@ import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DELIVERY_METHOD
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_CONSENT
-import com.intellisoft.nndak.logic.Logics.Companion.DHM_DISPENSING
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_REASON
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_STOCK
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_TYPE
 import com.intellisoft.nndak.logic.Logics.Companion.DHM_VOLUME
-import com.intellisoft.nndak.logic.Logics.Companion.DIAPER_CHANGED
 import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_DETAILS
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_ROUTE
 import com.intellisoft.nndak.logic.Logics.Companion.EBM_VOLUME
@@ -82,24 +79,21 @@ import com.intellisoft.nndak.logic.Logics.Companion.STOOL
 import com.intellisoft.nndak.logic.Logics.Companion.SUFFICIENT_EXPRESSION
 import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.VDRL
-import com.intellisoft.nndak.logic.Logics.Companion.VOLUME_DISPENSED
 import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.logic.Logics.Companion.WITHIN_ONE
 import com.intellisoft.nndak.models.*
 import com.intellisoft.nndak.screens.dashboard.RegistrationFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
+import com.intellisoft.nndak.utils.Constants.SYNC_STATE
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel.Companion.createCarePlanItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
-import org.hl7.fhir.r4.model.codesystems.RiskProbability
 import org.json.JSONObject
 import timber.log.Timber
-import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 const val TAG = "ScreenerViewModel"
 
@@ -113,10 +107,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     lateinit var title: String
     lateinit var dhm: String
-    lateinit var given: String
-    lateinit var patientIp: String
-    lateinit var unpasteurized: String
-    lateinit var pasteurized: String
 
     private val questionnaireResource: Questionnaire
         get() = FhirContext.forR4().newJsonParser().parseResource(questionnaire) as Questionnaire
@@ -1609,11 +1599,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (resource.hasValueCodeableConcept() && !resource.valueCodeableConcept.hasCoding()) {
                         return true
                     }
-
                 }
-
-
-                // TODO check other resources inputs
             }
         }
         return false
@@ -1645,12 +1631,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     /**
      * Mother's Health
      */
-
-
-
-
-
-
 
 
     fun breastFeeding(
@@ -1860,7 +1840,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val encounterId = generateUuid()
                     title = code
                     updateEncounterAssessment(subjectReference, encounterId, title)
-
                     saveResources(bundle, subjectReference, encounterId, title)
                     customMessage.postValue(
                         MessageItem(
@@ -2926,7 +2905,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireResponse: QuestionnaireResponse,
         dataCodes: ArrayList<CodingObservation>,
         dataQuantity: ArrayList<QuantityObservation>,
-        patientId: String
+        patientId: String,
+        isAlive: Boolean
     ) {
         viewModelScope.launch {
             val bundle =
@@ -2935,59 +2915,175 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     questionnaireResponse
                 )
 
-          try {
-              val qh = QuestionnaireHelper()
-              dataCodes.forEach {
-                  bundle.addEntry()
-                      .setResource(
-                          qh.codingQuestionnaire(
-                              it.code,
-                              it.display,
-                              it.value
+            try {
+                val qh = QuestionnaireHelper()
+                dataCodes.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.value
 
-                          )
-                      )
-                      .request.url = "Observation"
+                            )
+                        )
+                        .request.url = "Observation"
 
-              }
-              dataQuantity.forEach {
-                  bundle.addEntry()
-                      .setResource(
-                          qh.quantityQuestionnaire(
-                              it.code,
-                              it.display,
-                              it.display,
-                              it.value,
-                              it.unit
+                }
+                dataQuantity.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.display,
+                                it.value,
+                                it.unit
 
-                          )
-                      )
-                      .request.url = "Observation"
+                            )
+                        )
+                        .request.url = "Observation"
 
-              }
+                }
 
-              val value = retrieveUser(false)
+                val value = retrieveUser(false)
 
-              bundle.addEntry()
-                  .setResource(
-                      qh.codingQuestionnaire(
-                          "Completed By",
-                          value,
-                          value
-                      )
-                  )
-                  .request.url = "Observation"
-              val encounterId = generateUuid()
-              val subjectReference = Reference("Patient/$patientId")
-              title = DISCHARGE_DETAILS
-              saveResources(bundle, subjectReference, encounterId, title)
-              customMessage.postValue(MessageItem(true, "Success"))
-          }catch (e: Exception){
-              Timber.d("Exception:::: ${e.printStackTrace()}")
-              customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
-          }
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Completed By",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = DISCHARGE_DETAILS
+
+                updateEncounterAssessment(subjectReference, encounterId, title)
+                saveResources(bundle, subjectReference, encounterId, title)
+                proceedToNextStep(patientId, isAlive)
+                customMessage.postValue(MessageItem(true, "Success"))
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
+            }
         }
     }
+
+    private suspend fun proceedToNextStep(patientId: String, alive: Boolean) {
+        val baby = fhirEngine.get<Patient>(patientId)
+        if (alive) {
+            baby.addressFirstRep.postalCode = SYNC_VALUE
+            baby.addressFirstRep.state = SYNC_VALUE
+            baby.active = false
+        } else {
+            baby.addressFirstRep.postalCode = SYNC_VALUE
+            baby.addressFirstRep.state = SYNC_STATE
+            baby.active = false
+            val isDeceased = BooleanType()
+            isDeceased.value = true
+            val deceasedDate = DateTimeType()
+            deceasedDate.value = Date()
+            baby.deceased = isDeceased
+        }
+        fhirEngine.update(baby)
+    }
+
+    fun readmitBaby(
+        questionnaireResponse: QuestionnaireResponse,
+        patientId: String,
+        resourceId: String
+    ) {
+
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                val qh = QuestionnaireHelper()
+                val baby = fhirEngine.get<Patient>(patientId)
+                baby.active = true
+                baby.addressFirstRep.postalCode = SYNC_VALUE
+                baby.addressFirstRep.state = SYNC_VALUE
+                fhirEngine.update(baby)
+
+                val value = retrieveUser(false)
+
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Completed By",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            ADMISSION_DATE,
+                            "Admission Date",
+                            Date().toString()
+                        )
+                    )
+                    .request.url = "Observation"
+
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = "Readmission"
+                handleReturn(DISCHARGE_DETAILS, patientId)
+                updateEncounterAssessment(subjectReference, encounterId, title)
+                saveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(MessageItem(true, "Baby readmitted successfully"))
+
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
+            }
+        }
+    }
+
+    private suspend fun handleReturn(key: String, patientId: String) {
+        val encounters: MutableList<EncounterItem> = mutableListOf()
+        fhirEngine.search<Encounter> {
+            filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+            filter(Encounter.REASON_CODE, {
+                value = of(Coding().apply {
+                    code = key
+                })
+            })
+            sort(Encounter.DATE, Order.DESCENDING)
+
+        }
+            .map {
+                PatientDetailsViewModel.createEncounterItem(
+                    it,
+                    getApplication<Application>().resources
+                )
+            }
+            .filter { it.status == Encounter.EncounterStatus.INPROGRESS.toString() }
+            .let { encounters.addAll(it) }
+        if (encounters.isNotEmpty()) {
+            encounters.forEach { cp ->
+
+                val subjectReference = Reference("Patient/$patientId")
+                val e = Encounter()
+                e.subject = subjectReference
+                e.id = cp.id
+                e.reasonCodeFirstRep.text = cp.code
+                e.reasonCodeFirstRep.codingFirstRep.code = cp.code
+                e.status = Encounter.EncounterStatus.FINISHED
+                saveResourceToDatabase(e)
+            }
+        }
+    }
+
 
 }
 

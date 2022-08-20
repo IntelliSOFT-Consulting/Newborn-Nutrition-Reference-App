@@ -4,7 +4,9 @@ import android.app.Application
 import android.content.res.Resources
 import android.os.Build
 import androidx.lifecycle.*
+import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.fhir.get
 import com.google.android.fhir.logicalId
 import com.google.android.fhir.search.Order
@@ -83,11 +85,10 @@ import com.intellisoft.nndak.logic.Logics.Companion.STOOL
 import com.intellisoft.nndak.logic.Logics.Companion.TOTAL_FEEDS
 import com.intellisoft.nndak.logic.Logics.Companion.VOMIT
 import com.intellisoft.nndak.models.*
+import com.intellisoft.nndak.utils.*
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
-import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
-import com.intellisoft.nndak.utils.getPastHoursOnIntervalOfWithStart
-import com.intellisoft.nndak.utils.getWeeksSoFarIntervalOf
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
@@ -122,6 +123,7 @@ class PatientDetailsViewModel(
     val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
     val liveBreastHistory = MutableLiveData<List<BreastsHistory>>()
     val liveDischargeDetails = MutableLiveData<List<DischargeItem>>()
+
 
 
     fun feedsDistribution() {
@@ -1913,55 +1915,20 @@ class PatientDetailsViewModel(
     }
 
 
-    suspend fun readmitBaby(resourceId: String) {
-
-//            val key = ADMISSION_WEIGHT
-//            fhirEngine.search<Observation> {
-//                filter(Observation.CODE, {
-//                    value = of(Coding().apply {
-//                        system = "http://snomed.info/sct"
-//                        code = key
-//                    })
-//                })
-//                filter(Observation.SUBJECT, { value = "Patient/$patientId" })
-//                sort(Observation.DATE, Order.DESCENDING)
-//            }
-//                .take(5)
-//                .map {
-//                    it.value
-//                }
-//                .let {
-//                    Timber.e("----", "----")
-//                   it.forEach{data->
-//                       Timber.e("----", data.c))
-//
-//                   }
-//                    // return it.toString()
-//                }
-
-        viewModelScope.launch {
-            try {
-                val encounter = fhirEngine.get<Encounter>(resourceId)
-                encounter.status = Encounter.EncounterStatus.FINISHED
-                fhirEngine.update(encounter.copy())
-                customMessage.postValue(
-                    MessageItem(
-                        success = true,
-                        message = "Baby readmitted successfully"
-                    )
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                customMessage.postValue(
-                    MessageItem(
-                        success = false,
-                        message = "Error encountered while readmitting baby"
-                    )
-                )
-                return@launch
-            }
-
-        }
+    private suspend fun updateEncounterAssessment(
+        subjectReference: Reference,
+        encounterId: String,
+        title: String
+    ) {
+        val encounterReference = Reference("Encounter/$encounterId")
+        val care = CarePlan()
+        care.encounter = encounterReference
+        care.subject = subjectReference
+        care.status = CarePlan.CarePlanStatus.COMPLETED
+        care.title = title
+        care.intent = CarePlan.CarePlanIntent.ORDER
+        care.created = Date()
+        fhirEngine.create(care)
     }
 
     companion object {

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Neonatal Nutrition</string>
-    <string name="title_nndak">Neonatal Nutrition</string>
+    <string name="app_name">NNDAK</string>
+    <string name="title_nndak">NNDAK</string>
     <string name="title_patient_list">Registered Patients</string>
     <string name="title_patient_detail">SamplePatient Detail</string>
 
@@ -258,7 +258,7 @@
     <string name="app_feeding_supplements">Feeding Supplements</string>
     <string name="app_add_dhm_recipient">Add DHM Recipient</string>
     <string name="action_add_recipient">Add Recipient</string>
-    <string name="app_title">Neonatal Nutrition</string>
+    <string name="app_title">NNDAK</string>
     <string name="app_title_ext">Digital Adaptation Kit</string>
     <string name="app_slogan_name">Driving Digital Excellence to Optimize Newborn Feeding in Kenya and Beyond</string>
     <string name="log">Login</string>
@@ -492,12 +492,14 @@
     <string name="action_readmit">Readmit Baby</string>
     <string name="app_weight">Discharge Weight</string>
     <string name="app_remarks">Doctor\'s Notes</string>
+    <string name="_new_assessement">\"Click the assessment button to start \"</string>
     <string-array name="birds">
         <item>Filter By:</item>
         <item>Preterm</item>
         <item>Term</item>
         <item>Low Weight Gain</item>
         <item>High/Medium Weight Gain</item>
+        <item>Discharged</item>
     </string-array>
     <string-array name="sort">
         <item>Sort By:</item>

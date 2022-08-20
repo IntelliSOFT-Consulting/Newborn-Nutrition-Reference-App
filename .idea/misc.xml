@@ -152,7 +152,7 @@
         <entry key="app/src/main/res/layout/fragment_breast_feeding.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_cues.xml" value="0.178125" />
-        <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.10891089108910891" />
+        <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/fragment_dhm_orders.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />

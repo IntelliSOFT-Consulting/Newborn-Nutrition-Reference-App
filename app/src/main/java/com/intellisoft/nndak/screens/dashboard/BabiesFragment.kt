@@ -54,13 +54,12 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     lateinit var adapterList: BabyItemAdapter
     private var mumBabyList = ArrayList<MotherBabyItem>()
     var count = 0
+    private var discharged = false
     private val binding
         get() = _binding!!
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private lateinit var mySpinner: Spinner
-
-    private var formatter = FormatHelper()
     private var status: String = "Filter By:"
 
 
@@ -89,23 +88,30 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         fhirEngine, "0"
                     )
                 ).get(PatientListViewModel::class.java)
-            val recyclerView: RecyclerView = binding.patientListContainer.patientList
+            val recyclerView: RecyclerView = binding.patientList
 
             adapterList = BabyItemAdapter(mumBabyList, this::onPatientItemClicked)
             recyclerView.adapter = adapterList
             adapterList.submitList(mumBabyList)
-            binding.pbLoading.visibility = View.VISIBLE
-            patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
+            binding.apply {
+                swipeRefreshLayout.isRefreshing = true
+                swipeRefreshLayout.setOnRefreshListener {
+                    binding.swipeRefreshLayout.isRefreshing = true
+                    patientListViewModel.searchPatientsByName("", discharged)
+                }
+            }
 
+            patientListViewModel.liveMotherBaby.observe(viewLifecycleOwner) {
+                mumBabyList.clear()
+                adapterList.notifyDataSetChanged()
                 if (it.isEmpty()) {
                     binding.apply {
                         imgEmpty.visibility = View.VISIBLE
-                        binding.pbLoading.visibility = View.GONE
+                        binding.swipeRefreshLayout.isRefreshing = false
                     }
                 }
                 if (it.isNotEmpty()) {
-                    mumBabyList.clear()
-                    adapterList.notifyDataSetChanged()
+
                     when (status) {
                         "Filter By:" -> {
                             displayComplete(it)
@@ -123,6 +129,9 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         "High/Medium Weight Gain" -> {
 
                             filterByGain(it, false)
+                        }
+                        "Discharged" -> {
+                            displayComplete(it)
                         }
                         else -> {
                             displayComplete(it)
@@ -147,9 +156,6 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mySpinner.adapter = adapter
         mySpinner.onItemSelectedListener = this
 
-        patientListViewModel.patientCount.observe(
-            viewLifecycleOwner
-        ) { binding.patientListContainer.patientCount.text = "$it Patient(s)" }
         searchView = binding.search
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -198,7 +204,10 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
             mainActivityViewModel.pollState.collect {
                 // After the sync is successful, update the patients list on the page.
                 if (it is State.Finished) {
-                    patientListViewModel.searchPatientsByName(searchView.query.toString().trim())
+                    patientListViewModel.searchPatientsByName(
+                        searchView.query.toString().trim(),
+                        discharged
+                    )
                 }
             }
         }
@@ -206,7 +215,8 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun displayComplete(it: List<MotherBabyItem>) {
         mumBabyList.addAll(it)
-        binding.pbLoading.visibility = View.GONE
+        binding.swipeRefreshLayout.isRefreshing = false
+
         binding.apply {
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
@@ -239,13 +249,14 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun filterByStatus(babies: List<MotherBabyItem>, s: String) {
+
         for ((i, baby) in babies.withIndex()) {
             if (baby.status == s) {
                 mumBabyList.add(baby)
             }
         }
         binding.apply {
-            binding.pbLoading.visibility = View.GONE
+            binding.swipeRefreshLayout.isRefreshing = false
             if (mumBabyList.isEmpty()) {
                 imgEmpty.visibility = View.VISIBLE
             } else {
@@ -320,7 +331,13 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val text: String = p0?.getItemAtPosition(p2).toString()
-        patientListViewModel.searchPatientsByName("")
+        if (text == "Discharged") {
+            discharged = true
+            patientListViewModel.searchPatientsByName("", discharged)
+        } else {
+            discharged = false
+            patientListViewModel.searchPatientsByName("", discharged)
+        }
         status = text
 
     }
