@@ -168,6 +168,7 @@ class RestManager {
             object : Callback<Statistics> {
                 override fun onFailure(call: Call<Statistics>, t: Throwable) {
                     onResult(null)
+                    Timber.e("onFailure $t")
 
                 }
 
@@ -175,6 +176,7 @@ class RestManager {
                     call: Call<Statistics>,
                     response: Response<Statistics>
                 ) {
+                    Timber.e("onResponse $response")
                     if (response.isSuccessful) {
                         onResult(response.body())
                     } else {

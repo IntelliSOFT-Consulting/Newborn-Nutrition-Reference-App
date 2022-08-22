@@ -186,6 +186,11 @@ class StatisticsFragment : Fragment() {
                 incData.tvTerm.text = it.term
                 incData.tvAverage.text = it.averageDays
                 tvRate.text = getString(R.string.app_mortality).replace("0", it.mortalityRate.rate)
+                populateFeedingTime(it.firstFeeding)
+                populateFeedsPercentage(it.percentageFeeds)
+                populateMortality(it.mortalityRate.data)
+                populateExpressingTimes(it.expressingTime)
+
                 val prePercentage =
                     ((it.preterm.toDouble() / it.totalBabies.toDouble()) * 100).roundToInt()
                 val termPercentage =
@@ -196,10 +201,7 @@ class StatisticsFragment : Fragment() {
                 incData.pbTerm.progress = termPercentage.toInt()
                 incData.pbPreTerm.progress = prePercentage.toInt()
             }
-            populateFeedingTime(it.firstFeeding)
-            populateFeedsPercentage(it.percentageFeeds)
-            populateMortality(it.mortalityRate.data)
-            populateExpressingTimes(it.expressingTime)
+
         }
     }
 
@@ -222,7 +224,7 @@ class StatisticsFragment : Fragment() {
                   syncLocalData()
               }
           } catch (e: Exception) {
-              e.printStackTrace()
+           Timber.e("Error loading statistics ${e.message}")
           }
         }
 

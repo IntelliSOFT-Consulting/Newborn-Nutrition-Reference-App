@@ -79,8 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:text="@string/action_role"
-                android:textSize="16sp" />
+                android:text="@string/action_role" />
 
             <TextView
                 android:id="@+id/tv_role"
@@ -88,8 +87,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:textSize="16sp" />
+                android:layout_weight="1" />
 
             <ImageView
                 android:layout_width="30dp"
@@ -126,8 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:text="@string/action_member"
-                android:textSize="16sp" />
+                android:text="@string/action_member" />
 
             <TextView
                 android:id="@+id/tv_since"
@@ -135,8 +132,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:textSize="16sp" />
+                android:layout_weight="1" />
 
             <ImageView
                 android:layout_width="30dp"
@@ -173,8 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:text="@string/update"
-                android:textSize="16sp" />
+                android:text="@string/update" />
 
             <TextView
                 android:id="@+id/tv_sync"
@@ -182,8 +177,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:textSize="16sp" />
+                android:layout_weight="1"  />
 
             <ImageView
                 android:layout_width="30dp"

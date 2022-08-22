@@ -160,12 +160,14 @@ class BabiesFragment : Fragment(), AdapterView.OnItemSelectedListener {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
-                    adapterList.filter.filter(newText)
+                  //  adapterList.filter.filter(newText)
+                    patientListViewModel.searchPatientsByName(newText,discharged)
                     return false
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    adapterList.filter.filter(query)
+//                    adapterList.filter.filter(query)
+                    patientListViewModel.searchPatientsByName(query,discharged)
                     return false
                 }
             }
