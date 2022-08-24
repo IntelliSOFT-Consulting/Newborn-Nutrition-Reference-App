@@ -65,9 +65,8 @@ data class DHMCategory(
 )
 data class DHMData(
     @SerializedName("day") val day: String,
-    @SerializedName("preterm") val preterm: String,
-    @SerializedName("term") val term: String,
-    @SerializedName("total") val total: String,
+    @SerializedName("preterm") val preterm: Stock,
+    @SerializedName("term") val term: Stock,
 )
 
 data class MilkExpression(

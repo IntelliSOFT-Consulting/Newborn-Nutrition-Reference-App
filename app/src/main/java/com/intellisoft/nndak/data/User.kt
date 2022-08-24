@@ -51,6 +51,7 @@ data class DHMStock(
 data class Stock(
     @SerializedName("pasteurized") val pasteurized: String,
     @SerializedName("unPasteurized") val unPasteurized: String,
+    @SerializedName("total") val total: String,
 
     )
 

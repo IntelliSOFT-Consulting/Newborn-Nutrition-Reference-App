@@ -308,10 +308,12 @@ class DhmStockFragment : Fragment() {
             term = Stock(
                 pasteurized = pa,
                 unPasteurized = upa,
+                total = "0"
             ),
             preterm = Stock(
                 pasteurized = prepa,
                 unPasteurized = preupa,
+                total = "0"
             ),
             userId = userId
         )
