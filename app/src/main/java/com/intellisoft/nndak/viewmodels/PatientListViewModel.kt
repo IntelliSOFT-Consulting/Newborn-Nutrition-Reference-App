@@ -33,8 +33,10 @@ import com.intellisoft.nndak.logic.Logics.Companion.GESTATION
 import com.intellisoft.nndak.logic.Translations.Companion.feedTypes
 import com.intellisoft.nndak.logic.Translations.Companion.feedingTimes
 import com.intellisoft.nndak.models.*
+import com.intellisoft.nndak.utils.Constants
 import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
+import com.intellisoft.nndak.utils.Constants.SYNC_STATE
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.getPastDaysOnIntervalOf
 import com.intellisoft.nndak.utils.getWeeksSoFarIntervalOf
@@ -64,27 +66,27 @@ class PatientListViewModel(
     val liveMotherBaby = MutableLiveData<List<MotherBabyItem>>()
     val patientCount = MutableLiveData<Long>()
     val context: Application = application
+    val discharged = false
 
     init {
         updatePatientListAndPatientCount(
-            { getSearchResults("", location) },
-            { count("", location) })
+            { getSearchResults("", location, discharged) },
+            { count("", location, discharged) })
 
         updateMumAndBabyCount(
-            { getMumSearchResults("", location) },
-            { count("", location) })
+            { getMumSearchResults("", location, discharged) },
+            { count("", location, discharged) })
     }
 
 
-
-    fun searchPatientsByName(nameQuery: String) {
+    fun searchPatientsByName(nameQuery: String, discharged: Boolean) {
         updatePatientListAndPatientCount(
-            { getSearchResults(nameQuery, location) },
-            { count(nameQuery, location) })
+            { getSearchResults(nameQuery, location, discharged) },
+            { count(nameQuery, location, discharged) })
 
         updateMumAndBabyCount(
-            { getMumSearchResults(nameQuery, location) },
-            { count("", location) })
+            { getMumSearchResults(nameQuery, location, discharged) },
+            { count("", location, discharged) })
 
     }
 
@@ -117,7 +119,7 @@ class PatientListViewModel(
      * Returns count of all the [Patient] who match the filter criteria unlike [getSearchResults]
      * which only returns a fixed range.
      */
-    private suspend fun count(nameQuery: String = "", location: String): Long {
+    private suspend fun count(nameQuery: String = "", location: String, discharged: Boolean): Long {
         return fhirEngine.count<Patient> {
             if (nameQuery.isNotEmpty()) {
                 filter(
@@ -128,7 +130,7 @@ class PatientListViewModel(
                     }
                 )
             }
-            filterCity(this, location)
+            filterCity(this, location, discharged)
         }
     }
 
@@ -376,7 +378,8 @@ class PatientListViewModel(
 
     private suspend fun getMumSearchResults(
         nameQuery: String = "",
-        location: String
+        location: String,
+        discharged: Boolean = false
     ): List<MotherBabyItem> {
         val mumBaby: MutableList<MotherBabyItem> = mutableListOf()
         fhirEngine
@@ -390,9 +393,8 @@ class PatientListViewModel(
                         }
                     )
                 }
-                filterCity(this, location)
+                filterCity(this, location, discharged)
                 sort(Patient.GIVEN, Order.ASCENDING)
-                //   count = 100
                 from = 0
             }
 
@@ -526,7 +528,8 @@ class PatientListViewModel(
                         } else {
                             "Normal"
                         }
-                    } }
+                    }
+                }
             }
 
         } catch (e: Exception) {
@@ -672,7 +675,8 @@ class PatientListViewModel(
 
     private suspend fun getSearchResults(
         nameQuery: String = "",
-        location: String
+        location: String,
+        discharged: Boolean
     ): List<PatientItem> {
         val patients: MutableList<PatientItem> = mutableListOf()
         fhirEngine
@@ -687,7 +691,7 @@ class PatientListViewModel(
                     )
 
                 }
-                filterCity(this, location)
+                filterCity(this, location, discharged)
                 sort(Patient.GIVEN, Order.ASCENDING)
                 from = 0
             }
@@ -697,9 +701,15 @@ class PatientListViewModel(
         return patients
     }
 
-    private fun filterCity(search: Search, location: String) {
+    private fun filterCity(search: Search, location: String, discharged: Boolean) {
         search.filter(Patient.ADDRESS_POSTALCODE, { value = SYNC_VALUE })
-        search.filter(Patient.ADDRESS_STATE, { value = SYNC_VALUE })
+        search.filter(Patient.ADDRESS_STATE, {
+            value = if (discharged) {
+                SYNC_STATE
+            } else {
+                SYNC_VALUE
+            }
+        })
     }
 
 

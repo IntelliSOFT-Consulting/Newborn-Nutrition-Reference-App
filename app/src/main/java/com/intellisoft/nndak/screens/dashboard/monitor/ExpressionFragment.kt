@@ -82,8 +82,7 @@ class ExpressionFragment : Fragment() {
                         fhirEngine,
                         patientId
                     )
-                )
-                    .get(PatientDetailsViewModel::class.java)
+                ).get(PatientDetailsViewModel::class.java)
 
             val recyclerView: RecyclerView = binding.patientList
 
@@ -152,8 +151,7 @@ class ExpressionFragment : Fragment() {
                         } else {
                             binding.apply {
                                 cpTitle.visibility = View.VISIBLE
-                                cpTitle.text =
-                                    "There are not expression data at the moment. Click the assessment button to start "
+                                cpTitle.text = getString(R.string._new_assessement)
                             }
                         }
                     }

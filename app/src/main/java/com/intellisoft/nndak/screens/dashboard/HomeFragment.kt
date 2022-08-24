@@ -182,6 +182,85 @@ class HomeFragment : Fragment() {
 
     private fun populateData(data: List<DHMData>) {
 
+        val dayNames: ArrayList<String> = ArrayList()
+        val preterm: ArrayList<Entry> = ArrayList()
+        val term: ArrayList<Entry> = ArrayList()
+        val total: ArrayList<Entry> = ArrayList()
+
+        for ((i, entry) in data.withIndex()) {
+            dayNames.add(entry.day)
+            val pretermValue = entry.preterm.total.toFloat()
+            val termValue = entry.term.total.toFloat()
+            val totalValue = pretermValue + termValue
+
+            preterm.add(Entry(i.toFloat(), pretermValue))
+            term.add(Entry(i.toFloat(), termValue))
+            total.add(Entry(i.toFloat(), totalValue))
+        }
+
+        val lessThanFive = LineDataSet(preterm, "Preterm DHM")
+        lessThanFive.setColors(Color.parseColor("#F65050"))
+        lessThanFive.setDrawCircleHole(false)
+        lessThanFive.setDrawValues(false)
+        lessThanFive.setDrawCircles(false)
+        lessThanFive.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+        val lessThanSeven = LineDataSet(term, "Term DHM")
+        lessThanSeven.setColors(Color.parseColor("#1EAF5F"))
+        lessThanSeven.setDrawCircleHole(false)
+        lessThanSeven.setDrawValues(false)
+        lessThanSeven.setDrawCircles(false)
+        lessThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+        val moreThanSeven = LineDataSet(total, "Total DHM")
+        moreThanSeven.setColors(Color.parseColor("#77A9FF"))
+        moreThanSeven.setDrawCircleHole(false)
+        moreThanSeven.setDrawValues(false)
+        moreThanSeven.setDrawCircles(false)
+        moreThanSeven.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+        val data = LineData(lessThanFive, lessThanSeven, moreThanSeven)
+        binding.totalTermChart.axisLeft.setDrawGridLines(false)
+
+        val xAxis: XAxis = binding.totalTermChart.xAxis
+        xAxis.setDrawGridLines(false)
+        xAxis.setDrawAxisLine(false)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.labelRotationAngle = -60f
+        xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
+
+
+        binding.totalTermChart.legend.isEnabled = true
+
+        //remove description label
+        binding.totalTermChart.description.isEnabled = false
+        binding.totalTermChart.isDragEnabled = true
+        binding.totalTermChart.setScaleEnabled(true)
+        binding.totalTermChart.description.text = "Age (Days)"
+        //add animation
+        binding.totalTermChart.animateX(1000, Easing.EaseInSine)
+        binding.totalTermChart.data = data
+
+        val leftAxis: YAxis = binding.totalTermChart.axisLeft
+        leftAxis.axisMinimum = 0f
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = false
+
+
+        val rightAxis: YAxis = binding.totalTermChart.axisRight
+        rightAxis.setDrawGridLines(false)
+        rightAxis.setDrawZeroLine(false)
+        rightAxis.isGranularityEnabled = false
+        rightAxis.isEnabled = false
+        //refresh
+        binding.totalTermChart.invalidate()
+
+
+    }
+
+
+    /*private fun populateDataOld(data: List<DHMData>) {
+
         val values = getPastDaysOnIntervalOf(7, 1)
 
         if (values.isNotEmpty()) {
@@ -255,7 +334,7 @@ class HomeFragment : Fragment() {
             binding.totalTermChart.invalidate()
         }
 
-    }
+    }*/
 
     private fun formatDays(values: List<LocalDate>): ArrayList<String> {
         val days = ArrayList<String>()

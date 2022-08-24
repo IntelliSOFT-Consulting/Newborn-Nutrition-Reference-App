@@ -32,7 +32,6 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.data.SessionData
 import com.intellisoft.nndak.databinding.FragmentDischargeBinding
 import com.intellisoft.nndak.dialogs.ConfirmationDialog
-import com.intellisoft.nndak.logic.Logics
 import com.intellisoft.nndak.logic.Logics.Companion.CURRENT_WEIGHT
 import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_DATE
 import com.intellisoft.nndak.logic.Logics.Companion.DISCHARGE_NOTES
@@ -48,7 +47,6 @@ import kotlinx.android.synthetic.main.fragment_landing.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
@@ -174,9 +172,16 @@ class DischargeFragment : Fragment() {
             incHistory.actionReadmit.setOnClickListener {
                 if (resourceId.isNotEmpty()) {
                     observeAdmitSaveAction()
-
+                    (activity as MainActivity).displayDialog()
                     CoroutineScope(Dispatchers.IO).launch {
-                        patientDetailsViewModel.readmitBaby(resourceId)
+                        val questionnaireFragment =
+                            childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+                        viewModel.readmitBaby(
+                            questionnaireFragment.getQuestionnaireResponse(),
+                            args.patientId,
+                            resourceId
+                        )
                     }
 
                 }
@@ -247,7 +252,8 @@ class DischargeFragment : Fragment() {
                 questionnaireFragment.getQuestionnaireResponse(),
                 dataCodes,
                 dataQuantity,
-                args.patientId
+                args.patientId,
+                isAlive
             )
         }
     }
@@ -322,20 +328,22 @@ class DischargeFragment : Fragment() {
                 return@observe
             }
 
-               val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
-                   .setTitleText("Success")
-                   .setContentText(it.message)
-                   .setCustomImage(R.drawable.smile)
-                   .setConfirmClickListener { sDialog ->
-                       run {
-                           sDialog.dismiss()
-                           try {  findNavController().navigateUp()}catch (e: Exception){
-                               e.printStackTrace()
-                           }
-                       }
-                   }
-               dialog.setCancelable(false)
-               dialog.show()
+            val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                .setTitleText("Success")
+                .setContentText(it.message)
+                .setCustomImage(R.drawable.smile)
+                .setConfirmClickListener { sDialog ->
+                    run {
+                        sDialog.dismiss()
+                        try {
+                            findNavController().navigateUp()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            dialog.setCancelable(false)
+            dialog.show()
 
         }
     }
