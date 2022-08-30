@@ -7,15 +7,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorStatusBar</item>
         <item name="fontFamily">@font/regular</item>
-<!--        <item name="questionnaire_theme">@style/Theme.MyQuestionnaire</item>-->
+        <item name="questionnaire_theme">@style/Theme.MyQuestionnaire</item>
     </style>
 
-<!--    <style name="Theme.MyQuestionnaire" parent="Theme.Questionnaire">-->
-<!--        <item name="questionnaireQuestionTextStyle">@color/colorPrimary</item>-->
-<!--        <item name="questionnaireTextInputEditTextStyle">@color/colorPrimaryDark</item>-->
-<!--        <item name="questionnaireDropDownTextStyle">@color/colorPrimary</item>-->
-
-<!--    </style>-->
+    <style name="Theme.MyQuestionnaire" parent="Theme.Questionnaire">
+        <item name="questionnaireQuestionTextStyle">@color/colorPrimary</item>
+    </style>
 
     <style name="CustomDialogTheme">
         <item name="android:windowBackground">@android:color/transparent</item>

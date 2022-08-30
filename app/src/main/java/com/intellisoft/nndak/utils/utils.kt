@@ -27,6 +27,8 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -46,6 +48,7 @@ import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.HumanName
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URISyntaxException
 import java.net.URL
@@ -77,7 +80,8 @@ fun showPicker(context: Context, input: TextInputEditText) {
         datePickerDialog.show()
     }
 }
-  fun listenMaxChanges(
+
+fun listenMaxChanges(
     input: TextInputEditText,
     inputLayout: TextInputLayout,
     error: String,
@@ -138,6 +142,30 @@ fun showPicker(context: Context, input: TextInputEditText) {
             }
         })
     }
+}
+
+fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+    val jsonString: String
+    try {
+        jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+    } catch (ioException: IOException) {
+        ioException.printStackTrace()
+        return null
+    }
+    return jsonString
+}
+
+fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {
+    val actual = LineDataSet(one, label)
+    actual.setColors(Color.parseColor(color))
+    actual.setDrawCircleHole(false)
+    actual.setDrawValues(false)
+    actual.setDrawCircles(false)
+    actual.circleRadius = 1f
+    actual.mode = LineDataSet.Mode.CUBIC_BEZIER
+    actual.lineWidth = 2f
+
+    return actual
 }
 
 fun listenChanges(

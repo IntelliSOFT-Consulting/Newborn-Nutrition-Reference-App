@@ -829,39 +829,27 @@
           "text": "If not, when was baby's first feed?",
           "answerOption": [
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "0"
-                }
-              ],
               "valueCoding": {
                 "code": "LA6133-8",
                 "display": "After 1 Hour"
               }
             },
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
-              "valueCoding": {
-                "code": "LA6128-8",
-                "display": "After 2 Hours"
-              }
-            },
-            {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
-                  "valueString": "1"
-                }
-              ],
               "valueCoding": {
                 "code": "LA6128-8",
                 "display": "After 3 Hours"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "LA6128-8",
+                "display": "Within  1 day"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "LA6128-8",
+                "display": "After 2 days"
               }
             }
           ]

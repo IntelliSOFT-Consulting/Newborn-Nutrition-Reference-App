@@ -160,7 +160,6 @@ class CustomRegistrationFragment : Fragment() {
 
             listenChanges(appMumName, tilMumName, "Enter full name")
             listenChanges(appParity, tilParity, "_")
-            listenChanges(appTwoParity, tilTwoParity, "_")
             listenChanges(appIpNumber, tilIpNumber, "Enter IP Number")
             listenChanges(appPmtct, tilPmtct, "Select Status")
             listenChanges(appMulti, tilMulti, "Select Birth Type")
@@ -256,7 +255,6 @@ class CustomRegistrationFragment : Fragment() {
         binding.apply {
             val mumName = appMumName.text.toString()
             val pari1 = appParity.text.toString()
-            val pari2 = appTwoParity.text.toString()
             val mumIp = appIpNumber.text.toString()
             val pmtct = appPmtct.text.toString()
             val multi = appMulti.text.toString()
@@ -270,17 +268,12 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (pari1.isEmpty()) {
-                tilParity.error = ""
+                tilParity.error = "Enter parity"
                 appParity.requestFocus()
                 return
 
             }
-            if (pari2.isEmpty()) {
-                tilTwoParity.error = ""
-                appTwoParity.requestFocus()
-                return
 
-            }
             if (mumIp.isEmpty()) {
                 tilIpNumber.error = "Enter Ip Number"
                 appIpNumber.requestFocus()
@@ -478,7 +471,6 @@ class CustomRegistrationFragment : Fragment() {
             }
 
             val pari12 = CodingObservation(PARITY, "Parity", pari1)
-            val pari22 = CodingObservation("Parity-Two", "Second Parity", pari2)
             val pm = CodingObservation(PMTCT, "Pmtct", pmtct)
             val multiPreg = CodingObservation(MULTIPLE_PREGNANCY, "Multiple Pregnancy", multi)
             val mBirths = CodingObservation(MULTIPLE_BIRTH_TYPE, "Multiple Birth Types", births)
@@ -512,7 +504,6 @@ class CustomRegistrationFragment : Fragment() {
             dataCodes.addAll(
                 listOf(
                     pari12,
-                    pari22,
                     pm,
                     multiPreg,
                     deDate,
@@ -664,8 +655,6 @@ class CustomRegistrationFragment : Fragment() {
             tilMumName.error = ""
             appParity.setText("")
             tilParity.error = ""
-            appTwoParity.setText("")
-            tilTwoParity.error = ""
             appIpNumber.setText("")
             tilIpNumber.error = ""
             appPmtct.setText("")

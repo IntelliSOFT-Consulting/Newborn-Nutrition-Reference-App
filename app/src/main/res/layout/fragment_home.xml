@@ -144,7 +144,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -156,7 +156,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_numbers"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -176,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/action_percent"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/design_default_color_error" />
 
 
@@ -243,7 +244,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
 
                                 android:textSize="@dimen/_25sp" />
 
@@ -256,7 +257,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_total_dhm"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -277,7 +279,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/action_percent"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/design_default_color_error" />
 
 
@@ -344,7 +346,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
                                 android:textSize="@dimen/_25sp" />
 
                         </LinearLayout>
@@ -354,8 +356,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_total_un"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:text="@string/action_total_dhm"
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -376,7 +379,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/action_percent"
                             android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/design_default_color_error" />
 
 
@@ -451,7 +454,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
 
                                 android:textSize="@dimen/_25sp" />
 
@@ -464,7 +467,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_average_dhm"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
 
                     <TextView
@@ -472,7 +476,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/action_percent"
                         android:textAlignment="center"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/success_stroke_color"
                         android:visibility="gone" />
 
@@ -538,7 +542,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -550,7 +554,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_infants"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -570,7 +575,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/action_percent"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/design_default_color_error" />
 
 
@@ -637,7 +642,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                                android:textAppearance="?attr/textAppearanceBody2"
                                 android:textSize="@dimen/_25sp" />
 
 
@@ -649,7 +654,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_dhm_length"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
+                        android:textSize="@dimen/_12dp"
+                        android:textAppearance="?attr/textAppearanceBody2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -669,7 +675,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/action_percent"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/design_default_color_error" />
 
 

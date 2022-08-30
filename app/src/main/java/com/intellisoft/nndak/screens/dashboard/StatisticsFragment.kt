@@ -35,6 +35,7 @@ import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.PatientListViewModel
 import kotlinx.android.synthetic.main.fragment_landing.view.*
 import timber.log.Timber
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -208,24 +209,24 @@ class StatisticsFragment : Fragment() {
     private fun loadLiveData() {
         showLoading(true)
         apiService.loadStatistics(requireContext()) {
-          try {
-              showLoading(false)
-              if (it != null) {
-                  val gson = Gson()
-                  val json = gson.toJson(it)
-                  try {
-                      FhirApplication.updateStatistics(requireContext(), json)
-                      updateUI(it)
-                  } catch (e: Exception) {
-                      e.printStackTrace()
-                  }
-              } else {
+            try {
+                showLoading(false)
+                if (it != null) {
+                    val gson = Gson()
+                    val json = gson.toJson(it)
+                    try {
+                        FhirApplication.updateStatistics(requireContext(), json)
+                        updateUI(it)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                } else {
 
-                  syncLocalData()
-              }
-          } catch (e: Exception) {
-           Timber.e("Error loading statistics ${e.message}")
-          }
+                    syncLocalData()
+                }
+            } catch (e: Exception) {
+                Timber.e("Error loading statistics ${e.message}")
+            }
         }
 
     }
@@ -401,11 +402,38 @@ class StatisticsFragment : Fragment() {
 
     private fun populateFeedsPercentage(percentageFeeds: PercentageFeeds) {
         val pie: MutableList<PieItem> = mutableListOf()
-        pie.add(PieItem(percentageFeeds.dhm, "Donated Human Milk", "#1EAF5F"))
-        pie.add(PieItem(percentageFeeds.iv, "Iv Fluids", "#F65050"))
+        pie.add(
+            PieItem(
+                percentageFeeds.dhm,
+                "Donated Human Milk " + calculatePercentage(percentageFeeds, percentageFeeds.dhm),
+                "#1EAF5F"
+            )
+        )
+        pie.add(
+            PieItem(
+                percentageFeeds.iv,
+                "Iv Fluids " + calculatePercentage(percentageFeeds, percentageFeeds.ebm),
+                "#F65050"
+            )
+        )
 //        pie.add(PieItem(percentageFeeds.oral, "Oral Feeds", "#FFC600"))
-        pie.add(PieItem(percentageFeeds.ebm, "Expressed Breast Milk", "#6C63FF"))
-        pie.add(PieItem(percentageFeeds.formula, "Formula", "#BA1B22"))
+        pie.add(
+            PieItem(
+                percentageFeeds.ebm,
+                "Expressed Breast Milk " + calculatePercentage(
+                    percentageFeeds,
+                    percentageFeeds.ebm
+                ),
+                "#6C63FF"
+            )
+        )
+        pie.add(
+            PieItem(
+                percentageFeeds.formula,
+                "Formula " + calculatePercentage(percentageFeeds, percentageFeeds.formula),
+                "#BA1B22"
+            )
+        )
 
         val pieShades: ArrayList<Int> = ArrayList()
         val entries = ArrayList<PieEntry>()
@@ -430,7 +458,7 @@ class StatisticsFragment : Fragment() {
             if (isTablet(requireContext())) {
                 percentageChart.legend.orientation = Legend.LegendOrientation.VERTICAL
                 percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-                percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                percentageChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
             } else {
                 percentageChart.legend.orientation = Legend.LegendOrientation.HORIZONTAL
                 percentageChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -454,12 +482,44 @@ class StatisticsFragment : Fragment() {
         }
     }
 
+
     private fun populateFeedingTime(firstFeeding: FirstFeeding) {
         val pie: MutableList<PieItem> = mutableListOf()
-        pie.add(PieItem(firstFeeding.withinOne, "Within 1 Hour", "#008c9b"))
-        pie.add(PieItem(firstFeeding.afterOne, "After 1 Hour", "#ffc600"))
-        pie.add(PieItem(firstFeeding.afterTwo, "After 2 Hours", "#fbb9b9"))
-        pie.add(PieItem(firstFeeding.afterThree, "After 3 Hours", "#6c63ff"))
+        pie.add(
+            PieItem(
+                firstFeeding.withinOne,
+                "Within 1 Hour " + getPercentage(firstFeeding, firstFeeding.withinOne),
+                "#428d9b"
+            )
+        )
+        pie.add(
+            PieItem(
+                firstFeeding.afterOne,
+                "After 1 Hour " + getPercentage(firstFeeding, firstFeeding.afterOne),
+                "#f8c632"
+            )
+        )
+        pie.add(
+            PieItem(
+                firstFeeding.afterTwo,
+                "After 3 Hours " + getPercentage(firstFeeding, firstFeeding.afterTwo),
+                "#f1b8b8"
+            )
+        )
+        pie.add(
+            PieItem(
+                firstFeeding.afterThree,
+                "Within 1 Day " + getPercentage(firstFeeding, firstFeeding.afterThree),
+                "#706dfd"
+            )
+        )
+        pie.add(
+            PieItem(
+                firstFeeding.afterThree,
+                "After 2 Days " + getPercentage(firstFeeding, firstFeeding.afterThree),
+                "#3c6f26"
+            )
+        )
 
         val pieShades: ArrayList<Int> = ArrayList()
         val entries = ArrayList<PieEntry>()
@@ -489,14 +549,14 @@ class StatisticsFragment : Fragment() {
             if (isTablet(requireContext())) {
                 totalTermChart.legend.orientation = Legend.LegendOrientation.VERTICAL
                 totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-                totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
             } else {
                 totalTermChart.legend.orientation = Legend.LegendOrientation.HORIZONTAL
                 totalTermChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
                 totalTermChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
 
             }
-            totalTermChart.legend.isWordWrapEnabled = true
+            totalTermChart.legend.isWordWrapEnabled = false
             totalTermChart.legend.xEntrySpace = 10f
             totalTermChart.legend.yEntrySpace = 10f
             totalTermChart.legend.yOffset = 10f
@@ -516,14 +576,34 @@ class StatisticsFragment : Fragment() {
         }
     }
 
-    private fun formatMonths(values: List<LocalDate>): ArrayList<String> {
-        val days = ArrayList<String>()
-        values.forEach {
-            val format = FormatHelper().getMonthName(it.toString())
-            days.add(format)
+    private fun getPercentage(firstFeeding: FirstFeeding, withinOne: String): String {
+        val percentage = try {
+            val total =
+                firstFeeding.withinOne.toFloat() + firstFeeding.afterOne.toFloat() + firstFeeding.afterTwo.toFloat() + firstFeeding.afterThree.toFloat()
+            val average = (withinOne.toFloat() / total) * 100
+            // two decimal places
+            val dat=DecimalFormat("#.##").format(average)
+            dat.toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "0.0"
         }
-        return days
+        return "$percentage %"
     }
+
+    private fun calculatePercentage(percentageFeeds: PercentageFeeds, ebm: String): String {
+        val data = try {
+            val total = percentageFeeds.dhm.toFloat() + percentageFeeds.iv.toFloat() +
+                    percentageFeeds.ebm.toFloat() + percentageFeeds.formula.toFloat()
+            val av = (ebm.toFloat() / total) * 100
+            av.toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "0.0"
+        }
+        return "$data %"
+    }
+
 
     private fun generateCenterText(): CharSequence {
         val s = SpannableString("Feeds")

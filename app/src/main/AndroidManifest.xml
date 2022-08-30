@@ -17,6 +17,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".screens.dashboard.growth.GrowthActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false" />
+        <activity
             android:name=".auth.PinLockActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />

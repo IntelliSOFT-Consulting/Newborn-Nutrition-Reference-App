@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -30,7 +31,10 @@ import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
+import com.intellisoft.nndak.screens.dashboard.growth.GrowthActivity
 import com.intellisoft.nndak.utils.extractUnits
+import com.intellisoft.nndak.utils.generateSource
+import com.intellisoft.nndak.utils.getJsonDataFromAsset
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -141,7 +145,7 @@ class BabyDashboardFragment : Fragment() {
         }
         patientDetailsViewModel.getMumChild()
         patientDetailsViewModel.getCurrentPrescriptions()
-        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) {data->
+        patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
             if (data != null) {
                 updateBabyMum(binding.incDetails, data)
             }
@@ -154,7 +158,7 @@ class BabyDashboardFragment : Fragment() {
                 binding.apply {
 
                     tvTotalVolume.text = it.totalFeed
-                    tvMotherMilk.text =it.varianceAmount
+                    tvMotherMilk.text = it.varianceAmount
                 }
             }
         }
@@ -266,16 +270,7 @@ class BabyDashboardFragment : Fragment() {
         }
     }
 
-    private fun getJsonDataFromAsset(context: Context, fileName: String): String? {
-        val jsonString: String
-        try {
-            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
-        } catch (ioException: IOException) {
-            ioException.printStackTrace()
-            return null
-        }
-        return jsonString
-    }
+
 
 
     private fun barGraphAlt(it: FeedsDistribution) {
@@ -458,6 +453,9 @@ class BabyDashboardFragment : Fragment() {
     private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {
         binding.apply {
             tvCurrentWeight.text = "${values.currentWeight} gm"
+            growthChart.setOnClickListener {
+                findNavController().navigate(BabyDashboardFragmentDirections.navigateToGrowth(args.patientId))
+            }
         }
         val intervals = ArrayList<String>()
         val babyWeight: ArrayList<Entry> = ArrayList()
@@ -481,14 +479,17 @@ class BabyDashboardFragment : Fragment() {
                 } else {
                     babyWeight.add(Entry(i.toFloat(), equivalent.toFloat()))
                 }
-                one.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
-                two.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
-                three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
-                four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
-                five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
-                six.add(Entry(i.toFloat(), entry.data[5].value.toFloat()))
-                seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+            } else {
+                babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
             }
+            one.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
+            two.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
+            three.add(Entry(i.toFloat(), entry.data[2].value.toFloat()))
+            four.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+            five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
+            six.add(Entry(i.toFloat(), entry.data[5].value.toFloat()))
+            seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+
 
         }
 
@@ -511,9 +512,10 @@ class BabyDashboardFragment : Fragment() {
         xAxis.setDrawGridLines(true)
         xAxis.setDrawAxisLine(true)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.mAxisMinimum = 1f
+        xAxis.mAxisMinimum = 0f
+        xAxis.setLabelCount(38, false)
         xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-
+        xAxis.labelRotationAngle = -45f
         binding.growthChart.legend.isEnabled = true
 
         //remove description label
@@ -545,18 +547,6 @@ class BabyDashboardFragment : Fragment() {
     }
 
 
-    private fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {
-        val actual = LineDataSet(one, label)
-        actual.setColors(Color.parseColor(color))
-        actual.setDrawCircleHole(false)
-        actual.setDrawValues(false)
-        actual.setDrawCircles(false)
-        actual.circleRadius = 1f
-        actual.mode = LineDataSet.Mode.CUBIC_BEZIER
-        actual.lineWidth = 2f
-
-        return actual
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

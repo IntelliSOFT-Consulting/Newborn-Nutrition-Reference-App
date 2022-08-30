@@ -53,19 +53,20 @@ class ViewPositioning(
             layerOne.tvhTiming.text = data.mum
 
             secondLayer.tvhDate.text = getString(R.string.baby_position)
-            secondLayer.tvhFrequency.text = getString(R.string.attachment)
-            secondLayer.tvhTiming.text = getString(R.string.suckle)
+            secondLayer.tvhFrequency.text = getString(R.string.attachment_data)
+            secondLayer.tvhTiming.text = getString(R.string.suckle_data)
 
             layerTwo.tvhDate.text = data.baby
             layerTwo.tvhFrequency.text = data.attach
             layerTwo.tvhTiming.text = data.suckle
 
-            thirdLayer.lnParent.visibility = View.GONE
-            thirdLayer.tvhDate.text = getString(R.string.breast_cond)
-            thirdLayer.tvhFrequency.text = getString(R.string.milk_flow)
-            thirdLayer.tvhTiming.text = getString(R.string.milk_volume)
+            thirdLayer.lnParent.visibility = View.VISIBLE
+            thirdLayer.tvhDate.text = getString(R.string.sucking)
+            thirdLayer.tvhFrequency.visibility = View.GONE
+            thirdLayer.tvhTiming.visibility = View.GONE
 
-            layerThree.lnParent.visibility = View.GONE
+            layerThree.lnParent.visibility = View.VISIBLE
+            layerThree.tvhDate.text = data.suckle
 
             boldText(firstLayer.tvhDate)
             boldText(firstLayer.tvhFrequency)

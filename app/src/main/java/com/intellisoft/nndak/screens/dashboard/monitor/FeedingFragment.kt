@@ -391,6 +391,7 @@ class FeedingFragment : Fragment() {
                 monitoringAdapter.notifyDataSetChanged()
 
                 binding.apply {
+                    tvFeeding.visibility = View.VISIBLE
                     incHistory.lnParent.visibility = View.VISIBLE
                     incHistory.tvhDate.text = "Date"
                     incHistory.tvhTime.text = "Time"
@@ -417,6 +418,9 @@ class FeedingFragment : Fragment() {
     }
 
     private fun setupFeedingTimes(start: String, frequency: String) {
+        binding.apply {
+            tvHist.visibility = View.VISIBLE
+        }
         val freq = getNumericFrequency(frequency)
         scheduleTimes = createTimingList(start, freq)
         adapterList = FeedAdapter(this::click)

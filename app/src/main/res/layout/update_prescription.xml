@@ -27,6 +27,7 @@
             android:layout_marginStart="3dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
+            android:textColor="@color/colorPrimary"
             android:text="@string/enter"
             android:textStyle="bold" />
 
@@ -45,9 +46,7 @@
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:hint="@string/app_current_weight"
-                app:boxStrokeColor="@color/colorPrimary"
-                app:hintTextColor="@color/colorPrimary">
+                android:hint="@string/app_current_weight" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eWeight"
@@ -135,7 +134,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/app_breast_milk"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal"
             android:visibility="gone" />
 
@@ -176,7 +175,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/formula"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal"
             android:visibility="gone" />
 
@@ -245,7 +244,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/ebm_milk"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal"
             android:visibility="gone" />
 
@@ -285,7 +284,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/dhm_milk"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal"
             android:visibility="gone" />
 
@@ -382,7 +381,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/app_iv_fluids"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal"
             android:visibility="gone" />
 
@@ -425,7 +424,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/app_additional"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="normal" />
 
         <LinearLayout

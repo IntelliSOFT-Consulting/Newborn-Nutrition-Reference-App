@@ -1342,7 +1342,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     customMessage.postValue(
                         MessageItem(
                             success = false,
-                            message = "Experienced Problems Processing Data, Try again"
+                            message = "Please enter all required fields"
                         )
                     )
                     return@launch
@@ -2974,14 +2974,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
     private suspend fun proceedToNextStep(patientId: String, alive: Boolean) {
         val baby = fhirEngine.get<Patient>(patientId)
-        if (alive) {
-            baby.addressFirstRep.postalCode = SYNC_VALUE
-            baby.addressFirstRep.state = SYNC_VALUE
-            baby.active = false
-        } else {
-            baby.addressFirstRep.postalCode = SYNC_VALUE
-            baby.addressFirstRep.state = SYNC_STATE
-            baby.active = false
+        baby.addressFirstRep.postalCode = SYNC_VALUE
+        baby.addressFirstRep.state = SYNC_STATE
+        baby.active = false
+
+        if (!alive) {
             val isDeceased = BooleanType()
             isDeceased.value = true
             val deceasedDate = DateTimeType()
@@ -3010,6 +3007,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 baby.active = true
                 baby.addressFirstRep.postalCode = SYNC_VALUE
                 baby.addressFirstRep.state = SYNC_VALUE
+
+                if (baby.hasDeceased()) {
+                    val isDeceased = BooleanType()
+                    isDeceased.value = false
+                    val deceasedDate = DateTimeType()
+                    deceasedDate.value = Date()
+                    baby.deceased = isDeceased
+                }
                 fhirEngine.update(baby)
 
                 val value = retrieveUser(false)

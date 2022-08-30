@@ -125,7 +125,6 @@ class PatientDetailsViewModel(
     val liveDischargeDetails = MutableLiveData<List<DischargeItem>>()
 
 
-
     fun feedsDistribution() {
         viewModelScope.launch { liveFeeds.value = getFeedsDataModel() }
     }
@@ -1768,7 +1767,8 @@ class PatientDetailsViewModel(
         val history: MutableList<BreastsHistory> = mutableListOf()
         val feeding = getAllEncounters(BREASTS_FEEDING)
         if (feeding.isNotEmpty()) {
-            feeding.forEach {
+            val sortedEncounters = sortCollectedEncounters(feeding)
+            sortedEncounters.forEach {
                 val data = retrieveBreast(it)
                 if (data.date != "--") {
                     history.add(data)
@@ -1796,9 +1796,11 @@ class PatientDetailsViewModel(
         val history: MutableList<PositioningHistory> = mutableListOf()
         val feeding = getAllEncounters("Positioning-Assessment")
         if (feeding.isNotEmpty()) {
-            feeding.forEach {
+            val sortPositioning = sortCollectedEncounters(feeding)
+            sortPositioning.forEach {
                 val data = retrievePositioning(it)
                 if (data.date != "--") {
+
                     history.add(data)
                 }
             }
