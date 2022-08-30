@@ -27,8 +27,8 @@
             android:layout_marginStart="3dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
-            android:textColor="@color/colorPrimary"
             android:text="@string/enter"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:hint="@string/app_current_weight" >
+                android:hint="@string/app_current_weight">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eWeight"
@@ -78,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cursorVisible="false"
+                    android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:importantForAutofill="no"
@@ -351,18 +352,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15dp"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:weightSum="2">
 
             <include
                 android:id="@+id/dhm_signed"
                 layout="@layout/frequency"
                 android:layout_width="0dp"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="gone" />
+
             <include
                 android:id="@+id/dhm_reason"
                 layout="@layout/reason"
@@ -391,8 +393,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15dp"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:weightSum="2">
 
             <include
                 android:id="@+id/iv_volume"
@@ -408,11 +410,11 @@
                 android:id="@+id/iv_route"
                 layout="@layout/routes"
                 android:layout_width="0dp"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="gone" />
 
 
         </LinearLayout>
@@ -424,8 +426,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@string/app_additional"
-            android:textColor="@color/colorPrimary"
             android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/colorPrimary"
             android:textStyle="normal" />
 
         <LinearLayout

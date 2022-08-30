@@ -103,7 +103,7 @@ class GrowthActivity : AppCompatActivity() {
         val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
 
-        for ((i, entry) in growths.withIndex()) {
+        for ((i, entry) in growths.subList(0,25).withIndex()) {
 
             intervals.add(entry.age.toString())
             val start = entry.age
@@ -126,8 +126,6 @@ class GrowthActivity : AppCompatActivity() {
             five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
             six.add(Entry(i.toFloat(), entry.data[5].value.toFloat()))
             seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
-
-
         }
 
         val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
@@ -150,7 +148,7 @@ class GrowthActivity : AppCompatActivity() {
         xAxis.setDrawAxisLine(true)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.mAxisMinimum = 0f
-        xAxis.setLabelCount(38, false)
+        xAxis.setLabelCount(24, false)
         xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
         xAxis.labelRotationAngle = -45f
 
@@ -160,7 +158,6 @@ class GrowthActivity : AppCompatActivity() {
         binding.growthChart.description.isEnabled = true
         binding.growthChart.isDragEnabled = false
         binding.growthChart.setScaleEnabled(false)
-        binding.growthChart.description.text = "Age (weeks)"
         binding.growthChart.description.setPosition(0f, 10f)
 
         //add animation
@@ -169,7 +166,7 @@ class GrowthActivity : AppCompatActivity() {
         val leftAxis: YAxis = binding.growthChart.axisLeft
         leftAxis.axisMinimum = 0f
         leftAxis.mAxisMaximum = 12f
-        leftAxis.setLabelCount(24, false)
+        leftAxis.setLabelCount(24, true)
 
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true

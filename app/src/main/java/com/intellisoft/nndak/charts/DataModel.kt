@@ -18,8 +18,10 @@ data class Statistics(
 data class FirstFeeding(
     @SerializedName("withinOne") val withinOne: String,
     @SerializedName("afterOne") val afterOne: String,
-    @SerializedName("afterTwo") val afterTwo: String,
     @SerializedName("afterThree") val afterThree: String,
+    @SerializedName("withinDay") val withinDay: String,
+    @SerializedName("afterTwoDays") val afterTwoDays: String,
+
 )
 
 data class PercentageFeeds(

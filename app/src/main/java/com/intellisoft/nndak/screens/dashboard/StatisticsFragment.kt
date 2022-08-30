@@ -501,22 +501,22 @@ class StatisticsFragment : Fragment() {
         )
         pie.add(
             PieItem(
-                firstFeeding.afterTwo,
-                "After 3 Hours " + getPercentage(firstFeeding, firstFeeding.afterTwo),
+                firstFeeding.afterThree,
+                "After 3 Hours " + getPercentage(firstFeeding, firstFeeding.afterThree),
                 "#f1b8b8"
             )
         )
         pie.add(
             PieItem(
-                firstFeeding.afterThree,
-                "Within 1 Day " + getPercentage(firstFeeding, firstFeeding.afterThree),
+                firstFeeding.withinDay,
+                "Within 1 Day " + getPercentage(firstFeeding, firstFeeding.withinDay),
                 "#706dfd"
             )
         )
         pie.add(
             PieItem(
-                firstFeeding.afterThree,
-                "After 2 Days " + getPercentage(firstFeeding, firstFeeding.afterThree),
+                firstFeeding.afterTwoDays,
+                "After 2 Days " + getPercentage(firstFeeding, firstFeeding.afterTwoDays),
                 "#3c6f26"
             )
         )
@@ -579,10 +579,12 @@ class StatisticsFragment : Fragment() {
     private fun getPercentage(firstFeeding: FirstFeeding, withinOne: String): String {
         val percentage = try {
             val total =
-                firstFeeding.withinOne.toFloat() + firstFeeding.afterOne.toFloat() + firstFeeding.afterTwo.toFloat() + firstFeeding.afterThree.toFloat()
+                firstFeeding.withinOne.toFloat() + firstFeeding.afterOne.toFloat() +
+                        firstFeeding.withinDay.toFloat() + firstFeeding.afterThree.toFloat() +
+                        firstFeeding.afterTwoDays.toFloat()
             val average = (withinOne.toFloat() / total) * 100
             // two decimal places
-            val dat=DecimalFormat("#.##").format(average)
+            val dat = DecimalFormat("#.##").format(average)
             dat.toString()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -596,7 +598,8 @@ class StatisticsFragment : Fragment() {
             val total = percentageFeeds.dhm.toFloat() + percentageFeeds.iv.toFloat() +
                     percentageFeeds.ebm.toFloat() + percentageFeeds.formula.toFloat()
             val av = (ebm.toFloat() / total) * 100
-            av.toString()
+            val dat = DecimalFormat("#.##").format(av)
+            dat.toString()
         } catch (e: Exception) {
             e.printStackTrace()
             "0.0"

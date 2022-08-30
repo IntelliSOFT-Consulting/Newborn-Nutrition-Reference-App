@@ -271,8 +271,6 @@ class BabyDashboardFragment : Fragment() {
     }
 
 
-
-
     private fun barGraphAlt(it: FeedsDistribution) {
 
         val groupCount = 8
@@ -466,8 +464,10 @@ class BabyDashboardFragment : Fragment() {
         val five: ArrayList<Entry> = ArrayList()
         val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
+        val max = 24
 
-        for ((i, entry) in growths.withIndex()) {
+        for ((i, entry) in growths.subList(0, max + 1)
+            .withIndex()) {
 
             intervals.add(entry.age.toString())
             val start = entry.age
@@ -513,7 +513,7 @@ class BabyDashboardFragment : Fragment() {
         xAxis.setDrawAxisLine(true)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.mAxisMinimum = 0f
-        xAxis.setLabelCount(38, false)
+        xAxis.setLabelCount(max, false)
         xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
         xAxis.labelRotationAngle = -45f
         binding.growthChart.legend.isEnabled = true
@@ -530,12 +530,11 @@ class BabyDashboardFragment : Fragment() {
         binding.growthChart.data = data
         val leftAxis: YAxis = binding.growthChart.axisLeft
         leftAxis.axisMinimum = 0f
-        /* leftAxis.mAxisMaximum = 1200f
-         leftAxis.setLabelCount(6, true)
-      */
+        leftAxis.mAxisMaximum = 12f
+        leftAxis.setLabelCount(12, false)
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true
-
+        leftAxis.isEnabled = true
 
         val rightAxis: YAxis = binding.growthChart.axisRight
         rightAxis.setDrawGridLines(false)
@@ -545,7 +544,6 @@ class BabyDashboardFragment : Fragment() {
         //refresh
         binding.growthChart.invalidate()
     }
-
 
 
     override fun onDestroyView() {

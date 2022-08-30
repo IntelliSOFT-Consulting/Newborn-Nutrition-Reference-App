@@ -123,7 +123,6 @@ class CustomRegistrationFragment : Fragment() {
     }
 
 
-
     private fun showTimePicker(input: TextInputEditText) {
         input.setOnClickListener {
             val mTimePicker: TimePickerDialog
@@ -186,21 +185,21 @@ class CustomRegistrationFragment : Fragment() {
             /**
              * Dropdowns
              */
-            showOptions(requireContext(),appPmtct, R.menu.pmtct)
+            showOptions(requireContext(), appPmtct, R.menu.pmtct)
             showMultiOptions(appMulti, R.menu.yesno)
             showDeliveryOptions(appDelivery, R.menu.delivery)
-            showOptions(requireContext(),appBirthType, R.menu.birthtypes)
-            showOptions(requireContext(),appCs, R.menu.reasons)
-            showOptions(requireContext(),appVdrl, R.menu.pmtct)
-            showOptions(requireContext(),appSex, R.menu.sex)
-            showOptions(requireContext(),appBba, R.menu.yesno)
+            showOptions(requireContext(), appBirthType, R.menu.birthtypes)
+            showOptions(requireContext(), appCs, R.menu.reasons)
+            showOptions(requireContext(), appVdrl, R.menu.pmtct)
+            showOptions(requireContext(), appSex, R.menu.sex)
+            showOptions(requireContext(), appBba, R.menu.yesno)
 
             /**
              * Date pickers
              */
-            showPicker(requireContext(),appDelDate)
-            showPicker(requireContext(),appDob)
-            showPicker(requireContext(),appAdmDate)
+            showPicker(requireContext(), appDelDate)
+            showPicker(requireContext(), appDob)
+            showPicker(requireContext(), appAdmDate)
             /**
              * Time Pickers
              */
@@ -260,6 +259,42 @@ class CustomRegistrationFragment : Fragment() {
             val multi = appMulti.text.toString()
             val births = appBirthType.text.toString()
 
+            val delDate = appDelDate.text.toString()
+            val delTime = appDelTime.text.toString()
+            val delMethod = appDelivery.text.toString()
+            val cs = appCs.text.toString()
+            val vdrl = appVdrl.text.toString()
+            val dob = appDob.text.toString()
+            val sex = appSex.text.toString()
+
+            /**
+             * Validate all the fields at once
+             */
+            if (mumName.isEmpty() && pari1.isEmpty() && mumIp.isEmpty() &&
+                pmtct.isEmpty() && multi.isEmpty() && delDate.isEmpty() &&
+                delTime.isEmpty() && delMethod.isEmpty() && cs.isEmpty() &&
+                vdrl.isEmpty() && dob.isEmpty()&&sex.isEmpty()
+
+                    ) {
+                tilMumName.error = "required field"
+                tilParity.error = "required field"
+                tilIpNumber.error = "required field"
+                tilPmtct.error = "required field"
+                tilMulti.error = "required field"
+                tilDelDate.error = "required field"
+                tilDelTime.error = "required field"
+                tilDelivery.error = "required field"
+                tilCs.error = "required field"
+                tilVdrl.error = "required field"
+                tilDob.error = "required field"
+                tilSex.error = "required field"
+
+
+
+                return
+            }
+
+
 
             if (mumName.isEmpty()) {
                 tilMumName.error = "Enter mother's name"
@@ -301,13 +336,6 @@ class CustomRegistrationFragment : Fragment() {
 
                 }
             }
-            val delDate = appDelDate.text.toString()
-            val delTime = appDelTime.text.toString()
-            val delMethod = appDelivery.text.toString()
-            val cs = appCs.text.toString()
-            val vdrl = appVdrl.text.toString()
-            val dob = appDob.text.toString()
-            val sex = appSex.text.toString()
 
             if (delDate.isEmpty()) {
                 tilDelDate.error = "Select delivery date"

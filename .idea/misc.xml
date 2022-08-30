@@ -91,6 +91,7 @@
         <entry key="app/src/main/res/drawable/calendar_today_24.xml" value="0.259" />
         <entry key="app/src/main/res/drawable/default_border.xml" value="0.2685" />
         <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.272" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.276" />
         <entry key="app/src/main/res/drawable/line_dash_grey_20.xml" value="0.2545" />
         <entry key="app/src/main/res/drawable/schedule_24.xml" value="0.1345" />
         <entry key="app/src/main/res/font/poppins.xml" value="0.10598958333333333" />
@@ -222,7 +223,7 @@
         <entry key="app/src/main/res/layout/statistics.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
-        <entry key="app/src/main/res/layout/update_prescription.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/update_prescription.xml" value="0.22" />
         <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/birthtypes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
