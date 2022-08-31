@@ -537,5 +537,23 @@
     <string name="breast_feeding_date">Date</string>
     <string name="app_growth">Baby\'s Growth</string>
     <string name="app_weeks">Weight (kg)</string>
+    <string name="assess_date">Date</string>
+    <string name="_none">None</string>
+    <string name="engorged_breasts">Engorged Breasts</string>
+    <string name="sore_nipples">Sore Nipples</string>
+    <string name="cracked_nipples">Cracked Nipples</string>
+    <string name="inverted_nipples">Inverted Nipples</string>
+    <string name="flat_nipples">Flat Nipples</string>
+    <string name="breast_feed">Breast Feed</string>
+    <string name="ebm_da">EBM</string>
+    <string name="term_formula">Term Formula</string>
+    <string name="preterm_formula">Preterm Formula</string>
+    <string name="term_dhm">Term DHM</string>
+    <string name="preterm_dhm">Preterm DHM</string>
+    <string name="iv_fluid_and_additives">IV Fluid and Additives</string>
+    <string name="after_1_hour">After 1 Hour</string>
+    <string name="after_3_hours">After 3 Hours</string>
+    <string name="within_1_day">Within 1 day</string>
+    <string name="after_2_days">After 2 days</string>
 
 </resources>

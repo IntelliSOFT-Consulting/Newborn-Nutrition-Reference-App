@@ -3,6 +3,7 @@ package com.intellisoft.nndak.utils
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog.show
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -78,6 +79,25 @@ fun showPicker(context: Context, input: TextInputEditText) {
         )
         datePickerDialog.datePicker.maxDate = Date().time
         datePickerDialog.show()
+    }
+}
+
+  fun showTimePicker(context: Context,input: TextInputEditText) {
+    input.setOnClickListener {
+        val mTimePicker: TimePickerDialog
+        val mcurrentTime = Calendar.getInstance()
+        val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
+        val minute = mcurrentTime.get(Calendar.MINUTE)
+
+        mTimePicker = TimePickerDialog(
+            context,
+            { view, hourOfDay, minute ->
+                input.setText(
+                    String.format("%02d:%02d", hourOfDay, minute)
+                )
+            }, hour, minute, false
+        )
+        mTimePicker.show()
     }
 }
 

@@ -51,6 +51,7 @@ import com.intellisoft.nndak.models.QuantityObservation
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.showOptions
 import com.intellisoft.nndak.utils.showPicker
+import com.intellisoft.nndak.utils.showTimePicker
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.android.synthetic.main.fragment_custom_registration.*
 import kotlinx.coroutines.CoroutineScope
@@ -122,26 +123,6 @@ class CustomRegistrationFragment : Fragment() {
         }
     }
 
-
-    private fun showTimePicker(input: TextInputEditText) {
-        input.setOnClickListener {
-            val mTimePicker: TimePickerDialog
-            val mcurrentTime = Calendar.getInstance()
-            val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
-            val minute = mcurrentTime.get(Calendar.MINUTE)
-
-            mTimePicker = TimePickerDialog(
-                requireContext(),
-                { view, hourOfDay, minute ->
-                    input.setText(
-                        String.format("%02d:%02d", hourOfDay, minute)
-                    )
-                }, hour, minute, false
-            )
-            mTimePicker.show()
-        }
-    }
-
     private fun initViews() {
         binding.apply {
 
@@ -203,8 +184,8 @@ class CustomRegistrationFragment : Fragment() {
             /**
              * Time Pickers
              */
-            showTimePicker(appDelTime)
-            showTimePicker(appAdmTime)
+            showTimePicker(requireContext(),appDelTime)
+            showTimePicker(requireContext(),appAdmTime)
 
         }
     }
@@ -266,16 +247,29 @@ class CustomRegistrationFragment : Fragment() {
             val vdrl = appVdrl.text.toString()
             val dob = appDob.text.toString()
             val sex = appSex.text.toString()
+            val bWeight = appBirthWeight.text.toString()
+            val gestation = appGestation.text.toString()
+            val apgarfive = appFiveScore.text.toString()
+            val apgarten = appTenScore.text.toString()
+            val bba = appBba.text.toString()
+            val head = appHead.text.toString()
+            val inter = appInter.text.toString()
+            val adWeight = appAdmWeight.text.toString()
+            val admDate = appAdmDate.text.toString()
+            val admTime = appAdmTime.text.toString()
+            val remarks = appNotes.text.toString()
 
             /**
              * Validate all the fields at once
              */
             if (mumName.isEmpty() && pari1.isEmpty() && mumIp.isEmpty() &&
                 pmtct.isEmpty() && multi.isEmpty() && delDate.isEmpty() &&
-                delTime.isEmpty() && delMethod.isEmpty() && cs.isEmpty() &&
-                vdrl.isEmpty() && dob.isEmpty()&&sex.isEmpty()
-
-                    ) {
+                delTime.isEmpty() && delMethod.isEmpty() &&
+                vdrl.isEmpty() && dob.isEmpty() && sex.isEmpty() && bWeight.isEmpty()
+                && gestation.isEmpty() && apgarfive.isEmpty() && apgarten.isEmpty() && bba.isEmpty()
+                && head.isEmpty() && inter.isEmpty() && adWeight.isEmpty() &&
+                admDate.isEmpty() && admTime.isEmpty() && remarks.isEmpty()
+            ) {
                 tilMumName.error = "required field"
                 tilParity.error = "required field"
                 tilIpNumber.error = "required field"
@@ -284,11 +278,20 @@ class CustomRegistrationFragment : Fragment() {
                 tilDelDate.error = "required field"
                 tilDelTime.error = "required field"
                 tilDelivery.error = "required field"
-                tilCs.error = "required field"
                 tilVdrl.error = "required field"
                 tilDob.error = "required field"
                 tilSex.error = "required field"
-
+                tilBirthWeight.error = "required field"
+                tilGestation.error = "required field"
+                tilFiveScore.error = "required field"
+                tilTenScore.error = "required field"
+                tilBba.error = "required field"
+                tilHead.error = "required field"
+                tilInter.error = "required field"
+                tilAdmWeight.error = "required field"
+                tilAdmDate.error = "required field"
+                tilAdmTime.error = "required field"
+                tilNotes.error = "required field"
 
 
                 return
@@ -308,7 +311,6 @@ class CustomRegistrationFragment : Fragment() {
                 return
 
             }
-
             if (mumIp.isEmpty()) {
                 tilIpNumber.error = "Enter Ip Number"
                 appIpNumber.requestFocus()
@@ -336,7 +338,6 @@ class CustomRegistrationFragment : Fragment() {
 
                 }
             }
-
             if (delDate.isEmpty()) {
                 tilDelDate.error = "Select delivery date"
                 appDelDate.requestFocus()
@@ -381,11 +382,7 @@ class CustomRegistrationFragment : Fragment() {
                 return
 
             }
-            val bWeight = appBirthWeight.text.toString()
-            val gestation = appGestation.text.toString()
-            val apgarfive = appFiveScore.text.toString()
-            val apgarten = appTenScore.text.toString()
-            val bba = appBba.text.toString()
+
 
             if (bWeight.isEmpty()) {
                 tilBirthWeight.error = "Enter birth weight"
@@ -417,12 +414,7 @@ class CustomRegistrationFragment : Fragment() {
                 return
 
             }
-            val head = appHead.text.toString()
-            val inter = appInter.text.toString()
-            val adWeight = appAdmWeight.text.toString()
-            val admDate = appAdmDate.text.toString()
-            val admTime = appAdmTime.text.toString()
-            val remarks = appNotes.text.toString()
+
 
 
             if (head.isEmpty()) {
@@ -512,9 +504,11 @@ class CustomRegistrationFragment : Fragment() {
             val five = QuantityObservation(APGAR_SCORE, "5 mins Score", apgarfive, "score")
             val ten = QuantityObservation("10-Score", "10 mins Score", apgarten, "score")
             val bornB = CodingObservation(BBA, "Born before Arrival", bba)
-            val headC = QuantityObservation(HEAD_CIRCUMFERENCE, "Head Circumference", head, "cm")
+            val headC =
+                QuantityObservation(HEAD_CIRCUMFERENCE, "Head Circumference", head, "cm")
             val ventions = CodingObservation(INTERVENTIONS, "Interventions", inter)
-            val aWeight = QuantityObservation(ADMISSION_WEIGHT, "Admission Weight", adWeight, "gm")
+            val aWeight =
+                QuantityObservation(ADMISSION_WEIGHT, "Admission Weight", adWeight, "gm")
             val aDate = CodingObservation(ADMISSION_DATE, "Admission Date", admDate)
             val aTime = CodingObservation("Admission-Time", "Admission Time", admTime)
             val aRemarks = CodingObservation(REMARKS, "Additional Notes", remarks)

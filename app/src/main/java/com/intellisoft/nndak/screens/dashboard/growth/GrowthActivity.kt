@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navArgs
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
@@ -20,9 +19,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.GrowthData
 import com.intellisoft.nndak.charts.WeightsData
 import com.intellisoft.nndak.databinding.ActivityGrowthBinding
-import com.intellisoft.nndak.logic.DataSort
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
-import com.intellisoft.nndak.screens.dashboard.child.BabyDashboardFragmentDirections
 import com.intellisoft.nndak.utils.generateSource
 import com.intellisoft.nndak.utils.getJsonDataFromAsset
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
@@ -85,14 +82,17 @@ class GrowthActivity : AppCompatActivity() {
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
             growths.forEachIndexed { idx, growth -> }
-            populateZScoreLineChart(weightsData, growths)
+            populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {
-
+    private fun populateZScoreLineChart(
+        values: WeightsData,
+        growths: List<GrowthData>,
+        gestationAge: String
+    ) {
         val intervals = ArrayList<String>()
         val babyWeight: ArrayList<Entry> = ArrayList()
         val one: ArrayList<Entry> = ArrayList()
@@ -102,13 +102,14 @@ class GrowthActivity : AppCompatActivity() {
         val five: ArrayList<Entry> = ArrayList()
         val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
+        val max = gestationAge.toInt() - 20
 
-        for ((i, entry) in growths.subList(0,25).withIndex()) {
+        for ((i, entry) in growths.subList(0, max + 1)
+            .withIndex()) {
 
             intervals.add(entry.age.toString())
             val start = entry.age
             val ges = values.gestationAge.toInt()
-
             if (start == ges || start > ges) {
                 val equivalent = extractValueIndex(start, values)
                 if (equivalent == "0") {
@@ -126,6 +127,8 @@ class GrowthActivity : AppCompatActivity() {
             five.add(Entry(i.toFloat(), entry.data[4].value.toFloat()))
             six.add(Entry(i.toFloat(), entry.data[5].value.toFloat()))
             seven.add(Entry(i.toFloat(), entry.data[6].value.toFloat()))
+
+
         }
 
         val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
@@ -148,16 +151,16 @@ class GrowthActivity : AppCompatActivity() {
         xAxis.setDrawAxisLine(true)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.mAxisMinimum = 0f
-        xAxis.setLabelCount(24, false)
+        xAxis.setLabelCount(max, false)
         xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
         xAxis.labelRotationAngle = -45f
-
         binding.growthChart.legend.isEnabled = true
 
         //remove description label
         binding.growthChart.description.isEnabled = true
         binding.growthChart.isDragEnabled = false
         binding.growthChart.setScaleEnabled(false)
+        binding.growthChart.description.text = "Age (weeks)"
         binding.growthChart.description.setPosition(0f, 10f)
 
         //add animation
@@ -166,14 +169,13 @@ class GrowthActivity : AppCompatActivity() {
         val leftAxis: YAxis = binding.growthChart.axisLeft
         leftAxis.axisMinimum = 0f
         leftAxis.mAxisMaximum = 12f
-        leftAxis.setLabelCount(24, true)
-
+        leftAxis.setLabelCount(12, false)
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true
-
+        leftAxis.isEnabled = true
 
         val rightAxis: YAxis = binding.growthChart.axisRight
-        rightAxis.setDrawGridLines(true)
+        rightAxis.setDrawGridLines(false)
         rightAxis.setDrawZeroLine(false)
         rightAxis.isGranularityEnabled = false
         rightAxis.isEnabled = false

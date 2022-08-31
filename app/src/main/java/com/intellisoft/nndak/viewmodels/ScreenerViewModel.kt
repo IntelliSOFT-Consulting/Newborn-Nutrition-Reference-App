@@ -2972,6 +2972,75 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    fun handleAssessment(
+        questionnaireResponse: QuestionnaireResponse,
+        dataCodes: ArrayList<CodingObservation>,
+        dataQuantity: ArrayList<QuantityObservation>,
+        patientId: String,
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                val qh = QuestionnaireHelper()
+                dataCodes.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.value
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+                dataQuantity.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.display,
+                                it.value,
+                                it.unit
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+
+                val value = retrieveUser(false)
+
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Completed By",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = BABY_ASSESSMENT
+
+//                updateEncounterAssessment(subjectReference, encounterId, title)
+                saveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(MessageItem(true, "Success"))
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Please try again"))
+            }
+        }
+    }
+
     private suspend fun proceedToNextStep(patientId: String, alive: Boolean) {
         val baby = fhirEngine.get<Patient>(patientId)
         baby.addressFirstRep.postalCode = SYNC_VALUE

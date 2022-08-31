@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.dashboard.child.BabyAssessmentFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/breadcrumb"
+            layout="@layout/breadcrumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15dp" />
+
+        <include
+            android:id="@+id/inc_details"
+            layout="@layout/baby_item" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingTop="@dimen/_15dp"
+            app:cardCornerRadius="@dimen/_10dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_10"
+                    android:text="@string/app_first_session"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimary" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/add_patient_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="880dp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/date_time"
+                    layout="@layout/date_time" />
+
+                <include
+                    android:id="@+id/weight_well"
+                    layout="@layout/value_select" />
+
+                <include
+                    android:id="@+id/jaundice_asphyxia"
+                    layout="@layout/value_select" />
+
+                <include
+                    android:id="@+id/sepsis_breast"
+                    layout="@layout/value_select" />
+
+                <include
+                    android:id="@+id/mum_well_other"
+                    layout="@layout/value_select" />
+
+                <include
+                    android:id="@+id/baby_fed_after"
+                    layout="@layout/value_select" />
+
+                <include
+                    android:id="@+id/feed_type"
+                    layout="@layout/value_select" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_notes"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="2"
+                        android:hint="@string/admission_notes">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/app_notes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|left"
+                            android:inputType="textMultiLine"
+                            android:lines="20"
+                            android:minLines="5"
+                            android:scrollbars="vertical"
+                            android:scrollHorizontally="false"
+                            android:textSize="12sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_15dp"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5dp"
+                        android:backgroundTint="@color/dim_red"
+                        android:text="@string/action_submit"
+                        android:textColor="@android:color/white"
+                        app:cornerRadius="@dimen/_25dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_cancel"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5dp"
+                        android:text="@string/action_cancel"
+                        app:cornerRadius="@dimen/_25dp"
+                        app:strokeColor="@color/dim_red" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

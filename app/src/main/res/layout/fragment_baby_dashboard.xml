@@ -33,7 +33,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
+                android:layout_weight="2"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -42,8 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingRight="@dimen/_15dp">
+                    android:orientation="vertical" >
 
                     <TextView
                         android:layout_width="match_parent"
@@ -52,10 +51,31 @@
                         android:text="@string/app_baby_curve"
                         android:textAppearance="?attr/textAppearanceSubtitle1" />
 
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/growth_chart"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp" />
+                        android:layout_height="300dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="?attr/textAppearanceBody2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_150dp"
+                            android:layout_marginBottom="@dimen/_10dp"
+                            android:rotation="-90"
+                            android:text="@string/app_weeks"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_12dp" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/growth_chart"
+                            android:layout_marginStart="@dimen/_10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_12dp"
+                            android:padding="@dimen/_5dp"
+                            android:textAlignment="center" />
+                    </LinearLayout>
 
                     <TextView
                         style="?attr/textAppearanceBody2"
@@ -67,107 +87,86 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
 
-                <androidx.cardview.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_current_weight"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_5dp">
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textSize="@dimen/_20sp" />
 
-                        <TextView
-                            android:id="@+id/tv_current_weight"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="@dimen/_20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/app_current_weight"
-                            android:textSize="@dimen/_12dp"
-                            android:textAppearance="?attr/textAppearanceBody2" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            android:visibility="invisible">
-
-                            <ImageView
-                                android:layout_width="@dimen/_15dp"
-                                android:layout_height="@dimen/_15dp"
-                                app:srcCompat="@drawable/ic_show_chart"
-                                app:tint="@color/dim_green" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/action_percent"
-                                android:textAppearance="?attr/textAppearanceBody2"
-                                android:textColor="@color/dim_green" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_current_weight"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textSize="@dimen/_12dp" />
 
 
-                        </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_compared_weight"
+                        android:textAlignment="center"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/app_compared_weight"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            android:visibility="gone" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
 
-                <androidx.cardview.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="6dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_mother_milk"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/_5dp">
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textSize="@dimen/_20sp" />
 
-                        <TextView
-                            android:id="@+id/tv_mother_milk"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textSize="@dimen/_20sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_mothers_milk"
+                        android:textAlignment="center"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textSize="@dimen/_12dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/app_mothers_milk"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/_12dp"
-                            android:textAppearance="?attr/textAppearanceBody2" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <LinearLayout
@@ -196,7 +195,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
                         android:text="@string/app_feed_distribution"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"  />
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/feeds_chart"
@@ -240,8 +239,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_daily_feeds"
                             android:textAlignment="center"
-                            android:textSize="@dimen/_12dp"
-                            android:textAppearance="?attr/textAppearanceBody2" />
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textSize="@dimen/_12dp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -305,8 +304,8 @@
                             android:layout_height="wrap_content"
                             android:text="@string/app_expressions"
                             android:textAlignment="center"
-                            android:textSize="@dimen/_12dp"
-                            android:textAppearance="?attr/textAppearanceBody2" />
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textSize="@dimen/_12dp" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -388,7 +387,7 @@
                                 android:layout_marginTop="@dimen/_15dp"
                                 android:text="@string/volume_milk"
                                 android:textAlignment="center"
-                                android:textAppearance="?attr/textAppearanceSubtitle1"  />
+                                android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                             <com.github.mikephil.charting.charts.BarChart
                                 android:id="@+id/status_chart"
@@ -431,8 +430,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/app_total_expressed"
-                                    android:textSize="@dimen/_12dp"
-                                    android:textAppearance="?attr/textAppearanceBody2" />
+                                    android:textAppearance="?attr/textAppearanceBody2"
+                                    android:textSize="@dimen/_12dp" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"

@@ -1,7 +1,5 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -31,17 +29,12 @@ import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
-import com.intellisoft.nndak.screens.dashboard.growth.GrowthActivity
-import com.intellisoft.nndak.utils.extractUnits
 import com.intellisoft.nndak.utils.generateSource
 import com.intellisoft.nndak.utils.getJsonDataFromAsset
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
-import java.io.IOException
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -264,105 +257,12 @@ class BabyDashboardFragment : Fragment() {
             val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
             val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
             growths.forEachIndexed { idx, growth -> }
-            populateZScoreLineChart(weightsData, growths)
+            populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-
-    private fun barGraphAlt(it: FeedsDistribution) {
-
-        val groupCount = 8
-        val groupSpace = 0.10f
-        val barSpace = 0.01f
-        val barWidth = 0.20f
-        val iv: ArrayList<BarEntry> = ArrayList()
-        val ebm: ArrayList<BarEntry> = ArrayList()
-        val dhm: ArrayList<BarEntry> = ArrayList()
-        val fm: ArrayList<BarEntry> = ArrayList()
-
-        val intervals = ArrayList<String>()
-        for ((i, entry) in it.data.withIndex()) {
-            intervals.add(entry.time)
-
-            iv.add(BarEntry(i.toFloat(), entry.ivVolume.toFloat()))
-            ebm.add(BarEntry(i.toFloat(), entry.ebmVolume.toFloat()))
-            dhm.add(BarEntry(i.toFloat(), entry.dhmVolume.toFloat()))
-            fm.add(BarEntry(i.toFloat(), entry.formula.toFloat()))
-        }
-
-        val fluids = BarDataSet(iv, "IV")
-        fluids.setColors(Color.parseColor("#4472C4"))
-        fluids.setDrawValues(false)
-
-        val expressed = BarDataSet(ebm, "EBM")
-        expressed.setColors(Color.parseColor("#ED7D31"))
-        expressed.setDrawValues(false)
-
-        val donor = BarDataSet(dhm, "DHM")
-        donor.setColors(Color.parseColor("#A5A5A5"))
-        donor.setDrawValues(false)
-
-
-        val form = BarDataSet(fm, "Formula")
-        form.setColors(Color.parseColor("#24a047"))
-        form.setDrawValues(false)
-
-        val data = BarData(fluids, expressed, donor, form)
-        data.setValueFormatter(LargeValueFormatter())
-
-        binding.apply {
-            try {
-                feedsChart.data = data
-                val xAxis: XAxis = feedsChart.xAxis
-                xAxis.setDrawGridLines(false)
-                xAxis.setDrawAxisLine(false)
-                xAxis.position = XAxis.XAxisPosition.BOTTOM
-                xAxis.labelRotationAngle = -60f
-                xAxis.mAxisMinimum = 0f
-
-                xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
-                xAxis.setLabelCount(groupCount, true)
-                feedsChart.axisLeft.setDrawGridLines(false)
-                feedsChart.legend.isEnabled = true
-
-                //remove description label
-                feedsChart.description.isEnabled = false
-                feedsChart.isDragEnabled = false
-                feedsChart.setScaleEnabled(false)
-                feedsChart.description.text = "Age (Days)"
-                //add animation
-                feedsChart.animateX(1000, Easing.EaseInSine)
-                feedsChart.data = data
-
-                val leftAxis: YAxis = feedsChart.axisLeft
-                leftAxis.axisMinimum = 0f
-                leftAxis.setDrawGridLines(true)
-                leftAxis.isGranularityEnabled = false
-
-                val rightAxis: YAxis = feedsChart.axisRight
-                rightAxis.setDrawGridLines(false)
-                rightAxis.setDrawZeroLine(false)
-                rightAxis.isGranularityEnabled = false
-                rightAxis.isEnabled = false
-
-                feedsChart.barData.barWidth = barWidth
-                feedsChart.xAxis.axisMaximum =
-                    0f + feedsChart.barData.getGroupWidth(
-                        groupSpace,
-                        barSpace
-                    ) * groupCount
-                feedsChart.groupBars(0f, groupSpace, barSpace)
-
-                //refresh
-                feedsChart.invalidate()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-    }
 
     private fun barGraph(it: FeedsDistribution) {
 
@@ -448,11 +348,15 @@ class BabyDashboardFragment : Fragment() {
         }
     }
 
-    private fun populateZScoreLineChart(values: WeightsData, growths: List<GrowthData>) {
+    private fun populateZScoreLineChart(
+        values: WeightsData,
+        growths: List<GrowthData>,
+        gestationAge: String
+    ) {
         binding.apply {
             tvCurrentWeight.text = "${values.currentWeight} gm"
             growthChart.setOnClickListener {
-                findNavController().navigate(BabyDashboardFragmentDirections.navigateToGrowth(args.patientId))
+                //   findNavController().navigate(BabyDashboardFragmentDirections.navigateToGrowth(args.patientId))
             }
         }
         val intervals = ArrayList<String>()
@@ -464,7 +368,7 @@ class BabyDashboardFragment : Fragment() {
         val five: ArrayList<Entry> = ArrayList()
         val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
-        val max = 24
+        val max = gestationAge.toInt() - 20
 
         for ((i, entry) in growths.subList(0, max + 1)
             .withIndex()) {
@@ -528,19 +432,24 @@ class BabyDashboardFragment : Fragment() {
         //add animation
         binding.growthChart.animateX(1000, Easing.EaseInSine)
         binding.growthChart.data = data
+
+
         val leftAxis: YAxis = binding.growthChart.axisLeft
         leftAxis.axisMinimum = 0f
         leftAxis.mAxisMaximum = 12f
-        leftAxis.setLabelCount(12, false)
+        leftAxis.labelCount = 24
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true
         leftAxis.isEnabled = true
 
         val rightAxis: YAxis = binding.growthChart.axisRight
-        rightAxis.setDrawGridLines(false)
-        rightAxis.setDrawZeroLine(false)
-        rightAxis.isGranularityEnabled = false
-        rightAxis.isEnabled = false
+        rightAxis.setDrawGridLines(true)
+        rightAxis.setDrawZeroLine(true)
+        rightAxis.isGranularityEnabled = true
+        rightAxis.axisMinimum = 0f
+        rightAxis.mAxisMaximum = 12f
+        rightAxis.labelCount = 24
+        rightAxis.isEnabled = true
         //refresh
         binding.growthChart.invalidate()
     }

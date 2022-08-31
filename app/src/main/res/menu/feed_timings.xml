@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_cuo"
+        android:title="@string/after_1_hour" />
+
+    <item
+        android:id="@+id/menu_three"
+        android:title="@string/after_3_hours" />
+
+    <item
+        android:id="@+id/menu_one"
+        android:title="@string/within_1_day" />
+
+    <item
+        android:id="@+id/menu_two"
+        android:title="@string/after_2_days" />
+
+
+</menu>
