@@ -1342,7 +1342,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     customMessage.postValue(
                         MessageItem(
                             success = false,
-                            message = "Experienced Problems Processing Data, Try again"
+                            message = "Please enter all required fields"
                         )
                     )
                     return@launch
@@ -2972,16 +2972,82 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    fun handleAssessment(
+        questionnaireResponse: QuestionnaireResponse,
+        dataCodes: ArrayList<CodingObservation>,
+        dataQuantity: ArrayList<QuantityObservation>,
+        patientId: String,
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                val qh = QuestionnaireHelper()
+                dataCodes.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.value
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+                dataQuantity.forEach {
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                it.code,
+                                it.display,
+                                it.display,
+                                it.value,
+                                it.unit
+
+                            )
+                        )
+                        .request.url = "Observation"
+
+                }
+
+                val value = retrieveUser(false)
+
+                bundle.addEntry()
+                    .setResource(
+                        qh.codingQuestionnaire(
+                            "Completed By",
+                            value,
+                            value
+                        )
+                    )
+                    .request.url = "Observation"
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = BABY_ASSESSMENT
+
+//                updateEncounterAssessment(subjectReference, encounterId, title)
+                saveResources(bundle, subjectReference, encounterId, title)
+                customMessage.postValue(MessageItem(true, "Success"))
+            } catch (e: Exception) {
+                Timber.d("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Please try again"))
+            }
+        }
+    }
+
     private suspend fun proceedToNextStep(patientId: String, alive: Boolean) {
         val baby = fhirEngine.get<Patient>(patientId)
-        if (alive) {
-            baby.addressFirstRep.postalCode = SYNC_VALUE
-            baby.addressFirstRep.state = SYNC_VALUE
-            baby.active = false
-        } else {
-            baby.addressFirstRep.postalCode = SYNC_VALUE
-            baby.addressFirstRep.state = SYNC_STATE
-            baby.active = false
+        baby.addressFirstRep.postalCode = SYNC_VALUE
+        baby.addressFirstRep.state = SYNC_STATE
+        baby.active = false
+
+        if (!alive) {
             val isDeceased = BooleanType()
             isDeceased.value = true
             val deceasedDate = DateTimeType()
@@ -3010,6 +3076,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 baby.active = true
                 baby.addressFirstRep.postalCode = SYNC_VALUE
                 baby.addressFirstRep.state = SYNC_VALUE
+
+                if (baby.hasDeceased()) {
+                    val isDeceased = BooleanType()
+                    isDeceased.value = false
+                    val deceasedDate = DateTimeType()
+                    deceasedDate.value = Date()
+                    baby.deceased = isDeceased
+                }
                 fhirEngine.update(baby)
 
                 val value = retrieveUser(false)

@@ -18,9 +18,11 @@ data class Statistics(
 data class FirstFeeding(
     @SerializedName("withinOne") val withinOne: String,
     @SerializedName("afterOne") val afterOne: String,
-    @SerializedName("afterTwo") val afterTwo: String,
     @SerializedName("afterThree") val afterThree: String,
-)
+    @SerializedName("withinDay") val withinDay: String,
+    @SerializedName("afterTwoDays") val afterTwoDays: String,
+
+    )
 
 data class PercentageFeeds(
     @SerializedName("dhm") val dhm: String,
@@ -63,6 +65,7 @@ data class DHMCategory(
     @SerializedName("preterm") val preterm: Stock,
     @SerializedName("term") val term: Stock,
 )
+
 data class DHMData(
     @SerializedName("day") val day: String,
     @SerializedName("preterm") val preterm: Stock,
@@ -97,12 +100,16 @@ data class FeedsData(
 )
 
 data class WeightsData(
+    @SerializedName("status") val status: String,
     @SerializedName("babyGender") val babyGender: String,
+    @SerializedName("birthWeight") val birthWeight: String,
     @SerializedName("currentWeight") val currentWeight: String,
+    @SerializedName("currentDaily") val currentDaily: String,
     @SerializedName("gestationAge") val gestationAge: String,
     @SerializedName("dayOfLife") val dayOfLife: Int,
     @SerializedName("weeksLife") val weeksLife: Int,
     @SerializedName("data") val data: List<ActualData>,
+    @SerializedName("dailyData") val dailyData: List<ActualData>,
 )
 
 data class ActualData(
@@ -144,4 +151,15 @@ data class GrowthData(
 data class GrowthOptions(
     val option: String,
     val value: String,
+)
+
+data class WHOData(
+    @SerializedName("Day") val day: Int,
+    @SerializedName("-3") val neg3: Double,
+    @SerializedName("-2") val neg2: Double,
+    @SerializedName("-1") val neg1: Double,
+    @SerializedName("0") val neutral: Double,
+    @SerializedName("1") val pos1: Double,
+    @SerializedName("2") val pos2: Double,
+    @SerializedName("3") val pos3: Double,
 )

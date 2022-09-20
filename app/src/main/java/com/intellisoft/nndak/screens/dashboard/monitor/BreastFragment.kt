@@ -297,9 +297,10 @@ class BreastFragment : Fragment() {
 
                 binding.apply {
                     incTitle.lnParent.visibility = View.VISIBLE
-                    incTitle.tvhDate.text = getString(R.string._date)
-                    incTitle.tvhFrequency.text = getString(R.string._interest)
-                    incTitle.tvhTiming.text = getString(R.string._cues)
+                    incTitle.tvhDate.visibility = View.VISIBLE
+                    incTitle.tvhFrequency.text = resources.getString(R.string.breast_feeding_date)
+                    incTitle.tvhTiming.visibility = View.VISIBLE
+
                     val seven: ViewGroup.LayoutParams =
                         LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.7f)
                     val three: ViewGroup.LayoutParams =
@@ -313,6 +314,13 @@ class BreastFragment : Fragment() {
                     boldText(incTitle.tvhDate)
                     boldText(incTitle.tvhFrequency)
                     boldText(incTitle.tvhTiming)
+
+                    /**
+                     * ***************************
+                     */
+
+
+
                 }
             }
         }

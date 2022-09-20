@@ -51,6 +51,7 @@ import com.intellisoft.nndak.models.QuantityObservation
 import com.intellisoft.nndak.utils.Constants.SYNC_VALUE
 import com.intellisoft.nndak.utils.showOptions
 import com.intellisoft.nndak.utils.showPicker
+import com.intellisoft.nndak.utils.showTimePicker
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import kotlinx.android.synthetic.main.fragment_custom_registration.*
 import kotlinx.coroutines.CoroutineScope
@@ -122,27 +123,6 @@ class CustomRegistrationFragment : Fragment() {
         }
     }
 
-
-
-    private fun showTimePicker(input: TextInputEditText) {
-        input.setOnClickListener {
-            val mTimePicker: TimePickerDialog
-            val mcurrentTime = Calendar.getInstance()
-            val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
-            val minute = mcurrentTime.get(Calendar.MINUTE)
-
-            mTimePicker = TimePickerDialog(
-                requireContext(),
-                { view, hourOfDay, minute ->
-                    input.setText(
-                        String.format("%02d:%02d", hourOfDay, minute)
-                    )
-                }, hour, minute, false
-            )
-            mTimePicker.show()
-        }
-    }
-
     private fun initViews() {
         binding.apply {
 
@@ -160,7 +140,6 @@ class CustomRegistrationFragment : Fragment() {
 
             listenChanges(appMumName, tilMumName, "Enter full name")
             listenChanges(appParity, tilParity, "_")
-            listenChanges(appTwoParity, tilTwoParity, "_")
             listenChanges(appIpNumber, tilIpNumber, "Enter IP Number")
             listenChanges(appPmtct, tilPmtct, "Select Status")
             listenChanges(appMulti, tilMulti, "Select Birth Type")
@@ -187,26 +166,26 @@ class CustomRegistrationFragment : Fragment() {
             /**
              * Dropdowns
              */
-            showOptions(requireContext(),appPmtct, R.menu.pmtct)
+            showOptions(requireContext(), appPmtct, R.menu.pmtct)
             showMultiOptions(appMulti, R.menu.yesno)
             showDeliveryOptions(appDelivery, R.menu.delivery)
-            showOptions(requireContext(),appBirthType, R.menu.birthtypes)
-            showOptions(requireContext(),appCs, R.menu.reasons)
-            showOptions(requireContext(),appVdrl, R.menu.pmtct)
-            showOptions(requireContext(),appSex, R.menu.sex)
-            showOptions(requireContext(),appBba, R.menu.yesno)
+            showOptions(requireContext(), appBirthType, R.menu.birthtypes)
+            showOptions(requireContext(), appCs, R.menu.reasons)
+            showOptions(requireContext(), appVdrl, R.menu.pmtct)
+            showOptions(requireContext(), appSex, R.menu.sex)
+            showOptions(requireContext(), appBba, R.menu.yesno)
 
             /**
              * Date pickers
              */
-            showPicker(requireContext(),appDelDate)
-            showPicker(requireContext(),appDob)
-            showPicker(requireContext(),appAdmDate)
+            showPicker(requireContext(), appDelDate)
+            showPicker(requireContext(), appDob)
+            showPicker(requireContext(), appAdmDate)
             /**
              * Time Pickers
              */
-            showTimePicker(appDelTime)
-            showTimePicker(appAdmTime)
+            showTimePicker(requireContext(),appDelTime)
+            showTimePicker(requireContext(),appAdmTime)
 
         }
     }
@@ -256,11 +235,68 @@ class CustomRegistrationFragment : Fragment() {
         binding.apply {
             val mumName = appMumName.text.toString()
             val pari1 = appParity.text.toString()
-            val pari2 = appTwoParity.text.toString()
             val mumIp = appIpNumber.text.toString()
             val pmtct = appPmtct.text.toString()
             val multi = appMulti.text.toString()
             val births = appBirthType.text.toString()
+
+            val delDate = appDelDate.text.toString()
+            val delTime = appDelTime.text.toString()
+            val delMethod = appDelivery.text.toString()
+            val cs = appCs.text.toString()
+            val vdrl = appVdrl.text.toString()
+            val dob = appDob.text.toString()
+            val sex = appSex.text.toString()
+            val bWeight = appBirthWeight.text.toString()
+            val gestation = appGestation.text.toString()
+            val apgarfive = appFiveScore.text.toString()
+            val apgarten = appTenScore.text.toString()
+            val bba = appBba.text.toString()
+            val head = appHead.text.toString()
+            val inter = appInter.text.toString()
+            val adWeight = appAdmWeight.text.toString()
+            val admDate = appAdmDate.text.toString()
+            val admTime = appAdmTime.text.toString()
+            val remarks = appNotes.text.toString()
+
+            /**
+             * Validate all the fields at once
+             */
+            if (mumName.isEmpty() && pari1.isEmpty() && mumIp.isEmpty() &&
+                pmtct.isEmpty() && multi.isEmpty() && delDate.isEmpty() &&
+                delTime.isEmpty() && delMethod.isEmpty() &&
+                vdrl.isEmpty() && dob.isEmpty() && sex.isEmpty() && bWeight.isEmpty()
+                && gestation.isEmpty() && apgarfive.isEmpty() && apgarten.isEmpty() && bba.isEmpty()
+                && head.isEmpty() && inter.isEmpty() && adWeight.isEmpty() &&
+                admDate.isEmpty() && admTime.isEmpty() && remarks.isEmpty()
+            ) {
+                tilMumName.error = "required field"
+                tilParity.error = "required field"
+                tilIpNumber.error = "required field"
+                tilPmtct.error = "required field"
+                tilMulti.error = "required field"
+                tilDelDate.error = "required field"
+                tilDelTime.error = "required field"
+                tilDelivery.error = "required field"
+                tilVdrl.error = "required field"
+                tilDob.error = "required field"
+                tilSex.error = "required field"
+                tilBirthWeight.error = "required field"
+                tilGestation.error = "required field"
+                tilFiveScore.error = "required field"
+                tilTenScore.error = "required field"
+                tilBba.error = "required field"
+                tilHead.error = "required field"
+                tilInter.error = "required field"
+                tilAdmWeight.error = "required field"
+                tilAdmDate.error = "required field"
+                tilAdmTime.error = "required field"
+                tilNotes.error = "required field"
+
+
+                return
+            }
+
 
 
             if (mumName.isEmpty()) {
@@ -270,14 +306,8 @@ class CustomRegistrationFragment : Fragment() {
 
             }
             if (pari1.isEmpty()) {
-                tilParity.error = ""
+                tilParity.error = "Enter parity"
                 appParity.requestFocus()
-                return
-
-            }
-            if (pari2.isEmpty()) {
-                tilTwoParity.error = ""
-                appTwoParity.requestFocus()
                 return
 
             }
@@ -308,14 +338,6 @@ class CustomRegistrationFragment : Fragment() {
 
                 }
             }
-            val delDate = appDelDate.text.toString()
-            val delTime = appDelTime.text.toString()
-            val delMethod = appDelivery.text.toString()
-            val cs = appCs.text.toString()
-            val vdrl = appVdrl.text.toString()
-            val dob = appDob.text.toString()
-            val sex = appSex.text.toString()
-
             if (delDate.isEmpty()) {
                 tilDelDate.error = "Select delivery date"
                 appDelDate.requestFocus()
@@ -360,11 +382,7 @@ class CustomRegistrationFragment : Fragment() {
                 return
 
             }
-            val bWeight = appBirthWeight.text.toString()
-            val gestation = appGestation.text.toString()
-            val apgarfive = appFiveScore.text.toString()
-            val apgarten = appTenScore.text.toString()
-            val bba = appBba.text.toString()
+
 
             if (bWeight.isEmpty()) {
                 tilBirthWeight.error = "Enter birth weight"
@@ -396,12 +414,7 @@ class CustomRegistrationFragment : Fragment() {
                 return
 
             }
-            val head = appHead.text.toString()
-            val inter = appInter.text.toString()
-            val adWeight = appAdmWeight.text.toString()
-            val admDate = appAdmDate.text.toString()
-            val admTime = appAdmTime.text.toString()
-            val remarks = appNotes.text.toString()
+
 
 
             if (head.isEmpty()) {
@@ -478,7 +491,6 @@ class CustomRegistrationFragment : Fragment() {
             }
 
             val pari12 = CodingObservation(PARITY, "Parity", pari1)
-            val pari22 = CodingObservation("Parity-Two", "Second Parity", pari2)
             val pm = CodingObservation(PMTCT, "Pmtct", pmtct)
             val multiPreg = CodingObservation(MULTIPLE_PREGNANCY, "Multiple Pregnancy", multi)
             val mBirths = CodingObservation(MULTIPLE_BIRTH_TYPE, "Multiple Birth Types", births)
@@ -492,9 +504,11 @@ class CustomRegistrationFragment : Fragment() {
             val five = QuantityObservation(APGAR_SCORE, "5 mins Score", apgarfive, "score")
             val ten = QuantityObservation("10-Score", "10 mins Score", apgarten, "score")
             val bornB = CodingObservation(BBA, "Born before Arrival", bba)
-            val headC = QuantityObservation(HEAD_CIRCUMFERENCE, "Head Circumference", head, "cm")
+            val headC =
+                QuantityObservation(HEAD_CIRCUMFERENCE, "Head Circumference", head, "cm")
             val ventions = CodingObservation(INTERVENTIONS, "Interventions", inter)
-            val aWeight = QuantityObservation(ADMISSION_WEIGHT, "Admission Weight", adWeight, "gm")
+            val aWeight =
+                QuantityObservation(ADMISSION_WEIGHT, "Admission Weight", adWeight, "gm")
             val aDate = CodingObservation(ADMISSION_DATE, "Admission Date", admDate)
             val aTime = CodingObservation("Admission-Time", "Admission Time", admTime)
             val aRemarks = CodingObservation(REMARKS, "Additional Notes", remarks)
@@ -512,7 +526,6 @@ class CustomRegistrationFragment : Fragment() {
             dataCodes.addAll(
                 listOf(
                     pari12,
-                    pari22,
                     pm,
                     multiPreg,
                     deDate,
@@ -664,8 +677,6 @@ class CustomRegistrationFragment : Fragment() {
             tilMumName.error = ""
             appParity.setText("")
             tilParity.error = ""
-            appTwoParity.setText("")
-            tilTwoParity.error = ""
             appIpNumber.setText("")
             tilIpNumber.error = ""
             appPmtct.setText("")

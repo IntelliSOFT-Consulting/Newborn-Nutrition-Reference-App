@@ -12,9 +12,8 @@
 
 <!--    <style name="Theme.MyQuestionnaire" parent="Theme.Questionnaire">-->
 <!--        <item name="questionnaireQuestionTextStyle">@color/colorPrimary</item>-->
-<!--        <item name="questionnaireTextInputEditTextStyle">@color/colorPrimaryDark</item>-->
-<!--        <item name="questionnaireDropDownTextStyle">@color/colorPrimary</item>-->
-
+<!--        &lt;!&ndash;        display text color&ndash;&gt;-->
+<!--        <item name="questionnaireSubtitleTextStyle">@color/colorPrimary</item>-->
 <!--    </style>-->
 
     <style name="CustomDialogTheme">

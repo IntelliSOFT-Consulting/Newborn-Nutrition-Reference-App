@@ -18,6 +18,8 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:importantForAutofill="no"
+
+        android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
         android:inputType="numberDecimal"
         android:textColorHint="#757575"
         android:textSize="12sp" />

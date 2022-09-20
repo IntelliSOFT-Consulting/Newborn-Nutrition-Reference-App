@@ -12,6 +12,7 @@ import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -154,6 +155,14 @@ class EditPrescriptionFragment : Fragment() {
             otherValue.appFrequency.setText(it.supplements)
             dhmSigned.tilFre.hint = "Consent Date"
 
+            showPicker(requireContext(), dhmSigned.appFrequency)
+            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_today_24)
+            dhmSigned.appFrequency.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                drawable,
+                null
+            )
 
             if (it.formula != "N/A") {
                 cbFormula.isChecked = true
@@ -196,7 +205,6 @@ class EditPrescriptionFragment : Fragment() {
                     isSigned = true
                 }
 
-                showPicker(requireContext(), dhmSigned.appFrequency)
                 dhmSigned.tilFre.visibility = View.VISIBLE
                 dhmSigned.appFrequency.setText(it.consentDate)
                 dhmConsent.appFrequency.setText(con)

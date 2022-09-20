@@ -167,11 +167,11 @@
                             android:layout_weight="1.7"
                             android:paddingBottom="@dimen/_10dp">
 
-                            <TextView
+                            <com.intellisoft.nndak.utils.VerticalTextView
                                 android:id="@+id/textView"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:rotation="-90"
+                                android:layout_height="match_parent"
+                                android:textAlignment="center"
                                 android:text="@string/number_of_babies"
                                 android:textColor="@color/dim_red"
                                 android:visibility="gone"
@@ -194,7 +194,7 @@
                         <TextView
                             android:id="@+id/tv_rate"
                             android:layout_width="@dimen/_0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="31dp"
                             android:layout_weight="0.3"
                             android:text="@string/app_mortality"
                             android:textColor="@color/dim_red" />
@@ -229,11 +229,11 @@
                         android:layout_height="0dp"
                         android:layout_weight="1.7">
 
-                        <TextView
+                        <com.intellisoft.nndak.utils.VerticalTextView
                             android:id="@+id/textView1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="-90"
+                            android:layout_height="match_parent"
+                            android:textAlignment="center"
                             android:text="@string/number_of_mothers"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"

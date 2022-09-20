@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_value"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:hint="@string/action_weight">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/app_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:textSize="12sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_select"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:hint="@string/app_baby_well">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/app_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:textSize="12sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

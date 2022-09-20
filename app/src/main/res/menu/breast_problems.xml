@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_none"
+        android:title="@string/_none" />
+
+    <item
+        android:id="@+id/menu_engorged"
+        android:title="@string/engorged_breasts" />
+
+    <item
+        android:id="@+id/menu_sore"
+        android:title="@string/sore_nipples" />
+
+    <item
+        android:id="@+id/menu_crack"
+        android:title="@string/cracked_nipples" />
+
+    <item
+        android:id="@+id/menu_invert"
+        android:title="@string/inverted_nipples" />
+    <item
+        android:id="@+id/menu_flat"
+        android:title="@string/flat_nipples" />
+
+
+</menu>

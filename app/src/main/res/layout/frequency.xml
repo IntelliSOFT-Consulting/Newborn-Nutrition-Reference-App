@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/til_fre"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
-    android:id="@+id/til_fre"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:hint="@string/app_frequency">
@@ -13,8 +13,10 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:cursorVisible="false"
+        android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
         android:focusable="false"
         android:focusableInTouchMode="false"
+
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
         android:textColorHint="#757575"

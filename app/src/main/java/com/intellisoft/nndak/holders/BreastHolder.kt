@@ -1,5 +1,7 @@
 package com.intellisoft.nndak.holders
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,10 +22,12 @@ class BreastHolder(binding: ExpressionHistoryBinding) :
         data: BreastsHistory,
         onItemClicked: (BreastsHistory) -> Unit
     ) {
-        this.tvhDate.text = data.date
-        this.tvhFrequency.text = data.interest
-        this.tvhTiming.text = data.cues
-        this.tvhView.text = "View Details"
+        this.tvhDate.visibility = ViewGroup.INVISIBLE
+        this.tvhFrequency.text = data.date
+        this.tvhTiming.text = "View Details"
+        this.tvhTiming.setTextColor(ColorStateList.valueOf(Color.parseColor("#c62828")))
+
+        this.tvhView.visibility = ViewGroup.INVISIBLE
         val seven: ViewGroup.LayoutParams =
             LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.7f)
         val three: ViewGroup.LayoutParams =
@@ -33,7 +37,7 @@ class BreastHolder(binding: ExpressionHistoryBinding) :
         this.tvhFrequency.layoutParams = three
         this.tvhTiming.layoutParams = three
         this.tvhView.layoutParams = seven
-        this.tvhView.setOnClickListener {
+        this.tvhTiming.setOnClickListener {
             onItemClicked(data)
         }
     }

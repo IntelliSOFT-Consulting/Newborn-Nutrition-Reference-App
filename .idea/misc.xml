@@ -91,6 +91,7 @@
         <entry key="app/src/main/res/drawable/calendar_today_24.xml" value="0.259" />
         <entry key="app/src/main/res/drawable/default_border.xml" value="0.2685" />
         <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.272" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_drop_down_24.xml" value="0.276" />
         <entry key="app/src/main/res/drawable/line_dash_grey_20.xml" value="0.2545" />
         <entry key="app/src/main/res/drawable/schedule_24.xml" value="0.1345" />
         <entry key="app/src/main/res/font/poppins.xml" value="0.10598958333333333" />
@@ -99,7 +100,7 @@
         <entry key="app/src/main/res/font/poppins_medium.xml" value="0.10598958333333333" />
         <entry key="app/src/main/res/layout-large/baby_item.xml" value="0.178125" />
         <entry key="app/src/main/res/layout-large/baby_list_item_view.xml" value="0.178125" />
-        <entry key="app/src/main/res/layout-large/fragment_custom_registration.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-large/fragment_custom_registration.xml" value="0.25" />
         <entry key="app/src/main/res/layout-large/fragment_statistics.xml" value="0.178125" />
         <entry key="app/src/main/res/layout-large/mother_item.xml" value="0.15260416666666668" />
         <entry key="app/src/main/res/layout-large/prescribe_item.xml" value="0.178125" />
@@ -108,7 +109,11 @@
         <entry key="app/src/main/res/layout-notnight/baby_list_item_view.xml" value="0.178125" />
         <entry key="app/src/main/res/layout-v26/baby_item.xml" value="0.35625" />
         <entry key="app/src/main/res/layout-v26/baby_list_item_view.xml" value="0.340625" />
+        <entry key="app/src/main/res/layout-w1240dp/content_growth.xml" value="0.2289156626506024" />
+        <entry key="app/src/main/res/layout-w600dp/content_growth.xml" value="0.30158730158730157" />
         <entry key="app/src/main/res/layout/activity_get_started.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_growth.xml" value="0.129981884057971" />
+        <entry key="app/src/main/res/layout/activity_growth2.xml" value="0.129981884057971" />
         <entry key="app/src/main/res/layout/activity_history.xml" value="0.10829207920792079" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
@@ -116,6 +121,7 @@
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.14505208333333333" />
         <entry key="app/src/main/res/layout/add_patient_fragment.xml" value="0.1703125" />
+        <entry key="app/src/main/res/layout/app_bar_growth.xml" value="0.129981884057971" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.12395833333333334" />
         <entry key="app/src/main/res/layout/baby_item.xml" value="0.2" />
         <entry key="app/src/main/res/layout/baby_list_item_view.xml" value="0.17325227963525835" />
@@ -129,6 +135,7 @@
         <entry key="app/src/main/res/layout/custom_edittext_layout.xml" value="0.14" />
         <entry key="app/src/main/res/layout/custom_layout.xml" value="0.10849834983498349" />
         <entry key="app/src/main/res/layout/custom_number_picker_layout.xml" value="0.10849834983498349" />
+        <entry key="app/src/main/res/layout/date_time.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/dialog_expression_success.xml" value="0.10375412541254125" />
         <entry key="app/src/main/res/layout/discharge_history.xml" value="0.25" />
         <entry key="app/src/main/res/layout/drawer_header_layout.xml" value="0.1" />
@@ -152,7 +159,8 @@
         <entry key="app/src/main/res/layout/fragment_breast_feeding.xml" value="0.1703125" />
         <entry key="app/src/main/res/layout/fragment_child_dashboard.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_cues.xml" value="0.178125" />
-        <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_custom_assessment.xml" value="0.17325227963525835" />
+        <entry key="app/src/main/res/layout/fragment_custom_registration.xml" value="0.23595505617977527" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.340625" />
         <entry key="app/src/main/res/layout/fragment_dhm_orders.xml" value="0.12644389438943895" />
         <entry key="app/src/main/res/layout/fragment_dhm_receipient.xml" value="0.12644389438943895" />
@@ -176,15 +184,18 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_registration.xml" value="0.13" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.1153052805280528" />
+        <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.129981884057971" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.2" />
         <entry key="app/src/main/res/layout/frequency.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/horizontal_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/horizontal_item_three.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item.xml" value="0.10375412541254125" />
         <entry key="app/src/main/res/layout/item_landing.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/layout/item_transform.xml" value="0.129981884057971" />
         <entry key="app/src/main/res/layout/landing.xml" value="0.22146739130434784" />
         <entry key="app/src/main/res/layout/login_app_bar_layout.xml" value="0.16316006600660066" />
         <entry key="app/src/main/res/layout/mother_item.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/nav_header_growth.xml" value="0.129981884057971" />
         <entry key="app/src/main/res/layout/new_patient_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/observation_list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/observation_list_view.xml" value="0.1" />
@@ -214,16 +225,22 @@
         <entry key="app/src/main/res/layout/statistics.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/success_dialog.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/tips_dialog.xml" value="0.16" />
-        <entry key="app/src/main/res/layout/update_prescription.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/update_prescription.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/value_select.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/add_patient_fragment_menu.xml" value="0.2657407407407407" />
+        <entry key="app/src/main/res/menu/assess_menu.xml" value="0.2657407407407407" />
         <entry key="app/src/main/res/menu/birthtypes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/breast_problems.xml" value="0.2657407407407407" />
         <entry key="app/src/main/res/menu/cache_menu.xml" value="0.14791666666666667" />
         <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.14" />
         <entry key="app/src/main/res/menu/delivery.xml" value="0.3859857482185273" />
         <entry key="app/src/main/res/menu/details_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.15494791666666666" />
         <entry key="app/src/main/res/menu/edit_patient_fragment_menu.xml" value="0.12057291666666667" />
+        <entry key="app/src/main/res/menu/feed_timings.xml" value="0.2657407407407407" />
+        <entry key="app/src/main/res/menu/feed_type.xml" value="0.2657407407407407" />
         <entry key="app/src/main/res/menu/hidden_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/list_options_menu.xml" value="0.15390625" />
         <entry key="app/src/main/res/menu/maternity.xml" value="0.15390625" />

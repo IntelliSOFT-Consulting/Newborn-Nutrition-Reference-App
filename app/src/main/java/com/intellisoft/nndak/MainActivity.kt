@@ -363,13 +363,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sessionTimeOut() {
-        finishAffinity()
-        val i = Intent(this@MainActivity, PinLockActivity::class.java)
-        startActivity(i)
-        this@MainActivity.overridePendingTransition(
-            R.anim.anim_slide_in_left,
-            R.anim.anim_slide_out_left
-        )
+//        finishAffinity()
+//        val i = Intent(this@MainActivity, PinLockActivity::class.java)
+//        startActivity(i)
+//        this@MainActivity.overridePendingTransition(
+//            R.anim.anim_slide_in_left,
+//            R.anim.anim_slide_out_left
+//        )
     }
 
     private fun showToast(message: String) {
@@ -444,18 +444,18 @@ class MainActivity : AppCompatActivity() {
                     incDetails.lnConditions.visibility = View.VISIBLE
                 }
                 if (isSepsis != "Yes") {
-                    incDetails.appNeonatalSepsis.visibility = View.GONE
-                    incDetails.tvNeonatalSepsis.visibility = View.GONE
+                    incDetails.appNeonatalSepsis.visibility = View.INVISIBLE
+                    incDetails.tvNeonatalSepsis.visibility = View.INVISIBLE
                 }
 
                 if (isAsphyxia != "Yes") {
-                    incDetails.appAsphyxia.visibility = View.GONE
-                    incDetails.tvAsphyxia.visibility = View.GONE
+                    incDetails.appAsphyxia.visibility = View.INVISIBLE
+                    incDetails.tvAsphyxia.visibility = View.INVISIBLE
                 }
 
                 if (isJaundice != "Yes") {
-                    incDetails.tvJaundice.visibility = View.GONE
-                    incDetails.appJaundice.visibility = View.GONE
+                    incDetails.tvJaundice.visibility = View.INVISIBLE
+                    incDetails.appJaundice.visibility = View.INVISIBLE
                 }
             } catch (e: Exception) {
                 Timber.e(e)

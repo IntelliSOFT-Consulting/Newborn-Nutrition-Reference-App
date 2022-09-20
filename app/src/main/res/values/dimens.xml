@@ -64,5 +64,6 @@
     <dimen name="_3dp">3dp</dimen>
     <dimen name="_1dp">1dp</dimen>
     <dimen name="_12dp">12sp</dimen>
+    <dimen name="_30sp">30sp</dimen>
 
 </resources>

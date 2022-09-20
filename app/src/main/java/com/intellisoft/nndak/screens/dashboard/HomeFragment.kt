@@ -153,10 +153,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(it: DHMModel) {
+        val totalPreTerm =
+            it.dhmVolume.preterm.unPasteurized.toFloat() + it.dhmVolume.preterm.pasteurized.toFloat()
+        val totalTerm =
+            it.dhmVolume.term.unPasteurized.toFloat() + it.dhmVolume.term.pasteurized.toFloat()
         binding.apply {
             tvDhmInfants.text = it.dhmInfants
-            tvVolumeAvailable.text = it.dhmVolume.preterm.pasteurized
-            tvVolumeUnp.text = it.dhmVolume.preterm.unPasteurized
+            tvVolumeAvailable.text = "$totalPreTerm mls"
+            tvVolumeUnp.text = "$totalTerm mls"
             tvAverageVolume.text = it.dhmAverage
             tvFullyInfants.text = it.fullyReceiving
             tvAverageLength.text = it.dhmLength

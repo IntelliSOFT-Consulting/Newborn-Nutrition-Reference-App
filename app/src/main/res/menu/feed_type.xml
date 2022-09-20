@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_cuo"
+        android:title="@string/breast_feed" />
+    <item
+        android:id="@+id/menu_emb"
+        android:title="@string/ebm_da" />
+    <item
+        android:id="@+id/menu_form"
+        android:title="@string/term_formula" />
+    <item
+        android:id="@+id/menu_pre"
+        android:title="@string/preterm_formula" />
+    <item
+        android:id="@+id/menu_fhm"
+        android:title="@string/term_dhm" />
+    <item
+        android:id="@+id/menu_preterm"
+        android:title="@string/preterm_dhm" />
+    <item
+        android:id="@+id/menu_additive"
+        android:title="@string/iv_fluid_and_additives" />
+</menu>

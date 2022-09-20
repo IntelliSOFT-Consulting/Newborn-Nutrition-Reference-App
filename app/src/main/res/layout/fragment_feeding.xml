@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_current_prescription"
-           android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/colorPrimary"
             android:visibility="gone" />
 
         <include
@@ -35,10 +36,11 @@
 
         <TextView
             android:id="@+id/tv_hist"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_upcoming"
-           android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:visibility="gone" />
 
         <include
@@ -47,11 +49,12 @@
 
         <TextView
             android:id="@+id/tv_feeding"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_feeding_history"
-           android:textAppearance="?attr/textAppearanceSubtitle1" />
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:visibility="gone" />
 
 
         <include
@@ -83,8 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="@string/app_enter_feeding"
-            android:textColor="@color/colorPrimary"
-           android:textAppearance="?attr/textAppearanceSubtitle1" />
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/colorPrimary" />
 
         <include
             android:id="@+id/control"
