@@ -36,8 +36,11 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.charts.GrowthData
+import com.intellisoft.nndak.charts.WHOData
 import com.intellisoft.nndak.databinding.PositioningItemBinding
 import com.intellisoft.nndak.helper_class.FormatHelper
+import com.intellisoft.nndak.logic.DataSort.Companion.convertToKg
 import com.intellisoft.nndak.utils.Constants.CORNER_RADIUS
 import com.intellisoft.nndak.utils.Constants.FILL_COLOR
 import com.intellisoft.nndak.utils.Constants.STROKE_COLOR
@@ -82,7 +85,7 @@ fun showPicker(context: Context, input: TextInputEditText) {
     }
 }
 
-  fun showTimePicker(context: Context,input: TextInputEditText) {
+fun showTimePicker(context: Context, input: TextInputEditText) {
     input.setOnClickListener {
         val mTimePicker: TimePickerDialog
         val mcurrentTime = Calendar.getInstance()
@@ -186,6 +189,68 @@ fun generateSource(one: ArrayList<Entry>, label: String, color: String): LineDat
     actual.lineWidth = 2f
 
     return actual
+}
+
+fun generateDoubleSource(one: ArrayList<Entry>, label: String, color: String): LineDataSet {
+    val actual = LineDataSet(one, label)
+    actual.setColors(Color.parseColor(color))
+    actual.setDrawCircleHole(false)
+    actual.setDrawValues(false)
+    actual.setDrawCircles(false)
+    actual.circleRadius = 2f
+    actual.mode = LineDataSet.Mode.CUBIC_BEZIER
+    actual.lineWidth = 5f
+
+    return actual
+}
+  fun determineCommonIndex(growths: List<WHOData>, birthWeight: String): Int {
+    var commonIndex = 0
+    val birthWeightKg = convertToKg(birthWeight).toFloat()
+    val startingWeight = growths.find { it.day == 1 }
+    if (startingWeight != null) {
+        val indexZero = startingWeight.neg3
+        val indexOne = startingWeight.neg2
+        val indexTwo = startingWeight.neg1
+        val indexThree = startingWeight.neutral
+        val indexFour = startingWeight.pos1
+        val indexFive = startingWeight.pos2
+        val indexSix = startingWeight.pos3
+        val list =
+            listOf(indexZero, indexOne, indexTwo, indexThree, indexFour, indexFive, indexSix)
+        for ((index, value) in list.withIndex()) {
+            if (birthWeightKg < value) {
+                commonIndex = index
+                break
+            }
+        }
+    }
+
+    return commonIndex
+
+}
+
+fun establishCommonIndex(
+    gestationAge: String,
+    growths: List<GrowthData>,
+    birthWeightKg: String
+): Int {
+    var commonIndex = 3
+    val gestation = gestationAge.toInt()
+    val birthWeight = birthWeightKg.toFloat()
+    val growth = growths.find { it.age == gestation }
+    if (growth != null) {
+        val data = growth.data
+        for ((i, entry) in data.withIndex()) {
+            //check if the birth weight is less than the first value
+            if (birthWeight < entry.value.toFloat()) {
+                commonIndex = i
+                break
+            }
+        }
+
+    }
+    return commonIndex
+
 }
 
 fun listenChanges(
@@ -493,6 +558,17 @@ fun getWeeksSoFarIntervalOf(start: String, times: Int, interval: Int): List<Loca
     for (i in 1..times) {
         list.add(date)
         date = date.plusWeeks(interval.toLong())
+    }
+    return list
+}
+
+
+fun getDaysSoFarIntervalOf(start: String, times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.parse(start)
+    for (i in 1..times) {
+        list.add(date)
+        date = date.plusDays(interval.toLong())
     }
     return list
 }

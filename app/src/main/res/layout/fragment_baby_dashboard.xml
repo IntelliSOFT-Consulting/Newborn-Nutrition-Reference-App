@@ -42,9 +42,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_baby_gender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_10"
@@ -56,20 +57,16 @@
                         android:layout_height="300dp"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <com.intellisoft.nndak.utils.VerticalTextView
                             style="?attr/textAppearanceBody2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_150dp"
-                            android:layout_marginBottom="@dimen/_10dp"
-                            android:rotation="-90"
+                            android:layout_height="match_parent"
                             android:text="@string/app_weeks"
                             android:textAlignment="center"
                             android:textSize="@dimen/_12dp" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/growth_chart"
-                            android:layout_marginStart="@dimen/_10dp"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_12dp"
@@ -83,6 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_10dp"
                         android:text="@string/app_age"
+
                         android:textAlignment="center" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

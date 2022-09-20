@@ -3,12 +3,16 @@ package com.intellisoft.nndak.data
 
 import android.content.Context
 import androidx.work.WorkerParameters
+import com.google.android.fhir.sync.AcceptLocalConflictResolver
+import com.google.android.fhir.sync.ConflictResolver
 import com.google.android.fhir.sync.DownloadWorkManager
 import com.google.android.fhir.sync.FhirSyncWorker
 import com.intellisoft.nndak.FhirApplication
 
 class FhirPeriodicSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     FhirSyncWorker(appContext, workerParams) {
+
+    override fun getConflictResolver() = AcceptLocalConflictResolver
 
     override fun getDownloadWorkManager(): DownloadWorkManager {
         return DownloadManagerImpl()

@@ -230,6 +230,14 @@ class ChildDashboardFragment : Fragment() {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
             }
+            R.id.menu_patient_edit -> {
+                findNavController().navigate(
+                    ChildDashboardFragmentDirections.navigateToEditBaby(
+                        args.patientId
+                    )
+                )
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

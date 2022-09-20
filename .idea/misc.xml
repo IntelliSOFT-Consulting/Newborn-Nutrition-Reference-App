@@ -228,6 +228,8 @@
         <entry key="app/src/main/res/layout/update_prescription.xml" value="0.22" />
         <entry key="app/src/main/res/layout/value_select.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/volume.xml" value="0.17760416666666667" />
+        <entry key="app/src/main/res/menu/add_patient_fragment_menu.xml" value="0.2657407407407407" />
+        <entry key="app/src/main/res/menu/assess_menu.xml" value="0.2657407407407407" />
         <entry key="app/src/main/res/menu/birthtypes.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/breast_problems.xml" value="0.2657407407407407" />

@@ -714,11 +714,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
+                    <com.intellisoft.nndak.utils.VerticalTextView
                         android:id="@+id/textView1"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rotation="-90"
+                        android:layout_height="match_parent"
                         android:text="@string/dhm_volume"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"

@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
@@ -28,13 +30,18 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.FragmentBabyDashboardBinding
+import com.intellisoft.nndak.logic.DataSort.Companion.convertToKg
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
+import com.intellisoft.nndak.utils.establishCommonIndex
+import com.intellisoft.nndak.utils.generateDoubleSource
 import com.intellisoft.nndak.utils.generateSource
 import com.intellisoft.nndak.utils.getJsonDataFromAsset
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
 import timber.log.Timber
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -140,6 +147,12 @@ class BabyDashboardFragment : Fragment() {
         patientDetailsViewModel.getCurrentPrescriptions()
         patientDetailsViewModel.liveMumChild.observe(viewLifecycleOwner) { data ->
             if (data != null) {
+                binding.apply {
+                    response.appIpNumber.text = data.assessment.breastfeedingBaby
+                    response.appMotherName.text = data.assessment.breastProblems
+                    response.appBabyName.text = data.assessment.contraindicated
+                }
+
                 updateBabyMum(binding.incDetails, data)
             }
         }
@@ -248,19 +261,177 @@ class BabyDashboardFragment : Fragment() {
 
     private fun standardWeeklyCharts(weightsData: WeightsData) {
         try {
-            var standard = "boy-z-score.json"
-            if (weightsData.babyGender == "female") {
-                standard = "girl-z-score.json"
+            var isBoy = true
+            var isPreterm = true
+            val status = try {
+                if (weightsData.status.toDouble() < 37) {
+                    isPreterm = true
+                    "Preterm"
+                } else {
+                    isPreterm = false
+                    "Term"
+                }
+            } catch (e: Exception) {
+                isPreterm = true
+                "Preterm"
             }
-            val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
-            val gson = Gson()
-            val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
-            val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-            growths.forEachIndexed { idx, growth -> }
-            populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
+            if (isPreterm) {
+                var standard = "boy-z-score.json"
+                if (weightsData.babyGender == "female") {
+                    standard = "girl-z-score.json"
+                    isBoy = false
+                }
+                val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
+                val gson = Gson()
+                val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
+                val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
+                growths.forEachIndexed { idx, growth -> }
+                populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
+
+            } else {
+                /**
+                 * Call function to use WHO Data
+                 */
+                var who = "who-boys.json"
+                if (weightsData.babyGender == "female") {
+                    who = "who-girls.json"
+                    isBoy = false
+                }
+                val jsonFileString = getJsonDataFromAsset(requireContext(), who)
+                val gson = Gson()
+                val listWhoType = object : TypeToken<List<WHOData>>() {}.type
+                val growths: List<WHOData> = gson.fromJson(jsonFileString, listWhoType)
+                growths.forEachIndexed { idx, growth -> Timber.e("WHO: $growth") }
+                populateWHOZScoreLineChart(weightsData, growths, weightsData.gestationAge)
+            }
+            binding.apply {
+                if (isBoy) {
+                    tvBabyGender.text = "${resources.getString(R.string.app_baby_curve)} (Boy)"
+                } else {
+                    tvBabyGender.text = "${resources.getString(R.string.app_baby_curve)} (Girl)"
+                }
+                val data =
+                    if (isPreterm) {
+                        weightsData.currentWeight.toDouble()
+                    } else {
+                        weightsData.currentDaily.toDouble()
+                    }
+                val df = DecimalFormat("#.##")
+                df.roundingMode = RoundingMode.CEILING
+                val weight = df.format(data)
+
+                tvCurrentWeight.text = "$weight gm"
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun populateWHOZScoreLineChart(
+        weightsData: WeightsData,
+        growths: List<WHOData>,
+        gestationAge: String
+    ) {
+
+        val intervals = ArrayList<String>()
+        val one: ArrayList<Entry> = ArrayList()
+        val two: ArrayList<Entry> = ArrayList()
+        val three: ArrayList<Entry> = ArrayList()
+        val four: ArrayList<Entry> = ArrayList()
+        val five: ArrayList<Entry> = ArrayList()
+        val six: ArrayList<Entry> = ArrayList()
+        val seven: ArrayList<Entry> = ArrayList()
+        val babyWeight: ArrayList<Entry> = ArrayList()
+        val max = 100//weightsData.dayOfLife// + 70
+
+
+
+        for ((i, entry) in growths.subList(0, max)
+            .withIndex()) {
+            val index = i
+            intervals.add(index.toString())
+            val active = weightsData.dailyData.size
+            val dailyData = weightsData.dailyData
+
+            /**
+             * Get the initial weight to determine where it falls on the chart
+             */
+            val initialWeight = dailyData[0].actual.toDouble()
+            if (i < active) {
+                val dailyKgs = convertToKg(dailyData[i].actual)
+
+                babyWeight.add(Entry(i.toFloat(), dailyKgs.toFloat()))
+
+            }
+            one.add(Entry(i.toFloat(), entry.neg3.toFloat()))
+            two.add(Entry(i.toFloat(), entry.neg2.toFloat()))
+            three.add(Entry(i.toFloat(), entry.neg1.toFloat()))
+            four.add(Entry(i.toFloat(), entry.neutral.toFloat()))
+            five.add(Entry(i.toFloat(), entry.pos1.toFloat()))
+            six.add(Entry(i.toFloat(), entry.pos2.toFloat()))
+            seven.add(Entry(i.toFloat(), entry.pos3.toFloat()))
+
+        }
+
+        val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
+        val dataOne = generateSource(one, "-3", "#000000")
+        val dataTwo = generateSource(two, "-2", "#880d0d")
+        val dataThree = generateSource(three, "-1", "#ffa20e")
+        val dataFour = generateSource(four, "0", "#006600")
+        val dataFive = generateSource(five, "+1", "#ffa20e")
+        val dataSix = generateSource(six, "+2", "#880d0d")
+        val dataSeven = generateSource(seven, "+3", "#000000")
+
+        val data = LineData(
+            baby,
+            dataOne, dataTwo, dataThree, dataFour,
+            dataFive, dataSix, dataSeven
+        )
+        binding.growthChart.axisLeft.setDrawGridLines(false)
+
+        val xAxis: XAxis = binding.growthChart.xAxis
+        xAxis.setDrawGridLines(true)
+        xAxis.setDrawAxisLine(true)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.mAxisMinimum = 0f
+        xAxis.setLabelCount(max, false)
+        xAxis.valueFormatter = IndexAxisValueFormatter(intervals)
+        xAxis.labelRotationAngle = -45f
+        binding.growthChart.legend.isEnabled = true
+//        binding.growthChart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+//        binding.growthChart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+//        binding.growthChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+
+        //remove description label
+        binding.growthChart.description.isEnabled = true
+        binding.growthChart.isDragEnabled = false
+        binding.growthChart.setScaleEnabled(false)
+        binding.growthChart.description.text = "Age (weeks)"
+        binding.growthChart.description.setPosition(0f, 10f)
+
+        //add animation
+        binding.growthChart.animateX(1000, Easing.EaseInSine)
+        binding.growthChart.data = data
+
+
+        val leftAxis: YAxis = binding.growthChart.axisLeft
+        leftAxis.axisMinimum = 0f
+        leftAxis.mAxisMaximum = 30f
+        leftAxis.setLabelCount(60, true)
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = true
+        leftAxis.isEnabled = true
+
+        val rightAxis: YAxis = binding.growthChart.axisRight
+        rightAxis.setDrawGridLines(true)
+        rightAxis.setDrawZeroLine(true)
+        rightAxis.isGranularityEnabled = true
+        rightAxis.axisMinimum = 0f
+        rightAxis.mAxisMaximum = 30f
+        rightAxis.setLabelCount(60, true)
+        rightAxis.isEnabled = true
+        //refresh
+        binding.growthChart.invalidate()
     }
 
 
@@ -353,12 +524,7 @@ class BabyDashboardFragment : Fragment() {
         growths: List<GrowthData>,
         gestationAge: String
     ) {
-        binding.apply {
-            tvCurrentWeight.text = "${values.currentWeight} gm"
-            growthChart.setOnClickListener {
-                //   findNavController().navigate(BabyDashboardFragmentDirections.navigateToGrowth(args.patientId))
-            }
-        }
+        Timber.e("populateZScoreLineChart")
         val intervals = ArrayList<String>()
         val babyWeight: ArrayList<Entry> = ArrayList()
         val one: ArrayList<Entry> = ArrayList()
@@ -368,7 +534,16 @@ class BabyDashboardFragment : Fragment() {
         val five: ArrayList<Entry> = ArrayList()
         val six: ArrayList<Entry> = ArrayList()
         val seven: ArrayList<Entry> = ArrayList()
-        val max = gestationAge.toInt() - 20
+        val max = 25
+        //gestationAge.toInt() - 20
+
+        /**
+         * Get baby's birth weight to determine the starting point
+         */
+        val birthWeight = values.birthWeight
+        //convert to kilograms
+        val birthWeightKg = convertToKg(birthWeight)
+        val commonIndex = establishCommonIndex(gestationAge, growths, birthWeightKg)
 
         for ((i, entry) in growths.subList(0, max + 1)
             .withIndex()) {
@@ -379,12 +554,12 @@ class BabyDashboardFragment : Fragment() {
             if (start == ges || start > ges) {
                 val equivalent = extractValueIndex(start, values)
                 if (equivalent == "0") {
-                    babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+                    // babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
                 } else {
                     babyWeight.add(Entry(i.toFloat(), equivalent.toFloat()))
                 }
             } else {
-                babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
+                babyWeight.add(Entry(i.toFloat(), entry.data[commonIndex].value.toFloat()))
             }
             one.add(Entry(i.toFloat(), entry.data[0].value.toFloat()))
             two.add(Entry(i.toFloat(), entry.data[1].value.toFloat()))
@@ -397,7 +572,7 @@ class BabyDashboardFragment : Fragment() {
 
         }
 
-        val baby = generateSource(babyWeight, "Actual Weight", "#4472c4")
+        val baby = generateDoubleSource(babyWeight, "Actual Weight", "#4472c4")
         val dataOne = generateSource(one, "-3", "#000000")
         val dataTwo = generateSource(two, "-2", "#880d0d")
         val dataThree = generateSource(three, "-1", "#ffa20e")
@@ -453,6 +628,8 @@ class BabyDashboardFragment : Fragment() {
         //refresh
         binding.growthChart.invalidate()
     }
+
+
 
 
     override fun onDestroyView() {

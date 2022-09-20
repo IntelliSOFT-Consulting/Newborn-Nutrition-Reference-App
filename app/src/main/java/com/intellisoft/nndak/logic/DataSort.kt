@@ -39,7 +39,8 @@ class DataSort {
             return data.sortedWith(compareBy { it.hour }).reversed()
 
         }
-          fun getNumericFrequency(frequency: String): String {
+
+        fun getNumericFrequency(frequency: String): String {
             val index = 0
             val ch = frequency[index]
             return ch.toString()
@@ -82,7 +83,8 @@ class DataSort {
             val recent = if (weeklyLast.isEmpty()) {
                 "0"
             } else {
-                weeklyLast.last()
+                //weeklyLast.last()
+                weekly.toString()
             }
 
             return recent
@@ -158,7 +160,6 @@ class DataSort {
 
         fun extractValueIndex(start: Int, values: WeightsData): String {
             values.data.forEach {
-
                 if (it.day == start) {
                     return convertToKg(it.actual)
                 }
@@ -167,7 +168,7 @@ class DataSort {
 
         }
 
-        private fun convertToKg(actual: String): String {
+        fun convertToKg(actual: String): String {
             val value = actual.toFloat()
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.DOWN

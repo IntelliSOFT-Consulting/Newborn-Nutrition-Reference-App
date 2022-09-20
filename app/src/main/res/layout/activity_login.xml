@@ -182,31 +182,33 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginFormView" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="end"
-            android:layout_marginBottom="@dimen/_15dp"
-            android:orientation="horizontal"
+            android:layout_height="40dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="end|bottom"
+            app:backgroundTint="@android:color/holo_red_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.03"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
-                android:layout_width="100dp"
+                android:layout_width="@dimen/_100dp"
                 android:layout_height="40dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/founder" />
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/founder"
+                app:backgroundTint="@android:color/holo_red_light" />
 
             <ImageView
                 android:id="@+id/button"
-                android:layout_width="100dp"
+                android:layout_width="@dimen/_100dp"
                 android:layout_height="40dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/path" />
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/path"
+                app:backgroundTint="@android:color/holo_red_light" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
