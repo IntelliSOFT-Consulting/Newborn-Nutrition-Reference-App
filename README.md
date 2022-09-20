@@ -11,7 +11,7 @@ You are welcome to use the app as is, or you can build it from source.  The app 
 
 ### Installing
 * Clone the repository
-``` git clone https://github.com/google/android-fhir.git ``` 
+``` https://github.com/IntelliSOFT-Consulting/human-milk-bank.git ``` 
 * Open the project in Android Studio
 * Build the project
 * Run the project on an Android device or emulator
