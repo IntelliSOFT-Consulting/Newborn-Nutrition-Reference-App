@@ -23,8 +23,10 @@ Open the project in android studio and sync the dependencies.
 ## FHIR Server Configuration
 The app is configured to use the [HAPI FHIR Server](https://hapifhir.io/) as the FHIR server. You can use any FHIR server of your choice. To configure the app to use your FHIR server, you will need to change the following.
 ```
-Base URL of the FHIR server in [ServerConfiguration](https://github.com/IntelliSOFT-Consulting/human-milk-bank/blob/main/app/src/main/java/com/intellisoft/nndak/FhirApplication.kt) file.
+Base URL of the FHIR server
 ```
+You can locate this in this [Server Configuration](https://github.com/IntelliSOFT-Consulting/human-milk-bank/blob/main/app/src/main/java/com/intellisoft/nndak/FhirApplication.kt) file path
+
 
 ## Deployment
 To create a release build, you will need to create a keystore and add it to the project. You can follow the instructions [here](https://developer.android.com/studio/publish/app-signing#generate-key) to create a keystore. 
