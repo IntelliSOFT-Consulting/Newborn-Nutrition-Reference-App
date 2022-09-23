@@ -196,10 +196,11 @@ fun generateDoubleSource(one: ArrayList<Entry>, label: String, color: String): L
     actual.setColors(Color.parseColor(color))
     actual.setDrawCircleHole(false)
     actual.setDrawValues(false)
-    actual.setDrawCircles(false)
+    actual.setDrawCircles(true)
+    actual.setCircleColor(Color.parseColor(color))
     actual.circleRadius = 2f
     actual.mode = LineDataSet.Mode.CUBIC_BEZIER
-    actual.lineWidth = 5f
+    actual.lineWidth = 2f
 
     return actual
 }
@@ -558,6 +559,16 @@ fun getWeeksSoFarIntervalOf(start: String, times: Int, interval: Int): List<Loca
     for (i in 1..times) {
         list.add(date)
         date = date.plusWeeks(interval.toLong())
+    }
+    return list
+}
+
+fun getMonthSoFarIntervalOf(start: String, times: Int, interval: Int): List<LocalDate> {
+    val list: MutableList<LocalDate> = ArrayList()
+    var date = LocalDate.parse(start)
+    for (i in 1..times) {
+        list.add(date)
+        date = date.plusMonths(interval.toLong())
     }
     return list
 }

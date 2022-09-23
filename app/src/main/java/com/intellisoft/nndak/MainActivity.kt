@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -363,13 +364,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sessionTimeOut() {
-//        finishAffinity()
-//        val i = Intent(this@MainActivity, PinLockActivity::class.java)
-//        startActivity(i)
-//        this@MainActivity.overridePendingTransition(
-//            R.anim.anim_slide_in_left,
-//            R.anim.anim_slide_out_left
-//        )
+        finishAffinity()
+        val i = Intent(this@MainActivity, PinLockActivity::class.java)
+        startActivity(i)
+        this@MainActivity.overridePendingTransition(
+            R.anim.anim_slide_in_left,
+            R.anim.anim_slide_out_left
+        )
     }
 
     private fun showToast(message: String) {
@@ -461,5 +462,7 @@ class MainActivity : AppCompatActivity() {
                 Timber.e(e)
             }
         }
+
+
     }
 }

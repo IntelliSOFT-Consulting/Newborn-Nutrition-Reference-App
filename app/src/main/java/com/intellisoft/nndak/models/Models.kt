@@ -1,6 +1,7 @@
 package com.intellisoft.nndak.models
 
-import android.app.PendingIntent
+import android.os.Parcel
+import android.os.Parcelable
 import com.intellisoft.nndak.viewmodels.RiskAssessmentItem
 
 class SimpleNotification(
@@ -141,6 +142,8 @@ data class ExpressionHistory(
  * Mother-Baby
  */
 
+//make this a data class parcelable
+
 data class MotherBabyItem(
     val id: String,
     val resourceId: String,
@@ -156,8 +159,10 @@ data class MotherBabyItem(
     var assessment: AssessmentItem,
 
     ) {
+
     override fun toString(): String = babyName
 }
+
 
 data class AssessmentItem(
     val breastfeedingBaby: String? = "",
@@ -383,3 +388,70 @@ data class DischargeItem(
     val weight: String,
     val notes: String
 )
+//create a parcelable data class
+
+data class DataDisplay(
+    val babyName: String,
+    val status:String,
+    val motherName:String,
+    val birthWeight:String,
+    val apgarScore:String,
+    val motherIp:String,
+    val babyWell:String,
+    val dateOfBirth:String,
+    val dayOfLife:String,
+    val dateOfAdm:String,
+    val neonatalSepsis:String,
+    val jaundice:String,
+    val asphyxia:String,
+
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(babyName)
+        parcel.writeString(status)
+        parcel.writeString(motherName)
+        parcel.writeString(birthWeight)
+        parcel.writeString(apgarScore)
+        parcel.writeString(motherIp)
+        parcel.writeString(babyWell)
+        parcel.writeString(dateOfBirth)
+        parcel.writeString(dayOfLife)
+        parcel.writeString(dateOfAdm)
+        parcel.writeString(neonatalSepsis)
+        parcel.writeString(jaundice)
+        parcel.writeString(asphyxia)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<DataDisplay> {
+        override fun createFromParcel(parcel: Parcel): DataDisplay {
+            return DataDisplay(parcel)
+        }
+
+        override fun newArray(size: Int): Array<DataDisplay?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+
+}

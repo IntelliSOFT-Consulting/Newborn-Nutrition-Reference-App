@@ -294,6 +294,11 @@
         <argument
             android:name="patient_id"
             app:argType="string" />
+
+        <argument
+            android:name="data"
+            app:argType="com.intellisoft.nndak.models.DataDisplay" />
+
     </activity>
 
 </navigation>

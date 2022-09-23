@@ -167,12 +167,33 @@ class DataSort {
             return "0"
 
         }
+        fun extractValueIndexBirth(start: Int, values: WeightsData): String {
+            values.dataBirth.forEach {
+                if (it.day == start) {
+                    return convertToKg(it.actual)
+                }
+            }
+            return "0"
+
+        }
+
+        fun extractValueIndexMonthly(start: Int, values: WeightsData): String {
+            values.dataMonthly.forEach {
+                if (it.day == start) {
+                    return convertToKg(it.actual)
+                }
+            }
+            return "0"
+
+        }
+
 
         fun convertToKg(actual: String): String {
             val value = actual.toFloat()
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.DOWN
             val rounded = df.format(value / 1000)
+            Timber.e("Rounded $rounded")
             return rounded.toString()
         }
     }

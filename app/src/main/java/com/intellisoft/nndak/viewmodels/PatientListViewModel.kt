@@ -477,7 +477,14 @@ class PatientListViewModel(
             motherIp = mother[0].resourceId
         }
         val gainRate =
-            calculateWeightGainRate(baby.resourceId, baby.gender, status, birthWeight, gestation,baby.dob)
+            calculateWeightGainRate(
+                baby.resourceId,
+                baby.gender,
+                status,
+                birthWeight,
+                gestation,
+                baby.dob
+            )
 
         return MotherBabyItem(
             id = position.toString(),
@@ -639,6 +646,8 @@ class PatientListViewModel(
         val weight = pullWeights(resourceId)
         val data = arrayListOf<ActualData>()
         val dailyData = arrayListOf<ActualData>()
+        val dataBirth = arrayListOf<ActualData>()
+        val dataMonthly = arrayListOf<ActualData>()
         var dayOfLife = 0
         var weeksLife = 0
         var babyGender = ""
@@ -681,6 +690,38 @@ class PatientListViewModel(
                 dailyData.add(ActualData(day = i, actual = value, projected = value))
 
             }
+
+            /**
+             * Calculate the weight for the baby in weeks since birth
+             */
+
+
+            val weeklyString = getWeeksSoFarIntervalOf(patient.dob, weeksLife + 1, 1)
+            val sortedWeekly = sortCollected(weight)
+            for ((i, entry) in weeklyString.withIndex()) {
+                val added = i.toFloat() + 1f
+                var value = extractWeeklyMeasure(entry, 6, sortedWeekly)
+                if (value == "0.0") {
+                    value = lastKnownWeight
+                }
+                dataBirth.add(ActualData(day = added.toInt(), actual = value, projected = value))
+            }
+
+
+            val months = getFormattedAgeMonths(patient.dob)
+
+            val monthlyString = getMonthSoFarIntervalOf(patient.dob, months + 1, 1)
+            val sortedMonthly = sortCollected(weight)
+            for ((i, entry) in monthlyString.withIndex()) {
+                val added = i.toFloat()
+                var value = extractWeeklyMeasure(entry, 28, sortedMonthly)
+
+                if (value == "0.0") {
+                    value = lastKnownWeight
+                }
+                dataMonthly.add(ActualData(day = added.toInt(), actual = value, projected = value))
+            }
+
         }
         return WeightsData(
             status = status,
@@ -691,9 +732,28 @@ class PatientListViewModel(
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
             data = data,
+            dataBirth = dataBirth,
             dailyData = dailyData,
-            weeksLife = weeksLife + 1
+            weeksLife = weeksLife + 1,
+            dataMonthly = dataMonthly
         )
+    }
+
+    private fun getFormattedAgeMonths(
+        dob: String
+    ): Int {
+        if (dob.isEmpty()) return 0
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Period.between(LocalDate.parse(dob), LocalDate.now()).let {
+                when {
+                    it.years > 0 -> it.years
+                    it.months > 0 -> it.months
+                    else -> it.days
+                }
+            }
+        } else {
+            0
+        }
     }
 
     private suspend fun retrieveQuantity(patientId: String, code: String): String {

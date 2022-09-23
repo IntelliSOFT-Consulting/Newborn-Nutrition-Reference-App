@@ -227,8 +227,8 @@ class HomeFragment : Fragment() {
         binding.totalTermChart.axisLeft.setDrawGridLines(false)
 
         val xAxis: XAxis = binding.totalTermChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.setDrawAxisLine(false)
+        xAxis.setDrawGridLines(true)
+        xAxis.setDrawAxisLine(true)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelRotationAngle = -60f
         xAxis.valueFormatter = IndexAxisValueFormatter(dayNames)
