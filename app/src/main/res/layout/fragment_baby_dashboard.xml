@@ -24,19 +24,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_previous"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_10"
-            android:text="Intergrowth chart"
-            android:textAllCaps="false"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:cornerRadius="@dimen/_25dp"
-            app:icon="@drawable/ic_baseline_arrow_back_ios_24"
-            app:strokeColor="@color/colorPrimary" />
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btn_previous"
+                style="?attr/textAppearanceBody2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/active"
+                android:gravity="end"
+                android:text="WHO Chart (0-13 weeks)"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/btn_current"
+                style="?attr/textAppearanceBody2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/underline"
+                android:text="WHO Chart (4-24 months)"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
 
 
         <LinearLayout
@@ -108,6 +126,7 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/baby_growth_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -136,6 +155,30 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="@dimen/_12dp" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/img_deviation"
+                            android:layout_width="@dimen/_15dp"
+                            android:layout_height="@dimen/_15dp"
+                            android:layout_margin="3dp"
+                            android:rotation="45" />
+
+                        <TextView
+                            android:id="@+id/tv_deviation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="@color/dim_green" />
+
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -143,7 +186,7 @@
                         android:text="@string/app_compared_weight"
                         android:textAlignment="center"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -163,16 +206,47 @@
                     android:padding="@dimen/_5dp">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/dim_green" />
+
+                    <TextView
                         android:id="@+id/tv_mother_milk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="@dimen/_20sp" />
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="@dimen/_15dp"
+                            android:layout_height="@dimen/_15dp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/ic_show_chart"
+                            app:tint="@color/dim_green" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mother_s_milk"
+                            android:textAppearance="?attr/textAppearanceBody2" />
+
+
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/app_mothers_milk"
+                        android:text="@string/from_prescribed_diet"
                         android:textAlignment="center"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textSize="@dimen/_12dp" />

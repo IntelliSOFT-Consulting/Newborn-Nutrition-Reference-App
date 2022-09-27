@@ -96,6 +96,9 @@
         <action
             android:id="@+id/navigate_to_growth"
             app:destination="@id/growthActivity" />
+        <action
+            android:id="@+id/navigate_to_table"
+            app:destination="@id/growthChartFragment" />
     </fragment>
     <fragment
         android:id="@+id/babyAssessmentFragment"
@@ -300,5 +303,14 @@
             app:argType="com.intellisoft.nndak.models.DataDisplay" />
 
     </activity>
+    <fragment
+        android:id="@+id/growthChartFragment"
+        android:name="com.intellisoft.nndak.screens.dashboard.growth.GrowthChartFragment"
+        android:label="@string/app_growth"
+        tools:layout="@layout/fragment_growth_chart">
+        <argument
+            android:name="patient_id"
+            app:argType="string" />
 
+    </fragment>
 </navigation>

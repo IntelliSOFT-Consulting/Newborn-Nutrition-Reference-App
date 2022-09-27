@@ -182,8 +182,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:textAppearance="?attr/textAppearanceBody2"
                             android:text="@string/app_gestation"
+                            android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
                             app:autoSizeTextType="uniform" />
 

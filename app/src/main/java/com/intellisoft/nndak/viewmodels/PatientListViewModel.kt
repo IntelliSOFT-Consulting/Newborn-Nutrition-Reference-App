@@ -675,7 +675,14 @@ class PatientListViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                data.add(ActualData(day = added.toInt(), actual = value, projected = value))
+                data.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
             val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife + 1, 1)
             val sortedDays = sortCollected(weight)
@@ -687,7 +694,14 @@ class PatientListViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dailyData.add(ActualData(day = i, actual = value, projected = value))
+                dailyData.add(
+                    ActualData(
+                        day = i,
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
 
             }
 
@@ -704,7 +718,14 @@ class PatientListViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dataBirth.add(ActualData(day = added.toInt(), actual = value, projected = value))
+                dataBirth.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
 
 
@@ -719,7 +740,14 @@ class PatientListViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dataMonthly.add(ActualData(day = added.toInt(), actual = value, projected = value))
+                dataMonthly.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
 
         }
@@ -732,10 +760,7 @@ class PatientListViewModel(
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
             data = data,
-            dataBirth = dataBirth,
             dailyData = dailyData,
-            weeksLife = weeksLife + 1,
-            dataMonthly = dataMonthly
         )
     }
 

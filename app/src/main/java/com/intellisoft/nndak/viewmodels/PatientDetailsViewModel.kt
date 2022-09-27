@@ -89,6 +89,7 @@ import com.intellisoft.nndak.utils.Constants.MAX_RESOURCE_COUNT
 import com.intellisoft.nndak.utils.Constants.MIN_RESOURCE_COUNT
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
+import timber.log.Timber
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -112,7 +113,7 @@ class PatientDetailsViewModel(
     val liveFeeds = MutableLiveData<FeedsDistribution>()
     val livePrescriptionsData = MutableLiveData<List<PrescriptionItem>>()
     val liveFeedingData = MutableLiveData<List<PrescriptionItem>>()
-    val liveWeights = MutableLiveData<WeightsData>()
+    val liveWeights = MutableLiveData<WeightsDetailedData>()
     val liveExpressions = MutableLiveData<MilkExpression>()
     val context: Application = application
     val liveFeedingHistory = MutableLiveData<List<FeedingHistory>>()
@@ -220,7 +221,7 @@ class PatientDetailsViewModel(
 
     }
 
-    private suspend fun getWeightsDataModel(): WeightsData {
+    private suspend fun getWeightsDataModel(): WeightsDetailedData {
         val patient = getPatient()
         val weight = pullWeights()
         val data = arrayListOf<ActualData>()
@@ -231,7 +232,7 @@ class PatientDetailsViewModel(
         var weeksLife = 0
         var babyGender = ""
         val gestationAge = retrieveQuantity(GESTATION)
-        val lastKnownWeight: String
+        var lastKnownWeight = "0"
         //get if baby is term or preterm
         val status = retrieveQuantity(GESTATION)
         patient.let {
@@ -247,7 +248,6 @@ class PatientDetailsViewModel(
              * Calculate the weight for the baby in weeks
              */
 
-
             val daysString = getWeeksSoFarIntervalOf(patient.dob, weeksLife + 1, 1)
             val sorted = sortCollected(weight)
 
@@ -260,22 +260,36 @@ class PatientDetailsViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                data.add(ActualData(day = added.toInt(), actual = value, projected = value))
+
+                data.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
             /**
              * Calculate the weight for the baby in days
              */
             val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife + 1, 1)
             val sortedDays = sortCollected(weight)
+
             for ((i, entry) in days.withIndex()) {
-                /**
-                 * Extract daily weight
-                 */
+
                 var value = extractDailyMeasure(entry, sortedDays)
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dailyData.add(ActualData(day = i, actual = value, projected = value))
+                dailyData.add(
+                    ActualData(
+                        day = i,
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
 
             }
 
@@ -284,7 +298,7 @@ class PatientDetailsViewModel(
              */
 
 
-            val weeklyString = getWeeksSoFarIntervalOf(patient.dob, weeksLife + 1, 1)
+            val weeklyString = getWeeksSoFarIntervalOf(patient.dob, weeksLife, 1)
             val sortedWeekly = sortCollected(weight)
             for ((i, entry) in weeklyString.withIndex()) {
                 val added = i.toFloat() + 1f
@@ -292,11 +306,18 @@ class PatientDetailsViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dataBirth.add(ActualData(day = added.toInt(), actual = value, projected = value))
+                dataBirth.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
-            val months=getFormattedAgeMonths(patient.dob)
+            val months = getFormattedAgeMonths(patient.dob)
 
-            val monthlyString = getMonthSoFarIntervalOf(patient.dob, months+1, 1)
+            val monthlyString = getMonthSoFarIntervalOf(patient.dob, months + 1, 1)
             val sortedMonthly = sortCollected(weight)
             for ((i, entry) in monthlyString.withIndex()) {
                 val added = i.toFloat()
@@ -305,24 +326,44 @@ class PatientDetailsViewModel(
                 if (value == "0.0") {
                     value = lastKnownWeight
                 }
-                dataMonthly.add(ActualData(day = added.toInt(), actual = value, projected = value))
+                dataMonthly.add(
+                    ActualData(
+                        day = added.toInt(),
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
             }
 
         }
+        val yesterday = FormatHelper().getYesterdayDateNoTime()
+        //get value today from the daily data
+        val yesterdayValue = dailyData.find { it.date == yesterday }?.actual ?: "0"
+        var gainValue = 0f
+        if (yesterdayValue != "0") {
+            gainValue = lastKnownWeight.toFloat() - yesterdayValue.toFloat()
+        }
 
-        return WeightsData(
+        val positive = gainValue >= 0
+
+        return WeightsDetailedData(
             status = status,
             babyGender = babyGender,
-            currentWeight =data.last().actual,
+            currentWeight = data.last().actual,
             birthWeight = retrieveQuantity(BIRTH_WEIGHT),
             currentDaily = dailyData.last().actual,
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
             data = data,
             dataBirth = dataBirth,
-            dataMonthly=dataMonthly,
+            dataMonthly = dataMonthly,
             dailyData = dailyData,
-            weeksLife = weeksLife + 1
+            weeksLife = weeksLife + 1,
+            deviation = Deviation(
+                positive = positive,
+                value = " $gainValue mg",
+            )
         )
     }
 
@@ -1034,6 +1075,7 @@ class PatientDetailsViewModel(
             0
         }
     }
+
     private fun getFormattedAge(
         dob: String
     ): Int {
@@ -1041,8 +1083,8 @@ class PatientDetailsViewModel(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val now = LocalDate.now()
             val dob = LocalDate.parse(dob)
-            val date1=Date(now.year,now.monthValue,now.dayOfMonth)
-            val date2=Date(dob.year,dob.monthValue,dob.dayOfMonth)
+            val date1 = Date(now.year, now.monthValue, now.dayOfMonth)
+            val date2 = Date(dob.year, dob.monthValue, dob.dayOfMonth)
             getDaysDifference(date2, date1)
         } else {
             0

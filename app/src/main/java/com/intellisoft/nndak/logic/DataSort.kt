@@ -1,10 +1,7 @@
 package com.intellisoft.nndak.logic
 
 import android.os.Build
-import com.intellisoft.nndak.charts.CombinedGrowth
-import com.intellisoft.nndak.charts.GrowthData
-import com.intellisoft.nndak.charts.GrowthOptions
-import com.intellisoft.nndak.charts.WeightsData
+import com.intellisoft.nndak.charts.*
 import com.intellisoft.nndak.helper_class.FormatHelper
 import com.intellisoft.nndak.models.*
 import timber.log.Timber
@@ -167,7 +164,16 @@ class DataSort {
             return "0"
 
         }
-        fun extractValueIndexBirth(start: Int, values: WeightsData): String {
+        fun extractValueIndex(start: Int, values: WeightsDetailedData): String {
+            values.data.forEach {
+                if (it.day == start) {
+                    return convertToKg(it.actual)
+                }
+            }
+            return "0"
+
+        }
+        fun extractValueIndexBirth(start: Int, values: WeightsDetailedData): String {
             values.dataBirth.forEach {
                 if (it.day == start) {
                     return convertToKg(it.actual)
@@ -177,7 +183,7 @@ class DataSort {
 
         }
 
-        fun extractValueIndexMonthly(start: Int, values: WeightsData): String {
+        fun extractValueIndexMonthly(start: Int, values: WeightsDetailedData): String {
             values.dataMonthly.forEach {
                 if (it.day == start) {
                     return convertToKg(it.actual)
@@ -193,7 +199,6 @@ class DataSort {
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.DOWN
             val rounded = df.format(value / 1000)
-            Timber.e("Rounded $rounded")
             return rounded.toString()
         }
     }

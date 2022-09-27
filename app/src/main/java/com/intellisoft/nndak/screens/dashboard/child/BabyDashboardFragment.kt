@@ -1,13 +1,14 @@
 package com.intellisoft.nndak.screens.dashboard.child
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.*
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +35,6 @@ import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndexBirth
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndexMonthly
 import com.intellisoft.nndak.models.DataDisplay
-import com.intellisoft.nndak.models.MotherBabyItem
 import com.intellisoft.nndak.utils.establishCommonIndex
 import com.intellisoft.nndak.utils.generateDoubleSource
 import com.intellisoft.nndak.utils.generateSource
@@ -67,7 +67,8 @@ class BabyDashboardFragment : Fragment() {
     private val args: BabyAssessmentFragmentArgs by navArgs()
     private val viewModel: ScreenerViewModel by viewModels()
     private lateinit var data: DataDisplay
-    private var proceed = false
+    private var isHistory = false
+    private var isAction = false
     private val binding
         get() = _binding!!
 
@@ -117,6 +118,14 @@ class BabyDashboardFragment : Fragment() {
             incDetails.pbLoading.visibility = View.VISIBLE
             incDetails.lnBody.visibility = View.GONE
 
+            babyGrowthCard.setOnClickListener {
+                findNavController().navigate(
+                    BabyDashboardFragmentDirections.navigateToTable(
+                        args.patientId
+                    )
+                )
+            }
+
             /**
              * Three Columns
              */
@@ -159,7 +168,7 @@ class BabyDashboardFragment : Fragment() {
                 }
                 val gest = mum.dashboard.gestation ?: ""
                 val status = mum.status
-                proceed = true
+
                 data = DataDisplay(
                     babyName = mum.babyName,
                     status = "$gest-$status",
@@ -190,12 +199,7 @@ class BabyDashboardFragment : Fragment() {
                 }
             }
         }
-        patientDetailsViewModel.activeWeeklyBabyWeights()
-        patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
-            if (it != null) {
-                standardWeeklyCharts(it)
-            }
-        }
+        loadActiveWeights()
         patientDetailsViewModel.getExpressions()
         patientDetailsViewModel.liveExpressions.observe(viewLifecycleOwner) { expression ->
             if (expression != null) {
@@ -203,6 +207,15 @@ class BabyDashboardFragment : Fragment() {
                 binding.apply {
                     tvTotalExpressed.text = expression.totalFeed
                 }
+            }
+        }
+    }
+
+    private fun loadActiveWeights() {
+        patientDetailsViewModel.activeWeeklyBabyWeights()
+        patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
+            if (it != null) {
+                standardWeeklyCharts(it)
             }
         }
     }
@@ -281,10 +294,11 @@ class BabyDashboardFragment : Fragment() {
     }
 
 
-    private fun standardWeeklyCharts(weightsData: WeightsData) {
+    private fun standardWeeklyCharts(weightsData: WeightsDetailedData) {
         try {
 
-            var isBoy = true
+            val isBoy = weightsData.babyGender == "female"
+
             var graduateBaby = false
             val isPreterm: Boolean = try {
                 weightsData.status.toDouble() < 37
@@ -297,33 +311,31 @@ class BabyDashboardFragment : Fragment() {
                 val totalWeeks = weeksInLife + gestationAge.toInt()
                 if (totalWeeks > 64) {
                     graduateBaby = true
-                    var who = "who-boy-monthly.json"
-                    if (weightsData.babyGender == "female") {
-                        who = "who-girl-monthly.json"
-                        isBoy = false
-                    }
-                    activateHistoryButton(true)
+                    if (isHistory) {
+                        activeHistoricalData(isBoy, weightsData)
 
-                    calculateBabyWeight(weightsData, who, false)
+                    } else {
+                        var who = "who-boy-monthly.json"
+                        if (!isBoy) {
+                            who = "who-girl-monthly.json"
+
+                        }
+                        activateHistoryButton(true)
+
+                        calculateBabyWeight(weightsData, who, false)
+                    }
 
                 } else {
-
-                    var standard = "boy-z-score.json"
-                    if (weightsData.babyGender == "female") {
-                        standard = "girl-z-score.json"
-                        isBoy = false
-                    }
-
-                    val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
-                    val gson = Gson()
-                    val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
-                    val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
-                    growths.forEachIndexed { idx, growth -> }
-                    populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
+                    activeHistoricalData(isBoy, weightsData)
                 }
                 binding.apply {
                     val unit = if (graduateBaby) "Months" else "Weeks"
-                    growthLabel.text = "Postmenstrual Age ($unit)"
+                    val name = if (graduateBaby) "Postnatal Age" else "Postmenstrual Age"
+                    if (isHistory) {
+                        growthLabel.text = "Postmenstrual Age (Weeks)"
+                    } else {
+                        growthLabel.text = "$name ($unit)"
+                    }
                 }
 
             } else {
@@ -331,20 +343,30 @@ class BabyDashboardFragment : Fragment() {
                 //check if the baby has exceeded week 13
                 if (weightsData.weeksLife > 13) {
                     graduateBaby = true
-                    var who = "who-boy-monthly.json"
-                    if (weightsData.babyGender == "female") {
-                        who = "who-girl-monthly.json"
-                        isBoy = false
+
+                    if (isHistory) {
+                        var who = "who-boy-weekly.json"
+                        if (!isBoy) {
+                            who = "who-girl-weekly.json"
+
+                        }
+                        calculateBabyWeight(weightsData, who, true)
+                    } else {
+                        var who = "who-boy-monthly.json"
+                        if (!isBoy) {
+                            who = "who-girl-monthly.json"
+
+                        }
+                        activateHistoryButton(false)
+                        calculateBabyWeight(weightsData, who, false)
                     }
-                    activateHistoryButton(false)
-                    calculateBabyWeight(weightsData, who, false)
 
 
                 } else {
                     var who = "who-boy-weekly.json"
-                    if (weightsData.babyGender == "female") {
+                    if (!isBoy) {
                         who = "who-girl-weekly.json"
-                        isBoy = false
+
                     }
                     calculateBabyWeight(weightsData, who, true)
 
@@ -357,9 +379,13 @@ class BabyDashboardFragment : Fragment() {
 
             binding.apply {
                 val label = if (graduateBaby) {
-                    if (isPreterm) "WHO Chart Preterm" else "WHO Chart "
+                    if (isPreterm) {
+                        if (isHistory) "INTERGROWTH-21 Chart Preterm" else "WHO Term Chart "
+                    } else {
+                        "WHO Term Chart "
+                    }
                 } else {
-                    if (isPreterm) "INTERGROWTH-21 Chart Preterm" else "WHO Chart "
+                    if (isPreterm) "INTERGROWTH-21 Chart Preterm" else "WHO Term Chart "
                 }
                 if (isBoy) {
                     tvBabyGender.text =
@@ -374,42 +400,111 @@ class BabyDashboardFragment : Fragment() {
                     } else {
                         weightsData.currentDaily.toDouble()
                     }
+
                 val df = DecimalFormat("#.##")
                 df.roundingMode = RoundingMode.CEILING
                 val weight = df.format(data)
 
                 tvCurrentWeight.text = "$weight gm"
+                tvDeviation.text = weightsData.deviation.value
+                if (weightsData.deviation.positive) {
+                    // get color from resources
+                    val color = ContextCompat.getColor(requireContext(), R.color.dim_green)
+                    tvDeviation.setTextColor(color)
+                    val icon = ContextCompat.getDrawable(requireContext(), R.drawable.green)
+                    imgDeviation.setImageDrawable(icon)
+
+                    // rotate the image to negative 135 degrees
+                    imgDeviation.rotation = -135f
+
+//
+                } else {
+                    val color = ContextCompat.getColor(requireContext(), R.color.dim_red)
+                    tvDeviation.setTextColor(color)
+                    //set deviation image to red
+                    val icon = ContextCompat.getDrawable(requireContext(), R.drawable.red)
+                    imgDeviation.setImageDrawable(icon)
+
+
+                }
+                if (isAction) {
+                    activateTabs(!isHistory)
+                } else {
+                    activateTabs(graduateBaby)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun activateHistoryButton(isPreterm: Boolean) {
+    private fun activeHistoricalData(isBoy: Boolean, weightsData: WeightsDetailedData) {
+
+        var standard = "boy-z-score.json"
+        if (!isBoy) {
+            standard = "girl-z-score.json"
+
+        }
+
+        val jsonFileString = getJsonDataFromAsset(requireContext(), standard)
+        val gson = Gson()
+        val listGrowthType = object : TypeToken<List<GrowthData>>() {}.type
+        val growths: List<GrowthData> = gson.fromJson(jsonFileString, listGrowthType)
+        growths.forEachIndexed { idx, growth -> }
+        populateZScoreLineChart(weightsData, growths, weightsData.gestationAge)
+    }
+
+    private fun activateTabs(graduateBaby: Boolean) {
+        // set background to a drawable in textview
         binding.apply {
-            val text = if (isPreterm) "Intergrowth Chart" else "0-13 weeks Chart"
-            btnPrevious.text = text
-            btnPrevious.visibility = View.VISIBLE
-            btnPrevious.setOnClickListener {
-
-
-                FhirApplication.setMilk(requireContext(), tvMotherMilk.text.toString())
-
-                if (proceed) {
-
-                    findNavController().navigate(
-                        BabyDashboardFragmentDirections.navigateToGrowth(
-                            args.patientId, this@BabyDashboardFragment.data
-                        )
-                    )
-                } else {
-                    Toast.makeText(requireContext(), "Please wait", Toast.LENGTH_SHORT).show()
-                }
+            if (graduateBaby) {
+                btnCurrent.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.active)
+                btnPrevious.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.underline)
+            } else {
+                btnPrevious.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.active)
+                btnCurrent.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.underline)
             }
         }
     }
 
-    private fun calculateBabyWeight(weightsData: WeightsData, who: String, weekly: Boolean) {
+    private fun activateHistoryButton(isPreterm: Boolean) {
+        binding.apply {
+            val text = if (isPreterm) "Intergrowth Chart" else " WHO Chart (0-13 weeks)"
+            val textAlt = if (isPreterm) "WHO Growth Chart" else " WHO Chart (4-24 months)"
+            btnPrevious.text = text
+            btnCurrent.text = textAlt
+
+            btnPrevious.visibility = View.VISIBLE
+            btnCurrent.visibility = View.VISIBLE
+            btnPrevious.setOnClickListener {
+                isHistory = true
+                isAction = true
+                reloadPrevious(isHistory)
+            }
+            btnCurrent.setOnClickListener {
+                isAction = true
+                isHistory = false
+                reloadPrevious(isHistory)
+            }
+
+        }
+    }
+
+    private fun reloadPrevious(history: Boolean) {
+        activateTabs(!history)
+        loadActiveWeights()
+
+    }
+
+    private fun calculateBabyWeight(
+        weightsData: WeightsDetailedData,
+        who: String,
+        weekly: Boolean
+    ) {
         val jsonFileString = getJsonDataFromAsset(requireContext(), who)
         val gson = Gson()
         val listWhoType = object : TypeToken<List<WHOData>>() {}.type
@@ -424,7 +519,7 @@ class BabyDashboardFragment : Fragment() {
     }
 
     private fun populateWHOMonthlyLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<WHOData>,
         gestationAge: String
     ) {
@@ -442,11 +537,14 @@ class BabyDashboardFragment : Fragment() {
             intervals.add(entry.day.toString())
             val start = entry.day
             val ges = values.weeksLife
+            Timber.e("Gestation Age::: $start $ges")
             if (start != 0) {
-                val equivalent = extractValueIndexMonthly(start, values)
-                if (start == ges || start < ges) {
-                    if (equivalent != "0") {
-                        babyWeight.add(Entry(i.toFloat(), equivalent.toFloat()))
+                if (ges > 13) {
+                    val equivalent = extractValueIndexMonthly(start, values)
+                    if (start == ges || start < ges) {
+                        if (equivalent != "0") {
+                            babyWeight.add(Entry(i.toFloat() + 1, equivalent.toFloat()))
+                        }
                     }
                 }
             }
@@ -479,7 +577,7 @@ class BabyDashboardFragment : Fragment() {
 
 
     private fun populateWHOZScoreLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<WHOData>,
         gestationAge: String
     ) {
@@ -630,7 +728,7 @@ class BabyDashboardFragment : Fragment() {
     }
 
     private fun populateZScoreLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<GrowthData>,
         gestationAge: String
     ) {
@@ -663,7 +761,6 @@ class BabyDashboardFragment : Fragment() {
 
             if (start == ges || start > ges) {
                 val equivalent = extractValueIndex(start, values)
-                Timber.e("Test Account $start $ges $equivalent ${values.data}")
                 if (equivalent == "0") {
                     // babyWeight.add(Entry(i.toFloat(), entry.data[3].value.toFloat()))
                 } else {

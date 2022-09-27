@@ -25,6 +25,7 @@ import com.intellisoft.nndak.R
 import com.intellisoft.nndak.charts.GrowthData
 import com.intellisoft.nndak.charts.WHOData
 import com.intellisoft.nndak.charts.WeightsData
+import com.intellisoft.nndak.charts.WeightsDetailedData
 import com.intellisoft.nndak.databinding.ActivityGrowthBinding
 import com.intellisoft.nndak.logic.DataSort
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
@@ -157,17 +158,17 @@ class GrowthActivity : AppCompatActivity() {
     private fun loadWeights() {
         patientDetailsViewModel.activeWeeklyBabyWeights()
         binding.swipeRefreshLayout.isRefreshing = true
-        patientDetailsViewModel.liveWeights.observe(this) {
-            if (it != null) {
-                binding.swipeRefreshLayout.isRefreshing = false
-                binding.cardView.visibility = View.VISIBLE
-                standardWeeklyCharts(it)
-            }
-        }
+//        patientDetailsViewModel.liveWeights.observe(this) {
+//            if (it != null) {
+//                binding.swipeRefreshLayout.isRefreshing = false
+//                binding.cardView.visibility = View.VISIBLE
+//                standardWeeklyCharts(it)
+//            }
+//        }
     }
 
 
-    private fun standardWeeklyCharts(weightsData: WeightsData) {
+    private fun standardWeeklyCharts(weightsData: WeightsDetailedData) {
         try {
 
             var isBoy = true
@@ -246,7 +247,7 @@ class GrowthActivity : AppCompatActivity() {
     }
 
     private fun populateZScoreLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<GrowthData>,
         gestationAge: String
     ) {
@@ -314,7 +315,7 @@ class GrowthActivity : AppCompatActivity() {
 
     }
 
-    private fun calculateBabyWeight(weightsData: WeightsData, who: String, weekly: Boolean) {
+    private fun calculateBabyWeight(weightsData: WeightsDetailedData, who: String, weekly: Boolean) {
         val jsonFileString = getJsonDataFromAsset(this@GrowthActivity, who)
         val gson = Gson()
         val listWhoType = object : TypeToken<List<WHOData>>() {}.type
@@ -329,7 +330,7 @@ class GrowthActivity : AppCompatActivity() {
     }
 
     private fun populateWHOMonthlyLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<WHOData>,
         gestationAge: String
     ) {
@@ -384,7 +385,7 @@ class GrowthActivity : AppCompatActivity() {
 
 
     private fun populateWHOZScoreLineChart(
-        values: WeightsData,
+        values: WeightsDetailedData,
         growths: List<WHOData>,
         gestationAge: String
     ) {
