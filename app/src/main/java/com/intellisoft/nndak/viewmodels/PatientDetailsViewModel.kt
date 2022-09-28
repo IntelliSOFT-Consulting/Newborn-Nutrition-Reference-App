@@ -120,6 +120,7 @@ class PatientDetailsViewModel(
     val livePositioningHistory = MutableLiveData<List<PositioningHistory>>()
     val liveBreastHistory = MutableLiveData<List<BreastsHistory>>()
     val liveDischargeDetails = MutableLiveData<List<DischargeItem>>()
+    val liveWeightHistory = MutableLiveData<WeightHistory>()
 
 
     fun feedsDistribution() {
@@ -367,6 +368,44 @@ class PatientDetailsViewModel(
         )
     }
 
+    private suspend fun getHistoricalWeightModel(): WeightHistory {
+        val patient = getPatient()
+        val weight = pullWeights()
+        var dayOfLife = 0
+        val dailyData = arrayListOf<ActualData>()
+        patient.let {
+            dayOfLife = getFormattedAge(it.dob)
+
+        }
+        val lastKnownWeight = retrieveQuantity(CURRENT_WEIGHT)
+        if (weight.isNotEmpty()) {
+            val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife + 1, 1)
+            val sortedDays = sortCollected(weight)
+
+            for ((i, entry) in days.withIndex()) {
+
+                var value = extractDailyMeasure(entry, sortedDays)
+                if (value == "0.0") {
+                    value = lastKnownWeight
+                }
+                dailyData.add(
+                    ActualData(
+                        day = i,
+                        actual = value,
+                        projected = value,
+                        date = entry.toString()
+                    )
+                )
+
+            }
+        }
+        return WeightHistory(
+            dayOfLife = "$dayOfLife",
+            dailyData = dailyData
+        )
+
+    }
+
     private suspend fun getFeedsDataModel(): FeedsDistribution {
         val prescription = getActivePrescriptionsDataModel(context)
         var times = 8
@@ -585,11 +624,11 @@ class PatientDetailsViewModel(
         val breastfeeding = retrieveCode(BABY_BREASTFEEDING)
         val mumWell = retrieveCode(MUM_WELL)
         var dDate = retrieveCode(DELIVERY_DATE)
+        var admDate = retrieveCode(ADMISSION_DATE)
         var birthWeight = ""
         var status = ""
         var gestation = ""
         var apgar = ""
-        var admDate = ""
         var dMethod = ""
         var parity = ""
         var pmtct = ""
@@ -643,14 +682,7 @@ class PatientDetailsViewModel(
                             "$birthWeight -Low"
                         }
                     }
-                    ADMISSION_DATE -> {
-                        admDate =
-                            try {
-                                FormatHelper().extractDateString(element.value)
-                            } catch (e: Exception) {
-                                element.value
-                            }
-                    }
+
                     APGAR_SCORE -> {
                         apgar = element.value
                     }
@@ -675,11 +707,8 @@ class PatientDetailsViewModel(
                 }
             }
         }
-        dDate = try {
-            FormatHelper().extractDateString(dDate)
-        } catch (e: Exception) {
-            dDate
-        }
+        dDate = extractDate(dDate)
+        admDate = extractDate(admDate)
         val total = calculateTotalExpressedMilk()
 
         var name = ""
@@ -737,6 +766,15 @@ class PatientDetailsViewModel(
                 contraindicated = contra
             )
         )
+    }
+
+    private fun extractDate(date: String): String {
+        val dateValue = try {
+            FormatHelper().extractDateString(date)
+        } catch (e: Exception) {
+            date
+        }
+        return dateValue
     }
 
     private suspend fun calculateWeightGainRate(
@@ -2029,6 +2067,11 @@ class PatientDetailsViewModel(
         care.intent = CarePlan.CarePlanIntent.ORDER
         care.created = Date()
         fhirEngine.create(care)
+    }
+
+    fun activeBabyWeights() {
+
+        viewModelScope.launch { liveWeightHistory.value = getHistoricalWeightModel() }
     }
 
     companion object {

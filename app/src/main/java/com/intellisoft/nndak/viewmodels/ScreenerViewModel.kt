@@ -3140,12 +3140,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                     .request.url = "Observation"
 
+
+                val date = FormatHelper().getDateNoTime()
                 bundle.addEntry()
                     .setResource(
                         qh.codingQuestionnaire(
                             ADMISSION_DATE,
                             "Admission Date",
-                            Date().toString()
+                            date
                         )
                     )
                     .request.url = "Observation"

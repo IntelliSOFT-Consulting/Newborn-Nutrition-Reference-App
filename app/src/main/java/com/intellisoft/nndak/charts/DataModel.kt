@@ -128,6 +128,11 @@ data class WeightsDetailedData(
     @SerializedName("deviation") val deviation: Deviation,
 )
 
+data class WeightHistory(
+    @SerializedName("dayOfLife") val dayOfLife: String,
+    @SerializedName("dailyData") val dailyData: List<ActualData>,
+)
+
 data class Deviation(
     @SerializedName("positive") val positive: Boolean,
     @SerializedName("value") val value: String,

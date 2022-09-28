@@ -15,9 +15,13 @@ import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.MainActivity.Companion.updateBabyMum
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.adapters.HistoryAdapter
+import com.intellisoft.nndak.charts.ActualData
 import com.intellisoft.nndak.databinding.FragmentGrowthChartBinding
+import com.intellisoft.nndak.holders.WeightHistoryViewHolder
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +39,10 @@ class GrowthChartFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: PatientDetailsViewModel
     private val args: GrowthChartFragmentArgs by navArgs()
+    private var actualDataList = ArrayList<ActualData>()
+    private lateinit var adapterList: HistoryAdapter
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,14 +97,28 @@ class GrowthChartFragment : Fragment() {
             }
         }
 
+        adapterList = HistoryAdapter(actualDataList, this::onDataItemClicked)
+        binding.apply {
+            rvData.adapter = adapterList
+
+        }
+
         loadActiveWeights()
+
+
+    }
+
+    private fun onDataItemClicked(actualData: ActualData) {
 
     }
 
     private fun loadActiveWeights() {
-        patientDetailsViewModel.activeWeeklyBabyWeights()
-        patientDetailsViewModel.liveWeights.observe(viewLifecycleOwner) {
-            if (it != null) {
+        patientDetailsViewModel.activeBabyWeights()
+        patientDetailsViewModel.liveWeightHistory.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                actualDataList.addAll(data.dailyData)
+                adapterList.submitList(actualDataList)
+                adapterList.notifyDataSetChanged()
 
             }
         }

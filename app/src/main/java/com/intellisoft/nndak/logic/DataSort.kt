@@ -89,10 +89,28 @@ class DataSort {
 
 
         fun extractDailyMeasure(entry: LocalDate, sorted: List<ObservationItem>): String {
+            //loop through the weights to equate to day
+            var totalValue = 0f
+            var countValue = 0f
+            sorted.forEach {
+                val date = FormatHelper().getSimpleDate(it.effective)
 
-            return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
-                ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
-                ?: "0.0"
+                if (date == entry.toString()) {
+                    val value = it.quantity.toFloat()
+                    countValue++
+                    totalValue += value
+
+                }
+            }
+            var dailyMeasure = totalValue / countValue
+            if (dailyMeasure.toString() == "NaN") {
+                dailyMeasure = 0f
+            }
+            return "$dailyMeasure"
+
+//            return sorted.findLast { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
+//                ?: sorted.find { FormatHelper().getSimpleDate(it.effective) == entry.toString() }?.quantity
+//                ?: "0.0"
         }
 
         fun getFormattedIntAge(
@@ -164,6 +182,7 @@ class DataSort {
             return "0"
 
         }
+
         fun extractValueIndex(start: Int, values: WeightsDetailedData): String {
             values.data.forEach {
                 if (it.day == start) {
@@ -173,6 +192,7 @@ class DataSort {
             return "0"
 
         }
+
         fun extractValueIndexBirth(start: Int, values: WeightsDetailedData): String {
             values.dataBirth.forEach {
                 if (it.day == start) {

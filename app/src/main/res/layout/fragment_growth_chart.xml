@@ -84,7 +84,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvHome"
+                        android:id="@+id/rv_data"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

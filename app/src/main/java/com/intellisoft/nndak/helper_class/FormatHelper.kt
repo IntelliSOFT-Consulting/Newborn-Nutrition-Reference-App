@@ -209,6 +209,13 @@ class FormatHelper {
         return sdf.format(date)
     }
 
+    fun getDateNoTime(): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val date = Date()
+
+        return sdf.format(date)
+    }
+
     fun getYesterdayDateNoTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val date = Date()
