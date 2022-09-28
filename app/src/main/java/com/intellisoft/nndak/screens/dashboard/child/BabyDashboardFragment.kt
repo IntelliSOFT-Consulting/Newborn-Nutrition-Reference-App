@@ -35,10 +35,7 @@ import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndex
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndexBirth
 import com.intellisoft.nndak.logic.DataSort.Companion.extractValueIndexMonthly
 import com.intellisoft.nndak.models.DataDisplay
-import com.intellisoft.nndak.utils.establishCommonIndex
-import com.intellisoft.nndak.utils.generateDoubleSource
-import com.intellisoft.nndak.utils.generateSource
-import com.intellisoft.nndak.utils.getJsonDataFromAsset
+import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import com.intellisoft.nndak.viewmodels.ScreenerViewModel
@@ -138,6 +135,15 @@ class BabyDashboardFragment : Fragment() {
             status.appIpNumber.text = getString(R.string.mother_breastfeeding_baby)
             status.appMotherName.text = getString(R.string.breast_problems)
             status.appBabyName.text = getString(R.string.mother_contraindicated)
+
+//            males Titles bold
+            boldText(status.appIpNumber)
+            boldText(status.appMotherName)
+            boldText(status.appBabyName)
+
+            status.appIpNumber.setTextColor(resources.getColor(R.color.colorPrimary))
+            status.appMotherName.setTextColor(resources.getColor(R.color.colorPrimary))
+            status.appBabyName.setTextColor(resources.getColor(R.color.colorPrimary))
 
             status.appBabyAge.visibility = View.GONE
             status.appDhmType.visibility = View.GONE
@@ -309,25 +315,25 @@ class BabyDashboardFragment : Fragment() {
                 val weeksInLife = weightsData.weeksLife
                 val gestationAge = weightsData.gestationAge
                 val totalWeeks = weeksInLife + gestationAge.toInt()
-                if (totalWeeks > 64) {
-                    graduateBaby = true
-                    if (isHistory) {
-                        activeHistoricalData(isBoy, weightsData)
-
-                    } else {
-                        var who = "who-boy-monthly.json"
-                        if (!isBoy) {
-                            who = "who-girl-monthly.json"
-
-                        }
-                        activateHistoryButton(true)
-
-                        calculateBabyWeight(weightsData, who, false)
-                    }
-
-                } else {
+//                if (totalWeeks > 64) {
+//                    graduateBaby = true
+//                    if (isHistory) {
+//                        activeHistoricalData(isBoy, weightsData)
+//
+//                    } else {
+//                        var who = "who-boy-monthly.json"
+//                        if (!isBoy) {
+//                            who = "who-girl-monthly.json"
+//
+//                        }
+//                        activateHistoryButton(true)
+//
+//                        calculateBabyWeight(weightsData, who, false)
+//                    }
+//
+//                } else {
                     activeHistoricalData(isBoy, weightsData)
-                }
+                //}
                 binding.apply {
                     val unit = if (graduateBaby) "Months" else "Weeks"
                     val name = if (graduateBaby) "Postnatal Age" else "Postmenstrual Age"
@@ -341,28 +347,28 @@ class BabyDashboardFragment : Fragment() {
             } else {
 
                 //check if the baby has exceeded week 13
-                if (weightsData.weeksLife > 13) {
-                    graduateBaby = true
-
-                    if (isHistory) {
-                        var who = "who-boy-weekly.json"
-                        if (!isBoy) {
-                            who = "who-girl-weekly.json"
-
-                        }
-                        calculateBabyWeight(weightsData, who, true)
-                    } else {
-                        var who = "who-boy-monthly.json"
-                        if (!isBoy) {
-                            who = "who-girl-monthly.json"
-
-                        }
-                        activateHistoryButton(false)
-                        calculateBabyWeight(weightsData, who, false)
-                    }
-
-
-                } else {
+//                if (weightsData.weeksLife > 13) {
+//                    graduateBaby = true
+//
+//                    if (isHistory) {
+//                        var who = "who-boy-weekly.json"
+//                        if (!isBoy) {
+//                            who = "who-girl-weekly.json"
+//
+//                        }
+//                        calculateBabyWeight(weightsData, who, true)
+//                    } else {
+//                        var who = "who-boy-monthly.json"
+//                        if (!isBoy) {
+//                            who = "who-girl-monthly.json"
+//
+//                        }
+//                        activateHistoryButton(false)
+//                        calculateBabyWeight(weightsData, who, false)
+//                    }
+//
+//
+//                } else {
                     var who = "who-boy-weekly.json"
                     if (!isBoy) {
                         who = "who-girl-weekly.json"
@@ -370,7 +376,7 @@ class BabyDashboardFragment : Fragment() {
                     }
                     calculateBabyWeight(weightsData, who, true)
 
-                }
+//                }
                 binding.apply {
                     val unit = if (graduateBaby) "Months" else "Weeks"
                     growthLabel.text = "Postnatal Age ($unit)"
@@ -378,15 +384,16 @@ class BabyDashboardFragment : Fragment() {
             }
 
             binding.apply {
-                val label = if (graduateBaby) {
-                    if (isPreterm) {
-                        if (isHistory) "INTERGROWTH-21 Chart Preterm" else "WHO Term Chart "
-                    } else {
-                        "WHO Term Chart "
-                    }
-                } else {
+                val label=
+//                val label = if (graduateBaby) {
+//                    if (isPreterm) {
+//                        if (isHistory) "INTERGROWTH-21 Chart Preterm" else "WHO Term Chart "
+//                    } else {
+//                        "WHO Term Chart "
+//                    }
+//                } else {
                     if (isPreterm) "INTERGROWTH-21 Chart Preterm" else "WHO Term Chart "
-                }
+//                }
                 if (isBoy) {
                     tvBabyGender.text =
                         "${resources.getString(R.string.app_baby_curve)} $label (Boy)"

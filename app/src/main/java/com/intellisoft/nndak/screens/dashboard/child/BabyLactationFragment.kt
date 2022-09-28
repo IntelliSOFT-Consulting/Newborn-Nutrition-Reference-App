@@ -36,10 +36,7 @@ import com.intellisoft.nndak.logic.Logics.Companion.NEONATOLOGIST
 import com.intellisoft.nndak.logic.Logics.Companion.NURSE
 import com.intellisoft.nndak.logic.Logics.Companion.NUTRITION_OFFICER
 import com.intellisoft.nndak.logic.Logics.Companion.PEDIATRICIAN
-import com.intellisoft.nndak.utils.formatTime
-import com.intellisoft.nndak.utils.getPastHoursOnIntervalOf
-import com.intellisoft.nndak.utils.isNetworkAvailable
-import com.intellisoft.nndak.utils.loadTime
+import com.intellisoft.nndak.utils.*
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModel
 import com.intellisoft.nndak.viewmodels.PatientDetailsViewModelFactory
 import timber.log.Timber
@@ -131,6 +128,13 @@ class BabyLactationFragment : Fragment() {
             status.appIpNumber.text = getString(R.string.mother_breastfeeding_baby)
             status.appMotherName.text = getString(R.string.breast_problems)
             status.appBabyName.text = getString(R.string.mother_contraindicated)
+
+            boldText(status.appIpNumber)
+            boldText(status.appMotherName)
+            boldText(status.appBabyName)
+            status.appIpNumber.setTextColor(resources.getColor(R.color.colorPrimary))
+            status.appMotherName.setTextColor(resources.getColor(R.color.colorPrimary))
+            status.appBabyName.setTextColor(resources.getColor(R.color.colorPrimary))
 
             status.appBabyAge.visibility = View.GONE
             status.appDhmType.visibility = View.GONE

@@ -74,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.updateLastSyncTimestamp()
         handleMenuClicks()
 
+//        throw  RuntimeException("Boom!")
+
 
     }
 
