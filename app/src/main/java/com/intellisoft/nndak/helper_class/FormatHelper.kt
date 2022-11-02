@@ -202,10 +202,30 @@ class FormatHelper {
         return convertedDate?.let { destFormat.format(it) }.toString()
     }
 
-    private fun getTodayDateNoTime(): String {
+    fun getTodayDateNoTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val date = Date()
+
         return sdf.format(date)
+    }
+
+    fun getDateNoTime(): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val date = Date()
+
+        return sdf.format(date)
+    }
+
+    fun getYesterdayDateNoTime(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val date = Date()
+        //subtract 1 day
+        val cal = Calendar.getInstance()
+        cal.time = date
+        cal.add(Calendar.DATE, -1)
+        val yesterday = cal.time
+        return sdf.format(yesterday)
+
     }
 
     fun dateOfBirth(date: String): Date? {
@@ -213,11 +233,13 @@ class FormatHelper {
         return destFormat.parse(date)
 
     }
+
     fun convertStringDate(date: String): Date? {
         val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
         return destFormat.parse(date)
 
     }
+
     fun convertStringDateAuto(date: String): Date? {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val destFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
@@ -384,6 +406,7 @@ class FormatHelper {
         val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         return sourceFormat.parse(date)
     }
+
     fun generateDateTime(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
         val date = Date()

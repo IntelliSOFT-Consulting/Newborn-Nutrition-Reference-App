@@ -107,15 +107,42 @@ data class WeightsData(
     @SerializedName("currentDaily") val currentDaily: String,
     @SerializedName("gestationAge") val gestationAge: String,
     @SerializedName("dayOfLife") val dayOfLife: Int,
+    @SerializedName("data") val data: List<ActualData>,
+    @SerializedName("dailyData") val dailyData: List<ActualData>,
+)
+
+
+data class WeightsDetailedData(
+    @SerializedName("status") val status: String,
+    @SerializedName("babyGender") val babyGender: String,
+    @SerializedName("birthWeight") val birthWeight: String,
+    @SerializedName("currentWeight") val currentWeight: String,
+    @SerializedName("currentDaily") val currentDaily: String,
+    @SerializedName("gestationAge") val gestationAge: String,
+    @SerializedName("dayOfLife") val dayOfLife: Int,
     @SerializedName("weeksLife") val weeksLife: Int,
     @SerializedName("data") val data: List<ActualData>,
     @SerializedName("dailyData") val dailyData: List<ActualData>,
+    @SerializedName("dataBirth") val dataBirth: List<ActualData>,
+    @SerializedName("dataMonthly") val dataMonthly: List<ActualData>,
+    @SerializedName("deviation") val deviation: Deviation,
+)
+
+data class WeightHistory(
+    @SerializedName("dayOfLife") val dayOfLife: String,
+    @SerializedName("dailyData") val dailyData: List<ActualData>,
+)
+
+data class Deviation(
+    @SerializedName("positive") val positive: Boolean,
+    @SerializedName("value") val value: String,
 )
 
 data class ActualData(
     @SerializedName("lifeDay") val day: Int,
     @SerializedName("actual") val actual: String,
     @SerializedName("projected") val projected: String,
+    @SerializedName("date") val date: String,
 )
 
 
@@ -154,7 +181,7 @@ data class GrowthOptions(
 )
 
 data class WHOData(
-    @SerializedName("Day") val day: Int,
+    @SerializedName("Unit") val day: Int,
     @SerializedName("-3") val neg3: Double,
     @SerializedName("-2") val neg2: Double,
     @SerializedName("-1") val neg1: Double,

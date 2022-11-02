@@ -121,6 +121,7 @@ class FhirApplication : Application() {
                 ""
             ).toString()
         }
+
         fun getUpdatedCurrent(context: Context): String {
             return (context.applicationContext as FhirApplication).sharedPreferences.getString(
                 RELATED,
@@ -260,6 +261,16 @@ class FhirApplication : Application() {
             )
         }
 
+        fun setMilk(context: Context, it: String) {
+            (context.applicationContext as FhirApplication).editor.putString("milk", it)
+                .commit()
+        }
 
+        fun getMilk(context: Context): String? {
+            return (context.applicationContext as FhirApplication).sharedPreferences.getString(
+                "milk",
+                ""
+            )
+        }
     }
 }

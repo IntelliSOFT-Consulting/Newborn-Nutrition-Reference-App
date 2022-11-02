@@ -215,7 +215,7 @@
     <string name="menu_notification">Notifications</string>
     <string name="menu_guide">Guide</string>
     <string name="app_baby_well">Baby is well</string>
-    <string name="app_gestation">Gestation</string>
+    <string name="app_gestation">Gestation (Birth)</string>
     <string name="app_asphyxia">Asphyxia</string>
     <string name="app_birth_date">Date of Birth</string>
     <string name="app_neonatal_sepsis">Neonatal Sepsis</string>
@@ -555,5 +555,7 @@
     <string name="after_3_hours">After 3 Hours</string>
     <string name="within_1_day">Within 1 day</string>
     <string name="after_2_days">After 2 days</string>
+    <string name="mother_s_milk">Mother\'s milk</string>
+    <string name="from_prescribed_diet">from prescribed diet</string>
 
 </resources>

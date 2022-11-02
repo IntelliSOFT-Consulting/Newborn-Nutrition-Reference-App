@@ -93,6 +93,7 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import org.json.JSONObject
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 const val TAG = "ScreenerViewModel"
@@ -1498,6 +1499,47 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         resource.subject = subjectReference
                         resource.encounter = encounterReference
                         resource.issued = Date()
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Condition -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        saveResourceToDatabase(resource)
+                    }
+                }
+                is Encounter -> {
+                    resource.subject = subjectReference
+                    resource.id = encounterId
+                    resource.reasonCodeFirstRep.text = reason
+                    resource.reasonCodeFirstRep.codingFirstRep.code = reason
+                    resource.status = Encounter.EncounterStatus.INPROGRESS
+                    saveResourceToDatabase(resource)
+                }
+
+            }
+        }
+    }
+
+    private suspend fun saveResourcesBackdated(
+        bundle: Bundle,
+        subjectReference: Reference,
+        encounterId: String,
+        reason: String,
+        date: Date,
+    ) {
+
+        val encounterReference = Reference("Encounter/$encounterId")
+        bundle.entry.forEach {
+            when (val resource = it.resource) {
+                is Observation -> {
+                    if (resource.hasCode()) {
+                        resource.id = generateUuid()
+                        resource.subject = subjectReference
+                        resource.encounter = encounterReference
+                        resource.issued = date
                         saveResourceToDatabase(resource)
                     }
                 }
@@ -3098,12 +3140,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     )
                     .request.url = "Observation"
 
+
+                val date = FormatHelper().getDateNoTime()
                 bundle.addEntry()
                     .setResource(
                         qh.codingQuestionnaire(
                             ADMISSION_DATE,
                             "Admission Date",
-                            Date().toString()
+                            date
                         )
                     )
                     .request.url = "Observation"
@@ -3154,6 +3198,76 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                 e.reasonCodeFirstRep.codingFirstRep.code = cp.code
                 e.status = Encounter.EncounterStatus.FINISHED
                 saveResourceToDatabase(e)
+            }
+        }
+    }
+
+    fun autoWeight(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(
+                    questionnaireResource,
+                    questionnaireResponse
+                )
+
+            try {
+                val qh = QuestionnaireHelper()
+
+
+                val encounterId = generateUuid()
+                val subjectReference = Reference("Patient/$patientId")
+                title = "Weight Assessment"
+                val start = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault())
+                val end = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+                val text = Date()
+                //substract a day from the current date
+                val date = start.parse(start.format(text))
+                //loop for 10 days
+                val current = 9500
+                for (i in 1..208) {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = date
+                    calendar.add(Calendar.DAY_OF_YEAR, -i)
+                    val dateBefore = calendar.time
+                    //if the i is divisible by 2, then multiply by 15 else 10
+                    val weight = if (i % 2 == 0) {
+                        current - (i * 15)
+                    } else {
+                        current - (i * 10)
+                    }
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.quantityQuestionnaire(
+                                CURRENT_WEIGHT,
+                                "Current Weight",
+                                "Current Weight",
+                                "$weight",
+                                "gm",
+                            )
+                        )
+                        .request.url = "Observation"
+
+
+                    val value = retrieveUser(false)
+
+                    bundle.addEntry()
+                        .setResource(
+                            qh.codingQuestionnaire(
+                                COMPLETED_BY,
+                                value,
+                                value
+                            )
+                        )
+                        .request.url = "Observation"
+
+                    saveResourcesBackdated(bundle, subjectReference, encounterId, title, dateBefore)
+                }
+                customMessage.postValue(MessageItem(true, "Success"))
+            } catch (e: Exception) {
+                Timber.e("Exception:::: ${e.printStackTrace()}")
+                customMessage.postValue(MessageItem(false, "Experienced problems saving data"))
             }
         }
     }

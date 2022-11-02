@@ -130,7 +130,6 @@ class AddPrescriptionFragment : Fragment() {
     }
 
     private fun updateArguments() {
-//        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "image-question.json")
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "feed-prescription.json")
     }
 
@@ -200,7 +199,23 @@ class AddPrescriptionFragment : Fragment() {
                 (requireActivity() as MainActivity).openNavigationDrawer()
                 true
             }
+            R.id.action_add_patient_submit -> {
+             generateBabyWeights()
+                true
+            }
+
             else -> false
+        }
+    }
+
+    private fun generateBabyWeights() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) as QuestionnaireFragment
+
+            viewModel.autoWeight(
+                questionnaireFragment.getQuestionnaireResponse(), args.patientId
+            )
         }
     }
 
