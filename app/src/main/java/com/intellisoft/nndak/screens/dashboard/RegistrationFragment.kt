@@ -157,7 +157,8 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun updateArguments() {
-        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "client-registration.json")
+//        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "client-registration.json")
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "multiple.json")
     }
 
     private fun addQuestionnaireFragment() {

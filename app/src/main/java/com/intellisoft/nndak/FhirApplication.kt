@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.android.fhir.*
 import com.google.android.fhir.sync.Sync
-import com.intellisoft.nndak.charts.MilkExpression
 import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.FhirPeriodicSyncWorker
 import com.intellisoft.nndak.utils.Constants.ACCESS_TOKEN
@@ -21,7 +20,6 @@ import com.intellisoft.nndak.utils.Constants.ORDER
 import com.intellisoft.nndak.utils.Constants.RELATED
 import com.intellisoft.nndak.utils.Constants.SERVER_SET
 import com.intellisoft.nndak.utils.Constants.SERVER_URL
-import com.intellisoft.nndak.utils.Constants.SERVER_URL_DEMO
 import com.intellisoft.nndak.utils.Constants.STATISTICS
 import com.intellisoft.nndak.utils.Constants.USER_ACCOUNT
 import com.intellisoft.nndak.utils.Constants.WEIGHTS
@@ -43,6 +41,7 @@ class FhirApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
         instance = this.applicationContext
 
         sharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)

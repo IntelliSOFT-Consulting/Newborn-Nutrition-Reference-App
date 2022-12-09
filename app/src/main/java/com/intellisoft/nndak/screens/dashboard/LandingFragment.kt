@@ -58,6 +58,7 @@ class LandingFragment : Fragment() {
 
             }
             cntRegister.setOnClickListener {
+                /*navigateToAutoRegistration*/
                 findNavController().navigate(LandingFragmentDirections.navigateToRegistration())
             }
             cntMilk.setOnClickListener {

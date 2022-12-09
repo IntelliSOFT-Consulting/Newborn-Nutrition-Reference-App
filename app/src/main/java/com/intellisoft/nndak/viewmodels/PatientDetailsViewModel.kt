@@ -91,6 +91,8 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.*
 import timber.log.Timber
 import java.io.IOException
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -274,7 +276,7 @@ class PatientDetailsViewModel(
             /**
              * Calculate the weight for the baby in days
              */
-            val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife + 1, 1)
+            val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife, 1)
             val sortedDays = sortCollected(weight)
 
             for ((i, entry) in days.withIndex()) {
@@ -339,21 +341,37 @@ class PatientDetailsViewModel(
 
         }
         val yesterday = FormatHelper().getYesterdayDateNoTime()
+        val today = FormatHelper().getTodayDateNoTime()
+
         //get value today from the daily data
         val yesterdayValue = dailyData.find { it.date == yesterday }?.actual ?: "0"
+        val todayValue = dailyData.find { it.date == today }?.actual ?: "0"
+
         var gainValue = 0f
         if (yesterdayValue != "0") {
-            gainValue = lastKnownWeight.toFloat() - yesterdayValue.toFloat()
+            gainValue = todayValue.toFloat() - yesterdayValue.toFloat()
         }
+        try {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            gainValue = df.format(gainValue).toFloat()
 
+        } catch (e: Exception) {
+            gainValue = gainValue
+        }
         val positive = gainValue >= 0
+        val currentDaily = if (dailyData.isNotEmpty()) {
+            dailyData.last().actual
+        } else {
+            "0"
+        }
 
         return WeightsDetailedData(
             status = status,
             babyGender = babyGender,
             currentWeight = data.last().actual,
             birthWeight = retrieveQuantity(BIRTH_WEIGHT),
-            currentDaily = dailyData.last().actual,
+            currentDaily = currentDaily,
             gestationAge = gestationAge,
             dayOfLife = dayOfLife,
             data = data,
@@ -379,7 +397,7 @@ class PatientDetailsViewModel(
         }
         val lastKnownWeight = retrieveQuantity(CURRENT_WEIGHT)
         if (weight.isNotEmpty()) {
-            val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife + 1, 1)
+            val days = getDaysSoFarIntervalOf(patient.dob, dayOfLife, 1)
             val sortedDays = sortCollected(weight)
 
             for ((i, entry) in days.withIndex()) {
@@ -1614,19 +1632,28 @@ class PatientDetailsViewModel(
 
     private fun calculateFirstFeedingTime(start: String, freq: String): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        var feedingDate = ""
+        try {
+            val date = sdf.parse(start)
+            val calendar: Calendar = GregorianCalendar()
+            if (date != null) {
+                calendar.time = date
+            }
+            calendar.add(Calendar.HOUR, freq.toInt())
+            val feed = sdf.format(calendar.time)
+            val current = FormatHelper().getTodayDate()
+            val less = FormatHelper().checkDateTime(feed, current)
+            feedingDate = if (less) {
+                current
+            } else {
+                feed
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            feedingDate = start
 
-        val date = sdf.parse(start)
-        val calendar: Calendar = GregorianCalendar()
-        calendar.time = date
-        calendar.add(Calendar.HOUR, freq.toInt())
-        val feed = sdf.format(calendar.time)
-        val current = FormatHelper().getTodayDate()
-        val less = FormatHelper().checkDateTime(feed, current)
-        if (less) {
-            return current
         }
-
-        return feed
+        return feedingDate
     }
 
     private suspend fun getObservationsPerEncounter(

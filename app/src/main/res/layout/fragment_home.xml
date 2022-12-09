@@ -145,7 +145,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
 
                         </LinearLayout>
@@ -246,7 +246,7 @@
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
 
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
 
                         </LinearLayout>
@@ -347,7 +347,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
                         </LinearLayout>
 
@@ -356,7 +356,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_total_dhm"
+                        android:text="@string/action_dhm"
                         android:textSize="@dimen/_12dp"
                         android:textAppearance="?attr/textAppearanceBody2"/>
 
@@ -456,7 +456,7 @@
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
 
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
 
                         </LinearLayout>
@@ -543,7 +543,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
 
                         </LinearLayout>
@@ -643,7 +643,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
                                 android:textAppearance="?attr/textAppearanceBody2"
-                                android:textSize="@dimen/_25sp" />
+                                android:textSize="@dimen/_18sp" />
 
 
                         </LinearLayout>

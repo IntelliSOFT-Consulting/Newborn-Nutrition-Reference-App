@@ -346,7 +346,7 @@ class PositioningFragment : Fragment() {
             updateTitleIconDescription(
                 R.drawable.pos,
                 incPositioning.dataAttach,
-                "Good attachment (Rename Good attachment)",
+                "Good attachment",
                 "Hold Breast using the C-Grip\nStimulate baby to open mouth wide\nMore areola above the nipple\nChin touching breast\nMouth Open (more than 120 Degrees)\nLower Lip turned out",
                 3
             )

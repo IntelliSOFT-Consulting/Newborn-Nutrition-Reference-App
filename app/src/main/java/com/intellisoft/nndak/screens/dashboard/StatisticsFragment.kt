@@ -239,6 +239,7 @@ class StatisticsFragment : Fragment() {
         try {
 
             val intervals = ArrayList<String>()
+            val test = listOf<String>("1","2","3","4","5","6")
             val lessFive: ArrayList<Entry> = ArrayList()
             val lessSeven: ArrayList<Entry> = ArrayList()
             val moreSeven: ArrayList<Entry> = ArrayList()
@@ -300,6 +301,9 @@ class StatisticsFragment : Fragment() {
             leftAxis.axisMinimum = 0f
             leftAxis.setDrawGridLines(true)
             leftAxis.isGranularityEnabled = false
+//            show fixed values in yaxis without decimal points
+            leftAxis.mAxisMaximum=12f
+            leftAxis.setLabelCount(12,true )
 
 
             val rightAxis: YAxis = binding.expressingChart.axisRight

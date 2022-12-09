@@ -432,7 +432,7 @@ class PatientListViewModel(
             .let { mother.addAll(it) }
 
         val obs = getObservations(baby.resourceId)
-        var birthWeight = ""
+        var birthWeight = "0"
         var status = ""
         var gestation = ""
         var assessed = false
