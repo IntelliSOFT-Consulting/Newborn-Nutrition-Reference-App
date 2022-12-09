@@ -43,7 +43,8 @@ To create a release build, run the following command in the terminal
 ```
 ./gradlew assembleRelease
 ```
-  
+## Security & Privacy 
+We do not collect or share any personal or sensitive user data with any third party libraries or SDKs. You can access a copy of the privacy policy [here]()
 ## Built With
 * [Android Studio](https://developer.android.com/studio) - The IDE used
 * [Gradle](https://gradle.org/) - Dependency Management
