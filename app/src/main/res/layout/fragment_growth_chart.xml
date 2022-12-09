@@ -54,7 +54,7 @@
                             android:layout_weight="0.35"
                             android:background="@drawable/header_bg"
                             android:padding="4dp"
-                            android:text="Date"
+                            android:text="@string/date"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 
@@ -65,7 +65,7 @@
                             android:layout_weight="0.35"
                             android:background="@drawable/header_bg"
                             android:padding="4dp"
-                            android:text="Weight"
+                            android:text="@string/weight_gm"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 
@@ -76,7 +76,7 @@
                             android:layout_weight="0.35"
                             android:background="@drawable/header_bg"
                             android:padding="4dp"
-                            android:text="Z-Score"
+                            android:text="@string/z_score"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 

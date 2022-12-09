@@ -239,6 +239,9 @@
             android:id="@+id/navigate_to_milk"
             app:destination="@id/homeFragment" />
         <action
+            android:id="@+id/navigate_to_auto_registration"
+            app:destination="@id/registrationFragment" />
+        <action
             android:id="@+id/navigate_to_registration"
             app:destination="@id/customRegistrationFragment" />
         <action

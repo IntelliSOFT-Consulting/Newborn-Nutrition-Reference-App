@@ -4,6 +4,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.intellisoft.nndak.charts.ActualData
 import com.intellisoft.nndak.databinding.ItemWeightBinding
+import timber.log.Timber
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class WeightHistoryViewHolder(binding: ItemWeightBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -14,8 +17,18 @@ class WeightHistoryViewHolder(binding: ItemWeightBinding) :
         patientItem: ActualData,
         onItemClicked: (ActualData) -> Unit
     ) {
+
+        //limit to 2 decimal places
+        try {
+            val actual = patientItem.actual.toFloat()
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            val weight = df.format(actual)
+            this.tvWeight.text = weight
+        } catch (e: Exception) {
+            this.tvWeight.text = patientItem.actual
+        }
         this.tvDate.text = patientItem.date
-        this.tvWeight.text = patientItem.actual
         this.tvScore.text = ""
 
     }
