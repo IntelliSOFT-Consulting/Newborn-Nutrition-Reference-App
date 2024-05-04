@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.annotations.SerializedName
 import com.intellisoft.nndak.FhirApplication
 import com.intellisoft.nndak.MainActivity
 import com.intellisoft.nndak.R
+import com.intellisoft.nndak.data.AuthResponse
 import com.intellisoft.nndak.data.LoginData
 import com.intellisoft.nndak.data.RestManager
 import com.intellisoft.nndak.databinding.ActivityLoginBinding
@@ -113,6 +115,34 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun validateLoginLocal(user: String, pass: String) {
+        val it = AuthResponse(
+            id = "1",
+            status = "success",
+            token = "sometoken",
+            issued = "",
+            expires = "",
+            message = "SUCCESS",
+            error = "",
+            newUser = false,
+            _reset_url = ""
+        )
+        FhirApplication.updateDetails(this@LoginActivity, it)
+        FhirApplication.setLoggedIn(this, true)
+        finishAffinity()
+
+        startActivity(
+            Intent(
+                this@LoginActivity,
+                MainActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+        this@LoginActivity.overridePendingTransition(
+            R.anim.anim_slide_in_left,
+            R.anim.anim_slide_out_left
+        )
+    }
+
     private fun processAccountRecovery(email: String) {
         showProgress(binding.pbLoading, binding.btnSubmit)
 
@@ -149,6 +179,7 @@ class LoginActivity : AppCompatActivity() {
         showProgress(progressBar, binding.btnSubmit)
 
         val user = LoginData(email = email, password = pass)
+
         apiService.loginUser(this, user) {
 
             hideProgress(progressBar, binding.btnSubmit)
